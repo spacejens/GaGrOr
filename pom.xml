@@ -45,14 +45,14 @@
     	<artifactId>servlet-api</artifactId>
     	<version>${javax.servlet.version}</version>
     	<type>jar</type>
-    	<scope>compile</scope>
+    	<scope>provided</scope>
     </dependency>
     <dependency>
     	<groupId>javax.servlet</groupId>
     	<artifactId>jstl</artifactId>
     	<version>${javax.servlet.jsp.jstl.version}</version>
     	<type>jar</type>
-    	<scope>compile</scope>
+    	<scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
