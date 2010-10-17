@@ -15,7 +15,7 @@ public class WelcomeController implements Controller {
 
 	@Override
 	public ModelAndView handleRequest(final HttpServletRequest arg0,
-			final HttpServletResponse arg1) throws Exception {
+			final HttpServletResponse arg1) {
 		return new ModelAndView("welcome");
 	}
 }
