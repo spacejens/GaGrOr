@@ -16,6 +16,6 @@ public class WelcomeController implements Controller {
 	@Override
 	public ModelAndView handleRequest(final HttpServletRequest arg0,
 			final HttpServletResponse arg1) throws Exception {
-		return new ModelAndView("/WEB-INF/jsp/welcome.jsp");
+		return new ModelAndView("welcome");
 	}
 }
