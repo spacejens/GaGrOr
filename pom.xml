@@ -42,9 +42,7 @@
 							<directory>WebContent</directory>
 						</resource>
 					</webResources>
-					<outputDirectory>WebContent/WEB-INF/classes</outputDirectory>
 					<warSourceDirectory>WebContent</warSourceDirectory>
-					<warName>gagror</warName>
 					<webXml>WebContent/WEB-INF/web.xml</webXml>
 				</configuration>
 			</plugin>
