@@ -5,7 +5,7 @@
   <groupId>se.spacejens</groupId>
   <artifactId>gagror</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>gagror</name>
   <url>http://maven.apache.org</url>
@@ -29,6 +29,22 @@
 	        <configuration>
 	          <source>1.6</source>
 	          <target>1.6</target>
+	        </configuration>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-war-plugin</artifactId>
+  			<version>2.1</version>
+	        <configuration>
+	            <webResources>
+	                <resource>
+	                    <directory>WebContent</directory>
+	                </resource>
+	            </webResources>
+	            <outputDirectory>WebContent/WEB-INF/classes</outputDirectory>
+	            <warSourceDirectory>WebContent</warSourceDirectory>
+	            <warName>gagror</warName>
+	            <webXml>WebContent/WEB-INF/web.xml</webXml>
 	        </configuration>
   		</plugin>
   	</plugins>
