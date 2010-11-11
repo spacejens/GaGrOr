@@ -9,5 +9,10 @@ import org.slf4j.Logger;
  */
 public interface LogAware {
 
+	/**
+	 * Get the logger used by this object when logging.
+	 * 
+	 * @return Never null.
+	 */
 	Logger getLog();
 }
