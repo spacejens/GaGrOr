@@ -1,5 +1,8 @@
 package se.spacejens.gagror.spring;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +21,9 @@ public class WelcomeController extends LogAwareSupport implements Controller {
 	@Override
 	public ModelAndView handleRequest(final HttpServletRequest arg0,
 			final HttpServletResponse arg1) {
-		this.getLog().info("Handling request");
-		return new ModelAndView("welcome");
+		this.getLog().info("Handling request and providing model");
+		final Map<String, Object> model = new HashMap<String, Object>();
+		model.put("brief", "A wild message appears!");
+		return new ModelAndView("welcome", "gagror", model);
 	}
 }

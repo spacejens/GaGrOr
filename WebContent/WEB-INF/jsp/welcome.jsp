@@ -5,6 +5,7 @@
 		<title>Welcome Page</title>
 	</head>
 	<body>
-		Welcome Page
+		<h1>Welcome Page</h1>
+		<p>Brief: <core:out value="${gagror.brief}" /></p>
 	</body>
 </html>

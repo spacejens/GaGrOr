@@ -1,5 +1,7 @@
 package se.spacejens.gagror.spring;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,7 +46,17 @@ public class WelcomeControllerTest extends AbstractTest {
 		Mockito.verifyZeroInteractions(request);
 		Assert.assertEquals("Unexpected view name", "welcome",
 				result.getViewName());
-		Assert.assertEquals("No model expected for this page", 0, result
-				.getModel().size());
+		Assert.assertNotNull("No model received", result.getModel());
+		Assert.assertNotNull("Gagror model not received", result.getModel()
+				.get("gagror"));
+		if (!(result.getModel().get("gagror") instanceof Map)) {
+			Assert.fail("Unexpected type of gagror model: "
+					+ result.getModel().get("gagror").getClass());
+		}
+		@SuppressWarnings("unchecked")
+		final Map<String, Object> model = (Map<String, Object>) result
+				.getModel().get("gagror");
+		Assert.assertNotNull("Model did not contain brief message",
+				model.get("brief"));
 	}
 }
