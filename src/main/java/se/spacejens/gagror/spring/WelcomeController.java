@@ -6,8 +6,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
 
 import se.spacejens.gagror.LogAwareSupport;
 
@@ -16,9 +17,11 @@ import se.spacejens.gagror.LogAwareSupport;
  * 
  * @author spacejens
  */
-public class WelcomeController extends LogAwareSupport implements Controller {
+@Controller
+@RequestMapping("/welcome")
+public class WelcomeController extends LogAwareSupport {
 
-	@Override
+	@RequestMapping("/initial.html")
 	public ModelAndView handleRequest(final HttpServletRequest arg0,
 			final HttpServletResponse arg1) {
 		this.getLog().info("Handling request and providing model");
