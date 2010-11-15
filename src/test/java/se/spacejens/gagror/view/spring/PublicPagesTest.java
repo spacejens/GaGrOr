@@ -5,15 +5,15 @@ import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Unit test for {@link PublicWebController}.
+ * Unit test for {@link PublicPages}.
  * 
  * @author spacejens
  */
-public class PublicWebControllerTest extends
-		ControllerTestSupport<PublicWebController> {
+public class PublicPagesTest extends
+		SpringViewTestSupport<PublicPages> {
 
 	/**
-	 * Test of {@link PublicWebController#index()}.
+	 * Test of {@link PublicPages#index()}.
 	 * 
 	 * @throws Exception
 	 *             If unexpected errors occur.
@@ -26,7 +26,7 @@ public class PublicWebControllerTest extends
 	}
 
 	@Override
-	protected PublicWebController createInstance() {
-		return new PublicWebController();
+	protected PublicPages createInstance() {
+		return new PublicPages();
 	}
 }

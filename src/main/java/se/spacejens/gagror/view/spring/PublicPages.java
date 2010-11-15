@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Controller for all public web pages (i.e. pages not requiring the user to be
- * logged in).
+ * Spring controller for all public web pages (i.e. pages not requiring the user
+ * to be logged in).
  * 
  * @author spacejens
  */
 @Controller
 @RequestMapping("/")
-public class PublicWebController extends ControllerSupport {
+public class PublicPages extends SpringViewSupport {
 
 	/**
 	 * The index page is the first page seen by visitors. It provides

@@ -17,13 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 import se.spacejens.gagror.model.Message;
 
 /**
- * Controller for the welcome page.
+ * Spring controller for the welcome page.
  * 
  * @author spacejens
  */
 @Controller
 @RequestMapping("/welcome")
-public class WelcomeController extends ControllerSupport {
+public class Welcome extends SpringViewSupport {
 
 	@RequestMapping("/initial.html")
 	public ModelAndView handleRequest(final HttpServletRequest request,

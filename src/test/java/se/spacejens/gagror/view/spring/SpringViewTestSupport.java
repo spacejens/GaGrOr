@@ -12,7 +12,7 @@ import se.spacejens.gagror.TestSupport;
  * @param <C>
  *            Type of controller to test.
  */
-public abstract class ControllerTestSupport<C extends ControllerSupport>
+public abstract class SpringViewTestSupport<C extends SpringViewSupport>
 		extends TestSupport {
 
 	/** Controller instance used for tests. */

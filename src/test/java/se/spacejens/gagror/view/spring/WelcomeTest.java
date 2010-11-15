@@ -11,12 +11,12 @@ import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Unit test for {@link WelcomeController}.
+ * Unit test for {@link Welcome}.
  * 
  * @author spacejens
  */
-public class WelcomeControllerTest extends
-		ControllerTestSupport<WelcomeController> {
+public class WelcomeTest extends
+		SpringViewTestSupport<Welcome> {
 
 	/**
 	 * Verify that the correct model and view are returned.
@@ -48,7 +48,7 @@ public class WelcomeControllerTest extends
 	}
 
 	@Override
-	protected WelcomeController createInstance() {
-		return new WelcomeController();
+	protected Welcome createInstance() {
+		return new Welcome();
 	}
 }
