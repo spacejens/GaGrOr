@@ -11,7 +11,7 @@ import javax.persistence.Id;
  * @author spacejens
  */
 @Entity
-public class Message {
+public class Message extends EntitySupport {
 
 	private Long id;
 
@@ -21,7 +21,7 @@ public class Message {
 	 * Constructor needed by persistence framework.
 	 */
 	Message() {
-		// Do nothing
+		this.getLog().debug("Creating instance");
 	}
 
 	/**
@@ -31,6 +31,7 @@ public class Message {
 	 *            Message text.
 	 */
 	public Message(final String text) {
+		this.getLog().debug("Creating instance with text \"{}\"", text);
 		this.text = text;
 	}
 
@@ -41,6 +42,7 @@ public class Message {
 	}
 
 	void setId(final Long id) {
+		this.getLog().debug("Changing ID from {} to {}", this.id, id);
 		this.id = id;
 	}
 
@@ -50,6 +52,8 @@ public class Message {
 	}
 
 	public void setText(final String text) {
+		this.getLog().debug("Changing text from \"{}\" to \"{}\"", this.text,
+				text);
 		this.text = text;
 	}
 }

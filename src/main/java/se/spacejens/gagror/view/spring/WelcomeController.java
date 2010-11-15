@@ -26,8 +26,8 @@ import se.spacejens.gagror.model.Message;
 public class WelcomeController extends ControllerSupport {
 
 	@RequestMapping("/initial.html")
-	public ModelAndView handleRequest(final HttpServletRequest arg0,
-			final HttpServletResponse arg1) {
+	public ModelAndView handleRequest(final HttpServletRequest request,
+			final HttpServletResponse response) {
 		this.getLog().info("Handling request and providing model");
 		final Map<String, Object> model = new HashMap<String, Object>();
 		final EntityManagerFactory emf = Persistence
