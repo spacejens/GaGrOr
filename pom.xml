@@ -22,6 +22,7 @@
 		<org.hibernate.version.core>3.4.0.GA</org.hibernate.version.core>
 		<com.mysql.version.connector>5.1.13</com.mysql.version.connector>
 		<org.hsqldb.version>2.0.0</org.hsqldb.version>
+		<org.apache.openejb.version>3.1.3</org.apache.openejb.version>
 	</properties>
 
 	<build>
@@ -113,6 +114,13 @@
 			<version>${org.hsqldb.version}</version>
 			<type>jar</type>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openejb</groupId>
+			<artifactId>ejb31-api-experimental</artifactId>
+			<version>${org.apache.openejb.version}</version>
+			<type>jar</type>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

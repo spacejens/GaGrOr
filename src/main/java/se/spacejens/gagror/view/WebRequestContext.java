@@ -14,6 +14,13 @@ import se.spacejens.gagror.controller.RequestContext;
 class WebRequestContext extends LogAwareSupport implements RequestContext {
 
 	/**
+	 * Create anonymous instance.
+	 */
+	public WebRequestContext() {
+		this.getLog().debug("Creating anonymous web request context");
+	}
+
+	/**
 	 * Create instance from information stored in servlet request.
 	 * 
 	 * @param request

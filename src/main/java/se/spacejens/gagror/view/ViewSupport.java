@@ -22,4 +22,16 @@ public abstract class ViewSupport extends LogAwareSupport {
 	protected RequestContext getContext(final HttpServletRequest request) {
 		return new WebRequestContext(request);
 	}
+
+	/**
+	 * Create request context information for an anonymous request.
+	 * 
+	 * @param request
+	 *            Not null.
+	 * @return Not null.
+	 */
+	protected RequestContext getAnonymousContext(
+			final HttpServletRequest request) {
+		return new WebRequestContext();
+	}
 }
