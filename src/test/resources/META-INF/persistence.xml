@@ -5,9 +5,10 @@
 
 	<persistence-unit name="GagrorPersistenceUnit" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>se.spacejens.gagror.model.Message</class>
+		<jar-file>./target/classes</jar-file>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+			<property name="hibernate.archive.autodetection" value="class, hbm"/>
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
 			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
