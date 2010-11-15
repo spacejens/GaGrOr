@@ -1,4 +1,4 @@
-package se.spacejens.gagror.spring;
+package se.spacejens.gagror.view.spring;
 
 import java.util.Map;
 
@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.web.servlet.ModelAndView;
 
 import se.spacejens.gagror.AbstractTest;
+import se.spacejens.gagror.view.spring.WelcomeController;
 
 /**
  * Unit test for {@link WelcomeController}.

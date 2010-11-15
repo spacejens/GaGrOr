@@ -1,4 +1,4 @@
-package se.spacejens.gagror.spring;
+package se.spacejens.gagror.view.spring;
 
 import java.util.HashMap;
 import java.util.Map;
