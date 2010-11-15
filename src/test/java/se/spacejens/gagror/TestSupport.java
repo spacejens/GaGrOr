@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author spacejens
  */
-public abstract class AbstractTest {
+public abstract class TestSupport {
 
 	/** A logger instance to use for debug printouts. */
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());

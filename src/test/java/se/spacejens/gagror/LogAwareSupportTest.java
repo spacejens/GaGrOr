@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author spacejens
  */
-public class LogAwareSupportTest extends AbstractTest {
+public class LogAwareSupportTest extends TestSupport {
 
 	/** Instance to test. */
 	private LogAwareSupport instance;

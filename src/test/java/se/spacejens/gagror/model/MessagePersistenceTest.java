@@ -9,14 +9,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import se.spacejens.gagror.AbstractTest;
+import se.spacejens.gagror.TestSupport;
 
 /**
  * Persistence unit tests for {@link Message}.
  * 
  * @author spacejens
  */
-public class MessagePersistenceTest extends AbstractTest {
+public class MessagePersistenceTest extends TestSupport {
 
 	/**
 	 * Store and retrieve a message.

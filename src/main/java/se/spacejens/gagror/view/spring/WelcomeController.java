@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import se.spacejens.gagror.LogAwareSupport;
 import se.spacejens.gagror.model.Message;
 
 /**
@@ -24,7 +23,7 @@ import se.spacejens.gagror.model.Message;
  */
 @Controller
 @RequestMapping("/welcome")
-public class WelcomeController extends LogAwareSupport {
+public class WelcomeController extends ControllerSupport {
 
 	@RequestMapping("/initial.html")
 	public ModelAndView handleRequest(final HttpServletRequest arg0,
