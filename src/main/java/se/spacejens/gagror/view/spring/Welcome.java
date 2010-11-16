@@ -24,31 +24,16 @@ import se.spacejens.gagror.model.Message;
 public class Welcome extends SpringViewSupport {
 
 	@RequestMapping("/initial.html")
-	public ModelAndView handleRequest(final HttpServletRequest request,
-			final HttpServletResponse response) {
+	public ModelAndView handleRequest(final HttpServletRequest request, final HttpServletResponse response) {
 		this.getLog().info("Handling request and providing model");
 		final Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			final Message message = new MessageClient(
-					this.getNamingContextProvider()).createMessage(
-					this.getAnonymousContext(),
+			final Message message = new MessageClient(this.getNamingContextProvider()).createMessage(this.getAnonymousContext(),
 					"An EJB generated persistent message appears!");
 			model.put("brief", message.getText() + " (" + message.getId() + ")");
 		} catch (GagrorException e) {
-			model.put("brief", "An error message appears: "
-					+ e.getCause().getMessage());
+			model.put("brief", "An error message appears: " + e.getCause().getMessage());
 		}
-		// final EntityManagerFactory emf = Persistence
-		// .createEntityManagerFactory("GagrorPersistenceUnit");
-		// final EntityManager em = emf.createEntityManager();
-		// final EntityTransaction trans = em.getTransaction();
-		// trans.begin();
-		// Message mess1 = new Message("A persistent message appears!");
-		// em.persist(mess1);
-		// model.put("brief", mess1.getText() + " (" + mess1.getId() + ")");
-		// trans.commit();
-		// em.close();
-		// emf.close();
 		return new ModelAndView("welcome", "gagror", model);
 	}
 }

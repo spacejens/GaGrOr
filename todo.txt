@@ -1,5 +1,3 @@
-Update persistence.xml and Glassfish configuration to use data source correctly
-
 Add Hibernate validator
 
 Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
@@ -12,9 +10,15 @@ Use embeddable data types instead of plain Java types in mappings. View layer re
 
 Enable cacheing of entities using @Cacheable annotation (needs study)
 
+Create parallell DTO and entity classes, since EJB will detach entities it should return DTOs
+
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
+Create user entity. Store username and password in session when logging in
+
 Set cookie with session handle when logging in. Use it in place of login if session times out
+
+Sort TODO list in priority order
 
 ======================
 Ideas, not yet decided
@@ -24,3 +28,5 @@ Create service factory in service package, move all service interfaces there. Th
 technology choice from view layer.
 
 User-User relationship either mapped twice (friends, friendsOf) or stored in strict ID order (ID1 < ID2)
+
+Better solution (investigate how) for how to access persistence_2_0.xsd in correct location

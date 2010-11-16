@@ -16,15 +16,11 @@ import se.spacejens.gagror.model.Message;
 public class MessageBean extends EJBSupport implements MessageService {
 
 	@Override
-	public Message createMessage(final RequestContext rc, final String text)
-			throws GagrorException {
+	public Message createMessage(final RequestContext rc, final String text) throws GagrorException {
 		this.getLog().debug("Message bean creates new message");
-		// TODO
 		final JpaContext jpa = this.getJpaContext(rc);
-		if (jpa.getEntityManager() == null) {
-			return new Message("EJB does not have an entity manager");
-		} else {
-			return new Message("EJB has an entity manager");
-		}
+		final Message message = new Message(text);
+		jpa.getEntityManager().persist(message);
+		return message;
 	}
 }
