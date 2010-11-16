@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import se.spacejens.gagror.GagrorException;
-import se.spacejens.gagror.controller.NamingContextProviderImpl;
 import se.spacejens.gagror.controller.ejb.MessageClient;
+import se.spacejens.gagror.model.Message;
 
 /**
  * Spring controller for the welcome page.
@@ -29,12 +29,11 @@ public class Welcome extends SpringViewSupport {
 		this.getLog().info("Handling request and providing model");
 		final Map<String, Object> model = new HashMap<String, Object>();
 		try {
-			model.put(
-					"brief",
-					new MessageClient(new NamingContextProviderImpl())
-							.createMessage(this.getAnonymousContext(request),
-									"An EJB generated persistent message appears!")
-							.getText());
+			final Message message = new MessageClient(
+					this.getNamingContextProvider()).createMessage(
+					this.getAnonymousContext(),
+					"An EJB generated persistent message appears!");
+			model.put("brief", message.getText() + " (" + message.getId() + ")");
 		} catch (GagrorException e) {
 			model.put("brief", "An error message appears: "
 					+ e.getCause().getMessage());

@@ -13,15 +13,15 @@ public class GagrorException extends Exception {
 	public GagrorException() {
 	}
 
-	public GagrorException(final String arg0) {
-		super(arg0);
+	public GagrorException(final String message) {
+		super(message);
 	}
 
-	public GagrorException(final Throwable arg0) {
-		super(arg0);
+	public GagrorException(final Throwable cause) {
+		super(cause);
 	}
 
-	public GagrorException(final String arg0, final Throwable arg1) {
-		super(arg0, arg1);
+	public GagrorException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 }

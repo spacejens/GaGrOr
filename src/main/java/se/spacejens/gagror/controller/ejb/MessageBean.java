@@ -4,6 +4,7 @@ import javax.ejb.Singleton;
 
 import se.spacejens.gagror.GagrorException;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.Message;
 
 /**
@@ -19,6 +20,11 @@ public class MessageBean extends EJBSupport implements MessageService {
 			throws GagrorException {
 		this.getLog().debug("Message bean creates new message");
 		// TODO
-		return new Message("An EJB generated non-persistent message appears!");
+		final JpaContext jpa = this.getJpaContext(rc);
+		if (jpa.getEntityManager() == null) {
+			return new Message("EJB does not have an entity manager");
+		} else {
+			return new Message("EJB has an entity manager");
+		}
 	}
 }

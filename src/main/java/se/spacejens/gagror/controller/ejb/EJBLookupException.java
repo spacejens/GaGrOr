@@ -15,15 +15,15 @@ public class EJBLookupException extends GagrorException {
 	public EJBLookupException() {
 	}
 
-	public EJBLookupException(final String arg0) {
-		super(arg0);
+	public EJBLookupException(final String message) {
+		super(message);
 	}
 
-	public EJBLookupException(final Throwable arg0) {
-		super(arg0);
+	public EJBLookupException(final Throwable cause) {
+		super(cause);
 	}
 
-	public EJBLookupException(final String arg0, final Throwable arg1) {
-		super(arg0, arg1);
+	public EJBLookupException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 }

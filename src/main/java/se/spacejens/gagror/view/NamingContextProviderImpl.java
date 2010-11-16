@@ -1,10 +1,11 @@
-package se.spacejens.gagror.controller;
+package se.spacejens.gagror.view;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import se.spacejens.gagror.LogAwareSupport;
+import se.spacejens.gagror.controller.NamingContextProvider;
 
 /**
  * Implementation of naming context provider, using the same naming context
@@ -12,7 +13,7 @@ import se.spacejens.gagror.LogAwareSupport;
  * 
  * @author spacejens
  */
-public class NamingContextProviderImpl extends LogAwareSupport implements
+class NamingContextProviderImpl extends LogAwareSupport implements
 		NamingContextProvider {
 
 	/** Context instance. */
