@@ -1,32 +1,35 @@
+=========================================
+TODO list in order of decreasing priority
+=========================================
+
+Register at GitHub and store source code there
+
 Add Hibernate validator
-
-Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
-
-Add more framework unit tests when framework is stable
-
-Remove Message entity, Welcome controller etc. when other functionality has been added.
 
 Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
 
-Enable cacheing of entities using @Cacheable annotation (needs study)
-
-Create parallell DTO and entity classes, since EJB will detach entities it should return DTOs
+Create user entity. Store username and password in session when logging in
 
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
-Create user entity. Store username and password in session when logging in
+Remove Message entity, Welcome controller etc.
+
+Add more framework unit tests (and in the future, write new tests when adding functionality)
+
+Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
 
 Set cookie with session handle when logging in. Use it in place of login if session times out
 
-Sort TODO list in priority order
+=====================================
+Ideas, not yet decided or prioritized
+=====================================
 
-======================
-Ideas, not yet decided
-======================
+Create service factory in service package, move all service interfaces there. This would hide service technology choice from view layer. Worth it?
 
-Create service factory in service package, move all service interfaces there. This would hide service
-technology choice from view layer.
-
-User-User relationship either mapped twice (friends, friendsOf) or stored in strict ID order (ID1 < ID2)
+User-User relationship either mapped twice (friends, friendsOf) or stored in strict ID order (ID1 < ID2). Needs decision
 
 Better solution (investigate how) for how to access persistence_2_0.xsd in correct location
+
+Enable cacheing of entities using @Cacheable annotation (needs study)
+
+Create parallell DTO and entity classes, since EJB will detach entities it should return DTOs. Or, alternatively, use entity class as DTO as well
