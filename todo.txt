@@ -1,0 +1,26 @@
+Update persistence.xml and Glassfish configuration to use data source correctly
+
+Add Hibernate validator
+
+Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
+
+Add more framework unit tests when framework is stable
+
+Remove Message entity, Welcome controller etc. when other functionality has been added.
+
+Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
+
+Enable cacheing of entities using @Cacheable annotation (needs study)
+
+Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
+
+Set cookie with session handle when logging in. Use it in place of login if session times out
+
+======================
+Ideas, not yet decided
+======================
+
+Create service factory in service package, move all service interfaces there. This would hide service
+technology choice from view layer.
+
+User-User relationship either mapped twice (friends, friendsOf) or stored in strict ID order (ID1 < ID2)
