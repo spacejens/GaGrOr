@@ -2,8 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-Register at GitHub and store source code there
-
 Add Hibernate validator
 
 Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
