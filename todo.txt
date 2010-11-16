@@ -18,6 +18,8 @@ Add Hibernate lifecycle interceptor, use to store entity changes and to check ed
 
 Set cookie with session handle when logging in. Use it in place of login if session times out
 
+Further description of project purpose and technologies in README file
+
 =====================================
 Ideas, not yet decided or prioritized
 =====================================
