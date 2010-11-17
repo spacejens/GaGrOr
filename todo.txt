@@ -2,13 +2,11 @@
 TODO list in order of decreasing priority
 =========================================
 
-Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
-
-Implement hashCode and equals methods for entities properly
-
 Create user entity (using @Table and @Column). Store username and password in session when logging in
 
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
+
+Implement hashCode, equals, and toString methods for entities properly
 
 Add Spring TLD, using JSP fragments for tag definitions
 
@@ -37,3 +35,13 @@ Better solution (investigate how) for how to access persistence_2_0.xsd in corre
 Enable cacheing of entities using @Cacheable annotation (needs study)
 
 Create parallell DTO and entity classes, since EJB will detach entities it should return DTOs. Or, alternatively, use entity class as DTO as well
+
+==============
+Rejected ideas
+==============
+
+Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing. Rejected since there is not enough
+freedom in how embeddable types can be used. An @Embeddable type cannot inherit from another @Embeddable type, and @GeneratedValue cannot be used
+on @EmbeddedId. Might still be possible if ID types are custom created, could be investigated in the future.
+	https://forums.hibernate.org/viewtopic.php?p=2393944&sid=57b20ef2c7de6f6bcba632130987bc22
+	http://en.wikibooks.org/wiki/Java_Persistence/Embeddables#Inheritance
