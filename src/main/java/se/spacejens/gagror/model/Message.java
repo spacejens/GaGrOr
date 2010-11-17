@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A simple message entity, for testing persistence framework.
@@ -46,14 +48,15 @@ public class Message extends EntitySupport {
 		this.id = id;
 	}
 
-	@Column
+	@NotNull
+	@Size(min = 1, max = 255)
+	@Column(nullable = false)
 	public String getText() {
 		return this.text;
 	}
 
 	public void setText(final String text) {
-		this.getLog().debug("Changing text from \"{}\" to \"{}\"", this.text,
-				text);
+		this.getLog().debug("Changing text from \"{}\" to \"{}\"", this.text, text);
 		this.text = text;
 	}
 }

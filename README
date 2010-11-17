@@ -3,3 +3,11 @@ GaGrOr - Gaming Group Organizer
 
 A web application providing functionality to coordinate activities within a set of face-to-face gaming
 groups with several members. Also provides storage of information relevant to the activities of the groups.
+
+---------------
+Glassfish setup
+---------------
+Create a JDBC datasource named jdbc/gagror
+
+Copy log4j-1.2.16.jar into the Glassfish domain's lib directory. This is a workaround for a classloader
+problem in Glassfish.

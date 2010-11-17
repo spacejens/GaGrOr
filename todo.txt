@@ -2,13 +2,17 @@
 TODO list in order of decreasing priority
 =========================================
 
-Add Hibernate validator
+Add c3p0 to test dependencies, to enable connection pooling there
+
+Move shared fields (ID) to entity superclass, add version and timestamp columns
 
 Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
 
-Create user entity. Store username and password in session when logging in
+Create user entity (using @Table and @Column). Store username and password in session when logging in
 
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
+
+Add Spring TLD, using JSP fragments for tag definitions
 
 Remove Message entity, Welcome controller etc.
 
@@ -17,6 +21,8 @@ Add more framework unit tests (and in the future, write new tests when adding fu
 Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
 
 Set cookie with session handle when logging in. Use it in place of login if session times out
+
+Refactor JSP pages for CSS use and add CSS file
 
 Further description of project purpose and technologies in README file
 
