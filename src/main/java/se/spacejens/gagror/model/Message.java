@@ -2,8 +2,6 @@ package se.spacejens.gagror.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,8 +12,6 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class Message extends EntitySupport {
-
-	private Long id;
 
 	private String text;
 
@@ -35,17 +31,6 @@ public class Message extends EntitySupport {
 	public Message(final String text) {
 		this.getLog().debug("Creating instance with text \"{}\"", text);
 		this.text = text;
-	}
-
-	@Id
-	@GeneratedValue
-	public Long getId() {
-		return this.id;
-	}
-
-	void setId(final Long id) {
-		this.getLog().debug("Changing ID from {} to {}", this.id, id);
-		this.id = id;
 	}
 
 	@NotNull

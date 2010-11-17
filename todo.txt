@@ -2,9 +2,9 @@
 TODO list in order of decreasing priority
 =========================================
 
-Move shared fields (ID) to entity superclass, add version and timestamp columns
-
 Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
+
+Implement hashCode and equals methods for entities properly
 
 Create user entity (using @Table and @Column). Store username and password in session when logging in
 
