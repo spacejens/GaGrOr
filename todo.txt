@@ -2,8 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-Add c3p0 to test dependencies, to enable connection pooling there
-
 Move shared fields (ID) to entity superclass, add version and timestamp columns
 
 Use embeddable data types instead of plain Java types in mappings. View layer responsible for input parsing
