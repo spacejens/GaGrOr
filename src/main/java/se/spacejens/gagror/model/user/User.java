@@ -32,14 +32,14 @@ public interface User extends Entity {
 	 * 
 	 * @return Not null.
 	 */
-	String getUsername();
+	public String getUsername();
 
 	/**
 	 * Get the encrypted password.
 	 * 
 	 * @return Not null.
 	 */
-	String getPassword();
+	public String getPassword();
 
 	/**
 	 * Set the encrypted password.
@@ -47,5 +47,5 @@ public interface User extends Entity {
 	 * @param password
 	 *            Not null.
 	 */
-	void setPassword(final String password);
+	public void setPassword(final String password);
 }

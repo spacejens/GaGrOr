@@ -14,19 +14,19 @@ public interface Entity {
 	 * 
 	 * @return Null if not yet persistent.
 	 */
-	Long getId();
+	public Long getId();
 
 	/**
 	 * When was the entity created?
 	 * 
 	 * @return Not null.
 	 */
-	Timestamp getCreationTimestamp();
+	public Timestamp getCreationTimestamp();
 
 	/**
 	 * When was the entity last modified?
 	 * 
 	 * @return Not null.
 	 */
-	Timestamp getModificationTimestamp();
+	public Timestamp getModificationTimestamp();
 }
