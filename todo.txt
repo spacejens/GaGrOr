@@ -3,6 +3,7 @@ TODO list in order of decreasing priority
 =========================================
 
 User functionality: Verify password when registering. Log in and change password. Binding errors in forms.
+Proper exception handling (specific, service-technology-neutral exceptions as superclasses of EJB exceptions).
 
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
