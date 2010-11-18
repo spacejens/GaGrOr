@@ -14,6 +14,8 @@ Remove Message entity, Welcome controller etc.
 
 Add more framework unit tests (and in the future, write new tests when adding functionality)
 
+Clean up pom.xml, define properties for all versions, sort for readability, add more information
+
 Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
 
 Set cookie with session handle when logging in. Use it in place of login if session times out
