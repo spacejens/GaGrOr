@@ -3,7 +3,7 @@ package se.spacejens.gagror.controller.ejb;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import se.spacejens.gagror.LogAwareSupport;
+import se.spacejens.gagror.controller.HelperAndDAOClientSupport;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.model.JpaContext;
 
@@ -12,8 +12,9 @@ import se.spacejens.gagror.model.JpaContext;
  * 
  * @author spacejens
  */
-public abstract class EJBSupport extends LogAwareSupport {
+public abstract class EJBSupport extends HelperAndDAOClientSupport {
 
+	/** Entity manager instance to use. */
 	@PersistenceContext
 	private EntityManager entityManager;
 

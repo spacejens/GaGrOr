@@ -6,6 +6,6 @@
 	</head>
 	<body>
 		<h1>Welcome Page</h1>
-		<p>Brief: <core:out value="${gagror.brief}" /></p>
+		<p>Brief: <core:out value="${brief}" /></p>
 	</body>
 </html>

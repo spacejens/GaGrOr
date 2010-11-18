@@ -2,8 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-Create user entity (using @Table and @Column). Store username and password in session when logging in
-
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
 Implement hashCode, equals, and toString methods for entities properly
@@ -26,15 +24,15 @@ Further description of project purpose and technologies in README file
 Ideas, not yet decided or prioritized
 =====================================
 
-Create service factory in service package, move all service interfaces there. This would hide service technology choice from view layer. Worth it?
-
 User-User relationship either mapped twice (friends, friendsOf) or stored in strict ID order (ID1 < ID2). Needs decision
 
 Better solution (investigate how) for how to access persistence_2_0.xsd in correct location
 
 Enable cacheing of entities using @Cacheable annotation (needs study)
 
-Create parallell DTO and entity classes, since EJB will detach entities it should return DTOs. Or, alternatively, use entity class as DTO as well
+Create parallell DTO and entity classes, since EJB will detach entities it should return DTOs. Or, alternatively, use entity class as DTO as well.
+Another option is to return detached entity object, but make sure that all data needed by the view layer has been fetched (to prevent lazy fetching
+from causing exceptions when attempted on the detached entities).
 
 ==============
 Rejected ideas

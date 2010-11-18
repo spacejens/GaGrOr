@@ -12,13 +12,12 @@ import javax.validation.constraints.NotNull;
 import se.spacejens.gagror.LogAwareSupport;
 
 /**
- * Superclass for all entities, providing common functionality (ID, timestamps,
- * optimistic locking).
+ * Superclass for all entities, providing common functionality.
  * 
  * @author spacejens
  */
 @MappedSuperclass
-public abstract class EntitySupport extends LogAwareSupport {
+public abstract class EntitySupport extends LogAwareSupport implements Entity {
 
 	/** Database primary key value. */
 	private Long id;
@@ -29,11 +28,7 @@ public abstract class EntitySupport extends LogAwareSupport {
 	/** Time of latest entity modification. */
 	private Timestamp modificationTimestamp;
 
-	/**
-	 * Get the ID.
-	 * 
-	 * @return Null if not yet persistent.
-	 */
+	@Override
 	@Id
 	@GeneratedValue
 	@Column(name = "id")
@@ -42,7 +37,7 @@ public abstract class EntitySupport extends LogAwareSupport {
 	}
 
 	/**
-	 * Set the ID.
+	 * Set the ID. Should only be called by the persistence layer.
 	 * 
 	 * @param id
 	 *            Not null.
@@ -52,11 +47,7 @@ public abstract class EntitySupport extends LogAwareSupport {
 		this.id = id;
 	}
 
-	/**
-	 * When was the entity created?
-	 * 
-	 * @return Not null.
-	 */
+	@Override
 	@NotNull
 	@Column(name = "creationtimestamp", insertable = true, updatable = false)
 	public Timestamp getCreationTimestamp() {
@@ -74,11 +65,7 @@ public abstract class EntitySupport extends LogAwareSupport {
 		this.creationTimestamp = creationTimestamp;
 	}
 
-	/**
-	 * When was the entity last modified?
-	 * 
-	 * @return Not null.
-	 */
+	@Override
 	@Version
 	@Column(name = "modificationtimestamp")
 	public Timestamp getModificationTimestamp() {

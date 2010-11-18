@@ -1,8 +1,5 @@
 package se.spacejens.gagror.view.spring;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import se.spacejens.gagror.GagrorException;
-import se.spacejens.gagror.controller.ejb.MessageClient;
 import se.spacejens.gagror.model.Message;
 
 /**
@@ -26,14 +22,14 @@ public class Welcome extends SpringViewSupport {
 	@RequestMapping("/initial.html")
 	public ModelAndView handleRequest(final HttpServletRequest request, final HttpServletResponse response) {
 		this.getLog().info("Handling request and providing model");
-		final Map<String, Object> model = new HashMap<String, Object>();
+		final ModelAndView mav = new ModelAndView();
 		try {
-			final Message message = new MessageClient(this.getNamingContextProvider()).createMessage(this.getAnonymousContext(),
-					"An EJB generated persistent message appears!");
-			model.put("brief", message.getText() + " (" + message.getId() + ")");
+			final Message message = this.getMessageService().createMessage(this.getContext(request), "An EJB generated persistent message appears!");
+			mav.getModel().put("brief", message.getText() + " (" + message.getId() + ")");
 		} catch (GagrorException e) {
-			model.put("brief", "An error message appears: " + e.getCause().getMessage());
+			mav.getModel().put("brief", "An error message appears: " + e.getCause().getMessage());
 		}
-		return new ModelAndView("welcome", "gagror", model);
+		mav.setViewName("welcome");
+		return mav;
 	}
 }

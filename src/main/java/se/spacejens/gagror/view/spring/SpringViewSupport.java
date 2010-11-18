@@ -8,5 +8,4 @@ import se.spacejens.gagror.view.ViewSupport;
  * @author spacejens
  */
 public abstract class SpringViewSupport extends ViewSupport {
-
 }
