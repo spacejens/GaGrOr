@@ -70,8 +70,7 @@ public class PublicPages extends SpringViewSupport {
 		if (result.hasErrors()) {
 			this.getLog().debug("Registration form posted with binding errors");
 			mav.setViewName("register");
-			// TODO Check if framework adds form automatically
-			mav.getModel().put("userRegistrationForm", userRegistrationForm);
+			// Framework adds registration form and binding result automatically
 			return mav;
 		}
 		this.getLog().debug("Registration form posted");
@@ -83,6 +82,7 @@ public class PublicPages extends SpringViewSupport {
 			return mav;
 		} catch (GagrorException e) {
 			this.getLog().error("Exception while registering user", e);
+			// TODO Add global error message
 			mav.setViewName("register");
 			mav.getModel().put("userRegistrationForm", userRegistrationForm);
 			return mav;
