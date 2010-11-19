@@ -3,6 +3,7 @@ package se.spacejens.gagror.controller.helper;
 import se.spacejens.gagror.controller.Encrypter;
 import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserCreationException;
 
 /**
  * Implementation of user helper.
@@ -22,10 +23,9 @@ public class UserHelperImpl extends HelperSupport implements UserHelper {
 	}
 
 	@Override
-	public User registerUser(final String username, final String password) {
+	public User registerUser(final String username, final String password) throws UserCreationException {
 		// TODO Verify that the user is not currently logged in
 		final String encryptedPassword = Encrypter.encryptPassword(username, password);
-		// TODO Flush entitymanager to check if username busy, throw exception
 		return this.getUserDAO(this.getJpa()).createUser(username, encryptedPassword);
 	}
 }

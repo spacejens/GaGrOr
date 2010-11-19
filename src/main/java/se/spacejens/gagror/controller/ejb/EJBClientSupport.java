@@ -36,12 +36,11 @@ public abstract class EJBClientSupport<L> extends LogAwareSupport {
 	 *             If EJB lookup failed.
 	 */
 	@SuppressWarnings("unchecked")
-	protected L getReference() throws EJBLookupException {
+	protected L getReference() throws EJBCommunicationException {
 		try {
-			return (L) this.namingContextProvider.getContext().lookup(
-					"java:module/" + this.getBeanName());
+			return (L) this.namingContextProvider.getContext().lookup("java:module/" + this.getBeanName());
 		} catch (final NamingException e) {
-			throw new EJBLookupException(e);
+			throw new EJBCommunicationException(e);
 		}
 	}
 

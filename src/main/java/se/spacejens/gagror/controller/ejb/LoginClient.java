@@ -1,9 +1,10 @@
 package se.spacejens.gagror.controller.ejb;
 
-import se.spacejens.gagror.GagrorException;
 import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserCreationException;
 
 /**
  * Login service client.
@@ -23,7 +24,8 @@ public class LoginClient extends EJBClientSupport<LoginService> implements Login
 	}
 
 	@Override
-	public User registerUser(final RequestContext rc, final String username, final String password) throws GagrorException {
+	public User registerUser(final RequestContext rc, final String username, final String password) throws UserCreationException,
+			ServiceCommunicationException {
 		return this.getReference().registerUser(rc, username, password);
 	}
 

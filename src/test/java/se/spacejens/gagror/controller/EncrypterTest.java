@@ -1,8 +1,5 @@
 package se.spacejens.gagror.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,11 +18,7 @@ public class EncrypterTest extends TestSupport {
 	 */
 	@Test
 	public void algorithmExists() {
-		try {
-			Encrypter.getMessageDigest();
-		} catch (NoSuchAlgorithmException e) {
-			Assert.fail("Encryption algorithm did not exist");
-		}
+		Encrypter.getMessageDigest();
 	}
 
 	/**
@@ -33,11 +26,7 @@ public class EncrypterTest extends TestSupport {
 	 */
 	@Test
 	public void characterEncodingExists() {
-		try {
-			Encrypter.getBytes("Whatever");
-		} catch (UnsupportedEncodingException e) {
-			Assert.fail("Character encoding did not exist");
-		}
+		Encrypter.getBytes("Whatever");
 	}
 
 	/**

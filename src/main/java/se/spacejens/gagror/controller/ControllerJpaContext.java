@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller.ejb;
+package se.spacejens.gagror.controller;
 
 import javax.persistence.EntityManager;
 
@@ -9,7 +9,7 @@ import se.spacejens.gagror.model.JpaContext;
  * 
  * @author spacejens
  */
-class JpaContextImpl implements JpaContext {
+class ControllerJpaContext implements JpaContext {
 
 	/** Entity manager instance. */
 	private final EntityManager entityManager;
@@ -20,7 +20,7 @@ class JpaContextImpl implements JpaContext {
 	 * @param entityManager
 	 *            Not null.
 	 */
-	public JpaContextImpl(final EntityManager entityManager) {
+	public ControllerJpaContext(final EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 

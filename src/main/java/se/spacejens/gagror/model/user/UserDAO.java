@@ -15,6 +15,9 @@ public interface UserDAO {
 	 * @param password
 	 *            Encrypted password to use.
 	 * @return The user after persisting.
+	 * @throws UserCreationException
+	 *             If the user could not be created, most likely because the
+	 *             username was busy.
 	 */
-	public User createUser(final String username, final String password);
+	public User createUser(final String username, final String password) throws UserCreationException;
 }

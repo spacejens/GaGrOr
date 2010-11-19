@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import se.spacejens.gagror.GagrorException;
+import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.model.Message;
 
 /**
@@ -26,7 +26,7 @@ public class Welcome extends SpringViewSupport {
 		try {
 			final Message message = this.getMessageService().createMessage(this.getContext(request), "An EJB generated persistent message appears!");
 			mav.getModel().put("brief", message.getText() + " (" + message.getId() + ")");
-		} catch (GagrorException e) {
+		} catch (final ServiceCommunicationException e) {
 			mav.getModel().put("brief", "An error message appears: " + e.getCause().getMessage());
 		}
 		mav.setViewName("welcome");

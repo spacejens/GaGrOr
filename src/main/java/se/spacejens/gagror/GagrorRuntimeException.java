@@ -4,11 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A generic system exception. Subclasses are more specific.
+ * Thrown for errors that do not need to be explicitly caught or thrown in the
+ * source code.
  * 
  * @author spacejens
  */
-public class GagrorException extends Exception implements LogAware {
+public class GagrorRuntimeException extends RuntimeException implements LogAware {
 
 	/** Required by {@link java.io.Serializable} interface. */
 	private static final long serialVersionUID = 1L;
@@ -16,21 +17,21 @@ public class GagrorException extends Exception implements LogAware {
 	/** Logger to use for this object. */
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	public GagrorException() {
+	public GagrorRuntimeException() {
 		this.getLog().debug("Creating instance");
 	}
 
-	public GagrorException(final String message) {
+	public GagrorRuntimeException(final String message) {
 		super(message);
 		this.getLog().debug("Creating instance with message");
 	}
 
-	public GagrorException(final Throwable cause) {
+	public GagrorRuntimeException(final Throwable cause) {
 		super(cause);
 		this.getLog().debug("Creating instance with cause");
 	}
 
-	public GagrorException(final String message, final Throwable cause) {
+	public GagrorRuntimeException(final String message, final Throwable cause) {
 		super(message, cause);
 		this.getLog().debug("Creating instance with message and cause");
 	}

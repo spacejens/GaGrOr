@@ -1,7 +1,7 @@
 package se.spacejens.gagror.controller.ejb;
 
-import se.spacejens.gagror.GagrorException;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.model.Message;
 
 /**
@@ -19,9 +19,8 @@ public interface MessageService {
 	 * @param text
 	 *            The contents of the message.
 	 * @return The detached message object.
-	 * @throws GagrorException
-	 *             If failed.
+	 * @throws ServiceCommunicationException
+	 *             If communication with the service failed.
 	 */
-	public Message createMessage(final RequestContext rc, final String text)
-			throws GagrorException;
+	public Message createMessage(final RequestContext rc, final String text) throws ServiceCommunicationException;
 }

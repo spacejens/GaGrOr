@@ -10,7 +10,7 @@ import se.spacejens.gagror.model.user.User;
  * 
  * @author spacejens
  */
-public class UserRegistrationForm {
+public class UserRegistrationForm extends SpringFormSupport {
 
 	/** Username. */
 	private String username;

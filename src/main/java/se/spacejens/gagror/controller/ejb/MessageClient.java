@@ -1,8 +1,8 @@
 package se.spacejens.gagror.controller.ejb;
 
-import se.spacejens.gagror.GagrorException;
 import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.model.Message;
 
 /**
@@ -10,8 +10,7 @@ import se.spacejens.gagror.model.Message;
  * 
  * @author spacejens
  */
-public class MessageClient extends EJBClientSupport<MessageService> implements
-		MessageService {
+public class MessageClient extends EJBClientSupport<MessageService> implements MessageService {
 
 	/**
 	 * Create client instance.
@@ -29,8 +28,7 @@ public class MessageClient extends EJBClientSupport<MessageService> implements
 	}
 
 	@Override
-	public Message createMessage(final RequestContext rc, final String text)
-			throws GagrorException {
+	public Message createMessage(final RequestContext rc, final String text) throws ServiceCommunicationException {
 		return this.getReference().createMessage(rc, text);
 	}
 }

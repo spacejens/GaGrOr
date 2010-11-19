@@ -3,7 +3,10 @@ TODO list in order of decreasing priority
 =========================================
 
 User functionality: Verify password when registering. Log in and change password.
-Proper exception handling (specific, service-technology-neutral exceptions as superclasses of EJB exceptions).
+
+Change Encrypter to a proper helper, to avoid using static classes.
+
+Move constants to their own class/interface in the se.spacejens.gagror package.
 
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
