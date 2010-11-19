@@ -17,9 +17,14 @@ public interface UserHelper {
 	 *            Username of the new user.
 	 * @param password
 	 *            Plaintext password of the new user.
+	 * @param repeatPassword
+	 *            Plaintext password repeated.
 	 * @throws UserCreationException
 	 *             If the user could not be created, most likely because the
 	 *             username was busy.
+	 * @throws RepeatedPasswordNotMatchingException
+	 *             If the repeated password did not match.
 	 */
-	public User registerUser(final String username, final String password) throws UserCreationException;
+	public User registerUser(final String username, final String password, final String repeatPassword) throws UserCreationException,
+			RepeatedPasswordNotMatchingException;
 }

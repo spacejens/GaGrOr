@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
+import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.user.User;
 import se.spacejens.gagror.model.user.UserCreationException;
 
@@ -79,9 +80,17 @@ public class PublicPages extends SpringViewSupport {
 		}
 		final RequestContext rc = this.getContext(request);
 		try {
-			final User user = this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(), userRegistrationForm.getPassword());
+			final User user = this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(), userRegistrationForm.getPassword(),
+					userRegistrationForm.getRepeatPassword());
 			// TODO Log in as the newly registered user
 			mav.setView(new RedirectView("index.html"));
+			return mav;
+		} catch (RepeatedPasswordNotMatchingException e) {
+			this.getLog().debug("Repeated password did not match when registering user");
+			final FieldError error = new FieldError("userRegistrationForm", "repeatPassword", "passwords did not match");
+			result.addError(error);
+			mav.setViewName("register");
+			// Framework adds registration form and binding result automatically
 			return mav;
 		} catch (final UserCreationException e) {
 			this.getLog().debug("User could not be registered, assume that the username is not unique");

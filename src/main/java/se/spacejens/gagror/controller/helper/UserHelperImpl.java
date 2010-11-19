@@ -23,7 +23,11 @@ public class UserHelperImpl extends HelperSupport implements UserHelper {
 	}
 
 	@Override
-	public User registerUser(final String username, final String password) throws UserCreationException {
+	public User registerUser(final String username, final String password, final String repeatPassword) throws UserCreationException,
+			RepeatedPasswordNotMatchingException {
+		if (!password.equals(repeatPassword)) {
+			throw new RepeatedPasswordNotMatchingException();
+		}
 		// TODO Verify that the user is not currently logged in
 		final String encryptedPassword = Encrypter.encryptPassword(username, password);
 		return this.getUserDAO(this.getJpa()).createUser(username, encryptedPassword);
