@@ -12,6 +12,8 @@ Use abstract type for enums, defining integer code (with Hibernate type mapping)
 
 Implement hashCode, equals, and toString methods for entities properly
 
+Create more user-friendly form validation error messages
+
 Add Spring TLD, using JSP fragments for tag definitions
 
 Remove Message entity, Welcome controller etc.
