@@ -1,5 +1,7 @@
 package se.spacejens.gagror.view.spring;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Form backing bean used when logging in.
  * 
@@ -18,6 +20,7 @@ public class UserLoginForm {
 	 * 
 	 * @return Username.
 	 */
+	@NotNull
 	public String getUsername() {
 		return this.username;
 	}
@@ -37,6 +40,7 @@ public class UserLoginForm {
 	 * 
 	 * @return Password.
 	 */
+	@NotNull
 	public String getPassword() {
 		return this.password;
 	}

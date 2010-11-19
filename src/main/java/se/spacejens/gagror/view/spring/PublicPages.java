@@ -1,9 +1,10 @@
 package se.spacejens.gagror.view.spring;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -45,7 +46,7 @@ public class PublicPages extends SpringViewSupport {
 	public ModelAndView registerFormGet() {
 		this.getLog().debug("Serving registration page");
 		final ModelAndView mav = new ModelAndView("register");
-		mav.getModel().put("registrationform", new UserRegistrationForm());
+		mav.getModel().put("userRegistrationForm", new UserRegistrationForm());
 		return mav;
 	}
 
@@ -53,7 +54,9 @@ public class PublicPages extends SpringViewSupport {
 	 * Posting user registration form. If registration is successful, the user
 	 * will be automatically logged in.
 	 * 
-	 * @param registrationform
+	 * @param request
+	 *            HTTP request.
+	 * @param userRegistrationForm
 	 *            The posted form contents.
 	 * @param result
 	 *            Result of data binding.
@@ -61,22 +64,28 @@ public class PublicPages extends SpringViewSupport {
 	 *         cancelled, redirect to system dashboard if successful.
 	 */
 	@RequestMapping(value = "/register.html", method = RequestMethod.POST)
-	public ModelAndView registerFormPost(final HttpServletRequest request, @ModelAttribute final UserRegistrationForm registrationform) {
-		this.getLog().debug("Registration form posted");
-		final RequestContext rc = this.getContext(request);
+	public ModelAndView registerFormPost(final HttpServletRequest request, @Valid final UserRegistrationForm userRegistrationForm,
+			final BindingResult result) {
 		final ModelAndView mav = new ModelAndView();
-		try {
-			// TODO Check for binding errors
-			final User user = this.getLoginService().registerUser(rc, registrationform.getUsername(), registrationform.getPassword());
-			// TODO Log in as the newly registered user
-			mav.setView(new RedirectView("/index.html"));
-		} catch (GagrorException e) {
-			this.getLog().error("Exception while registering user", e);
-			// TODO Add error messages
+		if (result.hasErrors()) {
+			this.getLog().debug("Registration form posted with binding errors");
 			mav.setViewName("register");
-			mav.getModel().put("registrationform", registrationform);
+			// TODO Check if framework adds form automatically
+			mav.getModel().put("userRegistrationForm", userRegistrationForm);
 			return mav;
 		}
-		return mav;
+		this.getLog().debug("Registration form posted");
+		final RequestContext rc = this.getContext(request);
+		try {
+			final User user = this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(), userRegistrationForm.getPassword());
+			// TODO Log in as the newly registered user
+			mav.setView(new RedirectView("index.html"));
+			return mav;
+		} catch (GagrorException e) {
+			this.getLog().error("Exception while registering user", e);
+			mav.setViewName("register");
+			mav.getModel().put("userRegistrationForm", userRegistrationForm);
+			return mav;
+		}
 	}
 }
