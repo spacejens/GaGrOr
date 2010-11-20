@@ -22,16 +22,23 @@ public interface UserDAO {
 	public User createUser(final String username, final String password) throws UserCreationException;
 
 	/**
+	 * Find user with the specified ID.
+	 * 
+	 * @param id
+	 *            User ID to find.
+	 * @return Null if the user could not be found.
+	 */
+	public User findUser(final Long id);
+
+	/**
 	 * Find user with the specified login credentials.
 	 * 
 	 * @param username
 	 *            Username.
 	 * @param password
 	 *            Encrypted password.
-	 * @return Not null.
-	 * @throws UserNotFoundException
-	 *             If the user could not be found. This includes if there is
-	 *             such a user, but with a different password.
+	 * @return Null if the user could not be found (including if the user
+	 *         exists, but with another password).
 	 */
-	public User findUser(final String username, final String password) throws UserNotFoundException;
+	public User findUser(final String username, final String password);
 }

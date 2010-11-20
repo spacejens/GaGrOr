@@ -40,14 +40,19 @@ public class UserDAOImpl extends DAOSupport implements UserDAO {
 	}
 
 	@Override
-	public User findUser(final String username, final String password) throws UserNotFoundException {
+	public User findUser(final Long id) {
+		return this.getJpa().getEntityManager().find(UserImpl.class, id);
+	}
+
+	@Override
+	public User findUser(final String username, final String password) {
 		final TypedQuery<UserImpl> query = this.getJpa().getEntityManager().createNamedQuery("login", UserImpl.class);
 		query.setParameter("username", username);
 		query.setParameter("password", password);
 		try {
 			return query.getSingleResult();
 		} catch (final NoResultException e) {
-			throw new UserNotFoundException(e);
+			return null;
 		}
 	}
 }
