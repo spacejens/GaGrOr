@@ -4,6 +4,8 @@ TODO list in order of decreasing priority
 
 User functionality: Log in and change password.
 
+Clean up public web Spring controller (remove unused methods, clean code) and pages (reuse login form etc.).
+
 Change Encrypter to a proper helper, to avoid using static classes.
 
 Move constants to their own class/interface in the se.spacejens.gagror package.
@@ -17,6 +19,8 @@ Create more user-friendly form validation error messages
 Add Spring TLD, using JSP fragments for tag definitions
 
 Remove Message entity, Welcome controller etc.
+
+Refactor package structure with more sub-packages for clarity when expanding.
 
 Add more framework unit tests (and in the future, write new tests when adding functionality)
 
