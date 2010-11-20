@@ -4,6 +4,9 @@ TODO list in order of decreasing priority
 
 User functionality: Log in and change password.
 
+EJBs should not store information with JPA context (helper etc.) permanently. Create new every time to prevent this, use abstract boolean method to
+select behavior? Possibly save instances in the JPA context?
+
 Change Encrypter to a proper helper, to avoid using static classes.
 
 Move constants to their own class/interface in the se.spacejens.gagror package.
