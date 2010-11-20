@@ -1,5 +1,6 @@
 package se.spacejens.gagror.controller.ejb;
 
+import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.model.Message;
@@ -21,6 +22,8 @@ public interface MessageService {
 	 * @return The detached message object.
 	 * @throws ServiceCommunicationException
 	 *             If communication with the service failed.
+	 * @throws LoginFailedException
+	 *             If login using the credentials in the request context fails.
 	 */
-	public Message createMessage(final RequestContext rc, final String text) throws ServiceCommunicationException;
+	public Message createMessage(final RequestContext rc, final String text) throws ServiceCommunicationException, LoginFailedException;
 }

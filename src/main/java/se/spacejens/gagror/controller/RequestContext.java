@@ -21,4 +21,25 @@ public interface RequestContext {
 	 * @return Null if not present.
 	 */
 	public String getPassword();
+
+	/**
+	 * Get the web application context path of the request.
+	 * 
+	 * @return Not null.
+	 */
+	public String getContextPath();
+
+	/**
+	 * Get the servlet path of the request.
+	 * 
+	 * @return Not null.
+	 */
+	public String getServletPath();
+
+	/**
+	 * Check if the context contains username, password etc.
+	 * 
+	 * @return true if any such information is present.
+	 */
+	public boolean isContainingLoginInformation();
 }

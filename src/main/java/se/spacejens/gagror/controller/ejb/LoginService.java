@@ -1,5 +1,7 @@
 package se.spacejens.gagror.controller.ejb;
 
+import se.spacejens.gagror.controller.LoginFailedException;
+import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
@@ -24,7 +26,7 @@ public interface LoginService {
 	 *            Plaintext password.
 	 * @param repeatPassword
 	 *            Plaintext password repeated.
-	 * @return The new user.
+	 * @return The new user, not null.
 	 * @throws UserCreationException
 	 *             If the user could not be created, most likely because the
 	 *             username was busy.
@@ -32,7 +34,27 @@ public interface LoginService {
 	 *             If communication with the service failed.
 	 * @throws RepeatedPasswordNotMatchingException
 	 *             If the repeated password did not match.
+	 * @throws MayNotBeLoggedInException
+	 *             If a user was logged in.
 	 */
 	public User registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
-			throws UserCreationException, ServiceCommunicationException, RepeatedPasswordNotMatchingException;
+			throws UserCreationException, ServiceCommunicationException, RepeatedPasswordNotMatchingException, MayNotBeLoggedInException;
+
+	/**
+	 * Log in a user.
+	 * 
+	 * @param rc
+	 *            The request context.
+	 * @param username
+	 *            Username.
+	 * @param password
+	 *            Plaintext password.
+	 * @return The logged in user, not null.
+	 * @throws ServiceCommunicationException
+	 *             If communication with the service failed.
+	 * @throws LoginFailedException
+	 *             If login failed.
+	 */
+	public User loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
+			LoginFailedException;
 }

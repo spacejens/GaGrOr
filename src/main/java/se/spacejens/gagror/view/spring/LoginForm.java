@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
  * 
  * @author spacejens
  */
-public class UserLoginForm extends SpringFormSupport {
+public class LoginForm extends SpringFormSupport {
 
 	/** Username. */
 	private String username;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.model.Message;
 
@@ -28,6 +29,8 @@ public class Welcome extends SpringViewSupport {
 			mav.getModel().put("brief", message.getText() + " (" + message.getId() + ")");
 		} catch (final ServiceCommunicationException e) {
 			mav.getModel().put("brief", "An error message appears: " + e.getCause().getMessage());
+		} catch (final LoginFailedException e) {
+			mav.getModel().put("brief", "A login failed message appears");
 		}
 		mav.setViewName("welcome");
 		return mav;

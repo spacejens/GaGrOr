@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import se.spacejens.gagror.controller.LoginFailedException;
+import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
@@ -35,10 +37,139 @@ public class PublicPages extends SpringViewSupport {
 	 * 
 	 * @return View to the index page.
 	 */
-	@RequestMapping("/index.html")
+	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public ModelAndView index() {
 		this.getLog().debug("Serving index page");
-		return new ModelAndView("index");
+		final ModelAndView mav = new ModelAndView("index");
+		mav.getModel().put("loginForm", new LoginForm());
+		return mav;
+	}
+
+	/**
+	 * Posting login form on index page.
+	 * 
+	 * @param request
+	 *            HTTP request.
+	 * @param loginForm
+	 *            The posted form contents.
+	 * @param result
+	 *            Result of data binding.
+	 * @return View to login failed page (with error messages) if failed,
+	 *         redirect to system dashboard if successful.
+	 */
+	@RequestMapping(value = "/index.html", method = RequestMethod.POST)
+	public ModelAndView postLoginFormIndex(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
+		this.getLog().debug("Login form posted from index page");
+		return this.postLoginForm(request, loginForm, result);
+	}
+
+	/**
+	 * This page is displayed when the user is logged out, either by choice or
+	 * by force.
+	 * 
+	 * @return View to the logged out page.
+	 */
+	@RequestMapping(value = "/loggedout.html", method = RequestMethod.GET)
+	public ModelAndView loggedOut() {
+		this.getLog().debug("Serving logged out page");
+		final ModelAndView mav = new ModelAndView("loggedout");
+		mav.getModel().put("loginForm", new LoginForm());
+		return mav;
+	}
+
+	/**
+	 * Posting login form on logged out page.
+	 * 
+	 * @param request
+	 *            HTTP request.
+	 * @param loginForm
+	 *            The posted form contents.
+	 * @param result
+	 *            Result of data binding.
+	 * @return View to login failed page (with error messages) if failed,
+	 *         redirect to system dashboard if successful.
+	 */
+	@RequestMapping(value = "/loggedout.html", method = RequestMethod.POST)
+	public ModelAndView postLoginFormLoggedOut(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
+		this.getLog().debug("Login form posted from logged out page");
+		return this.postLoginForm(request, loginForm, result);
+	}
+
+	/**
+	 * Page shown when login fails
+	 * 
+	 * @return View to the login failed page.
+	 */
+	@RequestMapping(value = "/loginfailed.html", method = RequestMethod.GET)
+	public ModelAndView loginFailedGet() {
+		this.getLog().debug("Serving login failed page");
+		final ModelAndView mav = new ModelAndView("loginfailed");
+		mav.getModel().put("loginForm", new LoginForm());
+		return mav;
+	}
+
+	/**
+	 * Posting login form on login failed page.
+	 * 
+	 * @param request
+	 *            HTTP request.
+	 * @param loginForm
+	 *            The posted form contents.
+	 * @param result
+	 *            Result of data binding.
+	 * @return View to login failed page (with error messages) if failed,
+	 *         redirect to system dashboard if successful.
+	 */
+	@RequestMapping(value = "/loginfailed.html", method = RequestMethod.POST)
+	public ModelAndView loginFailedPost(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
+		this.getLog().debug("Login form posted from login failed page");
+		return this.postLoginForm(request, loginForm, result);
+	}
+
+	/**
+	 * Handle posting of login form.
+	 * 
+	 * @param request
+	 *            HTTP request.
+	 * @param loginForm
+	 *            The posted form contents.
+	 * @param result
+	 *            Result of data binding.
+	 * @return View to login failed page (with error messages) if failed,
+	 *         redirect to system dashboard if successful.
+	 * @throws LoginFailedException
+	 * @throws ServiceCommunicationException
+	 */
+	private ModelAndView postLoginForm(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
+		final RequestContext rc = this.getContext(request);
+		final ModelAndView mav = new ModelAndView();
+		if (result.hasErrors()) {
+			this.getLog().debug("Login form has binding errors");
+			mav.setViewName("loginfailed");
+			// Framework adds registration form and binding result automatically
+			return mav;
+		}
+		try {
+			final User user = this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
+			this.setLoggedInUser(user, request.getSession());
+			// TODO Go to a more suitable page
+			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
+			return mav;
+		} catch (final LoginFailedException e) {
+			this.getLog().debug("Login failed for user {}", loginForm.getUsername());
+			final ObjectError error = new ObjectError("loginForm", "wrong username/password combination");
+			result.addError(error);
+			mav.setViewName("loginfailed");
+			// Framework adds registration form and binding result automatically
+			return mav;
+		} catch (ServiceCommunicationException e) {
+			this.getLog().debug("Failure to communicate with service when registering user");
+			final ObjectError error = new ObjectError("loginForm", "communication problem");
+			result.addError(error);
+			mav.setViewName("register");
+			// Framework adds registration form and binding result automatically
+			return mav;
+		}
 	}
 
 	/**
@@ -66,8 +197,8 @@ public class PublicPages extends SpringViewSupport {
 	 *            The posted form contents.
 	 * @param result
 	 *            Result of data binding.
-	 * @return View to registration form (with error messages) if failed or
-	 *         cancelled, redirect to system dashboard if successful.
+	 * @return View to registration form (with error messages) if failed,
+	 *         redirect to system dashboard if successful.
 	 */
 	@RequestMapping(value = "/register.html", method = RequestMethod.POST)
 	public ModelAndView registerFormPost(final HttpServletRequest request, @Valid final UserRegistrationForm userRegistrationForm,
@@ -85,7 +216,7 @@ public class PublicPages extends SpringViewSupport {
 			final User user = this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(), userRegistrationForm.getPassword(),
 					userRegistrationForm.getRepeatPassword());
 			this.setLoggedInUser(user, request.getSession());
-			mav.setView(new RedirectView("index.html"));
+			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
 			return mav;
 		} catch (RepeatedPasswordNotMatchingException e) {
 			this.getLog().debug("Repeated password did not match when registering user");
@@ -107,6 +238,11 @@ public class PublicPages extends SpringViewSupport {
 			result.addError(error);
 			mav.setViewName("register");
 			// Framework adds registration form and binding result automatically
+			return mav;
+		} catch (MayNotBeLoggedInException e) {
+			this.getLog().debug("Attempting to register a new user while logged in");
+			// TODO Go to a more suitable page
+			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
 			return mav;
 		}
 	}

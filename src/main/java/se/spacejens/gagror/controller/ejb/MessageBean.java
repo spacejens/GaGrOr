@@ -2,6 +2,7 @@ package se.spacejens.gagror.controller.ejb;
 
 import javax.ejb.Singleton;
 
+import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.Message;
@@ -15,7 +16,7 @@ import se.spacejens.gagror.model.Message;
 public class MessageBean extends EJBSupport implements MessageService {
 
 	@Override
-	public Message createMessage(final RequestContext rc, final String text) {
+	public Message createMessage(final RequestContext rc, final String text) throws LoginFailedException {
 		this.getLog().debug("Message bean creates new message");
 		final JpaContext jpa = this.getJpaContext(rc);
 		final Message message = new Message(text);

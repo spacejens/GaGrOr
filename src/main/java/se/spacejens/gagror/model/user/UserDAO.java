@@ -14,7 +14,7 @@ public interface UserDAO {
 	 *            Username to use.
 	 * @param password
 	 *            Encrypted password to use.
-	 * @return The user after persisting.
+	 * @return The user after persisting, not null.
 	 * @throws UserCreationException
 	 *             If the user could not be created, most likely because the
 	 *             username was busy.

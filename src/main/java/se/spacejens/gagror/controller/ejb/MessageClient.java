@@ -1,5 +1,6 @@
 package se.spacejens.gagror.controller.ejb;
 
+import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
@@ -28,7 +29,7 @@ public class MessageClient extends EJBClientSupport<MessageService> implements M
 	}
 
 	@Override
-	public Message createMessage(final RequestContext rc, final String text) throws ServiceCommunicationException {
+	public Message createMessage(final RequestContext rc, final String text) throws ServiceCommunicationException, LoginFailedException {
 		return this.getReference().createMessage(rc, text);
 	}
 }

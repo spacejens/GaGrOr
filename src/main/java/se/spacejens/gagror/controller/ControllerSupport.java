@@ -21,8 +21,10 @@ public abstract class ControllerSupport extends HelperAndDAOClientSupport {
 	 * @param entityManager
 	 *            Not null.
 	 * @return Not null.
+	 * @throws LoginFailedException
+	 *             If login using the credentials in the request context fails.
 	 */
-	protected JpaContext getJpaContext(final RequestContext requestContext, final EntityManager entityManager) {
+	protected JpaContext getJpaContext(final RequestContext requestContext, final EntityManager entityManager) throws LoginFailedException {
 		final ControllerJpaContext jpa = new ControllerJpaContext(entityManager);
 		final User currentUser = this.getUserDAO(jpa).findUser(requestContext.getUsername(), requestContext.getPassword());
 		jpa.setCurrentUser(currentUser);
@@ -30,6 +32,9 @@ public abstract class ControllerSupport extends HelperAndDAOClientSupport {
 			this.getLog().debug("Created controller JPA context, no user logged in");
 		} else {
 			this.getLog().debug("Created controller JPA context, logged in user is {}", currentUser.getUsername());
+		}
+		if (requestContext.isContainingLoginInformation() && !jpa.isContainingLoginInformation()) {
+			throw new LoginFailedException();
 		}
 		return jpa;
 	}

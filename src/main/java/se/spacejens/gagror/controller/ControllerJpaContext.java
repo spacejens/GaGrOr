@@ -48,4 +48,9 @@ class ControllerJpaContext implements JpaContext {
 	void setCurrentUser(final User currentUser) {
 		this.currentUser = currentUser;
 	}
+
+	@Override
+	public boolean isContainingLoginInformation() {
+		return this.getCurrentUser() != null;
+	}
 }

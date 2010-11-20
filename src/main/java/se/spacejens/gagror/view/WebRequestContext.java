@@ -19,6 +19,12 @@ class WebRequestContext extends LogAwareSupport implements RequestContext {
 	/** The password used for login in this session. */
 	private final String password;
 
+	/** The web application context path of the request. */
+	private final String contextPath;
+
+	/** The servlet path of the request. */
+	private final String servletPath;
+
 	/**
 	 * Create instance from information stored in servlet request.
 	 * 
@@ -38,7 +44,9 @@ class WebRequestContext extends LogAwareSupport implements RequestContext {
 		} else {
 			this.password = sessionPassword.toString();
 		}
-		this.getLog().debug("Created web request context from HTTP servlet request, username={}", this.username);
+		this.contextPath = request.getContextPath();
+		this.servletPath = request.getServletPath();
+		this.getLog().debug("Created web request context from HTTP servlet request, username={}, servlet path={}", this.username, this.servletPath);
 	}
 
 	@Override
@@ -49,5 +57,20 @@ class WebRequestContext extends LogAwareSupport implements RequestContext {
 	@Override
 	public String getPassword() {
 		return this.password;
+	}
+
+	@Override
+	public String getContextPath() {
+		return this.contextPath;
+	}
+
+	@Override
+	public String getServletPath() {
+		return this.servletPath;
+	}
+
+	@Override
+	public boolean isContainingLoginInformation() {
+		return this.getUsername() != null || this.getPassword() != null;
 	}
 }

@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import se.spacejens.gagror.controller.ControllerSupport;
+import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.model.JpaContext;
 
@@ -24,8 +25,10 @@ public abstract class EJBSupport extends ControllerSupport {
 	 * @param requestContext
 	 *            Not null.
 	 * @return Not null.
+	 * @throws LoginFailedException
+	 *             If login using the credentials in the request context fails.
 	 */
-	protected JpaContext getJpaContext(final RequestContext requestContext) {
+	protected JpaContext getJpaContext(final RequestContext requestContext) throws LoginFailedException {
 		return this.getJpaContext(requestContext, this.entityManager);
 	}
 

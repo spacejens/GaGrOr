@@ -2,7 +2,7 @@
 TODO list in order of decreasing priority
 =========================================
 
-User functionality: Log in and change password. Special exception for login failure when handling each request (creating JPA context).
+User functionality: Log in and change password.
 
 Change Encrypter to a proper helper, to avoid using static classes.
 

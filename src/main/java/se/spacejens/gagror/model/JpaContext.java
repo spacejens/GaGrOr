@@ -24,4 +24,12 @@ public interface JpaContext {
 	 * @return Null if no user is logged in.
 	 */
 	public User getCurrentUser();
+
+	/**
+	 * Check if the context contains a logged in user or any other login
+	 * information.
+	 * 
+	 * @return true if any such information is present.
+	 */
+	public boolean isContainingLoginInformation();
 }
