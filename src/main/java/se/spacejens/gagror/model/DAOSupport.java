@@ -28,4 +28,9 @@ public abstract class DAOSupport extends DAOClientSupport {
 	protected JpaContext getJpa() {
 		return this.jpa;
 	}
+
+	@Override
+	protected boolean isStoringCreatedDAO() {
+		return true;
+	}
 }

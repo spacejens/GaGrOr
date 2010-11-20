@@ -31,4 +31,14 @@ public abstract class HelperSupport extends HelperAndDAOClientSupport {
 	protected JpaContext getJpa() {
 		return this.jpa;
 	}
+
+	@Override
+	protected boolean isStoringCreatedHelper() {
+		return true;
+	}
+
+	@Override
+	protected boolean isStoringCreatedDAO() {
+		return true;
+	}
 }

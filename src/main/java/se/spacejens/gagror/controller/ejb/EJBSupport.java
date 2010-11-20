@@ -28,4 +28,14 @@ public abstract class EJBSupport extends ControllerSupport {
 	protected JpaContext getJpaContext(final RequestContext requestContext) {
 		return this.getJpaContext(requestContext, this.entityManager);
 	}
+
+	@Override
+	protected boolean isStoringCreatedHelper() {
+		return false;
+	}
+
+	@Override
+	protected boolean isStoringCreatedDAO() {
+		return false;
+	}
 }

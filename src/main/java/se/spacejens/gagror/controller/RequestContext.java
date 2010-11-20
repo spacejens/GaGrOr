@@ -8,4 +8,17 @@ package se.spacejens.gagror.controller;
  */
 public interface RequestContext {
 
+	/**
+	 * Get the username used for login in this session.
+	 * 
+	 * @return Null if not present.
+	 */
+	public String getUsername();
+
+	/**
+	 * Get the encrypted password used for login in this session.
+	 * 
+	 * @return Null if not present.
+	 */
+	public String getPassword();
 }

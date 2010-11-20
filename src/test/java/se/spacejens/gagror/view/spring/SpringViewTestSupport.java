@@ -2,7 +2,7 @@ package se.spacejens.gagror.view.spring;
 
 import org.junit.Before;
 
-import se.spacejens.gagror.TestSupport;
+import se.spacejens.gagror.view.ViewTestSupport;
 
 /**
  * Superclass for unit tests of Spring controllers.
@@ -12,8 +12,7 @@ import se.spacejens.gagror.TestSupport;
  * @param <C>
  *            Type of controller to test.
  */
-public abstract class SpringViewTestSupport<C extends SpringViewSupport>
-		extends TestSupport {
+public abstract class SpringViewTestSupport<C extends SpringViewSupport> extends ViewTestSupport {
 
 	/** Controller instance used for tests. */
 	private C instance;

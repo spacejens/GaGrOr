@@ -1,6 +1,8 @@
 package se.spacejens.gagror.model.user;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 
 import se.spacejens.gagror.model.DAOSupport;
 import se.spacejens.gagror.model.JpaContext;
@@ -35,5 +37,17 @@ public class UserDAOImpl extends DAOSupport implements UserDAO {
 			throw new UserCreationException(e);
 		}
 		return user;
+	}
+
+	@Override
+	public User findUser(final String username, final String password) throws UserNotFoundException {
+		final TypedQuery<UserImpl> query = this.getJpa().getEntityManager().createNamedQuery("login", UserImpl.class);
+		query.setParameter("username", username);
+		query.setParameter("password", password);
+		try {
+			return query.getSingleResult();
+		} catch (final NoResultException e) {
+			throw new UserNotFoundException(e);
+		}
 	}
 }

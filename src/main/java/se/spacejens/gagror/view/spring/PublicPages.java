@@ -47,8 +47,10 @@ public class PublicPages extends SpringViewSupport {
 	 * @return View to the registration form.
 	 */
 	@RequestMapping(value = "/register.html", method = RequestMethod.GET)
-	public ModelAndView registerFormGet() {
+	public ModelAndView registerFormGet(final HttpServletRequest request) {
 		this.getLog().debug("Serving registration page");
+		// TODO Verify that the user is not logged in
+		final RequestContext rc = this.getContext(request);
 		final ModelAndView mav = new ModelAndView("register");
 		mav.getModel().put("userRegistrationForm", new UserRegistrationForm());
 		return mav;
@@ -82,7 +84,7 @@ public class PublicPages extends SpringViewSupport {
 		try {
 			final User user = this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(), userRegistrationForm.getPassword(),
 					userRegistrationForm.getRepeatPassword());
-			// TODO Log in as the newly registered user
+			this.setLoggedInUser(user, request.getSession());
 			mav.setView(new RedirectView("index.html"));
 			return mav;
 		} catch (RepeatedPasswordNotMatchingException e) {

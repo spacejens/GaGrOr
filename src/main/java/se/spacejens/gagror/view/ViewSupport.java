@@ -1,6 +1,7 @@
 package se.spacejens.gagror.view;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import se.spacejens.gagror.LogAwareSupport;
 import se.spacejens.gagror.controller.NamingContextProvider;
@@ -9,6 +10,7 @@ import se.spacejens.gagror.controller.ejb.LoginClient;
 import se.spacejens.gagror.controller.ejb.LoginService;
 import se.spacejens.gagror.controller.ejb.MessageClient;
 import se.spacejens.gagror.controller.ejb.MessageService;
+import se.spacejens.gagror.model.user.User;
 
 /**
  * Superclass for all views, providing shared functionality.
@@ -79,6 +81,24 @@ public abstract class ViewSupport extends LogAwareSupport {
 	 */
 	protected RequestContext getContext(final HttpServletRequest request) {
 		return new WebRequestContext(request);
+	}
+
+	/**
+	 * Store login information for the specified user in the HTTP session.
+	 * 
+	 * @param user
+	 *            Not null.
+	 * @param session
+	 *            Not null.
+	 */
+	protected void setLoggedInUser(final User user, final HttpSession session) {
+		if (null == user) {
+			this.getLog().info("Logged out");
+		} else {
+			this.getLog().info("Logged in as {}", user.getUsername());
+		}
+		session.setAttribute("username", user.getUsername());
+		session.setAttribute("password", user.getPassword());
 	}
 
 	/**

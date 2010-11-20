@@ -20,4 +20,18 @@ public interface UserDAO {
 	 *             username was busy.
 	 */
 	public User createUser(final String username, final String password) throws UserCreationException;
+
+	/**
+	 * Find user with the specified login credentials.
+	 * 
+	 * @param username
+	 *            Username.
+	 * @param password
+	 *            Encrypted password.
+	 * @return Not null.
+	 * @throws UserNotFoundException
+	 *             If the user could not be found. This includes if there is
+	 *             such a user, but with a different password.
+	 */
+	public User findUser(final String username, final String password) throws UserNotFoundException;
 }

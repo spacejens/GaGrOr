@@ -25,10 +25,14 @@ public abstract class DAOClientSupport extends LogAwareSupport {
 	 * @return Not null.
 	 */
 	protected UserDAO getUserDAO(final JpaContext jpa) {
-		if (null == this.userDAO) {
-			this.setUserDAO(new UserDAOImpl(jpa));
+		if (null != this.userDAO) {
+			return this.userDAO;
 		}
-		return this.userDAO;
+		final UserDAO output = new UserDAOImpl(jpa);
+		if (this.isStoringCreatedDAO()) {
+			this.setUserDAO(output);
+		}
+		return output;
 	}
 
 	/**
@@ -40,4 +44,12 @@ public abstract class DAOClientSupport extends LogAwareSupport {
 	void setUserDAO(final UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+
+	/**
+	 * Should created DAO objects be stored and reused by later calls to the
+	 * same get method?
+	 * 
+	 * @return true if so.
+	 */
+	protected abstract boolean isStoringCreatedDAO();
 }

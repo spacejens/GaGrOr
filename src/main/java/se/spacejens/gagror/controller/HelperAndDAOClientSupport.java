@@ -25,10 +25,14 @@ public abstract class HelperAndDAOClientSupport extends DAOClientSupport {
 	 * @return Not null.
 	 */
 	protected UserHelper getUserHelper(final JpaContext jpa) {
-		if (null == this.userHelper) {
-			this.setUserHelper(new UserHelperImpl(jpa));
+		if (null != this.userHelper) {
+			return this.userHelper;
 		}
-		return this.userHelper;
+		final UserHelper output = new UserHelperImpl(jpa);
+		if (this.isStoringCreatedHelper()) {
+			this.setUserHelper(output);
+		}
+		return output;
 	}
 
 	/**
@@ -40,4 +44,12 @@ public abstract class HelperAndDAOClientSupport extends DAOClientSupport {
 	void setUserHelper(final UserHelper userHelper) {
 		this.userHelper = userHelper;
 	}
+
+	/**
+	 * Should created helper objects be stored and reused by later calls to the
+	 * same get method?
+	 * 
+	 * @return true if so.
+	 */
+	protected abstract boolean isStoringCreatedHelper();
 }

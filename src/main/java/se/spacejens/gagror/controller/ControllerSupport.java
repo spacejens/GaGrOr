@@ -3,6 +3,8 @@ package se.spacejens.gagror.controller;
 import javax.persistence.EntityManager;
 
 import se.spacejens.gagror.model.JpaContext;
+import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserNotFoundException;
 
 /**
  * Superclass for all controller (i.e. not helper) implementations, providing
@@ -10,7 +12,7 @@ import se.spacejens.gagror.model.JpaContext;
  * 
  * @author spacejens
  */
-public class ControllerSupport extends HelperAndDAOClientSupport {
+public abstract class ControllerSupport extends HelperAndDAOClientSupport {
 
 	/**
 	 * Get the persistence context for a specific request context.
@@ -22,8 +24,15 @@ public class ControllerSupport extends HelperAndDAOClientSupport {
 	 * @return Not null.
 	 */
 	protected JpaContext getJpaContext(final RequestContext requestContext, final EntityManager entityManager) {
-		final JpaContext jpa = new ControllerJpaContext(entityManager);
-		// TODO Fill JPA context with information
+		final ControllerJpaContext jpa = new ControllerJpaContext(entityManager);
+		try {
+			final User currentUser = this.getUserDAO(jpa).findUser(requestContext.getUsername(), requestContext.getPassword());
+			jpa.setCurrentUser(currentUser);
+			this.getLog().debug("Created controller JPA context, logged in user is {}", currentUser.getUsername());
+		} catch (final UserNotFoundException e) {
+			jpa.setCurrentUser(null);
+			this.getLog().debug("Created controller JPA context, no user logged in");
+		}
 		return jpa;
 	}
 }

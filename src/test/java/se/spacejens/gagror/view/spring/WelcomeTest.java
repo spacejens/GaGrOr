@@ -21,10 +21,9 @@ public class WelcomeTest extends SpringViewTestSupport<Welcome> {
 	@Test
 	public void testModelAndView() {
 		this.log.info("Testing WelcomeController");
-		final HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+		final HttpServletRequest request = this.createMockRequest(null, null);
 		final HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		final ModelAndView result = this.getInstance().handleRequest(request, response);
-		Mockito.verifyZeroInteractions(request);
 		Assert.assertEquals("Unexpected view name", "welcome", result.getViewName());
 		Assert.assertNotNull("No model received", result.getModel());
 		Assert.assertNotNull("Model did not contain brief message", result.getModel().get("brief"));

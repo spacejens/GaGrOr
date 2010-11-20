@@ -2,6 +2,8 @@ package se.spacejens.gagror.model.user;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -16,6 +18,7 @@ import se.spacejens.gagror.model.EntitySupport;
  */
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
+@NamedQueries(value = { @NamedQuery(name = "login", query = "select u from UserImpl u where u.username = :username and u.password = :password") })
 public class UserImpl extends EntitySupport implements User {
 
 	/** The username of this user. */
