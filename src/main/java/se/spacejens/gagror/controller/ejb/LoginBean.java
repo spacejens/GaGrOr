@@ -4,7 +4,9 @@ import javax.ejb.Singleton;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
+import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.user.User;
@@ -33,5 +35,15 @@ public class LoginBean extends EJBSupport implements LoginService {
 	public User loginUser(final RequestContext rc, final String username, final String password) throws LoginFailedException {
 		final JpaContext jpa = this.getJpaContext(rc);
 		return this.getUserHelper(jpa).loginUser(username, password);
+	}
+
+	@Override
+	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException {
+		final JpaContext jpa = this.getJpaContext(rc);
+		final User user = jpa.getCurrentUser();
+		if (null == user) {
+			throw new NotLoggedInException();
+		}
+		return user;
 	}
 }

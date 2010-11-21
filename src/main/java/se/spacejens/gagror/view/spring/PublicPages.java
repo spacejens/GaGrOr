@@ -152,8 +152,7 @@ public class PublicPages extends SpringViewSupport {
 		try {
 			final User user = this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
 			this.setLoggedInUser(user, request.getSession());
-			// TODO Go to a more suitable page
-			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
+			mav.setView(new RedirectView(rc.getContextPath() + "/dashboard/index.html"));
 			return mav;
 		} catch (final LoginFailedException e) {
 			this.getLog().debug("Login failed for user {}", loginForm.getUsername());

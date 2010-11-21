@@ -5,7 +5,7 @@ package se.spacejens.gagror.controller;
  * 
  * @author spacejens
  */
-public class LoginFailedException extends ControllerException {
+public class LoginFailedException extends NotLoggedInException {
 
 	/** Required by {@link java.io.Serializable} interface. */
 	private static final long serialVersionUID = 1L;

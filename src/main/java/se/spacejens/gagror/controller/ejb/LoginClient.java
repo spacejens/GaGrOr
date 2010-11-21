@@ -3,6 +3,7 @@ package se.spacejens.gagror.controller.ejb;
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.NamingContextProvider;
+import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
@@ -41,5 +42,10 @@ public class LoginClient extends EJBClientSupport<LoginService> implements Login
 	public User loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
 			LoginFailedException {
 		return this.getReference().loginUser(rc, username, password);
+	}
+
+	@Override
+	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException {
+		return this.getReference().verifyLogin(rc);
 	}
 }

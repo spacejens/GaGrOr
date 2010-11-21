@@ -2,6 +2,7 @@ package se.spacejens.gagror.controller.ejb;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
+import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
@@ -57,4 +58,19 @@ public interface LoginService {
 	 */
 	public User loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
 			LoginFailedException;
+
+	/**
+	 * Verify that the current user can be logged in.
+	 * 
+	 * @param rc
+	 *            The request context, containing login credentials.
+	 * @return The logged in user, not null.
+	 * @throws ServiceCommunicationException
+	 *             If communication with the service failed.
+	 * @throws LoginFailedException
+	 *             If login failed.
+	 * @throws NotLoggedInException
+	 *             If the user was not logged in.
+	 */
+	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, LoginFailedException, NotLoggedInException;
 }

@@ -2,9 +2,10 @@
 TODO list in order of decreasing priority
 =========================================
 
-User functionality: Log in and change password.
+User functionality: Log out, and change password.
 
 Clean up public web Spring controller (remove unused methods, clean code) and pages (reuse login form etc.).
+Add inner classes to SpringViewSupport for different kinds (requires login, may not be logged in, don't care) of tasks.
 
 Change Encrypter to a proper helper, to avoid using static classes.
 
