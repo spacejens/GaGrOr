@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Welcome Page</title>
+		<title><gagror:systemAbbr/> - Welcome Page</title>
 	</head>
 	<body>
 		<h1>Welcome Page</h1>
