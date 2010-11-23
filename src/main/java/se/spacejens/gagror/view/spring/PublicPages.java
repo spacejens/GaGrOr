@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,7 +65,7 @@ public class PublicPages extends SpringViewSupport {
 			@Override
 			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
 				this.getLog().debug("Serving logged out page");
-				// TODO Use service to log out?
+				PublicPages.this.getLoginService().logoutUser(rc);
 				PublicPages.this.setLoggedInUser(null, request.getSession());
 				final ModelAndView mav = new ModelAndView("login");
 				mav.getModel().put("headline", "Logged Out");
@@ -186,47 +185,41 @@ public class PublicPages extends SpringViewSupport {
 	@RequestMapping(value = SpringRequestMappings.PUBLIC_REGISTER, method = RequestMethod.POST)
 	public ModelAndView registerFormPost(final HttpServletRequest request, @Valid final UserRegistrationForm userRegistrationForm,
 			final BindingResult result) {
-		// TODO Rewrite this method using work wrapper
-		this.getLog().debug("Registration form posted");
-		final ModelAndView mav = new ModelAndView();
-		if (result.hasErrors()) {
-			this.getLog().debug("Registration form has binding errors");
-			mav.setViewName("register");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		}
-		final RequestContext rc = this.getContext(request);
-		try {
-			final User user = this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(), userRegistrationForm.getPassword(),
-					userRegistrationForm.getRepeatPassword());
-			this.setLoggedInUser(user, request.getSession());
-			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
-			return mav;
-		} catch (RepeatedPasswordNotMatchingException e) {
-			this.getLog().debug("Repeated password did not match when registering user");
-			final FieldError error = new FieldError("userRegistrationForm", "repeatPassword", "passwords did not match");
-			result.addError(error);
-			mav.setViewName("register");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		} catch (final UserCreationException e) {
-			this.getLog().debug("User could not be registered, assume that the username is not unique");
-			final FieldError error = new FieldError("userRegistrationForm", "username", "username is not unique");
-			result.addError(error);
-			mav.setViewName("register");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		} catch (final ServiceCommunicationException e) {
-			this.getLog().debug("Failure to communicate with service when registering user");
-			final ObjectError error = new ObjectError("userRegistrationForm", "communication problem");
-			result.addError(error);
-			mav.setViewName("register");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		} catch (MayNotBeLoggedInException e) {
-			this.getLog().debug("Attempting to register a new user while logged in");
-			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
-			return mav;
-		}
+		return new WorkNotLoggedIn() {
+			@Override
+			protected ModelAndView doWorkNotLoggedIn(final RequestContext rc) throws LoginFailedException, MayNotBeLoggedInException,
+					ServiceCommunicationException {
+				this.getLog().debug("Registration form posted");
+				final ModelAndView mav = new ModelAndView();
+				if (result.hasErrors()) {
+					this.getLog().debug("Registration form has binding errors");
+					mav.setViewName("register");
+					// Framework adds registration form and binding result
+					return mav;
+				}
+				final User user;
+				try {
+					user = PublicPages.this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(),
+							userRegistrationForm.getPassword(), userRegistrationForm.getRepeatPassword());
+				} catch (final UserCreationException e) {
+					this.getLog().debug("User could not be registered, assume that the username is not unique");
+					final FieldError error = new FieldError("userRegistrationForm", "username", "username is not unique");
+					result.addError(error);
+					mav.setViewName("register");
+					// Framework adds registration form and binding result
+					return mav;
+				} catch (final RepeatedPasswordNotMatchingException e) {
+					this.getLog().debug("Repeated password did not match when registering user");
+					final FieldError error = new FieldError("userRegistrationForm", "repeatPassword", "passwords did not match");
+					result.addError(error);
+					mav.setViewName("register");
+					// Framework adds registration form and binding result
+					return mav;
+				}
+				PublicPages.this.setLoggedInUser(user, request.getSession());
+				mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
+				return mav;
+			}
+		}.process(request);
 	}
 }

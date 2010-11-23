@@ -55,5 +55,6 @@
 			</spring:bind>
 			<input type="submit" value="Register" />
 		</form>
+		<p>Or visit the <a href="index.html">front page</a></p>
 	</body>
 </html>

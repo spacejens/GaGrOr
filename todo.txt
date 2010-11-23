@@ -2,10 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-User functionality: Log out, and change password.
-
-Clean up public web Spring controller (clean code).
-
 Change Encrypter to a proper helper, to avoid using static classes.
 
 Move constants to their own class/interface in the se.spacejens.gagror package.
@@ -32,6 +28,8 @@ Set cookie with session handle when logging in. Use it in place of login if sess
 Refactor JSP pages for CSS use and add CSS file
 
 Further description of project purpose and technologies in README file
+
+User functionality: List users, change password, add contact info etc.
 
 =====================================
 Ideas, not yet decided or prioritized

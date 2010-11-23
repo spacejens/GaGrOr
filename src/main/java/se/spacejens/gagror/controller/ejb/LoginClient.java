@@ -48,4 +48,9 @@ public class LoginClient extends EJBClientSupport<LoginService> implements Login
 	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException, LoginFailedException {
 		return this.getReference().verifyLogin(rc);
 	}
+
+	@Override
+	public User logoutUser(final RequestContext rc) throws ServiceCommunicationException {
+		return this.getReference().logoutUser(rc);
+	}
 }

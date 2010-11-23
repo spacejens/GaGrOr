@@ -73,4 +73,15 @@ public interface LoginService {
 	 *             If the user was not logged in.
 	 */
 	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, LoginFailedException, NotLoggedInException;
+
+	/**
+	 * Log out the current user (if any).
+	 * 
+	 * @param rc
+	 *            The request context.
+	 * @return The logged out user, or null if no user was logged in.
+	 * @throws ServiceCommunicationException
+	 *             If communication with the service failed.
+	 */
+	public User logoutUser(final RequestContext rc) throws ServiceCommunicationException;
 }

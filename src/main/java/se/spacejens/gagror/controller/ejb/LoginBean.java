@@ -46,4 +46,18 @@ public class LoginBean extends EJBSupport implements LoginService {
 		}
 		return user;
 	}
+
+	@Override
+	public User logoutUser(final RequestContext rc) throws ServiceCommunicationException {
+		final JpaContext jpa;
+		try {
+			jpa = this.getJpaContext(rc);
+		} catch (final LoginFailedException e) {
+			// Not really logged in, nothing to do
+			return null;
+		}
+		final User user = jpa.getCurrentUser();
+		// TODO Mark user as logged out in database (i.e. delete session)
+		return user;
+	}
 }
