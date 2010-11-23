@@ -1,5 +1,7 @@
 package se.spacejens.gagror.view.spring;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +21,8 @@ public class PublicPagesTest extends SpringViewTestSupport<PublicPages> {
 	 */
 	@Test
 	public void testIndex() throws Exception {
-		final ModelAndView result = this.getInstance().index(null);
+		final HttpServletRequest request = this.createMockRequest(null, null);
+		final ModelAndView result = this.getInstance().index(request);
 		Assert.assertEquals("Unexpected view name", "index", result.getViewName());
 	}
 
