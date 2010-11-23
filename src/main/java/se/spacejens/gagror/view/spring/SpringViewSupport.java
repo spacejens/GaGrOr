@@ -73,6 +73,10 @@ public abstract class SpringViewSupport extends ViewSupport {
 			} catch (final ServiceCommunicationException e) {
 				// Go to internal error page
 				return SpringViewSupport.this.getErrorView("Internal Service Error", "No changes were made. This error has been logged.");
+			} catch (final RuntimeException e) {
+				this.getLog().error("Runtime exception caught", e);
+				// Go to internal error page
+				return SpringViewSupport.this.getErrorView("Internal Error", "No changes were made. This error has been logged.");
 			}
 		}
 
