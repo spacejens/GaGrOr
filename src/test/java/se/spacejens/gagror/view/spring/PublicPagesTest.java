@@ -9,8 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  * @author spacejens
  */
-public class PublicPagesTest extends
-		SpringViewTestSupport<PublicPages> {
+public class PublicPagesTest extends SpringViewTestSupport<PublicPages> {
 
 	/**
 	 * Test of {@link PublicPages#index()}.
@@ -20,9 +19,8 @@ public class PublicPagesTest extends
 	 */
 	@Test
 	public void testIndex() throws Exception {
-		final ModelAndView result = this.getInstance().index();
-		Assert.assertEquals("Unexpected view name", "index",
-				result.getViewName());
+		final ModelAndView result = this.getInstance().index(null);
+		Assert.assertEquals("Unexpected view name", "index", result.getViewName());
 	}
 
 	@Override

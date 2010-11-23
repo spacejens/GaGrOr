@@ -5,12 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
+import se.spacejens.gagror.view.spring.SpringRequestMappings;
 import se.spacejens.gagror.view.spring.SpringViewSupport;
 
 /**
@@ -20,7 +20,7 @@ import se.spacejens.gagror.view.spring.SpringViewSupport;
  * @author spacejens
  */
 @Controller
-@RequestMapping("/dashboard")
+@RequestMapping(SpringRequestMappings.DASHBOARD)
 public class DashboardPages extends SpringViewSupport {
 
 	/**
@@ -32,24 +32,18 @@ public class DashboardPages extends SpringViewSupport {
 	 * @return View to dashboard page if logged in, view to logged out page
 	 *         otherwise.
 	 */
-	@RequestMapping("/index.html")
+	@RequestMapping(SpringRequestMappings.DASHBOARD_INDEX)
 	public ModelAndView index(final HttpServletRequest request) {
-		this.getLog().debug("Serving dashboard index");
-		final RequestContext rc = this.getContext(request);
-		final ModelAndView mav = new ModelAndView();
-		try {
-			this.getLoginService().verifyLogin(rc);
-			mav.setViewName("dashboard/index");
-		} catch (LoginFailedException e) {
-			this.getLog().debug("Login failed on dashboard index, redirecting to logged out page");
-			mav.setView(new RedirectView(rc.getContextPath() + "/loggedout.html"));
-		} catch (ServiceCommunicationException e) {
-			this.getLog().debug("Service communication problems on dashboard index, redirecting to logged out page");
-			mav.setView(new RedirectView(rc.getContextPath() + "/loggedout.html"));
-		} catch (NotLoggedInException e) {
-			this.getLog().debug("Not logged in on dashboard index, redirecting to logged out page");
-			mav.setView(new RedirectView(rc.getContextPath() + "/loggedout.html"));
-		}
-		return mav;
+		return new WorkLoggedIn() {
+			@Override
+			protected ModelAndView doWorkLoggedIn(final RequestContext rc) throws NotLoggedInException, LoginFailedException,
+					ServiceCommunicationException {
+				this.getLog().debug("Serving dashboard index");
+				final ModelAndView mav = new ModelAndView("dashboard/index");
+				// TODO Replace with service call to get info, add to model
+				DashboardPages.this.getLoginService().verifyLogin(rc);
+				return mav;
+			}
+		}.process(request);
 	}
 }

@@ -27,7 +27,7 @@ import se.spacejens.gagror.model.user.UserCreationException;
  * @author spacejens
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping(SpringRequestMappings.PUBLIC)
 public class PublicPages extends SpringViewSupport {
 
 	/**
@@ -35,95 +35,88 @@ public class PublicPages extends SpringViewSupport {
 	 * functionality to log in and a link to register new users. Finally, it
 	 * also displays some general information about the system.
 	 * 
+	 * @param request
+	 *            HTTP request.
 	 * @return View to the index page.
 	 */
-	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
-	public ModelAndView index() {
-		this.getLog().debug("Serving index page");
-		final ModelAndView mav = new ModelAndView("index");
-		mav.getModel().put("loginForm", new LoginForm());
-		return mav;
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_INDEX)
+	public ModelAndView index(final HttpServletRequest request) {
+		return new Work() {
+			@Override
+			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+				this.getLog().debug("Serving index page");
+				final ModelAndView mav = new ModelAndView("index");
+				mav.getModel().put("loginForm", new LoginForm());
+				return mav;
+			}
+		}.process(request);
+
 	}
 
 	/**
-	 * Posting login form on index page.
+	 * This page is displayed when the user is logged out.
 	 * 
 	 * @param request
 	 *            HTTP request.
-	 * @param loginForm
-	 *            The posted form contents.
-	 * @param result
-	 *            Result of data binding.
-	 * @return View to login failed page (with error messages) if failed,
-	 *         redirect to system dashboard if successful.
-	 */
-	@RequestMapping(value = "/index.html", method = RequestMethod.POST)
-	public ModelAndView postLoginFormIndex(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
-		this.getLog().debug("Login form posted from index page");
-		return this.postLoginForm(request, loginForm, result);
-	}
-
-	/**
-	 * This page is displayed when the user is logged out, either by choice or
-	 * by force.
-	 * 
 	 * @return View to the logged out page.
 	 */
-	@RequestMapping(value = "/loggedout.html", method = RequestMethod.GET)
-	public ModelAndView loggedOut() {
-		this.getLog().debug("Serving logged out page");
-		final ModelAndView mav = new ModelAndView("loggedout");
-		mav.getModel().put("loginForm", new LoginForm());
-		return mav;
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_LOGGEDOUT)
+	public ModelAndView logout(final HttpServletRequest request) {
+		return new Work() {
+			@Override
+			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+				this.getLog().debug("Serving logged out page");
+				// TODO Use service to log out?
+				PublicPages.this.setLoggedInUser(null, request.getSession());
+				final ModelAndView mav = new ModelAndView("login");
+				mav.getModel().put("headline", "Logged Out");
+				mav.getModel().put("message", "Log in again");
+				mav.getModel().put("loginForm", new LoginForm());
+				return mav;
+			}
+		}.process(request);
 	}
 
 	/**
-	 * Posting login form on logged out page.
+	 * This page is viewed when the user was not logged in as expected.
 	 * 
 	 * @param request
 	 *            HTTP request.
-	 * @param loginForm
-	 *            The posted form contents.
-	 * @param result
-	 *            Result of data binding.
-	 * @return View to login failed page (with error messages) if failed,
-	 *         redirect to system dashboard if successful.
+	 * @return View to the login page.
 	 */
-	@RequestMapping(value = "/loggedout.html", method = RequestMethod.POST)
-	public ModelAndView postLoginFormLoggedOut(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
-		this.getLog().debug("Login form posted from logged out page");
-		return this.postLoginForm(request, loginForm, result);
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_NOTLOGGEDIN, method = RequestMethod.GET)
+	public ModelAndView notLoggedIn(final HttpServletRequest request) {
+		return new Work() {
+			@Override
+			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+				final ModelAndView mav = new ModelAndView("login");
+				mav.getModel().put("headline", "You Were Not Logged In");
+				mav.getModel().put("message", "Please log in and try again");
+				mav.getModel().put("loginForm", new LoginForm());
+				return mav;
+			}
+		}.process(request);
 	}
 
 	/**
-	 * Page shown when login fails
-	 * 
-	 * @return View to the login failed page.
-	 */
-	@RequestMapping(value = "/loginfailed.html", method = RequestMethod.GET)
-	public ModelAndView loginFailedGet() {
-		this.getLog().debug("Serving login failed page");
-		final ModelAndView mav = new ModelAndView("loginfailed");
-		mav.getModel().put("loginForm", new LoginForm());
-		return mav;
-	}
-
-	/**
-	 * Posting login form on login failed page.
+	 * View dedicated login page.
 	 * 
 	 * @param request
 	 *            HTTP request.
-	 * @param loginForm
-	 *            The posted form contents.
-	 * @param result
-	 *            Result of data binding.
-	 * @return View to login failed page (with error messages) if failed,
-	 *         redirect to system dashboard if successful.
+	 * @return View to the login page.
 	 */
-	@RequestMapping(value = "/loginfailed.html", method = RequestMethod.POST)
-	public ModelAndView loginFailedPost(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
-		this.getLog().debug("Login form posted from login failed page");
-		return this.postLoginForm(request, loginForm, result);
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_LOGIN, method = RequestMethod.GET)
+	public ModelAndView login(final HttpServletRequest request) {
+		return new Work() {
+			@Override
+			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+				final ModelAndView mav = new ModelAndView("login");
+				mav.getModel().put("headline", "Log In");
+				mav.getModel().put("message", "Enter your login credentials");
+				mav.getModel().put("loginForm", new LoginForm());
+				return mav;
+			}
+		}.process(request);
 	}
 
 	/**
@@ -140,35 +133,22 @@ public class PublicPages extends SpringViewSupport {
 	 * @throws LoginFailedException
 	 * @throws ServiceCommunicationException
 	 */
-	private ModelAndView postLoginForm(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
-		final RequestContext rc = this.getContext(request);
-		final ModelAndView mav = new ModelAndView();
-		if (result.hasErrors()) {
-			this.getLog().debug("Login form has binding errors");
-			mav.setViewName("loginfailed");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		}
-		try {
-			final User user = this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
-			this.setLoggedInUser(user, request.getSession());
-			mav.setView(new RedirectView(rc.getContextPath() + "/dashboard/index.html"));
-			return mav;
-		} catch (final LoginFailedException e) {
-			this.getLog().debug("Login failed for user {}", loginForm.getUsername());
-			final ObjectError error = new ObjectError("loginForm", "wrong username/password combination");
-			result.addError(error);
-			mav.setViewName("loginfailed");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		} catch (ServiceCommunicationException e) {
-			this.getLog().debug("Failure to communicate with service when registering user");
-			final ObjectError error = new ObjectError("loginForm", "communication problem");
-			result.addError(error);
-			mav.setViewName("register");
-			// Framework adds registration form and binding result automatically
-			return mav;
-		}
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_LOGIN, method = RequestMethod.POST)
+	public ModelAndView postLoginForm(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
+		return new Work() {
+			@Override
+			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+				this.getLog().debug("Login form posted");
+				if (result.hasErrors()) {
+					throw new LoginFailedException();
+				}
+				final User user = PublicPages.this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
+				PublicPages.this.setLoggedInUser(user, request.getSession());
+				// Framework adds login form and binding result automatically
+				return new ModelAndView(new RedirectView(rc.getContextPath() + SpringRequestMappings.DASHBOARD
+						+ SpringRequestMappings.DASHBOARD_INDEX));
+			}
+		}.process(request);
 	}
 
 	/**
@@ -176,14 +156,18 @@ public class PublicPages extends SpringViewSupport {
 	 * 
 	 * @return View to the registration form.
 	 */
-	@RequestMapping(value = "/register.html", method = RequestMethod.GET)
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_REGISTER, method = RequestMethod.GET)
 	public ModelAndView registerFormGet(final HttpServletRequest request) {
-		this.getLog().debug("Serving registration page");
-		// TODO Verify that the user is not logged in
-		final RequestContext rc = this.getContext(request);
-		final ModelAndView mav = new ModelAndView("register");
-		mav.getModel().put("userRegistrationForm", new UserRegistrationForm());
-		return mav;
+		return new WorkNotLoggedIn() {
+			@Override
+			protected ModelAndView doWorkNotLoggedIn(final RequestContext rc) throws LoginFailedException, MayNotBeLoggedInException,
+					ServiceCommunicationException {
+				this.getLog().debug("Serving registration page");
+				final ModelAndView mav = new ModelAndView("register");
+				mav.getModel().put("userRegistrationForm", new UserRegistrationForm());
+				return mav;
+			}
+		}.process(request);
 	}
 
 	/**
@@ -199,9 +183,10 @@ public class PublicPages extends SpringViewSupport {
 	 * @return View to registration form (with error messages) if failed,
 	 *         redirect to system dashboard if successful.
 	 */
-	@RequestMapping(value = "/register.html", method = RequestMethod.POST)
+	@RequestMapping(value = SpringRequestMappings.PUBLIC_REGISTER, method = RequestMethod.POST)
 	public ModelAndView registerFormPost(final HttpServletRequest request, @Valid final UserRegistrationForm userRegistrationForm,
 			final BindingResult result) {
+		// TODO Rewrite this method using work wrapper
 		this.getLog().debug("Registration form posted");
 		final ModelAndView mav = new ModelAndView();
 		if (result.hasErrors()) {
@@ -240,7 +225,6 @@ public class PublicPages extends SpringViewSupport {
 			return mav;
 		} catch (MayNotBeLoggedInException e) {
 			this.getLog().debug("Attempting to register a new user while logged in");
-			// TODO Go to a more suitable page
 			mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
 			return mav;
 		}

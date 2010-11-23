@@ -38,7 +38,7 @@ public class LoginBean extends EJBSupport implements LoginService {
 	}
 
 	@Override
-	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException {
+	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException, LoginFailedException {
 		final JpaContext jpa = this.getJpaContext(rc);
 		final User user = jpa.getCurrentUser();
 		if (null == user) {

@@ -94,11 +94,13 @@ public abstract class ViewSupport extends LogAwareSupport {
 	protected void setLoggedInUser(final User user, final HttpSession session) {
 		if (null == user) {
 			this.getLog().info("Logged out");
+			session.setAttribute("username", null);
+			session.setAttribute("password", null);
 		} else {
 			this.getLog().info("Logged in as {}", user.getUsername());
+			session.setAttribute("username", user.getUsername());
+			session.setAttribute("password", user.getPassword());
 		}
-		session.setAttribute("username", user.getUsername());
-		session.setAttribute("password", user.getPassword());
 	}
 
 	/**
