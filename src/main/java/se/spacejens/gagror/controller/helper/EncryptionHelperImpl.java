@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller;
+package se.spacejens.gagror.controller.helper;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -6,18 +6,23 @@ import java.security.NoSuchAlgorithmException;
 
 import net.iharder.Base64;
 import se.spacejens.gagror.GagrorImplementationException;
+import se.spacejens.gagror.model.JpaContext;
 
 /**
- * This class provides methods used for encrypting various data.
+ * This helper implementation provides methods used for encrypting various data.
  * 
  * @author spacejens
  */
-public final class Encrypter {
+public final class EncryptionHelperImpl extends HelperSupport implements EncryptionHelper {
 
 	/**
-	 * Private constructor to enforce access only through static methods.
+	 * Create instance.
+	 * 
+	 * @param jpa
+	 *            JPA context to use.
 	 */
-	private Encrypter() {
+	public EncryptionHelperImpl(final JpaContext jpa) {
+		super(jpa);
 	}
 
 	/**
@@ -25,7 +30,7 @@ public final class Encrypter {
 	 * 
 	 * @return Not null.
 	 */
-	static MessageDigest getMessageDigest() {
+	MessageDigest getMessageDigest() {
 		try {
 			return MessageDigest.getInstance("SHA");
 		} catch (final NoSuchAlgorithmException e) {
@@ -40,7 +45,7 @@ public final class Encrypter {
 	 *            Not null
 	 * @return Not null.
 	 */
-	static byte[] getBytes(final String text) {
+	byte[] getBytes(final String text) {
 		try {
 			return text.getBytes("UTF-8");
 		} catch (final UnsupportedEncodingException e) {
@@ -55,8 +60,8 @@ public final class Encrypter {
 	 *            Plaintext.
 	 * @return Ciphertext.
 	 */
-	private static String encryptText(final String text) {
-		return Base64.encodeBytes(Encrypter.getMessageDigest().digest(Encrypter.getBytes(text)));
+	private String encryptText(final String text) {
+		return Base64.encodeBytes(this.getMessageDigest().digest(this.getBytes(text)));
 	}
 
 	/**
@@ -69,7 +74,8 @@ public final class Encrypter {
 	 *            Password to encrypt.
 	 * @return Encrypted password.
 	 */
-	public static String encryptPassword(final String username, final String password) {
-		return Encrypter.encryptText(username + " " + password);
+	@Override
+	public String encryptPassword(final String username, final String password) {
+		return this.encryptText(username + " " + password);
 	}
 }

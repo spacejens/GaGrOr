@@ -1,6 +1,5 @@
 package se.spacejens.gagror.controller.helper;
 
-import se.spacejens.gagror.controller.Encrypter;
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.model.JpaContext;
@@ -33,13 +32,14 @@ public class UserHelperImpl extends HelperSupport implements UserHelper {
 		if (!password.equals(repeatPassword)) {
 			throw new RepeatedPasswordNotMatchingException();
 		}
-		final String encryptedPassword = Encrypter.encryptPassword(username, password);
+		final String encryptedPassword = this.getEncryptionHelper(this.getJpa()).encryptPassword(username, password);
 		return this.getUserDAO(this.getJpa()).createUser(username, encryptedPassword);
 	}
 
 	@Override
 	public User loginUser(final String username, final String password) throws LoginFailedException {
-		final User user = this.getUserDAO(this.getJpa()).findUser(username, Encrypter.encryptPassword(username, password));
+		final User user = this.getUserDAO(this.getJpa()).findUser(username,
+				this.getEncryptionHelper(this.getJpa()).encryptPassword(username, password));
 		if (null == user) {
 			throw new LoginFailedException();
 		}

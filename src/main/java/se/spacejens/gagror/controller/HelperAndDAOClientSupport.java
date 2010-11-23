@@ -1,5 +1,7 @@
 package se.spacejens.gagror.controller;
 
+import se.spacejens.gagror.controller.helper.EncryptionHelper;
+import se.spacejens.gagror.controller.helper.EncryptionHelperImpl;
 import se.spacejens.gagror.controller.helper.UserHelper;
 import se.spacejens.gagror.controller.helper.UserHelperImpl;
 import se.spacejens.gagror.model.DAOClientSupport;
@@ -16,6 +18,9 @@ public abstract class HelperAndDAOClientSupport extends DAOClientSupport {
 
 	/** User helper to use. */
 	private UserHelper userHelper = null;
+
+	/** Encryption helper to use. */
+	private EncryptionHelper encryptionHelper = null;
 
 	/**
 	 * Get the user helper to use.
@@ -43,6 +48,34 @@ public abstract class HelperAndDAOClientSupport extends DAOClientSupport {
 	 */
 	void setUserHelper(final UserHelper userHelper) {
 		this.userHelper = userHelper;
+	}
+
+	/**
+	 * Get the encryption helper to use.
+	 * 
+	 * @param jpa
+	 *            JPA context to use when creating new helper instance.
+	 * @return Not null.
+	 */
+	protected EncryptionHelper getEncryptionHelper(final JpaContext jpa) {
+		if (null != this.encryptionHelper) {
+			return this.encryptionHelper;
+		}
+		final EncryptionHelper output = new EncryptionHelperImpl(jpa);
+		if (this.isStoringCreatedHelper()) {
+			this.setEncryptionHelper(output);
+		}
+		return output;
+	}
+
+	/**
+	 * Set the encryption helper to use.
+	 * 
+	 * @param encryptionHelper
+	 *            Not null.
+	 */
+	void setEncryptionHelper(final EncryptionHelper encryptionHelper) {
+		this.encryptionHelper = encryptionHelper;
 	}
 
 	/**
