@@ -1,9 +1,9 @@
 package se.spacejens.gagror.controller;
 
-import se.spacejens.gagror.controller.helper.EncryptionHelper;
-import se.spacejens.gagror.controller.helper.EncryptionHelperImpl;
-import se.spacejens.gagror.controller.helper.UserHelper;
-import se.spacejens.gagror.controller.helper.UserHelperImpl;
+import se.spacejens.gagror.controller.helper.user.EncryptionHelper;
+import se.spacejens.gagror.controller.helper.user.EncryptionHelperImpl;
+import se.spacejens.gagror.controller.helper.user.UserHelper;
+import se.spacejens.gagror.controller.helper.user.UserHelperImpl;
 import se.spacejens.gagror.model.DAOClientSupport;
 import se.spacejens.gagror.model.JpaContext;
 

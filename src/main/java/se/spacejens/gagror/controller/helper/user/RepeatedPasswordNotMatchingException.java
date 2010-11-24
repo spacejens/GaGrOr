@@ -1,4 +1,6 @@
-package se.spacejens.gagror.controller.helper;
+package se.spacejens.gagror.controller.helper.user;
+
+import se.spacejens.gagror.controller.helper.HelperLogicException;
 
 /**
  * Thrown when a repeated password (e.g. at user registration or password

@@ -2,6 +2,7 @@ package se.spacejens.gagror.view.spring;
 
 import se.spacejens.gagror.GagrorImplementationException;
 import se.spacejens.gagror.view.spring.dashboard.DashboardPages;
+import se.spacejens.gagror.view.spring.publicpages.PublicPages;
 
 /**
  * Request mapping constants for all Spring controllers.

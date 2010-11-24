@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller.helper;
+package se.spacejens.gagror.controller.helper.user;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import net.iharder.Base64;
 import se.spacejens.gagror.GagrorImplementationException;
+import se.spacejens.gagror.controller.helper.HelperSupport;
 import se.spacejens.gagror.model.JpaContext;
 
 /**

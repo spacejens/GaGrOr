@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller.helper;
+package se.spacejens.gagror.controller.helper.user;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import se.spacejens.gagror.TestSupport;
+import se.spacejens.gagror.controller.helper.user.EncryptionHelperImpl;
 import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.user.User;
 

@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller.helper;
+package se.spacejens.gagror.controller.helper.user;
 
 /**
  * Specification for the helper responsible for encryption.

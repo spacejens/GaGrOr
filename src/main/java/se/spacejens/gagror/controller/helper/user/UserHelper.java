@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller.helper;
+package se.spacejens.gagror.controller.helper.user;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;

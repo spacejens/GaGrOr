@@ -1,6 +1,8 @@
-package se.spacejens.gagror.view.spring;
+package se.spacejens.gagror.view.spring.publicpages;
 
 import javax.validation.constraints.NotNull;
+
+import se.spacejens.gagror.view.spring.SpringFormSupport;
 
 /**
  * Form backing bean used when logging in.

@@ -1,7 +1,8 @@
-package se.spacejens.gagror.controller.helper;
+package se.spacejens.gagror.controller.helper.user;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
+import se.spacejens.gagror.controller.helper.HelperSupport;
 import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.user.User;
 import se.spacejens.gagror.model.user.UserCreationException;

@@ -1,10 +1,13 @@
-package se.spacejens.gagror.view.spring;
+package se.spacejens.gagror.view.spring.publicpages;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
+
+import se.spacejens.gagror.view.spring.SpringViewTestSupport;
+import se.spacejens.gagror.view.spring.publicpages.PublicPages;
 
 /**
  * Unit test for {@link PublicPages}.

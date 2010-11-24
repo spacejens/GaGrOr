@@ -6,8 +6,8 @@ import javax.servlet.http.HttpSession;
 import se.spacejens.gagror.LogAwareSupport;
 import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
-import se.spacejens.gagror.controller.ejb.LoginClient;
-import se.spacejens.gagror.controller.ejb.LoginService;
+import se.spacejens.gagror.controller.ejb.core.LoginClient;
+import se.spacejens.gagror.controller.ejb.core.LoginService;
 import se.spacejens.gagror.model.user.User;
 
 /**

@@ -1,4 +1,4 @@
-package se.spacejens.gagror.controller.ejb;
+package se.spacejens.gagror.controller.ejb.core;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
@@ -6,7 +6,8 @@ import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
-import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
+import se.spacejens.gagror.controller.ejb.EJBClientSupport;
+import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.user.User;
 import se.spacejens.gagror.model.user.UserCreationException;
 

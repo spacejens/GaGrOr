@@ -1,4 +1,4 @@
-package se.spacejens.gagror.view.spring;
+package se.spacejens.gagror.view.spring.publicpages;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -15,11 +15,13 @@ import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
-import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
+import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.user.User;
 import se.spacejens.gagror.model.user.UserCreationException;
 import se.spacejens.gagror.view.ViewParameters;
 import se.spacejens.gagror.view.Views;
+import se.spacejens.gagror.view.spring.SpringRequestMappings;
+import se.spacejens.gagror.view.spring.SpringViewSupport;
 
 /**
  * Spring controller for all public web pages (i.e. pages not requiring the user
