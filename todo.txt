@@ -2,11 +2,7 @@
 TODO list in order of decreasing priority
 =========================================
 
-Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
-
-Implement hashCode, equals, and toString methods for entities properly
-
-Create more user-friendly form validation error messages
+Implement toString method for entities properly
 
 Refactor package structure with more sub-packages for clarity when expanding.
 
@@ -19,11 +15,20 @@ Remove unused dependencies (replace HttpServletRequest with HttpRequest to elimi
 
 Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
 
-Set cookie with session handle when logging in. Use it in place of login if session times out
-
-Refactor JSP pages for CSS use and add CSS file
+Refactor JSP pages for CSS use and add CSS file.
+Possibly place CSS file name in model from Spring controller, to prepare for selectable themes?
 
 Further description of project purpose and technologies in README file
+
+Implement hashCode and equals methods for entities properly
+
+Set cookie with session handle when logging in. Use it in place of login if session times out
+
+Improved validation of entities, custom constraints for usernames (no whitespace etc.) and passwords.
+Create more user-friendly form validation error messages.
+
+User functionality: User type (normal, beta, admin etc.) and user status (active, suspended, deleted etc.)
+Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
 User functionality: List users, change password, add contact info etc.
 
