@@ -8,7 +8,7 @@ import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ejb.core.LoginClient;
 import se.spacejens.gagror.controller.ejb.core.LoginService;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Superclass for all views, providing shared functionality.
@@ -64,7 +64,7 @@ public abstract class ViewSupport extends LogAwareSupport {
 	 * @param session
 	 *            Not null.
 	 */
-	protected void setLoggedInUser(final User user, final HttpSession session) {
+	protected void setLoggedInUser(final UserEntity user, final HttpSession session) {
 		if (null == user) {
 			this.getLog().info("Logged out");
 			session.setAttribute(WebSessionAttributes.USERNAME, null);

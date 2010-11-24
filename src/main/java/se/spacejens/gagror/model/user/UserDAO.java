@@ -19,7 +19,7 @@ public interface UserDAO {
 	 *             If the user could not be created, most likely because the
 	 *             username was busy.
 	 */
-	public User createUser(final String username, final String password) throws UserCreationException;
+	public UserEntity createUser(final String username, final String password) throws UserCreationException;
 
 	/**
 	 * Find user with the specified ID.
@@ -28,7 +28,7 @@ public interface UserDAO {
 	 *            User ID to find.
 	 * @return Null if the user could not be found.
 	 */
-	public User findUser(final Long id);
+	public UserEntity findUser(final Long id);
 
 	/**
 	 * Find user with the specified login credentials.
@@ -40,5 +40,5 @@ public interface UserDAO {
 	 * @return Null if the user could not be found (including if the user
 	 *         exists, but with another password).
 	 */
-	public User findUser(final String username, final String password);
+	public UserEntity findUser(final String username, final String password);
 }

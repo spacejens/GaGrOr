@@ -18,8 +18,8 @@ import se.spacejens.gagror.model.EntitySupport;
  */
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
-@NamedQueries(value = { @NamedQuery(name = "UserImpl.login", query = "select u from UserImpl u where u.username = :username and u.password = :password") })
-public class UserImpl extends EntitySupport implements User {
+@NamedQueries(value = { @NamedQuery(name = "UserEntityImpl.login", query = "select u from UserEntityImpl u where u.username = :username and u.password = :password") })
+public class UserEntityImpl extends EntitySupport implements UserEntity {
 
 	/** The username of this user. */
 	private String username;
@@ -29,7 +29,7 @@ public class UserImpl extends EntitySupport implements User {
 
 	@Override
 	@NotNull
-	@Size(min = User.USERNAME_MIN_LENGTH, max = User.USERNAME_MAX_LENGTH)
+	@Size(min = UserEntity.USERNAME_MIN_LENGTH, max = UserEntity.USERNAME_MAX_LENGTH)
 	@Column(name = "username", nullable = false, insertable = true, updatable = false)
 	public String getUsername() {
 		return this.username;
@@ -47,7 +47,7 @@ public class UserImpl extends EntitySupport implements User {
 
 	@Override
 	@NotNull
-	@Size(min = User.PASSWORD_ENCRYPTED_MIN_LENGTH, max = User.PASSWORD_ENCRYPTED_MAX_LENGTH)
+	@Size(min = UserEntity.PASSWORD_ENCRYPTED_MIN_LENGTH, max = UserEntity.PASSWORD_ENCRYPTED_MAX_LENGTH)
 	@Column(name = "password", nullable = false, insertable = true, updatable = true)
 	public String getPassword() {
 		return this.password;

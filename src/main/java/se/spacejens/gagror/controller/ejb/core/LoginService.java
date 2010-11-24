@@ -6,7 +6,7 @@ import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
 
 /**
@@ -38,7 +38,7 @@ public interface LoginService {
 	 * @throws MayNotBeLoggedInException
 	 *             If a user was logged in.
 	 */
-	public User registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
+	public UserEntity registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
 			throws UserCreationException, ServiceCommunicationException, RepeatedPasswordNotMatchingException, MayNotBeLoggedInException;
 
 	/**
@@ -56,7 +56,7 @@ public interface LoginService {
 	 * @throws LoginFailedException
 	 *             If login failed.
 	 */
-	public User loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
+	public UserEntity loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
 			LoginFailedException;
 
 	/**
@@ -72,7 +72,7 @@ public interface LoginService {
 	 * @throws NotLoggedInException
 	 *             If the user was not logged in.
 	 */
-	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, LoginFailedException, NotLoggedInException;
+	public UserEntity verifyLogin(final RequestContext rc) throws ServiceCommunicationException, LoginFailedException, NotLoggedInException;
 
 	/**
 	 * Log out the current user (if any).
@@ -83,5 +83,5 @@ public interface LoginService {
 	 * @throws ServiceCommunicationException
 	 *             If communication with the service failed.
 	 */
-	public User logoutUser(final RequestContext rc) throws ServiceCommunicationException;
+	public UserEntity logoutUser(final RequestContext rc) throws ServiceCommunicationException;
 }

@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import se.spacejens.gagror.TestSupport;
 import se.spacejens.gagror.controller.helper.user.EncryptionHelperImpl;
 import se.spacejens.gagror.model.JpaContext;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Unit test for {@link EncryptionHelperImpl}.
@@ -71,17 +71,17 @@ public class EncrypterTest extends TestSupport {
 	public void encryptPasswordLength() {
 		// Create a long enough (and then some) string to work with
 		final StringBuffer textBuffer = new StringBuffer();
-		for (int i = 0; i < User.USERNAME_MAX_LENGTH + User.PASSWORD_MAX_LENGTH; i++) {
+		for (int i = 0; i < UserEntity.USERNAME_MAX_LENGTH + UserEntity.PASSWORD_MAX_LENGTH; i++) {
 			textBuffer.append(Integer.toString(i));
 		}
 		final String text = textBuffer.toString();
 		this.log.debug("Assembled dummy string: " + text);
 		// Test all possible length combinations
-		for (int userLength = User.USERNAME_MIN_LENGTH; userLength <= User.USERNAME_MAX_LENGTH; userLength++) {
-			for (int passwordLength = User.PASSWORD_MIN_LENGTH; passwordLength <= User.PASSWORD_MAX_LENGTH; passwordLength++) {
+		for (int userLength = UserEntity.USERNAME_MIN_LENGTH; userLength <= UserEntity.USERNAME_MAX_LENGTH; userLength++) {
+			for (int passwordLength = UserEntity.PASSWORD_MIN_LENGTH; passwordLength <= UserEntity.PASSWORD_MAX_LENGTH; passwordLength++) {
 				final String encrypted = this.instance.encryptPassword(text.substring(0, userLength), text.substring(0, passwordLength));
-				Assert.assertTrue("Encrypted password less than minimum length", encrypted.length() >= User.PASSWORD_ENCRYPTED_MIN_LENGTH);
-				Assert.assertTrue("Encrypted password greater than maximum length", encrypted.length() <= User.PASSWORD_ENCRYPTED_MAX_LENGTH);
+				Assert.assertTrue("Encrypted password less than minimum length", encrypted.length() >= UserEntity.PASSWORD_ENCRYPTED_MIN_LENGTH);
+				Assert.assertTrue("Encrypted password greater than maximum length", encrypted.length() <= UserEntity.PASSWORD_ENCRYPTED_MAX_LENGTH);
 			}
 		}
 	}

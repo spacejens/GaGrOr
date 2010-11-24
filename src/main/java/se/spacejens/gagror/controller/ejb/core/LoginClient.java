@@ -8,7 +8,7 @@ import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.ejb.EJBClientSupport;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
 
 /**
@@ -29,7 +29,7 @@ public class LoginClient extends EJBClientSupport<LoginService> implements Login
 	}
 
 	@Override
-	public User registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
+	public UserEntity registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
 			throws UserCreationException, ServiceCommunicationException, RepeatedPasswordNotMatchingException, MayNotBeLoggedInException {
 		return this.getReference().registerUser(rc, username, password, repeatPassword);
 	}
@@ -40,18 +40,18 @@ public class LoginClient extends EJBClientSupport<LoginService> implements Login
 	}
 
 	@Override
-	public User loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
+	public UserEntity loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
 			LoginFailedException {
 		return this.getReference().loginUser(rc, username, password);
 	}
 
 	@Override
-	public User verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException, LoginFailedException {
+	public UserEntity verifyLogin(final RequestContext rc) throws ServiceCommunicationException, NotLoggedInException, LoginFailedException {
 		return this.getReference().verifyLogin(rc);
 	}
 
 	@Override
-	public User logoutUser(final RequestContext rc) throws ServiceCommunicationException {
+	public UserEntity logoutUser(final RequestContext rc) throws ServiceCommunicationException {
 		return this.getReference().logoutUser(rc);
 	}
 }

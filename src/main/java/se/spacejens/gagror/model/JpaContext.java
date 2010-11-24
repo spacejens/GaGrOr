@@ -2,7 +2,7 @@ package se.spacejens.gagror.model;
 
 import javax.persistence.EntityManager;
 
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Persistence context information, including entity manager.
@@ -23,7 +23,7 @@ public interface JpaContext {
 	 * 
 	 * @return Null if no user is logged in.
 	 */
-	public User getCurrentUser();
+	public UserEntity getCurrentUser();
 
 	/**
 	 * Check if the context contains a logged in user or any other login

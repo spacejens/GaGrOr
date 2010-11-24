@@ -7,7 +7,7 @@ import se.spacejens.gagror.model.Entity;
  * 
  * @author spacejens
  */
-public interface User extends Entity {
+public interface UserEntity extends Entity {
 
 	/** Minimum length of valid username. */
 	public static final int USERNAME_MIN_LENGTH = 2;

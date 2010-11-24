@@ -25,8 +25,8 @@ public class UserDAOImpl extends DAOSupport implements UserDAO {
 	}
 
 	@Override
-	public User createUser(final String username, final String password) throws UserCreationException {
-		final UserImpl user = new UserImpl();
+	public UserEntity createUser(final String username, final String password) throws UserCreationException {
+		final UserEntityImpl user = new UserEntityImpl();
 		user.setUsername(username);
 		user.setPassword(password);
 		try {
@@ -40,13 +40,13 @@ public class UserDAOImpl extends DAOSupport implements UserDAO {
 	}
 
 	@Override
-	public User findUser(final Long id) {
-		return this.getJpa().getEntityManager().find(UserImpl.class, id);
+	public UserEntity findUser(final Long id) {
+		return this.getJpa().getEntityManager().find(UserEntityImpl.class, id);
 	}
 
 	@Override
-	public User findUser(final String username, final String password) {
-		final TypedQuery<UserImpl> query = this.getJpa().getEntityManager().createNamedQuery("UserImpl.login", UserImpl.class);
+	public UserEntity findUser(final String username, final String password) {
+		final TypedQuery<UserEntityImpl> query = this.getJpa().getEntityManager().createNamedQuery("UserEntityImpl.login", UserEntityImpl.class);
 		query.setParameter("username", username);
 		query.setParameter("password", password);
 		try {

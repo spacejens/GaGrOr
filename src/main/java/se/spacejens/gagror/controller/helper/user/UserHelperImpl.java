@@ -4,7 +4,7 @@ import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.helper.HelperSupport;
 import se.spacejens.gagror.model.JpaContext;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
 
 /**
@@ -25,7 +25,7 @@ public class UserHelperImpl extends HelperSupport implements UserHelper {
 	}
 
 	@Override
-	public User registerUser(final String username, final String password, final String repeatPassword) throws UserCreationException,
+	public UserEntity registerUser(final String username, final String password, final String repeatPassword) throws UserCreationException,
 			RepeatedPasswordNotMatchingException, MayNotBeLoggedInException {
 		if (this.getJpa().isContainingLoginInformation()) {
 			throw new MayNotBeLoggedInException();
@@ -38,8 +38,8 @@ public class UserHelperImpl extends HelperSupport implements UserHelper {
 	}
 
 	@Override
-	public User loginUser(final String username, final String password) throws LoginFailedException {
-		final User user = this.getUserDAO(this.getJpa()).findUser(username,
+	public UserEntity loginUser(final String username, final String password) throws LoginFailedException {
+		final UserEntity user = this.getUserDAO(this.getJpa()).findUser(username,
 				this.getEncryptionHelper(this.getJpa()).encryptPassword(username, password));
 		if (null == user) {
 			throw new LoginFailedException();

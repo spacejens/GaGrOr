@@ -3,7 +3,7 @@ package se.spacejens.gagror.controller;
 import javax.persistence.EntityManager;
 
 import se.spacejens.gagror.model.JpaContext;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Superclass for all controller (i.e. not helper) implementations, providing
@@ -26,7 +26,7 @@ public abstract class ControllerSupport extends HelperAndDAOClientSupport {
 	 */
 	protected JpaContext getJpaContext(final RequestContext requestContext, final EntityManager entityManager) throws LoginFailedException {
 		final ControllerJpaContext jpa = new ControllerJpaContext(entityManager);
-		final User currentUser = this.getUserDAO(jpa).findUser(requestContext.getUsername(), requestContext.getPassword());
+		final UserEntity currentUser = this.getUserDAO(jpa).findUser(requestContext.getUsername(), requestContext.getPassword());
 		jpa.setCurrentUser(currentUser);
 		if (null == currentUser) {
 			this.getLog().debug("Created controller JPA context, no user logged in");

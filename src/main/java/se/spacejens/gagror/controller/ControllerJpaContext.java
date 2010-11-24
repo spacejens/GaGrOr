@@ -3,7 +3,7 @@ package se.spacejens.gagror.controller;
 import javax.persistence.EntityManager;
 
 import se.spacejens.gagror.model.JpaContext;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Implementation of persistence context information container.
@@ -16,7 +16,7 @@ class ControllerJpaContext implements JpaContext {
 	private final EntityManager entityManager;
 
 	/** Currently logged in user, or null. */
-	private User currentUser = null;
+	private UserEntity currentUser = null;
 
 	/**
 	 * Create instance.
@@ -34,7 +34,7 @@ class ControllerJpaContext implements JpaContext {
 	}
 
 	@Override
-	public User getCurrentUser() {
+	public UserEntity getCurrentUser() {
 		return this.currentUser;
 	}
 
@@ -45,7 +45,7 @@ class ControllerJpaContext implements JpaContext {
 	 * @param currentUser
 	 *            Null if not logged in.
 	 */
-	void setCurrentUser(final User currentUser) {
+	void setCurrentUser(final UserEntity currentUser) {
 		this.currentUser = currentUser;
 	}
 

@@ -2,7 +2,7 @@ package se.spacejens.gagror.controller.helper.user;
 
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
 
 /**
@@ -30,7 +30,7 @@ public interface UserHelper {
 	 * @throws MayNotBeLoggedInException
 	 *             If a user was logged in.
 	 */
-	public User registerUser(final String username, final String password, final String repeatPassword) throws UserCreationException,
+	public UserEntity registerUser(final String username, final String password, final String repeatPassword) throws UserCreationException,
 			RepeatedPasswordNotMatchingException, MayNotBeLoggedInException;
 
 	/**
@@ -44,5 +44,5 @@ public interface UserHelper {
 	 * @throws LoginFailedException
 	 *             If login failed.
 	 */
-	public User loginUser(final String username, final String password) throws LoginFailedException;
+	public UserEntity loginUser(final String username, final String password) throws LoginFailedException;
 }

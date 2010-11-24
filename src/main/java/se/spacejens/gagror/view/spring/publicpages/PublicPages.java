@@ -16,7 +16,7 @@ import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
-import se.spacejens.gagror.model.user.User;
+import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
 import se.spacejens.gagror.view.ViewParameters;
 import se.spacejens.gagror.view.Views;
@@ -144,7 +144,7 @@ public class PublicPages extends SpringViewSupport {
 				if (result.hasErrors()) {
 					throw new LoginFailedException();
 				}
-				final User user = PublicPages.this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
+				final UserEntity user = PublicPages.this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
 				PublicPages.this.setLoggedInUser(user, request.getSession());
 				// Framework adds login form and binding result automatically
 				return new ModelAndView(new RedirectView(rc.getContextPath() + SpringRequestMappings.DASHBOARD
@@ -200,7 +200,7 @@ public class PublicPages extends SpringViewSupport {
 					// Framework adds registration form and binding result
 					return mav;
 				}
-				final User user;
+				final UserEntity user;
 				try {
 					user = PublicPages.this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(),
 							userRegistrationForm.getPassword(), userRegistrationForm.getRepeatPassword());

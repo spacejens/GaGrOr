@@ -9,7 +9,7 @@ import org.junit.Test;
 import se.spacejens.gagror.model.PersistenceTestSupport;
 
 /**
- * Persistence unit tests for {@link User}.
+ * Persistence unit tests for {@link UserEntity}.
  * 
  * @author spacejens
  */
@@ -23,7 +23,7 @@ public class UserPersistenceTest extends PersistenceTestSupport {
 	 */
 	@Test
 	public void storeAndRetrieve() throws Exception {
-		final UserImpl user = new UserImpl();
+		final UserEntityImpl user = new UserEntityImpl();
 		user.setUsername("top");
 		user.setPassword("fgkjdlfgg0khgfjievw0gfdryth0");
 		new TestTransaction() {
@@ -38,7 +38,7 @@ public class UserPersistenceTest extends PersistenceTestSupport {
 		new TestTransaction() {
 			@Override
 			public boolean work(final EntityManager em) throws Exception {
-				final UserImpl retrieved = em.find(UserImpl.class, user.getId());
+				final UserEntityImpl retrieved = em.find(UserEntityImpl.class, user.getId());
 				Assert.assertEquals("Wrong ID", user.getId(), retrieved.getId());
 				Assert.assertEquals("Wrong username", user.getUsername(), retrieved.getUsername());
 				Assert.assertEquals("Wrong password", user.getPassword(), retrieved.getPassword());
@@ -48,10 +48,10 @@ public class UserPersistenceTest extends PersistenceTestSupport {
 		new TestTransaction() {
 			@Override
 			public boolean work(final EntityManager em) throws Exception {
-				final TypedQuery<UserImpl> query = em.createNamedQuery("UserImpl.login", UserImpl.class);
+				final TypedQuery<UserEntityImpl> query = em.createNamedQuery("UserEntityImpl.login", UserEntityImpl.class);
 				query.setParameter("username", user.getUsername());
 				query.setParameter("password", user.getPassword());
-				final UserImpl retrieved = query.getSingleResult();
+				final UserEntityImpl retrieved = query.getSingleResult();
 				Assert.assertEquals("Wrong ID", user.getId(), retrieved.getId());
 				Assert.assertEquals("Wrong username", user.getUsername(), retrieved.getUsername());
 				Assert.assertEquals("Wrong password", user.getPassword(), retrieved.getPassword());
