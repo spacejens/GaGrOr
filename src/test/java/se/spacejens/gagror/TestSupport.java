@@ -12,4 +12,19 @@ public abstract class TestSupport {
 
 	/** A logger instance to use for debug printouts. */
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
+	/**
+	 * Build a alphabetical string of the specified length.
+	 * 
+	 * @param length
+	 *            The length of the string.
+	 * @return The generated string.
+	 */
+	protected String buildString(final int length) {
+		final StringBuffer output = new StringBuffer();
+		for (int i = 0; i < length; i++) {
+			output.append("x");
+		}
+		return output.toString();
+	}
 }

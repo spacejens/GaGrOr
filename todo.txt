@@ -8,8 +8,6 @@ Implement hashCode, equals, and toString methods for entities properly
 
 Create more user-friendly form validation error messages
 
-Remove Message entity, Welcome controller etc.
-
 Refactor package structure with more sub-packages for clarity when expanding.
 
 Add String constants or other definitions for entity names, columns, queries etc.

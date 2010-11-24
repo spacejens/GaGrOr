@@ -8,8 +8,6 @@ import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ejb.LoginClient;
 import se.spacejens.gagror.controller.ejb.LoginService;
-import se.spacejens.gagror.controller.ejb.MessageClient;
-import se.spacejens.gagror.controller.ejb.MessageService;
 import se.spacejens.gagror.model.user.User;
 
 /**
@@ -21,9 +19,6 @@ public abstract class ViewSupport extends LogAwareSupport {
 
 	/** Naming context provider to use when looking up services. */
 	private NamingContextProvider namingContextProvider = null;
-
-	/** Message service to use. */
-	private MessageService messageService = null;
 
 	/** Login service to use. */
 	private LoginService loginService = null;
@@ -48,28 +43,6 @@ public abstract class ViewSupport extends LogAwareSupport {
 	 */
 	void setLoginService(final LoginService loginService) {
 		this.loginService = loginService;
-	}
-
-	/**
-	 * Get the message service to use.
-	 * 
-	 * @return Not null.
-	 */
-	protected MessageService getMessageService() {
-		if (null == this.messageService) {
-			this.setMessageService(new MessageClient(this.getNamingContextProvider()));
-		}
-		return this.messageService;
-	}
-
-	/**
-	 * Set the message service to use.
-	 * 
-	 * @param messageService
-	 *            Not null.
-	 */
-	void setMessageService(final MessageService messageService) {
-		this.messageService = messageService;
 	}
 
 	/**
