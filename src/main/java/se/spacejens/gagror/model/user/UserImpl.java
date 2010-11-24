@@ -57,4 +57,14 @@ public class UserImpl extends EntitySupport implements User {
 	public void setPassword(final String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer output = new StringBuffer();
+		output.append(this.getUsername());
+		output.append("(");
+		output.append(super.toString());
+		output.append(")");
+		return output.toString();
+	}
 }

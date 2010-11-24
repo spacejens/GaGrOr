@@ -31,7 +31,7 @@ public abstract class ControllerSupport extends HelperAndDAOClientSupport {
 		if (null == currentUser) {
 			this.getLog().debug("Created controller JPA context, no user logged in");
 		} else {
-			this.getLog().debug("Created controller JPA context, logged in user is {}", currentUser.getUsername());
+			this.getLog().debug("Created controller JPA context, logged in user is {}", currentUser);
 		}
 		if (requestContext.isContainingLoginInformation() && !jpa.isContainingLoginInformation()) {
 			throw new LoginFailedException();

@@ -82,4 +82,13 @@ public abstract class EntitySupport extends LogAwareSupport implements Entity {
 	void setModificationTimestamp(final Timestamp modificationTimestamp) {
 		this.modificationTimestamp = modificationTimestamp;
 	}
+
+	@Override
+	public String toString() {
+		final StringBuffer output = new StringBuffer();
+		output.append(this.getClass().getSimpleName());
+		output.append("#");
+		output.append(this.getId());
+		return output.toString();
+	}
 }

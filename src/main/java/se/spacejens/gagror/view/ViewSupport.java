@@ -70,7 +70,7 @@ public abstract class ViewSupport extends LogAwareSupport {
 			session.setAttribute(WebSessionAttributes.USERNAME, null);
 			session.setAttribute(WebSessionAttributes.PASSWORD, null);
 		} else {
-			this.getLog().info("Logged in as {}", user.getUsername());
+			this.getLog().info("Logged in as {}", user);
 			session.setAttribute(WebSessionAttributes.USERNAME, user.getUsername());
 			session.setAttribute(WebSessionAttributes.PASSWORD, user.getPassword());
 		}

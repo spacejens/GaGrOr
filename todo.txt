@@ -2,8 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-Implement toString method for entities properly
-
 Refactor package structure with more sub-packages for clarity when expanding.
 
 Add String constants or other definitions for entity names, columns, queries etc.
