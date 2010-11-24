@@ -46,7 +46,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO {
 
 	@Override
 	public User findUser(final String username, final String password) {
-		final TypedQuery<UserImpl> query = this.getJpa().getEntityManager().createNamedQuery("login", UserImpl.class);
+		final TypedQuery<UserImpl> query = this.getJpa().getEntityManager().createNamedQuery("UserImpl.login", UserImpl.class);
 		query.setParameter("username", username);
 		query.setParameter("password", password);
 		try {

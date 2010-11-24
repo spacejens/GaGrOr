@@ -15,6 +15,15 @@ import se.spacejens.gagror.model.JpaContext;
  */
 public final class EncryptionHelperImpl extends HelperSupport implements EncryptionHelper {
 
+	/** One-way encryption hash to use. */
+	static final String ALGORITHM = "SHA";
+
+	/** Character encoding to use. */
+	static final String ENCODING = "UTF-8";
+
+	/** Added between username and password when joining them for encryption. */
+	static final String USERNAME_PASSWORD_JOINING = " ";
+
 	/**
 	 * Create instance.
 	 * 
@@ -32,9 +41,9 @@ public final class EncryptionHelperImpl extends HelperSupport implements Encrypt
 	 */
 	MessageDigest getMessageDigest() {
 		try {
-			return MessageDigest.getInstance("SHA");
+			return MessageDigest.getInstance(EncryptionHelperImpl.ALGORITHM);
 		} catch (final NoSuchAlgorithmException e) {
-			throw new GagrorImplementationException("Encrypter algorithm invalid", e);
+			throw new GagrorImplementationException(e);
 		}
 	}
 
@@ -47,9 +56,9 @@ public final class EncryptionHelperImpl extends HelperSupport implements Encrypt
 	 */
 	byte[] getBytes(final String text) {
 		try {
-			return text.getBytes("UTF-8");
+			return text.getBytes(EncryptionHelperImpl.ENCODING);
 		} catch (final UnsupportedEncodingException e) {
-			throw new GagrorImplementationException("Encrypter encoding invalid", e);
+			throw new GagrorImplementationException(e);
 		}
 	}
 
@@ -76,6 +85,6 @@ public final class EncryptionHelperImpl extends HelperSupport implements Encrypt
 	 */
 	@Override
 	public String encryptPassword(final String username, final String password) {
-		return this.encryptText(username + " " + password);
+		return this.encryptText(username + EncryptionHelperImpl.USERNAME_PASSWORD_JOINING + password);
 	}
 }

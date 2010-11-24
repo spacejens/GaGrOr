@@ -12,7 +12,9 @@ import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
+import se.spacejens.gagror.view.ViewParameters;
 import se.spacejens.gagror.view.ViewSupport;
+import se.spacejens.gagror.view.Views;
 
 /**
  * Superclass for all Spring controllers, providing shared functionality.
@@ -32,8 +34,8 @@ public abstract class SpringViewSupport extends ViewSupport {
 	 */
 	protected ModelAndView getErrorView(final String headline, final String message) {
 		final ModelAndView mav = new ModelAndView("error");
-		mav.getModel().put("headline", headline);
-		mav.getModel().put("message", message);
+		mav.getModel().put(ViewParameters.PUBLIC_ERROR_HEADLINE.getName(), headline);
+		mav.getModel().put(ViewParameters.PUBLIC_ERROR_MESSAGE.getName(), message);
 		return mav;
 	}
 
@@ -65,9 +67,9 @@ public abstract class SpringViewSupport extends ViewSupport {
 				// Remove session login credentials, go to login failed page
 				this.getLog().debug("Login failed, removing login credentials from session for user {}", rc.getUsername());
 				SpringViewSupport.this.setLoggedInUser(null, request.getSession());
-				final ModelAndView mav = new ModelAndView("login");
-				mav.getModel().put("headline", "Login Failed");
-				mav.getModel().put("message", "Try again");
+				final ModelAndView mav = new ModelAndView(Views.PUBLIC_LOGIN.getName());
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_HEADLINE.getName(), "Login Failed");
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_MESSAGE.getName(), "Try again");
 				// Form and bindings added automatically by framework
 				return mav;
 			} catch (final ServiceCommunicationException e) {

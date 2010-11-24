@@ -2,8 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-Move constants to their own class/interface in the se.spacejens.gagror package.
-
 Use abstract type for enums, defining integer code (with Hibernate type mapping) and display text
 
 Implement hashCode, equals, and toString methods for entities properly
@@ -13,6 +11,8 @@ Create more user-friendly form validation error messages
 Remove Message entity, Welcome controller etc.
 
 Refactor package structure with more sub-packages for clarity when expanding.
+
+Add String constants or other definitions for entity names, columns, queries etc.
 
 Add more framework unit tests (and in the future, write new tests when adding functionality)
 
@@ -44,6 +44,8 @@ Another option is to return detached entity object, but make sure that all data 
 from causing exceptions when attempted on the detached entities).
 
 Possibly save helper and DAO instances in the JPA context instead, to avoid creating multiple instances of the same helper/DAO in different places.
+
+Subclass spring ModelAndView etc., adding capabilities for Gagror enums etc.
 
 ==============
 Rejected ideas

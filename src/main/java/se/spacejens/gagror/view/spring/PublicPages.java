@@ -18,6 +18,8 @@ import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.user.User;
 import se.spacejens.gagror.model.user.UserCreationException;
+import se.spacejens.gagror.view.ViewParameters;
+import se.spacejens.gagror.view.Views;
 
 /**
  * Spring controller for all public web pages (i.e. pages not requiring the user
@@ -44,12 +46,11 @@ public class PublicPages extends SpringViewSupport {
 			@Override
 			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
 				this.getLog().debug("Serving index page");
-				final ModelAndView mav = new ModelAndView("index");
-				mav.getModel().put("loginForm", new LoginForm());
+				final ModelAndView mav = new ModelAndView(Views.PUBLIC_INDEX.getName());
+				mav.getModel().put(ViewParameters.COMMON_LOGINFORM.getName(), new LoginForm());
 				return mav;
 			}
 		}.process(request);
-
 	}
 
 	/**
@@ -67,10 +68,10 @@ public class PublicPages extends SpringViewSupport {
 				this.getLog().debug("Serving logged out page");
 				PublicPages.this.getLoginService().logoutUser(rc);
 				PublicPages.this.setLoggedInUser(null, request.getSession());
-				final ModelAndView mav = new ModelAndView("login");
-				mav.getModel().put("headline", "Logged Out");
-				mav.getModel().put("message", "Log in again");
-				mav.getModel().put("loginForm", new LoginForm());
+				final ModelAndView mav = new ModelAndView(Views.PUBLIC_LOGIN.getName());
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_HEADLINE.getName(), "Logged Out");
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_MESSAGE.getName(), "Log in again");
+				mav.getModel().put(ViewParameters.COMMON_LOGINFORM.getName(), new LoginForm());
 				return mav;
 			}
 		}.process(request);
@@ -88,10 +89,10 @@ public class PublicPages extends SpringViewSupport {
 		return new Work() {
 			@Override
 			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
-				final ModelAndView mav = new ModelAndView("login");
-				mav.getModel().put("headline", "You Were Not Logged In");
-				mav.getModel().put("message", "Please log in and try again");
-				mav.getModel().put("loginForm", new LoginForm());
+				final ModelAndView mav = new ModelAndView(Views.PUBLIC_LOGIN.getName());
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_HEADLINE.getName(), "You Were Not Logged In");
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_MESSAGE.getName(), "Please log in and try again");
+				mav.getModel().put(ViewParameters.COMMON_LOGINFORM.getName(), new LoginForm());
 				return mav;
 			}
 		}.process(request);
@@ -109,10 +110,10 @@ public class PublicPages extends SpringViewSupport {
 		return new Work() {
 			@Override
 			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
-				final ModelAndView mav = new ModelAndView("login");
-				mav.getModel().put("headline", "Log In");
-				mav.getModel().put("message", "Enter your login credentials");
-				mav.getModel().put("loginForm", new LoginForm());
+				final ModelAndView mav = new ModelAndView(Views.PUBLIC_LOGIN.getName());
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_HEADLINE.getName(), "Log In");
+				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_MESSAGE.getName(), "Enter your login credentials");
+				mav.getModel().put(ViewParameters.COMMON_LOGINFORM.getName(), new LoginForm());
 				return mav;
 			}
 		}.process(request);
@@ -162,8 +163,8 @@ public class PublicPages extends SpringViewSupport {
 			protected ModelAndView doWorkNotLoggedIn(final RequestContext rc) throws LoginFailedException, MayNotBeLoggedInException,
 					ServiceCommunicationException {
 				this.getLog().debug("Serving registration page");
-				final ModelAndView mav = new ModelAndView("register");
-				mav.getModel().put("userRegistrationForm", new UserRegistrationForm());
+				final ModelAndView mav = new ModelAndView(Views.PUBLIC_REGISTER.getName());
+				mav.getModel().put(ViewParameters.PUBLIC_REGISTER_FORM.getName(), new UserRegistrationForm());
 				return mav;
 			}
 		}.process(request);
@@ -193,7 +194,7 @@ public class PublicPages extends SpringViewSupport {
 				final ModelAndView mav = new ModelAndView();
 				if (result.hasErrors()) {
 					this.getLog().debug("Registration form has binding errors");
-					mav.setViewName("register");
+					mav.setViewName(Views.PUBLIC_REGISTER.getName());
 					// Framework adds registration form and binding result
 					return mav;
 				}
@@ -203,21 +204,25 @@ public class PublicPages extends SpringViewSupport {
 							userRegistrationForm.getPassword(), userRegistrationForm.getRepeatPassword());
 				} catch (final UserCreationException e) {
 					this.getLog().debug("User could not be registered, assume that the username is not unique");
-					final FieldError error = new FieldError("userRegistrationForm", "username", "username is not unique");
+					// TODO Somehow avoid hard-coded string for form property
+					final FieldError error = new FieldError(ViewParameters.PUBLIC_REGISTER_FORM.getName(), "username", "username is not unique");
 					result.addError(error);
-					mav.setViewName("register");
+					mav.setViewName(Views.PUBLIC_REGISTER.getName());
 					// Framework adds registration form and binding result
 					return mav;
 				} catch (final RepeatedPasswordNotMatchingException e) {
 					this.getLog().debug("Repeated password did not match when registering user");
-					final FieldError error = new FieldError("userRegistrationForm", "repeatPassword", "passwords did not match");
+					// TODO Somehow avoid hard-coded string for form property
+					final FieldError error = new FieldError(ViewParameters.PUBLIC_REGISTER_FORM.getName(), "repeatPassword",
+							"passwords did not match");
 					result.addError(error);
-					mav.setViewName("register");
+					mav.setViewName(Views.PUBLIC_REGISTER.getName());
 					// Framework adds registration form and binding result
 					return mav;
 				}
 				PublicPages.this.setLoggedInUser(user, request.getSession());
-				mav.setView(new RedirectView(rc.getContextPath() + "/index.html"));
+				mav.setView(new RedirectView(rc.getContextPath() + SpringRequestMappings.DASHBOARD
+						+ SpringRequestMappings.DASHBOARD_INDEX));
 				return mav;
 			}
 		}.process(request);

@@ -32,13 +32,13 @@ class WebRequestContext extends LogAwareSupport implements RequestContext {
 	 *            Not null.
 	 */
 	public WebRequestContext(final HttpServletRequest request) {
-		Object sessionUsername = request.getSession().getAttribute("username");
+		Object sessionUsername = request.getSession().getAttribute(WebSessionAttributes.USERNAME);
 		if (null == sessionUsername) {
 			this.username = null;
 		} else {
 			this.username = sessionUsername.toString();
 		}
-		Object sessionPassword = request.getSession().getAttribute("password");
+		Object sessionPassword = request.getSession().getAttribute(WebSessionAttributes.PASSWORD);
 		if (null == sessionPassword) {
 			this.password = null;
 		} else {

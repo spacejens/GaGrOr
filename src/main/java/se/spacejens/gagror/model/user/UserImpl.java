@@ -18,7 +18,7 @@ import se.spacejens.gagror.model.EntitySupport;
  */
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
-@NamedQueries(value = { @NamedQuery(name = "login", query = "select u from UserImpl u where u.username = :username and u.password = :password") })
+@NamedQueries(value = { @NamedQuery(name = "UserImpl.login", query = "select u from UserImpl u where u.username = :username and u.password = :password") })
 public class UserImpl extends EntitySupport implements User {
 
 	/** The username of this user. */

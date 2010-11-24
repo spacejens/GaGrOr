@@ -48,7 +48,7 @@ public class UserPersistenceTest extends PersistenceTestSupport {
 		new TestTransaction() {
 			@Override
 			public boolean work(final EntityManager em) throws Exception {
-				final TypedQuery<UserImpl> query = em.createNamedQuery("login", UserImpl.class);
+				final TypedQuery<UserImpl> query = em.createNamedQuery("UserImpl.login", UserImpl.class);
 				query.setParameter("username", user.getUsername());
 				query.setParameter("password", user.getPassword());
 				final UserImpl retrieved = query.getSingleResult();

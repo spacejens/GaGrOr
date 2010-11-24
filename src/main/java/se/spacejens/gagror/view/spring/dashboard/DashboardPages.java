@@ -10,6 +10,7 @@ import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
+import se.spacejens.gagror.view.Views;
 import se.spacejens.gagror.view.spring.SpringRequestMappings;
 import se.spacejens.gagror.view.spring.SpringViewSupport;
 
@@ -39,7 +40,7 @@ public class DashboardPages extends SpringViewSupport {
 			protected ModelAndView doWorkLoggedIn(final RequestContext rc) throws NotLoggedInException, LoginFailedException,
 					ServiceCommunicationException {
 				this.getLog().debug("Serving dashboard index");
-				final ModelAndView mav = new ModelAndView("dashboard/index");
+				final ModelAndView mav = new ModelAndView(Views.DASHBOARD_INDEX.getName());
 				// TODO Replace with service call to get info, add to model
 				DashboardPages.this.getLoginService().verifyLogin(rc);
 				return mav;

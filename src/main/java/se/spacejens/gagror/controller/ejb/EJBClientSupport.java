@@ -15,6 +15,11 @@ import se.spacejens.gagror.controller.NamingContextProvider;
  */
 public abstract class EJBClientSupport<L> extends LogAwareSupport {
 
+	/**
+	 * JNDI prefix for locating EJBs. Append {@link #getBeanName()} to complete.
+	 */
+	static final String JNDI_PREFIX_EJB = "java:module/";
+
 	/** Instance to use to access naming context for lookups. */
 	private final NamingContextProvider namingContextProvider;
 
@@ -38,7 +43,7 @@ public abstract class EJBClientSupport<L> extends LogAwareSupport {
 	@SuppressWarnings("unchecked")
 	protected L getReference() throws EJBCommunicationException {
 		try {
-			return (L) this.namingContextProvider.getContext().lookup("java:module/" + this.getBeanName());
+			return (L) this.namingContextProvider.getContext().lookup(EJBClientSupport.JNDI_PREFIX_EJB + this.getBeanName());
 		} catch (final NamingException e) {
 			throw new EJBCommunicationException(e);
 		}
