@@ -17,7 +17,7 @@ import se.spacejens.gagror.LogAwareSupport;
  * @author spacejens
  */
 @MappedSuperclass
-public abstract class EntitySupport extends LogAwareSupport implements Entity {
+public abstract class EntityImpl extends LogAwareSupport implements Entity {
 
 	/** Database primary key value. */
 	private Long id;

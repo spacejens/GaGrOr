@@ -9,7 +9,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import se.spacejens.gagror.model.EntitySupport;
+import se.spacejens.gagror.model.EntityImpl;
 
 /**
  * Implementation of system user.
@@ -19,7 +19,7 @@ import se.spacejens.gagror.model.EntitySupport;
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 @NamedQueries(value = { @NamedQuery(name = "UserEntityImpl.login", query = "select u from UserEntityImpl u where u.username = :username and u.password = :password") })
-public class UserEntityImpl extends EntitySupport implements UserEntity {
+public class UserEntityImpl extends EntityImpl implements UserEntity {
 
 	/** The username of this user. */
 	private String username;
