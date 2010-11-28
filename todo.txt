@@ -2,14 +2,13 @@
 TODO list in order of decreasing priority
 =========================================
 
-Add String constants or other definitions for entity names, columns, queries etc.
-
 Add more framework unit tests (and in the future, write new tests when adding functionality)
 
 Clean up pom.xml, define properties for all versions, sort for readability, add more information
 Remove unused dependencies (replace HttpServletRequest with HttpRequest to eliminate?), check dependency versions
 
 Add Hibernate lifecycle interceptor, use to store entity changes and to check editing permissions
+Add String constants or other definitions for entity names, columns, queries etc.
 
 Refactor JSP pages for CSS use and add CSS file.
 Possibly place CSS file name in model from Spring controller, to prepare for selectable themes?
