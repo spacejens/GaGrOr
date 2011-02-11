@@ -2,7 +2,14 @@
 TODO list in order of decreasing priority
 =========================================
 
-Add more framework unit tests (and in the future, write new tests when adding functionality)
+Never return entity classes from controller layer. Instead, always return a single DTO (with subclasses and content as other DTOs).
+Separate model package into three parts, one entity, one DTO, and one shared (enums, common interfaces etc.).
+
+Create basic page structure using tags. Allow for a main menu controlled by a permissions DTO.
+
+Implement support for admin users impersonating other users.
+
+Complete suite of JUnit tests for the current architecture (and always add tests in the future).
 
 Clean up pom.xml, define properties for all versions, sort for readability, add more information
 Remove unused dependencies (replace HttpServletRequest with HttpRequest to eliminate?), check dependency versions
