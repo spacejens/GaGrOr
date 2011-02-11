@@ -1,5 +1,5 @@
 <%-- Prints the system name abbreviation --%>
 
-<%@taglib prefix="core" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/taglibs.jspf" %>
 
-<core:out value="GaGrOr" />
+<c:out value="GaGrOr" />

@@ -8,50 +8,50 @@
 		<h1>Register New User</h1>
 		<form method="post">
 			<spring:bind path="userRegistrationForm">
-				<core:if test="${status.error}">
+				<c:if test="${status.error}">
 					<font color="red">
 						Global errors:
-						<core:forEach var="error" items="${status.errorMessages}">
-							<core:out value="${error}"/> :
-						</core:forEach>
+						<c:forEach var="error" items="${status.errorMessages}">
+							<c:out value="${error}"/> :
+						</c:forEach>
 					</font>
-				</core:if>
+				</c:if>
 			</spring:bind>
 			Username:
 			<spring:bind path="userRegistrationForm.username">
-				<input type="text" name="username" value="<core:out value="${userRegistrationForm.username}"/>" />
-				<core:if test="${status.error}">
+				<input type="text" name="username" value="<c:out value="${userRegistrationForm.username}"/>" />
+				<c:if test="${status.error}">
 					<font color="red">
 						errors:
-						<core:forEach var="error" items="${status.errorMessages}">
-							<core:out value="${error}"/> :
-						</core:forEach>
+						<c:forEach var="error" items="${status.errorMessages}">
+							<c:out value="${error}"/> :
+						</c:forEach>
 					</font>
-				</core:if>
+				</c:if>
 			</spring:bind>
 			Password:
 			<spring:bind path="userRegistrationForm.password">
-				<input type="password" name="password" value="<core:out value="${userRegistrationForm.password}"/>" />
-				<core:if test="${status.error}">
+				<input type="password" name="password" value="<c:out value="${userRegistrationForm.password}"/>" />
+				<c:if test="${status.error}">
 					<font color="red">
 						errors:
-						<core:forEach var="error" items="${status.errorMessages}">
-							<core:out value="${error}"/> :
-						</core:forEach>
+						<c:forEach var="error" items="${status.errorMessages}">
+							<c:out value="${error}"/> :
+						</c:forEach>
 					</font>
-				</core:if>
+				</c:if>
 			</spring:bind>
 			Repeat password:
 			<spring:bind path="userRegistrationForm.repeatPassword">
-				<input type="password" name="repeatPassword" value="<core:out value="${userRegistrationForm.repeatPassword}"/>" />
-				<core:if test="${status.error}">
+				<input type="password" name="repeatPassword" value="<c:out value="${userRegistrationForm.repeatPassword}"/>" />
+				<c:if test="${status.error}">
 					<font color="red">
 						errors:
-						<core:forEach var="error" items="${status.errorMessages}">
-							<core:out value="${error}"/> :
-						</core:forEach>
+						<c:forEach var="error" items="${status.errorMessages}">
+							<c:out value="${error}"/> :
+						</c:forEach>
 					</font>
-				</core:if>
+				</c:if>
 			</spring:bind>
 			<input type="submit" value="Register" />
 		</form>

@@ -1,3 +1,3 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 
-<core:redirect url="/index.html"/>
+<c:redirect url="/index.html"/>
