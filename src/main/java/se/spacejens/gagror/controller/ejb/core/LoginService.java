@@ -4,10 +4,10 @@ import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.RequestResult;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.user.UserCreationException;
-import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Service used to handle login, logout, and user registration.
@@ -27,7 +27,7 @@ public interface LoginService {
 	 *            Plaintext password.
 	 * @param repeatPassword
 	 *            Plaintext password repeated.
-	 * @return The new user, not null.
+	 * @return Not null, logged in as the registered user.
 	 * @throws UserCreationException
 	 *             If the user could not be created, most likely because the
 	 *             username was busy.
@@ -38,7 +38,7 @@ public interface LoginService {
 	 * @throws MayNotBeLoggedInException
 	 *             If a user was logged in.
 	 */
-	public UserEntity registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
+	public RequestResult registerUser(final RequestContext rc, final String username, final String password, final String repeatPassword)
 			throws UserCreationException, ServiceCommunicationException, RepeatedPasswordNotMatchingException, MayNotBeLoggedInException;
 
 	/**
@@ -50,13 +50,13 @@ public interface LoginService {
 	 *            Username.
 	 * @param password
 	 *            Plaintext password.
-	 * @return The logged in user, not null.
+	 * @return Not null, logged in as the user.
 	 * @throws ServiceCommunicationException
 	 *             If communication with the service failed.
 	 * @throws LoginFailedException
 	 *             If login failed.
 	 */
-	public UserEntity loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
+	public RequestResult loginUser(final RequestContext rc, final String username, final String password) throws ServiceCommunicationException,
 			LoginFailedException;
 
 	/**
@@ -64,7 +64,7 @@ public interface LoginService {
 	 * 
 	 * @param rc
 	 *            The request context, containing login credentials.
-	 * @return The logged in user, not null.
+	 * @return Not null, logged in as the user.
 	 * @throws ServiceCommunicationException
 	 *             If communication with the service failed.
 	 * @throws LoginFailedException
@@ -72,16 +72,18 @@ public interface LoginService {
 	 * @throws NotLoggedInException
 	 *             If the user was not logged in.
 	 */
-	public UserEntity verifyLogin(final RequestContext rc) throws ServiceCommunicationException, LoginFailedException, NotLoggedInException;
+	public RequestResult verifyLogin(final RequestContext rc) throws ServiceCommunicationException, LoginFailedException, NotLoggedInException;
 
 	/**
 	 * Log out the current user (if any).
 	 * 
 	 * @param rc
 	 *            The request context.
-	 * @return The logged out user, or null if no user was logged in.
+	 * @return Not null, not logged in as any user,
+	 *         {@link LogoutRequestResult#getLoggedOutUser()} is null if no user
+	 *         was logged in.
 	 * @throws ServiceCommunicationException
 	 *             If communication with the service failed.
 	 */
-	public UserEntity logoutUser(final RequestContext rc) throws ServiceCommunicationException;
+	public LogoutRequestResult logoutUser(final RequestContext rc) throws ServiceCommunicationException;
 }

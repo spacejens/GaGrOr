@@ -14,9 +14,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import se.spacejens.gagror.controller.LoginFailedException;
 import se.spacejens.gagror.controller.MayNotBeLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.RequestResult;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
-import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
 import se.spacejens.gagror.view.ViewParameters;
 import se.spacejens.gagror.view.Views;
@@ -109,9 +109,9 @@ public class PublicPages extends SpringViewSupport {
 	 */
 	@RequestMapping(value = SpringRequestMappings.PUBLIC_LOGIN, method = RequestMethod.GET)
 	public ModelAndView login(final HttpServletRequest request) {
-		return new Work() {
+		return new WorkNotLoggedIn() {
 			@Override
-			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+			protected ModelAndView doWorkNotLoggedIn(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
 				final ModelAndView mav = new ModelAndView(Views.PUBLIC_LOGIN.getName());
 				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_HEADLINE.getName(), "Log In");
 				mav.getModel().put(ViewParameters.PUBLIC_LOGIN_MESSAGE.getName(), "Enter your login credentials");
@@ -137,15 +137,15 @@ public class PublicPages extends SpringViewSupport {
 	 */
 	@RequestMapping(value = SpringRequestMappings.PUBLIC_LOGIN, method = RequestMethod.POST)
 	public ModelAndView postLoginForm(final HttpServletRequest request, @Valid final LoginForm loginForm, final BindingResult result) {
-		return new Work() {
+		return new WorkNotLoggedIn() {
 			@Override
-			protected ModelAndView doWork(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
+			protected ModelAndView doWorkNotLoggedIn(final RequestContext rc) throws LoginFailedException, ServiceCommunicationException {
 				this.getLog().debug("Login form posted");
 				if (result.hasErrors()) {
 					throw new LoginFailedException();
 				}
-				final UserEntity user = PublicPages.this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
-				PublicPages.this.setLoggedInUser(user, request.getSession());
+				final RequestResult result = PublicPages.this.getLoginService().loginUser(rc, loginForm.getUsername(), loginForm.getPassword());
+				PublicPages.this.setLoggedInUser(result, request.getSession());
 				// Framework adds login form and binding result automatically
 				return new ModelAndView(new RedirectView(rc.getContextPath() + SpringRequestMappings.DASHBOARD
 						+ SpringRequestMappings.DASHBOARD_INDEX));
@@ -200,7 +200,7 @@ public class PublicPages extends SpringViewSupport {
 					// Framework adds registration form and binding result
 					return mav;
 				}
-				final UserEntity user;
+				final RequestResult user;
 				try {
 					user = PublicPages.this.getLoginService().registerUser(rc, userRegistrationForm.getUsername(),
 							userRegistrationForm.getPassword(), userRegistrationForm.getRepeatPassword());

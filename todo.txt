@@ -2,9 +2,6 @@
 TODO list in order of decreasing priority
 =========================================
 
-Never return entity classes from controller layer. Instead, always return a single DTO (with subclasses and content as other DTOs).
-Separate model package into three parts, one entity, one DTO, and one shared (enums, common interfaces etc.).
-
 Create basic page structure using tags. Allow for a main menu controlled by a permissions DTO.
 
 Implement support for admin users impersonating other users.

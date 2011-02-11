@@ -25,7 +25,7 @@ public abstract class DTOImpl extends LogAwareSupport implements DTO {
 	 * 
 	 * @param entity
 	 */
-	protected DTOImpl(final EntityImpl entity) {
+	protected DTOImpl(final Entity entity) {
 		this.id = entity.getId();
 		this.creationTimestamp = entity.getCreationTimestamp();
 		this.modificationTimestamp = entity.getModificationTimestamp();
@@ -44,5 +44,14 @@ public abstract class DTOImpl extends LogAwareSupport implements DTO {
 	@Override
 	public Timestamp getModificationTimestamp() {
 		return this.modificationTimestamp;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuffer output = new StringBuffer();
+		output.append(this.getClass().getSimpleName());
+		output.append("#");
+		output.append(this.getId());
+		return output.toString();
 	}
 }

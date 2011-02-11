@@ -7,14 +7,7 @@ import se.spacejens.gagror.model.Entity;
  * 
  * @author spacejens
  */
-public interface UserEntity extends Entity, User {
-
-	/**
-	 * Get the encrypted password.
-	 * 
-	 * @return Not null.
-	 */
-	public String getPassword();
+public interface UserEntity extends Entity, UserReference, Password {
 
 	/**
 	 * Set the encrypted password.

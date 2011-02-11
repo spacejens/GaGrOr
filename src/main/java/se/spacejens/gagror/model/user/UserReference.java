@@ -5,7 +5,7 @@ package se.spacejens.gagror.model.user;
  * 
  * @author spacejens
  */
-public interface User {
+public interface UserReference {
 
 	/**
 	 * Get the username.

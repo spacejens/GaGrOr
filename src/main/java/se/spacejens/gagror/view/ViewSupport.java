@@ -6,9 +6,10 @@ import javax.servlet.http.HttpSession;
 import se.spacejens.gagror.LogAwareSupport;
 import se.spacejens.gagror.controller.NamingContextProvider;
 import se.spacejens.gagror.controller.RequestContext;
+import se.spacejens.gagror.controller.RequestResult;
 import se.spacejens.gagror.controller.ejb.core.LoginClient;
 import se.spacejens.gagror.controller.ejb.core.LoginService;
-import se.spacejens.gagror.model.user.UserEntity;
+import se.spacejens.gagror.model.user.UserLoggedInDTO;
 
 /**
  * Superclass for all views, providing shared functionality.
@@ -59,17 +60,18 @@ public abstract class ViewSupport extends LogAwareSupport {
 	/**
 	 * Store login information for the specified user in the HTTP session.
 	 * 
-	 * @param user
+	 * @param result
 	 *            Not null.
 	 * @param session
 	 *            Not null.
 	 */
-	protected void setLoggedInUser(final UserEntity user, final HttpSession session) {
-		if (null == user) {
+	protected void setLoggedInUser(final RequestResult result, final HttpSession session) {
+		if (null == result || null == result.getLoggedInUser()) {
 			this.getLog().info("Logged out");
 			session.setAttribute(WebSessionAttributes.USERNAME, null);
 			session.setAttribute(WebSessionAttributes.PASSWORD, null);
 		} else {
+			final UserLoggedInDTO user = result.getLoggedInUser();
 			this.getLog().info("Logged in as {}", user);
 			session.setAttribute(WebSessionAttributes.USERNAME, user.getUsername());
 			session.setAttribute(WebSessionAttributes.PASSWORD, user.getPassword());
