@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import net.iharder.Base64;
 import se.spacejens.gagror.GagrorImplementationException;
+import se.spacejens.gagror.SecurityConstants;
 import se.spacejens.gagror.controller.helper.HelperSupport;
 import se.spacejens.gagror.model.JpaContext;
 
@@ -15,15 +16,6 @@ import se.spacejens.gagror.model.JpaContext;
  * @author spacejens
  */
 public final class EncryptionHelperImpl extends HelperSupport implements EncryptionHelper {
-
-	/** One-way encryption hash to use. */
-	static final String ALGORITHM = "SHA";
-
-	/** Character encoding to use. */
-	static final String ENCODING = "UTF-8";
-
-	/** Added between username and password when joining them for encryption. */
-	static final String USERNAME_PASSWORD_JOINING = " ";
 
 	/**
 	 * Create instance.
@@ -42,7 +34,7 @@ public final class EncryptionHelperImpl extends HelperSupport implements Encrypt
 	 */
 	MessageDigest getMessageDigest() {
 		try {
-			return MessageDigest.getInstance(EncryptionHelperImpl.ALGORITHM);
+			return MessageDigest.getInstance(SecurityConstants.ALGORITHM);
 		} catch (final NoSuchAlgorithmException e) {
 			throw new GagrorImplementationException(e);
 		}
@@ -57,7 +49,7 @@ public final class EncryptionHelperImpl extends HelperSupport implements Encrypt
 	 */
 	byte[] getBytes(final String text) {
 		try {
-			return text.getBytes(EncryptionHelperImpl.ENCODING);
+			return text.getBytes(SecurityConstants.ENCODING);
 		} catch (final UnsupportedEncodingException e) {
 			throw new GagrorImplementationException(e);
 		}
@@ -86,6 +78,6 @@ public final class EncryptionHelperImpl extends HelperSupport implements Encrypt
 	 */
 	@Override
 	public String encryptPassword(final String username, final String password) {
-		return this.encryptText(username + EncryptionHelperImpl.USERNAME_PASSWORD_JOINING + password);
+		return this.encryptText(username + SecurityConstants.USERNAME_PASSWORD_JOINING + password);
 	}
 }

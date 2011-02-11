@@ -3,7 +3,7 @@ package se.spacejens.gagror.view.spring.publicpages;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import se.spacejens.gagror.model.user.UserEntity;
+import se.spacejens.gagror.SecurityConstants;
 import se.spacejens.gagror.view.spring.SpringFormSupport;
 
 /**
@@ -28,7 +28,7 @@ public class UserRegistrationForm extends SpringFormSupport {
 	 * @return Username.
 	 */
 	@NotNull
-	@Size(min = UserEntity.USERNAME_MIN_LENGTH, max = UserEntity.USERNAME_MAX_LENGTH)
+	@Size(min = SecurityConstants.USERNAME_MIN_LENGTH, max = SecurityConstants.USERNAME_MAX_LENGTH)
 	public String getUsername() {
 		return this.username;
 	}
@@ -49,7 +49,7 @@ public class UserRegistrationForm extends SpringFormSupport {
 	 * @return Password.
 	 */
 	@NotNull
-	@Size(min = UserEntity.PASSWORD_MIN_LENGTH, max = UserEntity.PASSWORD_MAX_LENGTH)
+	@Size(min = SecurityConstants.PASSWORD_MIN_LENGTH, max = SecurityConstants.PASSWORD_MAX_LENGTH)
 	public String getPassword() {
 		return this.password;
 	}
@@ -70,7 +70,7 @@ public class UserRegistrationForm extends SpringFormSupport {
 	 * @return Plaintext password.
 	 */
 	@NotNull
-	@Size(min = UserEntity.PASSWORD_MIN_LENGTH, max = UserEntity.PASSWORD_MAX_LENGTH)
+	@Size(min = SecurityConstants.PASSWORD_MIN_LENGTH, max = SecurityConstants.PASSWORD_MAX_LENGTH)
 	public String getRepeatPassword() {
 		return this.repeatPassword;
 	}

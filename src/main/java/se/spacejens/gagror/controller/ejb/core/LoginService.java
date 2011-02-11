@@ -6,8 +6,8 @@ import se.spacejens.gagror.controller.NotLoggedInException;
 import se.spacejens.gagror.controller.RequestContext;
 import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
-import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Service used to handle login, logout, and user registration.

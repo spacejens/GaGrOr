@@ -9,6 +9,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import se.spacejens.gagror.SecurityConstants;
 import se.spacejens.gagror.model.EntityImpl;
 
 /**
@@ -29,7 +30,7 @@ public class UserEntityImpl extends EntityImpl implements UserEntity {
 
 	@Override
 	@NotNull
-	@Size(min = UserEntity.USERNAME_MIN_LENGTH, max = UserEntity.USERNAME_MAX_LENGTH)
+	@Size(min = SecurityConstants.USERNAME_MIN_LENGTH, max = SecurityConstants.USERNAME_MAX_LENGTH)
 	@Column(name = "username", nullable = false, insertable = true, updatable = false)
 	public String getUsername() {
 		return this.username;
@@ -47,7 +48,7 @@ public class UserEntityImpl extends EntityImpl implements UserEntity {
 
 	@Override
 	@NotNull
-	@Size(min = UserEntity.PASSWORD_ENCRYPTED_MIN_LENGTH, max = UserEntity.PASSWORD_ENCRYPTED_MAX_LENGTH)
+	@Size(min = SecurityConstants.PASSWORD_ENCRYPTED_MIN_LENGTH, max = SecurityConstants.PASSWORD_ENCRYPTED_MAX_LENGTH)
 	@Column(name = "password", nullable = false, insertable = true, updatable = true)
 	public String getPassword() {
 		return this.password;

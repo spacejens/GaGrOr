@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import se.spacejens.gagror.SecurityConstants;
 import se.spacejens.gagror.model.DAOClientSupportTestSupport;
 import se.spacejens.gagror.model.JpaContext;
 import se.spacejens.gagror.model.user.UserDAO;
@@ -73,7 +74,7 @@ public class ControllerSupportTest extends DAOClientSupportTestSupport {
 		// TODO
 	}
 
-	private void performGetJpaContextTest(final String username, final String password, final UserEntity user) {
+	private void performGetJpaContextTest(final String username, final String password, final SecurityConstants user) {
 		// TODO
 	}
 

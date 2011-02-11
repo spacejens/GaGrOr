@@ -1,5 +1,6 @@
 package se.spacejens.gagror.model.user;
 
+
 /**
  * Specification of functionality for the user DAO.
  * 

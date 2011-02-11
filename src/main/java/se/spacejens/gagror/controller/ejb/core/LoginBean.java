@@ -10,8 +10,8 @@ import se.spacejens.gagror.controller.ServiceCommunicationException;
 import se.spacejens.gagror.controller.ejb.EJBSupport;
 import se.spacejens.gagror.controller.helper.user.RepeatedPasswordNotMatchingException;
 import se.spacejens.gagror.model.JpaContext;
-import se.spacejens.gagror.model.user.UserEntity;
 import se.spacejens.gagror.model.user.UserCreationException;
+import se.spacejens.gagror.model.user.UserEntity;
 
 /**
  * Implementation of login service.
