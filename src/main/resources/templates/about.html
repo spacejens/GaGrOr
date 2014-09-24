@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:fragment="head">
 	<title>GaGrOr - Gaming Group Organizer</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" type="text/css" href="webjars/foundation/5.4.0/css/foundation.css" />
@@ -11,28 +11,24 @@
 	<script src="webjars/foundation/5.4.0/js/foundation.min.js" />
 </head>
 <body>
-	<nav class="icon-bar five-up">
-		<a class="item" href="?name=home">
-			<i class="fi-home"></i>
-			<label>Home</label>
-		</a>
-		<a class="item" href="?name=bookmark">
-			<i class="fi-bookmark"></i>
-			<label>Bookmark</label>
-		</a>
-		<a class="item" href="?name=info">
+	<nav th:fragment="topmenu-public" class="icon-bar three-up">
+		<a class="item" href="/">
 			<i class="fi-info"></i>
 			<label>Info</label>
 		</a>
-		<a class="item" href="?name=mail">
-			<i class="fi-mail"></i>
-			<label>Mail</label>
+		<a class="item" href="login">
+			<i class="fi-unlock"></i>
+			<label>Log in</label>
 		</a>
-		<a class="item" href="?name=like">
-			<i class="fi-like"></i>
-			<label>Like</label>
+		<a class="item" href="register">
+			<i class="fi-plus"></i>
+			<label>Register</label>
 		</a>
 	</nav>
+	<h1>GaGrOr - Gaming Group Organizer</h1>
+	<p>GaGrOr is a web system that helps you keep track of gaming groups,
+	typically for face to face games.</p>
+	<p>Use the menu on top of the page to navigate.</p>
 	<script>$(document).foundation();</script>
 </body>
 </html>

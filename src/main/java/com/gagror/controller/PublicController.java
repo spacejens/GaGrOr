@@ -11,4 +11,14 @@ public class PublicController {
 	public String about(final Model model) {
 		return "about";
 	}
+
+	@RequestMapping("/login")
+	public String login(final Model model) {
+		return "login";
+	}
+
+	@RequestMapping("/register")
+	public String register(final Model model) {
+		return "register";
+	}
 }
