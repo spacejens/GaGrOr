@@ -1,0 +1,8 @@
+# Configure as needed to connect to the database
+spring.datasource.url=jdbc:mysql://localhost/gagror
+spring.datasource.username=gagroruser
+spring.datasource.password=gagrorpass
+spring.datasource.driverClassName=com.mysql.jdbc.Driver
+
+# Do not change this configuration
+liquibase.change-log=classpath:/liquibase/master-changelog.xml
