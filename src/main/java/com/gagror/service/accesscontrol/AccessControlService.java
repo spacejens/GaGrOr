@@ -33,7 +33,7 @@ public class AccessControlService {
 			// TODO Return output object?
 			return account.toString();
 		} else {
-			return null;
+			return "LOGIN FAILED";
 		}
 	}
 }
