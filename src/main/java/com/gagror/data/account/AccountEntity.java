@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.ToString;
@@ -18,6 +19,9 @@ public class AccountEntity {
 	@Id
 	@GeneratedValue
 	private Long id;
+
+	@Version
+	private Long version;
 
 	@Column(nullable = false)
 	private String login;
