@@ -12,7 +12,7 @@
 			<column name="version" type="bigint" defaultValueNumeric="0">
 				<constraints nullable="false" />
 			</column>
-			<column name="login" type="varchar(64)">
+			<column name="username" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
 			<column name="password" type="varchar(64)">
@@ -26,7 +26,7 @@
 
 	<changeSet id="account-admin" author="spacejens">
 		<insert tableName="account">
-			<column name="login" value="admin"/>
+			<column name="username" value="admin"/>
 			<column name="password" value="password"/>
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->
 		</insert>

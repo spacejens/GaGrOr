@@ -5,11 +5,9 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.gagror.data.account.LoginCredentialsInput;
-
 public class LoginCredentialsInputUnitTest {
 
-	private static final String LOGIN = "username";
+	private static final String USERNAME = "username";
 	private static final String PASSWORD = "secretpassword";
 
 	private LoginCredentialsInput instance;
@@ -23,7 +21,7 @@ public class LoginCredentialsInputUnitTest {
 	@Before
 	public void setupInstance() {
 		instance = new LoginCredentialsInput();
-		instance.setLogin(LOGIN);
+		instance.setUsername(USERNAME);
 		instance.setPassword(PASSWORD);
 	}
 }

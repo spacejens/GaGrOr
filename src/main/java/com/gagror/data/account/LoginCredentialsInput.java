@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString(exclude="password")
 public class LoginCredentialsInput {
 
-	private String login;
+	private String username;
 
 	private String password;
 }

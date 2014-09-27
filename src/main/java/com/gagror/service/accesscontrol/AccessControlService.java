@@ -28,8 +28,8 @@ public class AccessControlService {
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			if(null != sessionCredentials.getLoginCredentials()) {
-				requestAccount.setAccount(accountRepository.findByLoginAndPassword(
-						sessionCredentials.getLoginCredentials().getLogin(),
+				requestAccount.setAccount(accountRepository.findByUsernameAndPassword(
+						sessionCredentials.getLoginCredentials().getUsername(),
 						passwordEncryption.encrypt(sessionCredentials.getLoginCredentials())));
 			} else {
 				// No credentials, request account loading tried and failed
@@ -44,7 +44,7 @@ public class AccessControlService {
 		// TODO Return output object
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
-			return account.getLogin();
+			return account.getUsername();
 		} else {
 			return null;
 		}

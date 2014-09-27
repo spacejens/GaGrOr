@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class AccountEntityUnitTest {
 
-	private static final String LOGIN = "username";
+	private static final String USERNAME = "username";
 	private static final String PASSWORD = "secretpassword";
 	private static final AccountType TYPE = AccountType.STANDARD;
 
@@ -22,7 +22,7 @@ public class AccountEntityUnitTest {
 	@Before
 	public void setupInstance() {
 		instance = new AccountEntity();
-		instance.setLogin(LOGIN);
+		instance.setUsername(USERNAME);
 		instance.setPassword(PASSWORD);
 		instance.setAccountType(TYPE);
 	}

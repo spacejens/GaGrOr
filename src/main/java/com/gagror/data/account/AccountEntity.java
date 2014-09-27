@@ -26,7 +26,7 @@ public class AccountEntity {
 	private Long version;
 
 	@Column(nullable = false)
-	private String login;
+	private String username;
 
 	@Column(nullable = false)
 	private String password;
@@ -35,7 +35,7 @@ public class AccountEntity {
 	private AccountType accountType;
 
 	public AccountEntity(final RegisterInput registerForm) {
-		this.setLogin(registerForm.getLogin());
+		this.setUsername(registerForm.getUsername());
 		this.setPassword(registerForm.getPassword());
 		this.setAccountType(AccountType.STANDARD);
 	}
