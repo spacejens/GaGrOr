@@ -3,11 +3,11 @@ package com.gagror.service.accesscontrol;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Base64;
 
 import lombok.SneakyThrows;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gagror.data.account.LoginCredentialsInput;
@@ -15,12 +15,12 @@ import com.gagror.data.account.LoginCredentialsInput;
 @Service
 public class PasswordEncryptionService {
 
-	public static final int SALT_BYTES = 12; // 16 characters in Base64
-
-	private final SecureRandom secureRandom = new SecureRandom();
 	private final Base64.Encoder base64Encoder = Base64.getEncoder();
 	private final Base64.Decoder base64Decoder = Base64.getDecoder();
 	private final MessageDigest sha256;
+
+	@Autowired
+	SecureRandomService secureRandom;
 
 	@SneakyThrows(NoSuchAlgorithmException.class)
 	public PasswordEncryptionService() {
@@ -43,7 +43,7 @@ public class PasswordEncryptionService {
 		if(null != loginCredentials.getSalt()) {
 			salt = base64Decoder.decode(loginCredentials.getSalt());
 		} else {
-			salt = generateRandomSalt();
+			salt = secureRandom.generateRandomSalt();
 			loginCredentials.setSalt(base64Encoder.encodeToString(salt));
 		}
 		// Encrypt the password
@@ -60,11 +60,5 @@ public class PasswordEncryptionService {
 		System.arraycopy(salt, 0, inputBytes, 0, salt.length);
 		System.arraycopy(passwordBytes, 0, inputBytes, salt.length, passwordBytes.length);
 		return base64Encoder.encodeToString(sha256.digest(inputBytes));
-	}
-
-	private byte[] generateRandomSalt() {
-		byte[] salt = new byte[SALT_BYTES];
-		secureRandom.nextBytes(salt);
-		return salt;
 	}
 }

@@ -1,25 +1,36 @@
 package com.gagror.service.accesscontrol;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+
+import java.util.Base64;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.account.LoginCredentialsInput;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PasswordEncryptionServiceUnitTest {
 
 	private static final String USERNAME = "admin";
 	private static final String PASSWORD = "password";
-	private static final String ENCRYPTED = "cbT97FvathBBkU4kLQGaMhiFD+ijGbBJ3eB2/hVaKm8=";
 	private static final String SALT = "KyPVwKOMpZkRp1ZM";
+	private static final String ENCRYPTED = "cbT97FvathBBkU4kLQGaMhiFD+ijGbBJ3eB2/hVaKm8=";
+	private static final String SALT_GENERATED = "lrNAPBql23zhmV7V";
+	private static final String ENCRYPTED_GENERATED = "hZOmwLcEXP+cCpUjoCBDMxLNKchp4j9zx+mk66D363E=";
 
 	PasswordEncryptionService instance;
 	LoginCredentialsInput input;
 
+	@Mock
+	SecureRandomService secureRandom;
+
 	@Test
-	public void encrypt_ok() {
+	public void encrypt_encryptedPasswordOutputted() {
 		final String output = instance.encrypt(input);
 		assertEquals("Incorrect encryption", ENCRYPTED, output);
 	}
@@ -37,18 +48,24 @@ public class PasswordEncryptionServiceUnitTest {
 	}
 
 	@Test
+	public void encrypt_encryptedPasswordOutputted_generatedSalt() {
+		input.setSalt(null);
+		final String output = instance.encrypt(input);
+		assertEquals("Incorrect encryption", ENCRYPTED_GENERATED, output);
+	}
+
+	@Test
 	public void encrypt_generatedSaltStored() {
 		input.setSalt(null);
 		instance.encrypt(input);
-		assertNotNull("Generated salt not stored", input.getSalt());
+		assertEquals("Generated salt not stored", SALT_GENERATED, input.getSalt());
 	}
 
 	@Test
 	public void encrypt_encryptedPasswordStored_generatedSalt() {
 		input.setSalt(null);
 		instance.encrypt(input);
-		// TODO Verify that the password and salt match (refactoring needed to break out randomness)
-		assertNotNull("Encryption not stored", input.getEncryptedPassword());
+		assertEquals("Encryption not stored", ENCRYPTED_GENERATED, input.getEncryptedPassword());
 	}
 
 	@Test
@@ -68,7 +85,13 @@ public class PasswordEncryptionServiceUnitTest {
 	}
 
 	@Before
+	public void setupSecureRandom() {
+		when(secureRandom.generateRandomSalt()).thenReturn(Base64.getDecoder().decode(SALT_GENERATED));
+	}
+
+	@Before
 	public void setupInstance() {
 		instance = new PasswordEncryptionService();
+		instance.secureRandom = secureRandom;
 	}
 }
