@@ -4,6 +4,21 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Register</h1>
+	<form action="#" th:action="@{/access/register}" th:object="${registerForm}" method="post">
+		<label>
+			Username
+			<input type="text" th:field="*{login}" />
+		</label>
+		<label>
+			Password
+			<input type="password" th:field="*{password}" />
+		</label>
+		<label>
+			Repeat password
+			<input type="password" th:field="*{passwordRepeat}" />
+		</label>
+		<button type="submit">Register</button>
+	</form>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

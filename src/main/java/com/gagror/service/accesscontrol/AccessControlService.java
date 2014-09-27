@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.LoginCredentialsInput;
+import com.gagror.data.account.RegisterInput;
 
 @Service
 @Transactional
@@ -55,5 +56,15 @@ public class AccessControlService {
 
 	public void logOut() {
 		this.sessionCredentials.setLoginCredentials(null);
+	}
+
+	public void register(final RegisterInput registerForm) {
+		// Verify that the account can be created
+		// TODO Check if username is busy
+		// TODO Check that repeated password matches
+		// Create the account
+		accountRepository.save(new AccountEntity(registerForm));
+		// Automatically log in the newly registered user
+		this.logIn(registerForm);
 	}
 }

@@ -8,9 +8,11 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
+@NoArgsConstructor
 @Entity
 @ToString(exclude="password")
 @Table(name="account")
@@ -31,4 +33,10 @@ public class AccountEntity {
 
 	@Column(nullable = false)
 	private AccountType accountType;
+
+	public AccountEntity(final RegisterInput registerForm) {
+		this.setLogin(registerForm.getLogin());
+		this.setPassword(registerForm.getPassword());
+		this.setAccountType(AccountType.STANDARD);
+	}
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.data.account.LoginCredentialsInput;
+import com.gagror.data.account.RegisterInput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Controller
@@ -30,14 +31,21 @@ public class AccessController extends AbstractController {
 		return redirect("/");
 	}
 
-	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	@RequestMapping(value="/logout")
 	public RedirectView logOut(final Model model) {
 		accessControl.logOut();
 		return redirect("/access/login");
 	}
 
-	@RequestMapping("/register")
-	public String register(final Model model) {
+	@RequestMapping(value="/register", method=RequestMethod.GET)
+	public String registerForm(final Model model) {
+		model.addAttribute("registerForm", new RegisterInput());
 		return "register";
+	}
+
+	@RequestMapping(value="/register", method=RequestMethod.POST)
+	public RedirectView registerProcess(final Model model, final RegisterInput registerForm) {
+		accessControl.register(registerForm);
+		return redirect("/");
 	}
 }
