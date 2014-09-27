@@ -29,11 +29,23 @@ public class AccessControlService {
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			if(null != sessionCredentials.getLoginCredentials()) {
-				requestAccount.setAccount(accountRepository.findByUsernameAndPassword(
-						sessionCredentials.getLoginCredentials().getUsername(),
-						passwordEncryption.encrypt(sessionCredentials.getLoginCredentials())));
+				final AccountEntity account = accountRepository.findByUsername(
+						sessionCredentials.getLoginCredentials().getUsername());
+				if(account != null) {
+					sessionCredentials.getLoginCredentials().setSalt(account.getSalt());
+					if(account.getPassword().equals(
+							passwordEncryption.encrypt(sessionCredentials.getLoginCredentials()))) {
+						requestAccount.setAccount(account);
+					} else {
+						// Passwords don't match, cannot log in
+						requestAccount.setAccount(null);
+					}
+				} else {
+					// Account does not exist, cannot log in
+					requestAccount.setAccount(null);
+				}
 			} else {
-				// No credentials, request account loading tried and failed
+				// No credentials, cannot log in
 				requestAccount.setAccount(null);
 			}
 			requestAccount.setLoaded(true);

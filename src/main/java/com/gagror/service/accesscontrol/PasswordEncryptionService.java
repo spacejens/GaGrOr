@@ -17,9 +17,11 @@ public class PasswordEncryptionService {
 
 	public static final int SALT_BYTES = 12; // 16 characters in Base64
 	public static final int SALT_STRING_LENGTH = 16;
+	public static final int ENCRYPTED_STRING_LENGTH = 44; // SHA-256 output in Base64
 
 	private final SecureRandom secureRandom = new SecureRandom();
 	private final Base64.Encoder base64Encoder = Base64.getEncoder();
+	private final Base64.Decoder base64Decoder = Base64.getDecoder();
 	private final MessageDigest sha256;
 
 	@SneakyThrows(NoSuchAlgorithmException.class)
@@ -38,13 +40,17 @@ public class PasswordEncryptionService {
 		if(null != loginCredentials.getEncryptedPassword()) {
 			return loginCredentials.getEncryptedPassword();
 		}
-		// Generate a salt for the encryption
-		final byte[] salt = generateSalt();
+		// Get the salt for the encryption
+		final byte[] salt;
+		if(null != loginCredentials.getSalt()) {
+			salt = base64Decoder.decode(loginCredentials.getSalt());
+		} else {
+			salt = generateRandomSalt();
+			loginCredentials.setSalt(base64Encoder.encodeToString(salt));
+		}
 		// Encrypt the password
 		final String encryptedPassword =
 				this.encodePassword(loginCredentials.getPassword(), salt);
-		// Store and return the encrypted password
-		loginCredentials.setSalt(base64Encoder.encodeToString(salt));
 		loginCredentials.setEncryptedPassword(encryptedPassword);
 		return encryptedPassword;
 	}
@@ -58,7 +64,7 @@ public class PasswordEncryptionService {
 		return base64Encoder.encodeToString(sha256.digest(inputBytes));
 	}
 
-	private byte[] generateSalt() {
+	private byte[] generateRandomSalt() {
 		byte[] salt = new byte[SALT_BYTES];
 		secureRandom.nextBytes(salt);
 		return salt;
