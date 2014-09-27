@@ -5,8 +5,14 @@
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Log in</h1>
 	<form action="#" th:action="@{/access/login}" th:object="${loginForm}" method="post">
-		<input type="text" th:field="*{login}" />
-		<input type="password" th:field="*{password}" />
+		<label>
+			Username
+			<input type="text" th:field="*{login}" />
+		</label>
+		<label>
+			Password
+			<input type="password" th:field="*{password}" />
+		</label>
 		<button type="submit">Log in</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>
