@@ -88,6 +88,6 @@ public class AccessControlService {
 		passwordEncryption.encrypt(registerForm);
 		accountRepository.save(new AccountEntity(registerForm));
 		// Automatically log in the newly registered user
-		return this.logIn(new LoginCredentialsInput(registerForm));
+		return logIn(new LoginCredentialsInput(registerForm));
 	}
 }
