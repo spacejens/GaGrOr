@@ -1,0 +1,31 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+	<changeSet id="account-table" author="spacejens">
+		<createTable tableName="account">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="login" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="password" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="account_type" type="tinyint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="account-admin" author="spacejens">
+		<insert tableName="account">
+			<column name="login" value="admin"/>
+			<column name="password" value="password"/>
+			<column name="account_type" valueNumeric="1"/>
+		</insert>
+	</changeSet>
+</databaseChangeLog>

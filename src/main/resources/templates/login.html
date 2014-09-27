@@ -1,9 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="about :: head" />
+<head th:replace="/about :: head" />
 <body>
-	<nav th:replace="about :: topmenu-public"></nav>
+	<nav th:replace="/about :: topmenu-public"></nav>
 	<h1>Log in</h1>
+	<p>Logged in as <span th:text="${currentUser}">some user</span></p>
 	<script>$(document).foundation();</script>
 </body>
 </html>

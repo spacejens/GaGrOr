@@ -3,12 +3,12 @@
 <head th:fragment="head">
 	<title>GaGrOr - Gaming Group Organizer</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" type="text/css" href="webjars/foundation/5.4.0/css/foundation.css" />
-	<link rel="stylesheet" type="text/css" href="webjars/foundation-icon-fonts/d596a3cfb3/foundation-icons.css" />
-	<script src="webjars/modernizr/2.7.1/modernizr.js" />
-	<script src="webjars/jquery/2.1.0/jquery.js" />
-	<script src="webjars/fastclick/1.0.1/fastclick.js" />
-	<script src="webjars/foundation/5.4.0/js/foundation.min.js" />
+	<link rel="stylesheet" type="text/css" href="/webjars/foundation/5.4.0/css/foundation.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/foundation-icon-fonts/d596a3cfb3/foundation-icons.css" />
+	<script src="/webjars/modernizr/2.7.1/modernizr.js" />
+	<script src="/webjars/jquery/2.1.0/jquery.js" />
+	<script src="/webjars/fastclick/1.0.1/fastclick.js" />
+	<script src="/webjars/foundation/5.4.0/js/foundation.min.js" />
 </head>
 <body>
 	<nav th:fragment="topmenu-public" class="icon-bar three-up">
@@ -16,11 +16,11 @@
 			<i class="fi-info"></i>
 			<label>Info</label>
 		</a>
-		<a class="item" href="login">
+		<a class="item" href="/access/login">
 			<i class="fi-unlock"></i>
 			<label>Log in</label>
 		</a>
-		<a class="item" href="register">
+		<a class="item" href="/access/register">
 			<i class="fi-plus"></i>
 			<label>Register</label>
 		</a>
