@@ -16,8 +16,6 @@ import com.gagror.data.account.LoginCredentialsInput;
 public class PasswordEncryptionService {
 
 	public static final int SALT_BYTES = 12; // 16 characters in Base64
-	public static final int SALT_STRING_LENGTH = 16;
-	public static final int ENCRYPTED_STRING_LENGTH = 44; // SHA-256 output in Base64
 
 	private final SecureRandom secureRandom = new SecureRandom();
 	private final Base64.Encoder base64Encoder = Base64.getEncoder();
