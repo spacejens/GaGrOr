@@ -34,8 +34,8 @@
 	<changeSet id="account-admin" author="spacejens">
 		<insert tableName="account">
 			<column name="username" value="admin"/>
-			<column name="password" value="password"/>
-			<column name="salt" value="abcdefghijklmnop"/>
+			<column name="password" value="cbT97FvathBBkU4kLQGaMhiFD+ijGbBJ3eB2/hVaKm8="/> <!-- password -->
+			<column name="salt" value="KyPVwKOMpZkRp1ZM"/>
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->
 		</insert>
 	</changeSet>
