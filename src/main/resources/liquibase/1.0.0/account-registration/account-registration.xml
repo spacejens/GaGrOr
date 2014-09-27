@@ -24,6 +24,10 @@
 		</createTable>
 	</changeSet>
 
+	<changeSet id="username-unique" author="spacejens">
+		<addUniqueConstraint tableName="account" columnNames="username"/>
+	</changeSet>
+
 	<changeSet id="account-admin" author="spacejens">
 		<insert tableName="account">
 			<column name="username" value="admin"/>
