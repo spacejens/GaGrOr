@@ -15,8 +15,11 @@ public class LoginCredentialsInput {
 
 	private String encryptedPassword;
 
+	private String salt;
+
 	public LoginCredentialsInput(final RegisterInput registerForm) {
 		setUsername(registerForm.getUsername());
 		setEncryptedPassword(registerForm.getEncryptedPassword());
+		setSalt(registerForm.getSalt());
 	}
 }

@@ -18,6 +18,9 @@
 			<column name="password" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
+			<column name="salt" type="char(16)">
+				<constraints nullable="false" />
+			</column>
 			<column name="account_type" type="tinyint">
 				<constraints nullable="false" />
 			</column>
@@ -32,6 +35,7 @@
 		<insert tableName="account">
 			<column name="username" value="admin"/>
 			<column name="password" value="password"/>
+			<column name="salt" value="abcdefghijklmnop"/>
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->
 		</insert>
 	</changeSet>
