@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/about :: head" />
+<head th:replace="/fragments/framework :: head" />
 <body>
 	<nav th:replace="/about :: topmenu-public"></nav>
 	<h1>Register</h1>
-	<script>$(document).foundation();</script>
+	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

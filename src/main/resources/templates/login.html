@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/about :: head" />
+<head th:replace="/fragments/framework :: head" />
 <body>
 	<nav th:replace="/about :: topmenu-public"></nav>
 	<h1>Log in</h1>
@@ -10,6 +10,6 @@
 		<button type="submit">Log in</button>
 	</form>
 	<p>Current user is <span th:text="${currentUser}">some user</span></p>
-	<script>$(document).foundation();</script>
+	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
