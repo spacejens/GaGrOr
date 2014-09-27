@@ -43,9 +43,9 @@ public class AccessControlService {
 		// TODO Return output object
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
-			return account.toString();
+			return account.getLogin();
 		} else {
-			return "NOT LOGGED IN";
+			return null;
 		}
 	}
 

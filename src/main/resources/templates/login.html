@@ -2,14 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/framework :: head" />
 <body>
-	<nav th:replace="/about :: topmenu-public"></nav>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Log in</h1>
 	<form action="#" th:action="@{/access/login}" th:object="${loginForm}" method="post">
 		<input type="text" th:field="*{login}" />
 		<input type="password" th:field="*{password}" />
 		<button type="submit">Log in</button>
 	</form>
-	<p>Current user is <span th:text="${currentUser}">some user</span></p>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

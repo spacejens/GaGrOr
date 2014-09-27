@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:fragment="mainmenu" id="mainmenu">
+		<nav th:if="${currentUser}" class="icon-bar three-up">
+			<a class="item" href="../about.html" th:href="@{/}">
+				<i class="fi-info"></i>
+				<label>Info</label>
+			</a>
+			<a class="item" href="../profile.html" th:href="@{/profile}">
+				<i class="fi-torso"></i>
+				<label th:text="${currentUser}">Current user</label>
+			</a>
+			<a class="item" href="../logout.html" th:href="@{/access/logout}">
+				<i class="fi-lock"></i>
+				<label>Log out</label>
+			</a>
+		</nav>
+		<nav th:unless="${currentUser}" class="icon-bar three-up">
+			<a class="item" href="../about.html" th:href="@{/}">
+				<i class="fi-info"></i>
+				<label>Info</label>
+			</a>
+			<a class="item" href="../register.html" th:href="@{/access/register}">
+				<i class="fi-plus"></i>
+				<label>Register</label>
+			</a>
+			<a class="item" href="../login.html" th:href="@{/access/login}">
+				<i class="fi-unlock"></i>
+				<label>Log in</label>
+			</a>
+		</nav>
+	</div>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>
