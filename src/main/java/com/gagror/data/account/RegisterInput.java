@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper=true)
-@ToString(callSuper=true)
+@ToString(callSuper=true, exclude="passwordRepeat")
 public class RegisterInput extends LoginCredentialsInput {
 
 	private String passwordRepeat;
