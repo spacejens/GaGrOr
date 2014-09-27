@@ -50,26 +50,32 @@ public class AccessControlService {
 		}
 	}
 
-	public void logIn(final LoginCredentialsInput loginCredentials) {
+	public AccessControlResultType logIn(final LoginCredentialsInput loginCredentials) {
+		requestAccount.setLoaded(false);
 		this.sessionCredentials.setLoginCredentials(loginCredentials);
+		if(null != getRequestAccountEntity()) {
+			return AccessControlResultType.LOGGED_IN;
+		} else {
+			return AccessControlResultType.LOGIN_FAILED;
+		}
 	}
 
 	public void logOut() {
 		this.sessionCredentials.setLoginCredentials(null);
 	}
 
-	public void register(final RegisterInput registerForm) {
+	public AccessControlResultType register(final RegisterInput registerForm) {
 		// Verify that the account can be created
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
-			return;
+			return AccessControlResultType.REGISTER_FAILED_USERNAME_BUSY;
 		}
 		if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
-			return;
+			return AccessControlResultType.REGISTER_FAILED_PASSWORDS_DONT_MATCH;
 		}
 		// Create the account
 		passwordEncryption.encrypt(registerForm);
 		accountRepository.save(new AccountEntity(registerForm));
 		// Automatically log in the newly registered user
-		this.logIn(new LoginCredentialsInput(registerForm));
+		return this.logIn(new LoginCredentialsInput(registerForm));
 	}
 }

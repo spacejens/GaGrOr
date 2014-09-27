@@ -26,9 +26,13 @@ public class AccessController extends AbstractController {
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public RedirectView loginProcess(final Model model, final LoginCredentialsInput loginForm) {
-		accessControl.logIn(loginForm);
-		// TODO Redirect to different pages depending on result
-		return redirect("/");
+		switch(accessControl.logIn(loginForm)) {
+		case LOGGED_IN:
+			return redirect("/");
+		default:
+			// TODO Show appropriate form error when login fails
+			return redirect("/access/login");
+		}
 	}
 
 	@RequestMapping(value="/logout")
@@ -45,8 +49,17 @@ public class AccessController extends AbstractController {
 
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public RedirectView registerProcess(final Model model, final RegisterInput registerForm) {
-		accessControl.register(registerForm);
-		// TODO Redirect to different pages depending on the result
-		return redirect("/");
+		switch(accessControl.register(registerForm)) {
+		case LOGGED_IN:
+			return redirect("/");
+		case LOGIN_FAILED:
+			// TODO Unexpected immediate login failure, do something else here?
+			return redirect("/access/login");
+		case REGISTER_FAILED_PASSWORDS_DONT_MATCH:
+		case REGISTER_FAILED_USERNAME_BUSY:
+		default:
+			// TODO Show appropriate form errors when registration fails
+			return redirect("/access/register");
+		}
 	}
 }
