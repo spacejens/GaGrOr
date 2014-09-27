@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 public abstract class AbstractController {
@@ -12,7 +13,7 @@ public abstract class AbstractController {
 	AccessControlService accessControl;
 
 	@ModelAttribute("currentUser")
-	public String getCurrentUser() {
+	public AccountReferenceOutput getCurrentUser() {
 		return accessControl.getRequestAccount();
 	}
 

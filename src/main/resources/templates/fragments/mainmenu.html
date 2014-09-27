@@ -9,8 +9,9 @@
 				<label>Info</label>
 			</a>
 			<a class="item" href="../profile.html" th:href="@{/profile}">
-				<i class="fi-torso"></i>
-				<label th:text="${currentUser}">Current user</label>
+				<i class="fi-torso" th:if="${currentUser.accountType.standard}"></i>
+				<i class="fi-crown" th:if="${currentUser.accountType.systemOwner}"></i>
+				<label th:text="${currentUser.username}">Current user</label>
 			</a>
 			<a class="item" href="../login.html" th:href="@{/access/logout}">
 				<i class="fi-lock"></i>

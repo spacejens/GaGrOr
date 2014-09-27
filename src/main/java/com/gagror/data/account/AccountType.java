@@ -20,4 +20,12 @@ public enum AccountType {
 		}
 		throw new IllegalArgumentException(String.format("Unknown id: %d", id));
 	}
+
+	public boolean isStandard() {
+		return STANDARD == this;
+	}
+
+	public boolean isSystemOwner() {
+		return SYSTEM_OWNER == this;
+	}
 }

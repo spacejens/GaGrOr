@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.LoginCredentialsInput;
 import com.gagror.data.account.RegisterInput;
@@ -40,11 +41,11 @@ public class AccessControlService {
 		return requestAccount.getAccount();
 	}
 
-	public String getRequestAccount() {
+	public AccountReferenceOutput getRequestAccount() {
 		// TODO Return output object
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
-			return account.getUsername();
+			return new AccountReferenceOutput(account);
 		} else {
 			return null;
 		}
