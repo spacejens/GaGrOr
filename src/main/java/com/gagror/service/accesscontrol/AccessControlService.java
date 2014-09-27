@@ -18,11 +18,22 @@ public class AccessControlService {
 	@Autowired
 	PasswordEncryptionService passwordEncryption;
 
+	@Autowired
+	SessionCredentialsComponent sessionCredentials;
+
 	public String logIn(final LoginCredentialsInput loginCredentials) {
+		if(null == loginCredentials) {
+			return "NO CREDENTIALS";
+		}
 		final AccountEntity account = accountRepository.findByLoginAndPassword(
 				loginCredentials.getLogin(),
 				passwordEncryption.encrypt(loginCredentials));
-		// TODO Return output object?
-		return null != account ? account.toString() : "NULL";
+		if(null != account) {
+			sessionCredentials.setLoginCredentials(loginCredentials);
+			// TODO Return output object?
+			return account.toString();
+		} else {
+			return null;
+		}
 	}
 }
