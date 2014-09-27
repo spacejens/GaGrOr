@@ -36,7 +36,7 @@ public class AccountEntity {
 
 	public AccountEntity(final RegisterInput registerForm) {
 		this.setUsername(registerForm.getUsername());
-		this.setPassword(registerForm.getPassword());
+		this.setPassword(registerForm.getEncryptedPassword());
 		this.setAccountType(AccountType.STANDARD);
 	}
 }

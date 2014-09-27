@@ -63,8 +63,9 @@ public class AccessControlService {
 		// TODO Check if username is busy
 		// TODO Check that repeated password matches
 		// Create the account
+		passwordEncryption.encrypt(registerForm);
 		accountRepository.save(new AccountEntity(registerForm));
 		// Automatically log in the newly registered user
-		this.logIn(registerForm);
+		this.logIn(new LoginCredentialsInput(registerForm));
 	}
 }
