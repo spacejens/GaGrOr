@@ -24,40 +24,32 @@ public class AccessControlService {
 	@Autowired
 	RequestAccountComponent requestAccount;
 
-	public String getRequestAccount() {
-		// TODO Return output object?
+	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			if(null != sessionCredentials.getLoginCredentials()) {
 				requestAccount.setAccount(accountRepository.findByLoginAndPassword(
 						sessionCredentials.getLoginCredentials().getLogin(),
 						passwordEncryption.encrypt(sessionCredentials.getLoginCredentials())));
-				requestAccount.setLoaded(true);
 			} else {
 				// No credentials, request account loading tried and failed
-				requestAccount.setLoaded(true);
-				return "NO CREDENTIALS";
+				requestAccount.setAccount(null);
 			}
+			requestAccount.setLoaded(true);
 		}
-		if(null != requestAccount.getAccount()) {
-			return requestAccount.getAccount().toString();
+		return requestAccount.getAccount();
+	}
+
+	public String getRequestAccount() {
+		// TODO Return output object
+		final AccountEntity account = getRequestAccountEntity();
+		if(null != account) {
+			return account.toString();
 		} else {
 			return "NOT LOGGED IN";
 		}
 	}
 
-	public String logIn(final LoginCredentialsInput loginCredentials) {
-		if(null == loginCredentials) {
-			return "NO CREDENTIALS";
-		}
-		final AccountEntity account = accountRepository.findByLoginAndPassword(
-				loginCredentials.getLogin(),
-				passwordEncryption.encrypt(loginCredentials));
-		if(null != account) {
-			sessionCredentials.setLoginCredentials(loginCredentials);
-			// TODO Return output object?
-			return account.toString();
-		} else {
-			return "LOGIN FAILED";
-		}
+	public void logIn(final LoginCredentialsInput loginCredentials) {
+		this.sessionCredentials.setLoginCredentials(loginCredentials);
 	}
 }
