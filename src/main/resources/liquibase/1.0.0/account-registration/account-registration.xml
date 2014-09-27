@@ -15,10 +15,10 @@
 			<column name="username" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
-			<column name="password" type="varchar(64)">
+			<column name="password" type="char(44)"> <!-- Base64 SHA-256 output -->
 				<constraints nullable="false" />
 			</column>
-			<column name="salt" type="char(16)">
+			<column name="salt" type="char(16)"> <!-- Base64 12 random bytes -->
 				<constraints nullable="false" />
 			</column>
 			<column name="account_type" type="tinyint">
