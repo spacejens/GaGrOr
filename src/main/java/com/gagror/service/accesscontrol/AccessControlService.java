@@ -60,8 +60,12 @@ public class AccessControlService {
 
 	public void register(final RegisterInput registerForm) {
 		// Verify that the account can be created
-		// TODO Check if username is busy
-		// TODO Check that repeated password matches
+		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
+			return;
+		}
+		if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
+			return;
+		}
 		// Create the account
 		passwordEncryption.encrypt(registerForm);
 		accountRepository.save(new AccountEntity(registerForm));

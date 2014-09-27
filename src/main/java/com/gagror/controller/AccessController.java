@@ -46,6 +46,7 @@ public class AccessController extends AbstractController {
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public RedirectView registerProcess(final Model model, final RegisterInput registerForm) {
 		accessControl.register(registerForm);
+		// TODO Redirect to different pages depending on the result
 		return redirect("/");
 	}
 }
