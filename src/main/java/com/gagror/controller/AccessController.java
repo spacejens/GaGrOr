@@ -26,6 +26,13 @@ public class AccessController extends AbstractController {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public RedirectView loginProcess(final Model model, final LoginCredentialsInput loginForm) {
 		accessControl.logIn(loginForm);
+		// TODO Redirect to different pages depending on result
+		return redirect("/");
+	}
+
+	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	public RedirectView logOut(final Model model) {
+		accessControl.logOut();
 		return redirect("/access/login");
 	}
 

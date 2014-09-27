@@ -52,4 +52,8 @@ public class AccessControlService {
 	public void logIn(final LoginCredentialsInput loginCredentials) {
 		this.sessionCredentials.setLoginCredentials(loginCredentials);
 	}
+
+	public void logOut() {
+		this.sessionCredentials.setLoginCredentials(null);
+	}
 }
