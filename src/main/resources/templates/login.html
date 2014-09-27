@@ -9,7 +9,6 @@
 		<input type="password" th:field="*{password}" />
 		<button type="submit">Log in</button>
 	</form>
-	<p th:if="${loggedInUser}">Logged in as <span th:text="${loggedInUser}">some user</span></p>
 	<p>Current user is <span th:text="${currentUser}">some user</span></p>
 	<script>$(document).foundation();</script>
 </body>

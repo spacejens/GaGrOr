@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.data.account.LoginCredentialsInput;
 import com.gagror.service.accesscontrol.AccessControlService;
@@ -23,10 +24,11 @@ public class AccessController extends AbstractController {
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public String loginProcess(final Model model, final LoginCredentialsInput loginForm) {
-		model.addAttribute("loginForm", loginForm);
-		model.addAttribute("loggedInUser", accessControl.logIn(loginForm));
-		return "login";
+	public RedirectView loginProcess(final Model model, final LoginCredentialsInput loginForm) {
+		accessControl.logIn(loginForm);
+		final RedirectView redirect = new RedirectView("/access/login");
+		redirect.setExposeModelAttributes(false);
+		return redirect;
 	}
 
 	@RequestMapping("/register")
