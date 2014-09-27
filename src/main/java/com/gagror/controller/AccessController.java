@@ -26,9 +26,7 @@ public class AccessController extends AbstractController {
 	@RequestMapping(value="/login", method = RequestMethod.POST)
 	public RedirectView loginProcess(final Model model, final LoginCredentialsInput loginForm) {
 		accessControl.logIn(loginForm);
-		final RedirectView redirect = new RedirectView("/access/login");
-		redirect.setExposeModelAttributes(false);
-		return redirect;
+		return redirect("/access/login");
 	}
 
 	@RequestMapping("/register")
