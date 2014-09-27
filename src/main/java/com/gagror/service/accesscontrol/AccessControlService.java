@@ -42,7 +42,6 @@ public class AccessControlService {
 	}
 
 	public AccountReferenceOutput getRequestAccount() {
-		// TODO Return output object
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
 			return new AccountReferenceOutput(account);
