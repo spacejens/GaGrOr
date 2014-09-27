@@ -21,6 +21,30 @@ public class AccessControlService {
 	@Autowired
 	SessionCredentialsComponent sessionCredentials;
 
+	@Autowired
+	RequestAccountComponent requestAccount;
+
+	public String getRequestAccount() {
+		// TODO Return output object?
+		if(! requestAccount.isLoaded()) {
+			if(null != sessionCredentials.getLoginCredentials()) {
+				requestAccount.setAccount(accountRepository.findByLoginAndPassword(
+						sessionCredentials.getLoginCredentials().getLogin(),
+						passwordEncryption.encrypt(sessionCredentials.getLoginCredentials())));
+				requestAccount.setLoaded(true);
+			} else {
+				// No credentials, request account loading tried and failed
+				requestAccount.setLoaded(true);
+				return "NO CREDENTIALS";
+			}
+		}
+		if(null != requestAccount.getAccount()) {
+			return requestAccount.getAccount().toString();
+		} else {
+			return "NOT LOGGED IN";
+		}
+	}
+
 	public String logIn(final LoginCredentialsInput loginCredentials) {
 		if(null == loginCredentials) {
 			return "NO CREDENTIALS";
