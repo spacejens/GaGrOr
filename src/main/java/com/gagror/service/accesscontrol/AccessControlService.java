@@ -74,6 +74,7 @@ public class AccessControlService {
 
 	public void logOut() {
 		this.sessionCredentials.setLoginCredentials(null);
+		this.requestAccount.setLoaded(false);
 	}
 
 	public AccessControlResultType register(final RegisterInput registerForm) {
