@@ -20,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
 import com.gagror.data.account.LoginCredentialsInput;
@@ -51,7 +52,83 @@ public class AccessControlServiceUnitTest {
 	LoginCredentialsInput loginCredentials = new LoginCredentialsInput();
 	AccountEntity account = new AccountEntity();
 
-	// TODO Unit tests for methods to get request account (entity and output)
+	@Test
+	public void getRequestAccountEntity_ok() {
+		sessionCredentials.setLoginCredentials(loginCredentials);
+		final AccountEntity result = instance.getRequestAccountEntity();
+		assertSame("Failed to get request account", account, result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertSame("Should have cached request account", account, requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccountEntity_wrongPassword() {
+		loginCredentials.setPassword(WRONG_PASSWORD);
+		sessionCredentials.setLoginCredentials(loginCredentials);
+		final AccountEntity result = instance.getRequestAccountEntity();
+		assertNull("Should not have loaded request account", result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertNull("Should have cached request account null", requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccountEntity_accountNotFound() {
+		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
+		sessionCredentials.setLoginCredentials(loginCredentials);
+		final AccountEntity result = instance.getRequestAccountEntity();
+		assertNull("Should not have loaded request account", result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertNull("Should have cached request account null", requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccountEntity_noCredentials() {
+		sessionCredentials.setLoginCredentials(null);
+		final AccountEntity result = instance.getRequestAccountEntity();
+		assertNull("Should not have loaded request account", result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertNull("Should have cached request account null", requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccount_ok() {
+		sessionCredentials.setLoginCredentials(loginCredentials);
+		final AccountReferenceOutput result = instance.getRequestAccount();
+		assertEquals("Wrong ID", account.getId(), result.getId());
+		assertEquals("Wrong username", account.getUsername(), result.getUsername());
+		assertEquals("Wrong account type", account.getAccountType(), result.getAccountType());
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertSame("Should have cached request account", account, requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccount_wrongPassword() {
+		loginCredentials.setPassword(WRONG_PASSWORD);
+		sessionCredentials.setLoginCredentials(loginCredentials);
+		final AccountReferenceOutput result = instance.getRequestAccount();
+		assertNull("Should not have loaded request account", result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertNull("Should have cached request account null", requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccount_accountNotFound() {
+		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
+		sessionCredentials.setLoginCredentials(loginCredentials);
+		final AccountReferenceOutput result = instance.getRequestAccount();
+		assertNull("Should not have loaded request account", result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertNull("Should have cached request account null", requestAccount.getAccount());
+	}
+
+	@Test
+	public void getRequestAccount_noCredentials() {
+		sessionCredentials.setLoginCredentials(null);
+		final AccountReferenceOutput result = instance.getRequestAccount();
+		assertNull("Should not have loaded request account", result);
+		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
+		assertNull("Should have cached request account null", requestAccount.getAccount());
+	}
 
 	@Test
 	public void logIn_ok() {
