@@ -13,6 +13,7 @@ public enum AccountType {
 	private final int id;
 
 	public static AccountType fromId(final int id) {
+		// TODO Move enum fromId logic to a id-enum mapping from a utility class
 		for(final AccountType type : AccountType.values()) {
 			if(id == type.getId()) {
 				return type;
