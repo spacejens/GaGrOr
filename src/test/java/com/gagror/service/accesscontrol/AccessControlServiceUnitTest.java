@@ -99,7 +99,7 @@ public class AccessControlServiceUnitTest {
 
 	@Test
 	public void register_ok_loggedIn() {
-		when(accountRepository.findByUsername(USERNAME)).thenReturn(null).thenReturn(account);
+		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
 		final AccessControlResultType result = instance.register(registerForm);
 		assertEquals("Wrong registration result", AccessControlResultType.LOGGED_IN, result);
 		final ArgumentCaptor<AccountEntity> savedAccount = ArgumentCaptor.forClass(AccountEntity.class);
