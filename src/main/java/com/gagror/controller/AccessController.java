@@ -1,8 +1,12 @@
 package com.gagror.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
@@ -42,24 +46,28 @@ public class AccessController extends AbstractController {
 	}
 
 	@RequestMapping(value="/register", method=RequestMethod.GET)
-	public String registerForm(final Model model) {
-		model.addAttribute("registerForm", new RegisterInput());
+	public String registerForm(@ModelAttribute("registerForm") final RegisterInput registerForm) {
 		return "register";
 	}
 
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public RedirectView registerProcess(final Model model, final RegisterInput registerForm) {
+	public String registerProcess(
+			@Valid @ModelAttribute("registerForm") final RegisterInput registerForm,
+			final BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "register";
+		}
 		switch(accessControl.register(registerForm)) {
 		case LOGGED_IN:
-			return redirect("/");
+			return "redirect:/";
 		case LOGIN_FAILED:
 			// TODO Unexpected immediate login failure, do something else here?
-			return redirect("/access/login");
+			return "redirect:/access/login";
 		case REGISTER_FAILED_PASSWORDS_DONT_MATCH:
 		case REGISTER_FAILED_USERNAME_BUSY:
 		default:
 			// TODO Show appropriate form errors when registration fails
-			return redirect("/access/register");
+			return "register";
 		}
 	}
 }

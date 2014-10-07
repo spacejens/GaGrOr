@@ -1,5 +1,7 @@
 package com.gagror.data.account;
 
+import javax.validation.constraints.Size;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,6 +11,7 @@ import lombok.ToString;
 @ToString(exclude={"password","encryptedPassword"})
 public class LoginCredentialsInput {
 
+	@Size(min=3, max=64)
 	private String username;
 
 	private String password;
