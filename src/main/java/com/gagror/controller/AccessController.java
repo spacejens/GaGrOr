@@ -51,7 +51,7 @@ public class AccessController extends AbstractController {
 	}
 
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public String registerProcess(
+	public Object registerProcess(
 			@Valid @ModelAttribute("registerForm") final RegisterInput registerForm,
 			final BindingResult bindingResult) {
 		if(bindingResult.hasErrors()) {
@@ -59,10 +59,10 @@ public class AccessController extends AbstractController {
 		}
 		switch(accessControl.register(registerForm)) {
 		case LOGGED_IN:
-			return "redirect:/";
+			return redirect("/");
 		case LOGIN_FAILED:
 			// TODO Unexpected immediate login failure, do something else here?
-			return "redirect:/access/login";
+			return redirect("/access/login");
 		case REGISTER_FAILED_USERNAME_BUSY:
 			registerForm.addErrorUsernameBusy(bindingResult);
 			return "register";

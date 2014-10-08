@@ -18,7 +18,7 @@ public abstract class AbstractController {
 	}
 
 	protected RedirectView redirect(final String url) {
-		final RedirectView output = new RedirectView(url);
+		final RedirectView output = new RedirectView(url, true);
 		output.setExposeModelAttributes(false);
 		return output;
 	}
