@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,24 +22,28 @@ public class AccessController extends AbstractController {
 	AccessControlService accessControl;
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
-	public String loginForm(final Model model) {
-		model.addAttribute("loginForm", new LoginCredentialsInput());
+	public String loginForm(@ModelAttribute("loginForm") final LoginCredentialsInput loginForm) {
 		return "login";
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public RedirectView loginProcess(final Model model, final LoginCredentialsInput loginForm) {
+	public Object loginProcess(
+			@Valid @ModelAttribute("loginForm") final LoginCredentialsInput loginForm,
+			final BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "login";
+		}
 		switch(accessControl.logIn(loginForm)) {
 		case LOGGED_IN:
 			return redirect("/");
 		default:
-			// TODO Show appropriate form error when login fails
-			return redirect("/access/login");
+			loginForm.addErrorLoginFailed(bindingResult);
+			return "login";
 		}
 	}
 
 	@RequestMapping(value="/logout")
-	public RedirectView logOut(final Model model) {
+	public RedirectView logOut() {
 		accessControl.logOut();
 		return redirect("/access/login");
 	}

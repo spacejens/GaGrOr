@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
 @Data
 @NoArgsConstructor
 @ToString(exclude={"password","encryptedPassword"})
@@ -24,5 +27,9 @@ public class LoginCredentialsInput {
 		setUsername(registerForm.getUsername());
 		setEncryptedPassword(registerForm.getEncryptedPassword());
 		setSalt(registerForm.getSalt());
+	}
+
+	public void addErrorLoginFailed(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "password", "incorrect"));
 	}
 }
