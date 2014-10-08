@@ -3,7 +3,8 @@ package com.gagror.service.accesscontrol;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+
+import javax.xml.bind.DatatypeConverter;
 
 import lombok.SneakyThrows;
 
@@ -15,8 +16,6 @@ import com.gagror.data.account.LoginCredentialsInput;
 @Service
 public class PasswordEncryptionService {
 
-	private final Base64.Encoder base64Encoder = Base64.getEncoder();
-	private final Base64.Decoder base64Decoder = Base64.getDecoder();
 	private final MessageDigest sha256;
 
 	@Autowired
@@ -41,10 +40,10 @@ public class PasswordEncryptionService {
 		// Get the salt for the encryption
 		final byte[] salt;
 		if(null != loginCredentials.getSalt()) {
-			salt = base64Decoder.decode(loginCredentials.getSalt());
+			salt = DatatypeConverter.parseBase64Binary(loginCredentials.getSalt());
 		} else {
 			salt = secureRandom.generateRandomSalt();
-			loginCredentials.setSalt(base64Encoder.encodeToString(salt));
+			loginCredentials.setSalt(DatatypeConverter.printBase64Binary(salt));
 		}
 		// Encrypt the password
 		final String encryptedPassword =
@@ -59,6 +58,6 @@ public class PasswordEncryptionService {
 		final byte[] inputBytes = new byte[salt.length + passwordBytes.length];
 		System.arraycopy(salt, 0, inputBytes, 0, salt.length);
 		System.arraycopy(passwordBytes, 0, inputBytes, salt.length, passwordBytes.length);
-		return base64Encoder.encodeToString(sha256.digest(inputBytes));
+		return DatatypeConverter.printBase64Binary(sha256.digest(inputBytes));
 	}
 }
