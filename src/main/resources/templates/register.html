@@ -6,15 +6,15 @@
 	<h1>Register</h1>
 	<form action="#" th:action="@{/access/register}" th:object="${registerForm}" method="post">
 		<label>
-			Username <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>
+			Username <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>
 			<input type="text" th:field="*{username}" />
 		</label>
 		<label>
-			Password <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
+			Password <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
 			<input type="password" th:field="*{password}" />
 		</label>
 		<label>
-			Repeat password <span th:if="${#fields.hasErrors('passwordRepeat')}" th:errors="*{passwordRepeat}">Password repeat error</span>
+			Repeat password <span class="error" th:if="${#fields.hasErrors('passwordRepeat')}" th:errors="*{passwordRepeat}">Password repeat error</span>
 			<input type="password" th:field="*{passwordRepeat}" />
 		</label>
 		<button type="submit">Register</button>
