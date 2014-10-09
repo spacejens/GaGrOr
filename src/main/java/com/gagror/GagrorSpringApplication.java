@@ -2,6 +2,8 @@ package com.gagror;
 
 import java.util.Arrays;
 
+import javax.servlet.Filter;
+
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.boot.SpringApplication;
@@ -9,8 +11,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 @EnableAutoConfiguration
@@ -39,5 +43,11 @@ public class GagrorSpringApplication extends SpringBootServletInitializer {
 	protected SpringApplicationBuilder configure(final SpringApplicationBuilder application) {
 		log.info("Configuring GaGrOr application in a container");
 		return application.sources(GagrorSpringApplication.class);
+	}
+
+	@Bean
+	public Filter requestLoggingFilter() {
+		log.info("Adding request logging filter");
+		return new CommonsRequestLoggingFilter();
 	}
 }
