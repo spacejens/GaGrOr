@@ -11,3 +11,5 @@ Pre-build setup
 Before you build the application, you need to:
 * Copy the src/main/resources/application.properties_template to application.properties
 * Edit application properties with the appropriate database credentials
+* Copy the src/main/resources/logback.xml_template to logback.xml
+* Edit the logging configuration as desired for your environment
