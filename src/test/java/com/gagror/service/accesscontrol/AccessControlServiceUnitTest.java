@@ -1,13 +1,11 @@
 package com.gagror.service.accesscontrol;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -161,16 +159,6 @@ public class AccessControlServiceUnitTest {
 		assertSame("Login should fail", AccessControlResultType.LOGIN_FAILED, result);
 		assertTrue("Request account not loaded", requestAccount.isLoaded());
 		assertNull("Wrong request account loaded", requestAccount.getAccount());
-	}
-
-	@Test
-	public void logOut() {
-		instance.logOut();
-		assertNull("Session credentials not removed", sessionCredentials.getLoginCredentials());
-		assertFalse("Request account still loaded", requestAccount.isLoaded());
-		verifyNoMoreInteractions(
-				accountRepository,
-				passwordEncryption);
 	}
 
 	@Test

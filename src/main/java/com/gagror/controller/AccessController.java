@@ -8,9 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.view.RedirectView;
 
-import com.gagror.data.account.LoginCredentialsInput;
 import com.gagror.data.account.RegisterInput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -22,30 +20,8 @@ public class AccessController extends AbstractController {
 	AccessControlService accessControl;
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
-	public String loginForm(@ModelAttribute("loginForm") final LoginCredentialsInput loginForm) {
+	public String loginForm() {
 		return "login";
-	}
-
-	@RequestMapping(value="/login", method = RequestMethod.POST)
-	public Object loginProcess(
-			@Valid @ModelAttribute("loginForm") final LoginCredentialsInput loginForm,
-			final BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
-			return "login";
-		}
-		switch(accessControl.logIn(loginForm)) {
-		case LOGGED_IN:
-			return redirect("/");
-		default:
-			loginForm.addErrorLoginFailed(bindingResult);
-			return "login";
-		}
-	}
-
-	@RequestMapping(value="/logout")
-	public RedirectView logOut() {
-		accessControl.logOut();
-		return redirect("/access/login");
 	}
 
 	@RequestMapping(value="/register", method=RequestMethod.GET)

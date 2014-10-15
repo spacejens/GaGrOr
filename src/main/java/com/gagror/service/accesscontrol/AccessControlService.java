@@ -58,11 +58,6 @@ public class AccessControlService {
 		}
 	}
 
-	public void logOut() {
-		this.sessionCredentials.setLoginCredentials(null);
-		this.requestAccount.setLoaded(false);
-	}
-
 	public AccessControlResultType register(final RegisterInput registerForm) {
 		// Verify that the account can be created
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
