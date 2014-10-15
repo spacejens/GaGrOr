@@ -3,6 +3,7 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:fragment="mainmenu" id="mainmenu">
+		<form id="logout-form" th:action="@{/access/logout}" method="post" style="display: none;"></form>
 		<nav th:if="${currentUser}" class="icon-bar three-up">
 			<a class="item" href="../about.html" th:href="@{/}">
 				<i class="fi-info"></i>
@@ -13,7 +14,7 @@
 				<i class="fi-crown" th:if="${currentUser.accountType.systemOwner}"></i>
 				<label th:text="${currentUser.username}">Current user</label>
 			</a>
-			<a class="item" href="../login.html" th:href="@{/access/logout}">
+			<a class="item" href="#" onclick="javascript: document.getElementById('logout-form').submit();return false;">
 				<i class="fi-lock"></i>
 				<label>Log out</label>
 			</a>
