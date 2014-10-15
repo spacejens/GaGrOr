@@ -31,7 +31,6 @@ public class AccessControlServiceUnitTest {
 
 	private static final String USERNAME = "user";
 	private static final String PASSWORD = "pass";
-	private static final String SALT = "salt";
 	private static final String ENCRYPTED = "encrypted";
 	private static final String WRONG_PASSWORD = "wrongpass";
 	private static final String WRONG_ENCRYPTED = "wrongencrypted";
@@ -183,7 +182,6 @@ public class AccessControlServiceUnitTest {
 		verify(accountRepository).save(savedAccount.capture());
 		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getUsername());
 		assertEquals("Wrong password", ENCRYPTED, savedAccount.getValue().getPassword());
-		assertEquals("Wrong salt", SALT, savedAccount.getValue().getSalt());
 		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
 		assertTrue("Request account not loaded", requestAccount.isLoaded());
 		assertSame("Wrong request account saved", savedAccount.getValue(), requestAccount.getAccount());
@@ -220,7 +218,6 @@ public class AccessControlServiceUnitTest {
 	public void setupAccount() {
 		account.setUsername(USERNAME);
 		account.setPassword(ENCRYPTED);
-		account.setSalt(SALT);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -230,7 +227,6 @@ public class AccessControlServiceUnitTest {
 			@Override
 			public Object answer(final InvocationOnMock invocation) throws Throwable {
 				final LoginCredentialsInput input = (LoginCredentialsInput) invocation.getArguments()[0];
-				input.setSalt(SALT);
 				if(null != input.getEncryptedPassword()) {
 					// Already encrypted, do nothing
 				} else if(PASSWORD.equals(input.getPassword())) {

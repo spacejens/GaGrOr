@@ -15,10 +15,7 @@
 			<column name="username" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
-			<column name="password" type="char(44)"> <!-- Base64 SHA-256 output -->
-				<constraints nullable="false" />
-			</column>
-			<column name="salt" type="char(16)"> <!-- Base64 12 random bytes -->
+			<column name="password" type="char(60)"> <!-- BCrypt output -->
 				<constraints nullable="false" />
 			</column>
 			<column name="account_type" type="tinyint">
@@ -34,8 +31,7 @@
 	<changeSet id="account-admin" author="spacejens">
 		<insert tableName="account">
 			<column name="username" value="admin"/>
-			<column name="password" value="cbT97FvathBBkU4kLQGaMhiFD+ijGbBJ3eB2/hVaKm8="/> <!-- password -->
-			<column name="salt" value="KyPVwKOMpZkRp1ZM"/>
+			<column name="password" value="$2a$10$LtpG/uRFVYW33i8kp5XW1ehLzJv.fFmuOy8jST65Hz6o4CD6N5cju"/> <!-- password -->
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->
 		</insert>
 	</changeSet>

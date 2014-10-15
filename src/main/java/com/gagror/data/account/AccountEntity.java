@@ -32,15 +32,11 @@ public class AccountEntity {
 	private String password;
 
 	@Column(nullable = false)
-	private String salt;
-
-	@Column(nullable = false)
 	private AccountType accountType;
 
 	public AccountEntity(final RegisterInput registerForm) {
 		setUsername(registerForm.getUsername());
 		setPassword(registerForm.getEncryptedPassword());
-		setSalt(registerForm.getSalt());
 		setAccountType(AccountType.STANDARD);
 	}
 }

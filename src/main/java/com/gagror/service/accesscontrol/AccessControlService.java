@@ -32,7 +32,7 @@ public class AccessControlService {
 				final AccountEntity account = accountRepository.findByUsername(
 						sessionCredentials.getLoginCredentials().getUsername());
 				if(account != null) {
-					sessionCredentials.getLoginCredentials().setSalt(account.getSalt());
+					sessionCredentials.getLoginCredentials().setSalt(""); // TODO Remove use of salt from registration
 					if(account.getPassword().equals(
 							passwordEncryption.encrypt(sessionCredentials.getLoginCredentials()))) {
 						requestAccount.setAccount(account);
