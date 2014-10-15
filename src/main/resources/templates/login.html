@@ -4,6 +4,12 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Log in</h1>
+	<div th:if="${param.error}">
+		Invalid username and password.
+	</div>
+	<div th:if="${param.logout}">
+		You have been logged out.
+	</div>
 	<form action="#" th:action="@{/access/login}" method="post">
 		<label>
 			Username
