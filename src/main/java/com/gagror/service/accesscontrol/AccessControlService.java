@@ -29,12 +29,14 @@ public class AccessControlService {
 	RequestAccountComponent requestAccount;
 
 	public AccountEntity getRequestAccountEntity() {
-		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(null == authentication) {
-			return null;
+		if(! requestAccount.isLoaded()) {
+			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if(null != authentication) {
+				requestAccount.setAccount(accountRepository.findByUsername(authentication.getName()));
+			}
+			requestAccount.setLoaded(true);
 		}
-		final String username = authentication.getName();
-		return accountRepository.findByUsername(username);
+		return requestAccount.getAccount();
 	}
 
 	public AccountReferenceOutput getRequestAccount() {
