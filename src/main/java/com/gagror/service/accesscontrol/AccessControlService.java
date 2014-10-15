@@ -1,6 +1,8 @@
 package com.gagror.service.accesscontrol;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,30 +29,12 @@ public class AccessControlService {
 	RequestAccountComponent requestAccount;
 
 	public AccountEntity getRequestAccountEntity() {
-		if(! requestAccount.isLoaded()) {
-			if(null != sessionCredentials.getLoginCredentials()) {
-				final AccountEntity account = accountRepository.findByUsername(
-						sessionCredentials.getLoginCredentials().getUsername());
-				if(account != null) {
-					sessionCredentials.getLoginCredentials().setSalt(""); // TODO Remove use of salt from registration
-					if(account.getPassword().equals(
-							passwordEncryption.encrypt(sessionCredentials.getLoginCredentials()))) {
-						requestAccount.setAccount(account);
-					} else {
-						// Passwords don't match, cannot log in
-						requestAccount.setAccount(null);
-					}
-				} else {
-					// Account does not exist, cannot log in
-					requestAccount.setAccount(null);
-				}
-			} else {
-				// No credentials, cannot log in
-				requestAccount.setAccount(null);
-			}
-			requestAccount.setLoaded(true);
+		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(null == authentication) {
+			return null;
 		}
-		return requestAccount.getAccount();
+		final String username = authentication.getName();
+		return accountRepository.findByUsername(username);
 	}
 
 	public AccountReferenceOutput getRequestAccount() {
