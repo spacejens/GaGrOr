@@ -4,10 +4,10 @@ import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -66,15 +66,16 @@ public class AccessControlService {
 		} else {
 			log.info(String.format("Registering user '%s'", registerForm.getUsername()));
 			// Create the account
-			accountRepository.save(new AccountEntity(
+			final AccountEntity account = new AccountEntity(
 					registerForm.getUsername(),
-					passwordEncoder.encode(registerForm.getPassword())));
+					passwordEncoder.encode(registerForm.getPassword()));
+			accountRepository.save(account);
 			// Automatically log in the newly registered user
 			SecurityContextHolder.getContext().setAuthentication(
-					new UsernamePasswordAuthenticationToken(
-							registerForm.getUsername(),
-							registerForm.getPassword()));
-			// TODO The first page the newly registered user loads, the user is not shown as logged in. Fix this.
+					new PreAuthenticatedAuthenticationToken(
+							account.getUsername(),
+							account.getPassword(),
+							account.getAccountType().getAuthorities()));
 		}
 	}
 }
