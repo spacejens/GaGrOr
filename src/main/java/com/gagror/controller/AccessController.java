@@ -2,6 +2,8 @@ package com.gagror.controller;
 
 import javax.validation.Valid;
 
+import lombok.extern.apachecommons.CommonsLog;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,6 +16,7 @@ import com.gagror.service.accesscontrol.AccessControlService;
 
 @Controller
 @RequestMapping("/access")
+@CommonsLog
 public class AccessController extends AbstractController {
 
 	@Autowired
@@ -21,11 +24,13 @@ public class AccessController extends AbstractController {
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String loginForm() {
+		log.info("Viewing login form");
 		return "login";
 	}
 
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public String registerForm(@ModelAttribute("registerForm") final RegisterInput registerForm) {
+		log.info("Viewing register form");
 		return "register";
 	}
 
@@ -34,12 +39,15 @@ public class AccessController extends AbstractController {
 			@Valid @ModelAttribute("registerForm") final RegisterInput registerForm,
 			final BindingResult bindingResult) {
 		if(bindingResult.hasErrors()) {
+			log.info(String.format("Failed to register user '%s', form had errors", registerForm.getUsername()));
 			return "register";
 		}
 		accessControl.register(registerForm, bindingResult);
 		if(bindingResult.hasErrors()) {
+			log.info(String.format("Failed to register user '%s', rejected by service layer", registerForm.getUsername()));
 			return "register";
 		}
+		log.info(String.format("Successfully registered user '%s'", registerForm.getUsername()));
 		return redirect("/");
 	}
 }

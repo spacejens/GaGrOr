@@ -35,7 +35,7 @@ public class GagrorSpringApplication extends SpringBootServletInitializer {
 		String[] beanNames = ctx.getBeanDefinitionNames();
 		Arrays.sort(beanNames);
 		for (String beanName : beanNames) {
-			log.debug("Found Spring bean: " + beanName);
+			log.trace("Found Spring bean: " + beanName);
 		}
 	}
 

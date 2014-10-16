@@ -1,5 +1,7 @@
 package com.gagror.service.accesscontrol;
 
+import lombok.extern.apachecommons.CommonsLog;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +18,7 @@ import com.gagror.data.account.RegisterInput;
 
 @Service
 @Transactional
+@CommonsLog
 public class AccessControlService {
 
 	@Autowired
@@ -29,7 +32,9 @@ public class AccessControlService {
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			// TODO Handle not logged in case properly, name=anonymousUser when not logged in, check flags
 			if(null != authentication) {
+				log.debug(String.format("Loading request account '%s'", authentication.getName()));
 				requestAccount.setAccount(accountRepository.findByUsername(authentication.getName()));
 			}
 			requestAccount.setLoaded(true);
@@ -40,8 +45,10 @@ public class AccessControlService {
 	public AccountReferenceOutput getRequestAccount() {
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
+			log.debug(String.format("Loaded request account '%s' for output", account.getUsername()));
 			return new AccountReferenceOutput(account);
 		} else {
+			log.debug("Cannot load request account for output, user not logged in");
 			return null;
 		}
 	}
@@ -49,10 +56,13 @@ public class AccessControlService {
 	public void register(final RegisterInput registerForm, final BindingResult bindingResult) {
 		// Verify that the account can be created
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
+			log.error(String.format("Attempt to create user '%s' failed, username busy", registerForm.getUsername()));
 			registerForm.addErrorUsernameBusy(bindingResult);
 		} else if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
+			log.error(String.format("Attempt to create user '%s' failed, password repeat mismatch", registerForm.getUsername()));
 			registerForm.addErrorPasswordMismatch(bindingResult);
 		} else {
+			log.info(String.format("Registering user '%s'", registerForm.getUsername()));
 			// Create the account
 			accountRepository.save(new AccountEntity(
 					registerForm.getUsername(),

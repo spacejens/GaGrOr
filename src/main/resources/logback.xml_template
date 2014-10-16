@@ -6,6 +6,7 @@
 		</encoder>
 	</appender>
 
+	<logger name="com.gagror" level="debug" />
 	<logger name="org.springframework" level="warn" />
 	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="info" />
 	<logger name="org.springframework.security" level="info" />
