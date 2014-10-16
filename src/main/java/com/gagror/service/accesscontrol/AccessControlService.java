@@ -3,6 +3,7 @@ package com.gagror.service.accesscontrol;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,8 +33,9 @@ public class AccessControlService {
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			// TODO Handle not logged in case properly, name=anonymousUser when not logged in, check flags
-			if(null != authentication) {
+			if(null != authentication
+					&& authentication.isAuthenticated()
+					&& ! (authentication instanceof AnonymousAuthenticationToken)) {
 				log.debug(String.format("Loading request account '%s'", authentication.getName()));
 				requestAccount.setAccount(accountRepository.findByUsername(authentication.getName()));
 			}
