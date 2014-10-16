@@ -40,6 +40,6 @@ public class AccessController extends AbstractController {
 		if(bindingResult.hasErrors()) {
 			return "register";
 		}
-		return redirect("/access/login");
+		return redirect("/");
 	}
 }

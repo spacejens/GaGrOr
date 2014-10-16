@@ -1,6 +1,7 @@
 package com.gagror.service.accesscontrol;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -111,6 +112,7 @@ public class AccessControlServiceUnitTest {
 
 	@Test
 	public void register_ok() {
+		whenNotLoggedIn();
 		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
 		instance.register(registerForm, bindingResult);
 		verifyNoMoreInteractions(bindingResult);
@@ -119,13 +121,13 @@ public class AccessControlServiceUnitTest {
 		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getUsername());
 		assertEquals("Wrong password", PASSWORD, savedAccount.getValue().getPassword());
 		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
-		// TODO Verify that user is automatically logged in when registered
-		//assertTrue("Request account not loaded", requestAccount.isLoaded());
-		//assertSame("Wrong request account saved", savedAccount.getValue(), requestAccount.getAccount());
+		assertNotNull("Authentication not set in security context", SecurityContextHolder.getContext().getAuthentication());
+		assertEquals("Not logged in as correct user after registration", USERNAME, SecurityContextHolder.getContext().getAuthentication().getName());
 	}
 
 	@Test
 	public void register_usernameBusy() {
+		whenNotLoggedIn();
 		instance.register(registerForm, bindingResult);
 		verify(registerForm).addErrorUsernameBusy(bindingResult);
 		verify(accountRepository, never()).save(any(AccountEntity.class));
@@ -133,6 +135,7 @@ public class AccessControlServiceUnitTest {
 
 	@Test
 	public void register_passwordsDontMatch() {
+		whenNotLoggedIn();
 		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
 		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
 		instance.register(registerForm, bindingResult);

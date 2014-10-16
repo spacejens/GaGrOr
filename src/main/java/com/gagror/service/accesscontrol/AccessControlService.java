@@ -1,6 +1,7 @@
 package com.gagror.service.accesscontrol;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +57,11 @@ public class AccessControlService {
 			accountRepository.save(new AccountEntity(
 					registerForm.getUsername(),
 					passwordEncoder.encode(registerForm.getPassword())));
-			// TODO Automatically log in the newly registered user
+			// Automatically log in the newly registered user
+			SecurityContextHolder.getContext().setAuthentication(
+					new UsernamePasswordAuthenticationToken(
+							registerForm.getUsername(),
+							registerForm.getPassword()));
 		}
 	}
 }
