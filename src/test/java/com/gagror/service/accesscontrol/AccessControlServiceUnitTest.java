@@ -12,6 +12,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +23,10 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -144,12 +150,16 @@ public class AccessControlServiceUnitTest {
 	}
 
 	protected void whenNotLoggedIn() {
-		SecurityContextHolder.getContext().setAuthentication(null);
+		final Set<GrantedAuthority> authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
+		final Authentication authentication = new AnonymousAuthenticationToken("key", "anonymousUser", authorities);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
 	protected void whenLoggedIn() {
 		final Authentication authentication = mock(Authentication.class);
 		when(authentication.getName()).thenReturn(USERNAME);
+		when(authentication.isAuthenticated()).thenReturn(true);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
