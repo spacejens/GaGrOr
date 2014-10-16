@@ -24,6 +24,7 @@ public class GagrorSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/", "/webjars/**").permitAll()
+				.antMatchers("/access/register").not().authenticated()
 				.anyRequest().authenticated();
 		// Configuration for login process pages
 		http

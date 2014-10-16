@@ -36,19 +36,10 @@ public class AccessController extends AbstractController {
 		if(bindingResult.hasErrors()) {
 			return "register";
 		}
-		switch(accessControl.register(registerForm)) {
-		case LOGGED_IN:
-			return redirect("/");
-		case LOGIN_FAILED:
-			// TODO Unexpected immediate login failure, do something else here?
-			return redirect("/access/login");
-		case REGISTER_FAILED_USERNAME_BUSY:
-			registerForm.addErrorUsernameBusy(bindingResult);
-			return "register";
-		case REGISTER_FAILED_PASSWORDS_DONT_MATCH:
-		default:
-			registerForm.addErrorPasswordMismatch(bindingResult);
+		accessControl.register(registerForm, bindingResult);
+		if(bindingResult.hasErrors()) {
 			return "register";
 		}
+		return redirect("/access/login");
 	}
 }

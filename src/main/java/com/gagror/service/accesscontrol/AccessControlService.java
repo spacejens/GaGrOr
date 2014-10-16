@@ -3,13 +3,14 @@ package com.gagror.service.accesscontrol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
-import com.gagror.data.account.LoginCredentialsInput;
 import com.gagror.data.account.RegisterInput;
 
 @Service
@@ -20,13 +21,9 @@ public class AccessControlService {
 	AccountRepository accountRepository;
 
 	@Autowired
-	PasswordEncryptionService passwordEncryption;
-
-	@Autowired
-	SessionCredentialsComponent sessionCredentials;
-
-	@Autowired
 	RequestAccountComponent requestAccount;
+
+	PasswordEncoder passwordEncoder = GagrorAuthenticationConfiguration.getPasswordEncoder();
 
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
@@ -48,28 +45,18 @@ public class AccessControlService {
 		}
 	}
 
-	public AccessControlResultType logIn(final LoginCredentialsInput loginCredentials) {
-		requestAccount.setLoaded(false);
-		this.sessionCredentials.setLoginCredentials(loginCredentials);
-		if(null != getRequestAccountEntity()) {
-			return AccessControlResultType.LOGGED_IN;
-		} else {
-			return AccessControlResultType.LOGIN_FAILED;
-		}
-	}
-
-	public AccessControlResultType register(final RegisterInput registerForm) {
+	public void register(final RegisterInput registerForm, final BindingResult bindingResult) {
 		// Verify that the account can be created
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
-			return AccessControlResultType.REGISTER_FAILED_USERNAME_BUSY;
+			registerForm.addErrorUsernameBusy(bindingResult);
+		} else if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
+			registerForm.addErrorPasswordMismatch(bindingResult);
+		} else {
+			// Create the account
+			accountRepository.save(new AccountEntity(
+					registerForm.getUsername(),
+					passwordEncoder.encode(registerForm.getPassword())));
+			// TODO Automatically log in the newly registered user
 		}
-		if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
-			return AccessControlResultType.REGISTER_FAILED_PASSWORDS_DONT_MATCH;
-		}
-		// Create the account
-		passwordEncryption.encrypt(registerForm);
-		accountRepository.save(new AccountEntity(registerForm));
-		// Automatically log in the newly registered user
-		return logIn(new LoginCredentialsInput(registerForm));
 	}
 }

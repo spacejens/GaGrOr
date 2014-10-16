@@ -34,9 +34,9 @@ public class AccountEntity {
 	@Column(nullable = false)
 	private AccountType accountType;
 
-	public AccountEntity(final RegisterInput registerForm) {
-		setUsername(registerForm.getUsername());
-		setPassword(registerForm.getEncryptedPassword());
+	public AccountEntity(final String username, final String encryptedPassword) {
+		setUsername(username);
+		setPassword(encryptedPassword);
 		setAccountType(AccountType.STANDARD);
 	}
 }
