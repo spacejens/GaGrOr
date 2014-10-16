@@ -15,10 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public enum AccountType {
 
-	STANDARD(0,
-			SecurityRoles.ROLE_USER),
+	STANDARD(0),
 	SYSTEM_OWNER(1,
-			SecurityRoles.ROLE_USER,
 			SecurityRoles.ROLE_ADMIN);
 
 	@Getter
