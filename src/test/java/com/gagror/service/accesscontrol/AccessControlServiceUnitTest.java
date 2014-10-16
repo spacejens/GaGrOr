@@ -129,6 +129,7 @@ public class AccessControlServiceUnitTest {
 		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
 		assertNotNull("Authentication not set in security context", SecurityContextHolder.getContext().getAuthentication());
 		assertEquals("Not logged in as correct user after registration", USERNAME, SecurityContextHolder.getContext().getAuthentication().getName());
+		assertTrue("Not authenticated after registration", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 	}
 
 	@Test
