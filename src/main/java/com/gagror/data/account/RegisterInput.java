@@ -1,16 +1,21 @@
 package com.gagror.data.account;
 
+import javax.validation.constraints.Size;
+
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 @Data
-@EqualsAndHashCode(callSuper=true)
-@ToString(callSuper=true, exclude="passwordRepeat")
-public class RegisterInput extends LoginCredentialsInput {
+@ToString(exclude={"password","passwordRepeat"})
+public class RegisterInput {
+
+	@Size(min=3, max=64)
+	private String username;
+
+	private String password;
 
 	private String passwordRepeat;
 
