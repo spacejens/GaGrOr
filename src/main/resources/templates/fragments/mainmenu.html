@@ -9,7 +9,7 @@
 				<i class="fi-info"></i>
 				<label>Info</label>
 			</a>
-			<a class="item" href="../profile.html" th:href="@{/profile/edit}">
+			<a class="item" href="../edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${currentUser.id})}">
 				<i class="fi-torso" th:if="${currentUser.accountType.standard}"></i>
 				<i class="fi-crown" th:if="${currentUser.accountType.systemOwner}"></i>
 				<label th:text="${currentUser.username}">Current user</label>
