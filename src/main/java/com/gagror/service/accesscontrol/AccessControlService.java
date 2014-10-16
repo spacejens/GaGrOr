@@ -74,6 +74,7 @@ public class AccessControlService {
 					new UsernamePasswordAuthenticationToken(
 							registerForm.getUsername(),
 							registerForm.getPassword()));
+			// TODO The first page the newly registered user loads, the user is not shown as logged in. Fix this.
 		}
 	}
 }

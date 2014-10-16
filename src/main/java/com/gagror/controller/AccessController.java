@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.data.account.RegisterInput;
+import com.gagror.data.account.SecurityRoles;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Controller
@@ -23,21 +24,21 @@ public class AccessController extends AbstractController {
 	@Autowired
 	AccessControlService accessControl;
 
-	@PreAuthorize("true")
+	@PreAuthorize(SecurityRoles.IS_PUBLIC)
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String loginForm() {
 		log.info("Viewing login form");
 		return "login";
 	}
 
-	@PreAuthorize("isAnonymous()")
+	@PreAuthorize(SecurityRoles.IS_NOT_LOGGED_IN)
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public String registerForm(@ModelAttribute("registerForm") final RegisterInput registerForm) {
 		log.info("Viewing register form");
 		return "register";
 	}
 
-	@PreAuthorize("isAnonymous()")
+	@PreAuthorize(SecurityRoles.IS_NOT_LOGGED_IN)
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public Object registerProcess(
 			@Valid @ModelAttribute("registerForm") final RegisterInput registerForm,

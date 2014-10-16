@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gagror.data.account.SecurityRoles;
+
 @Controller
 @CommonsLog
+@PreAuthorize(SecurityRoles.IS_PUBLIC)
 public class PublicController extends AbstractController {
 
-	@PreAuthorize("true")
 	@RequestMapping("/")
 	public String about(final Model model) {
 		log.info("Viewing about page");

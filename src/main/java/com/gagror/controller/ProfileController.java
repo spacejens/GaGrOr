@@ -13,7 +13,7 @@ import com.gagror.data.account.SecurityRoles;
 @CommonsLog
 public class ProfileController extends AbstractController {
 
-	@PreAuthorize("hasRole('"+SecurityRoles.USER+"')")
+	@PreAuthorize(SecurityRoles.IS_LOGGED_IN)
 	@RequestMapping("/edit")
 	public String editProfileForm() {
 		log.info("Viewing edit profile form");
