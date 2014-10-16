@@ -8,24 +8,22 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
+/**
+ * @see http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/
+ */
 @Configuration
 @EnableWebMvcSecurity
 @CommonsLog
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-//TODO http://spring.io/guides/gs/securing-web/
-//TODO http://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html
-//TODO http://www.sivalabs.in/2014/03/springmvc4-spring-data-jpa.html
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class GagrorSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		log.info("Configuring GaGrOr application security");
-		// Authorize requests for various public resources and URLs
+		// Authorize requests for various public resources
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/webjars/**").permitAll()
-				.antMatchers("/access/register").not().authenticated()
-				.anyRequest().authenticated();
+				.antMatchers("/webjars/**").permitAll();
 		// Configuration for login process pages
 		http
 			.formLogin()
