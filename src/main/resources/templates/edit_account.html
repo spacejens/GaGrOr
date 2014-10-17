@@ -3,7 +3,27 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1>Profile</h1>
+	<h1>Edit user <span th:text="${currentState.username}">name</span></h1>
+	<form action="#" th:action="@{/account/edit/{accountId}(accountId=${currentState.id})}" th:object="${editAccountForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		<label>
+			Username <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>
+			<input type="text" th:field="*{username}" />
+		</label>
+		<fieldset>
+			<legend>Change password</legend>
+			<label>
+				Password <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
+				<input type="password" th:field="*{password}" />
+			</label>
+			<label>
+				Repeat password <span class="error" th:if="${#fields.hasErrors('passwordRepeat')}" th:errors="*{passwordRepeat}">Password repeat error</span>
+				<input type="password" th:field="*{passwordRepeat}" />
+			</label>
+		</fieldset>
+		<button type="submit">Save</button>
+	</form>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

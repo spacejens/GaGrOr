@@ -6,5 +6,7 @@ public interface AccountRepository extends Repository<AccountEntity, Long> {
 
 	AccountEntity findByUsername(final String username);
 
+	AccountEntity findById(final Long id);
+
 	AccountEntity save(final AccountEntity account);
 }
