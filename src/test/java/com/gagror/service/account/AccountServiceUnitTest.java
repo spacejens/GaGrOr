@@ -24,6 +24,8 @@ public class AccountServiceUnitTest {
 	private static final Long ACCOUNT_ID = 47L;
 	private static final Long ANOTHER_ID = 23L;
 
+	private static final Long VERSION = 3L;
+
 	private static final String FORM_USERNAME = "NewUsername";
 
 	AccountService instance;
@@ -59,6 +61,12 @@ public class AccountServiceUnitTest {
 	}
 
 	@Test(expected=IllegalStateException.class)
+	public void saveAccount_simultaneousEdit() {
+		when(account.getVersion()).thenReturn(VERSION+1);
+		instance.saveAccount(editAccountForm, bindingResult);
+	}
+
+	@Test(expected=IllegalStateException.class)
 	public void saveAccount_accountNotFound() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(null);
 		instance.saveAccount(editAccountForm, bindingResult);
@@ -68,12 +76,14 @@ public class AccountServiceUnitTest {
 	public void setupEditAccountForm() {
 		editAccountForm = new AccountEditInput();
 		editAccountForm.setId(ACCOUNT_ID);
+		editAccountForm.setVersion(VERSION);
 		editAccountForm.setUsername(FORM_USERNAME);
 	}
 
 	@Before
 	public void setupAccount() {
 		when(account.getId()).thenReturn(ACCOUNT_ID);
+		when(account.getVersion()).thenReturn(VERSION);
 	}
 
 	@Before

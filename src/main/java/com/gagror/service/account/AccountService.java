@@ -32,9 +32,14 @@ public class AccountService {
 	}
 
 	public void saveAccount(final AccountEditInput editAccountForm, final BindingResult bindingResult) {
+		// TODO Fail if password does not match in form
+		// Find the account to update
 		final AccountEntity entity = accountRepository.findById(editAccountForm.getId());
 		if(null == entity) {
 			throw new IllegalStateException(String.format("Failed to find edited account ID %d when saving", editAccountForm.getId()));
+		}
+		if(! editAccountForm.getVersion().equals(entity.getVersion())) {
+			throw new IllegalStateException(String.format("Simultaneous edit of account ID %d detected when saving", editAccountForm.getId()));
 		}
 		entity.setUsername(editAccountForm.getUsername());
 		// TODO Support editing account type (but not for yourself?)
