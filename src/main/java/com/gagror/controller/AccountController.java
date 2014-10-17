@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @CommonsLog
 public class AccountController extends AbstractController {
 
-	@PreAuthorize(IS_LOGGED_IN)
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
 	@RequestMapping("/edit/{accountId}")
 	public String editProfileForm(@PathVariable("accountId") final Long accountId) {
 		log.info(String.format("Viewing edit account form for account ID %d", accountId));

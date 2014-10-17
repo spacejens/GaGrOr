@@ -30,15 +30,21 @@ public class AccessControlService {
 
 	PasswordEncoder passwordEncoder = GagrorAuthenticationConfiguration.getPasswordEncoder();
 
+	public AccountEntity loadAccountEntity(final Authentication authentication) {
+		if(null != authentication
+				&& authentication.isAuthenticated()
+				&& ! (authentication instanceof AnonymousAuthenticationToken)) {
+			log.debug(String.format("Loading request account '%s'", authentication.getName()));
+			return accountRepository.findByUsername(authentication.getName());
+		} else {
+			return null;
+		}
+	}
+
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if(null != authentication
-					&& authentication.isAuthenticated()
-					&& ! (authentication instanceof AnonymousAuthenticationToken)) {
-				log.debug(String.format("Loading request account '%s'", authentication.getName()));
-				requestAccount.setAccount(accountRepository.findByUsername(authentication.getName()));
-			}
+			requestAccount.setAccount(loadAccountEntity(authentication));
 			requestAccount.setLoaded(true);
 		}
 		return requestAccount.getAccount();

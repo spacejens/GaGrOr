@@ -59,6 +59,35 @@ public class AccessControlServiceUnitTest {
 	AccountEntity account = new AccountEntity();
 
 	@Test
+	public void loadAccountEntity_ok() {
+		assertSame("Unexpected account loaded", account, instance.loadAccountEntity(mockValidAuthentication()));
+	}
+
+	@Test
+	public void loadAccountEntity_noAuthentication() {
+		assertNull("No account should be loaded without authentication", instance.loadAccountEntity(null));
+	}
+
+	@Test
+	public void loadAccountEntity_notAuthenticated() {
+		final Authentication auth = mockValidAuthentication();
+		when(auth.isAuthenticated()).thenReturn(false);
+		assertNull("No account should be loaded when not authenticated", instance.loadAccountEntity(auth));
+	}
+
+	@Test
+	public void loadAccountEntity_anonymous() {
+		assertNull("No account should be loaded when anonymous", instance.loadAccountEntity(getAnonymousAuthentication()));
+	}
+
+	@Test
+	public void loadAccountEntity_accountNotFound() {
+		final Authentication auth = mockValidAuthentication();
+		when(auth.getName()).thenReturn("UnknownUser");
+		assertNull("No account should be loaded for unknown name", instance.loadAccountEntity(auth));
+	}
+
+	@Test
 	public void getRequestAccountEntity_ok() {
 		whenLoggedIn();
 		final AccountEntity result = instance.getRequestAccountEntity();
@@ -151,17 +180,24 @@ public class AccessControlServiceUnitTest {
 	}
 
 	protected void whenNotLoggedIn() {
+		SecurityContextHolder.getContext().setAuthentication(getAnonymousAuthentication());
+	}
+
+	protected Authentication getAnonymousAuthentication() {
 		final Set<GrantedAuthority> authorities = new HashSet<>();
 		authorities.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
-		final Authentication authentication = new AnonymousAuthenticationToken("key", "anonymousUser", authorities);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return new AnonymousAuthenticationToken("key", "anonymousUser", authorities);
 	}
 
 	protected void whenLoggedIn() {
+		SecurityContextHolder.getContext().setAuthentication(mockValidAuthentication());
+	}
+
+	protected Authentication mockValidAuthentication() {
 		final Authentication authentication = mock(Authentication.class);
 		when(authentication.getName()).thenReturn(USERNAME);
 		when(authentication.isAuthenticated()).thenReturn(true);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return authentication;
 	}
 
 	@Before

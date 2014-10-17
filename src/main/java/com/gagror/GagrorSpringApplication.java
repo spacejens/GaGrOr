@@ -14,7 +14,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
+
+import com.gagror.service.accesscontrol.GagrorPermissionEvaluator;
 
 @Configuration
 @EnableAutoConfiguration
@@ -49,5 +52,11 @@ public class GagrorSpringApplication extends SpringBootServletInitializer {
 	public Filter requestLoggingFilter() {
 		log.info("Adding request logging filter");
 		return new CommonsRequestLoggingFilter();
+	}
+
+	@Bean
+	public PermissionEvaluator permissionEvaluator() {
+		log.info("Adding permission evaluator");
+		return new GagrorPermissionEvaluator();
 	}
 }
