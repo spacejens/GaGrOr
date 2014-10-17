@@ -34,7 +34,7 @@ public class AccessControlService {
 		if(null != authentication
 				&& authentication.isAuthenticated()
 				&& ! (authentication instanceof AnonymousAuthenticationToken)) {
-			log.debug(String.format("Loading request account '%s'", authentication.getName()));
+			log.trace(String.format("Loading request account '%s'", authentication.getName()));
 			return accountRepository.findByUsername(authentication.getName());
 		} else {
 			return null;
@@ -53,10 +53,10 @@ public class AccessControlService {
 	public AccountReferenceOutput getRequestAccount() {
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
-			log.debug(String.format("Loaded request account '%s' for output", account.getUsername()));
+			log.trace(String.format("Loaded request account '%s' for output", account.getUsername()));
 			return new AccountReferenceOutput(account);
 		} else {
-			log.debug("Cannot load request account for output, user not logged in");
+			log.trace("Cannot load request account for output, user not logged in");
 			return null;
 		}
 	}
@@ -64,10 +64,10 @@ public class AccessControlService {
 	public void register(final RegisterInput registerForm, final BindingResult bindingResult) {
 		// Verify that the account can be created
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
-			log.error(String.format("Attempt to create user '%s' failed, username busy", registerForm.getUsername()));
+			log.warn(String.format("Attempt to create user '%s' failed, username busy", registerForm.getUsername()));
 			registerForm.addErrorUsernameBusy(bindingResult);
 		} else if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
-			log.error(String.format("Attempt to create user '%s' failed, password repeat mismatch", registerForm.getUsername()));
+			log.warn(String.format("Attempt to create user '%s' failed, password repeat mismatch", registerForm.getUsername()));
 			registerForm.addErrorPasswordMismatch(bindingResult);
 		} else {
 			log.info(String.format("Registering user '%s'", registerForm.getUsername()));
