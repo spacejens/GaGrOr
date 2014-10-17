@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,6 +39,9 @@ public class AccountServiceUnitTest {
 
 	@Mock
 	AccountEntity account;
+
+	@Mock
+	AccountEntity anotherAccount;
 
 	AccountEditInput editAccountForm;
 
@@ -72,6 +79,14 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 	}
 
+	@Test
+	public void loadContacts() {
+		final List<AccountReferenceOutput> contacts = instance.loadContacts();
+		assertEquals("Unexpected number of contacts", 2, contacts.size());
+		assertEquals("Unexpected first account", ACCOUNT_ID, contacts.get(0).getId());
+		assertEquals("Unexpected second account", ANOTHER_ID, contacts.get(1).getId());
+	}
+
 	@Before
 	public void setupEditAccountForm() {
 		editAccountForm = new AccountEditInput();
@@ -84,11 +99,16 @@ public class AccountServiceUnitTest {
 	public void setupAccount() {
 		when(account.getId()).thenReturn(ACCOUNT_ID);
 		when(account.getVersion()).thenReturn(VERSION);
+		when(anotherAccount.getId()).thenReturn(ANOTHER_ID);
 	}
 
 	@Before
 	public void setupAccountRepository() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
+		final List<AccountEntity> allAccounts = new ArrayList<>();
+		allAccounts.add(account);
+		allAccounts.add(anotherAccount);
+		when(accountRepository.findAll()).thenReturn(allAccounts);
 	}
 
 	@Before

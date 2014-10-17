@@ -28,6 +28,15 @@ public class AccountController extends AbstractController {
 	@Autowired
 	AccountService accountService;
 
+	@PreAuthorize(IS_LOGGED_IN)
+	@RequestMapping("/contacts")
+	public String contacts(final Model model) {
+		log.info("Viewing contacts page");
+		// TODO Place contacts as a separate ModelAttribute controller method
+		model.addAttribute("contacts", accountService.loadContacts());
+		return "contacts";
+	}
+
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
 	@RequestMapping(value="/edit/{accountId}", method=RequestMethod.GET)
 	public String editUserForm(@PathVariable("accountId") final Long accountId, final Model model) {

@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<h1>Contacts</h1>
+	<table>
+		<thead>
+			<tr>
+				<td>Username</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="contact : ${contacts}">
+				<td th:text="${contact.username}">Name</td>
+			</tr>
+		</tbody>
+	</table>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

@@ -1,5 +1,8 @@
 package com.gagror.service.account;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 
 @Service
@@ -44,5 +48,17 @@ public class AccountService {
 		entity.setUsername(editAccountForm.getUsername());
 		// TODO Support editing account type (but not for yourself?)
 		// TODO Support password change (requires changing of security authentication when editing for current user)
+	}
+
+	public List<AccountReferenceOutput> loadContacts() {
+		log.debug("Loading contacts");
+		// TODO Add the concept of each user's address book (i.e. don't list every account)
+		// TODO Sort the contacts alphabetically by username
+		final Iterable<AccountEntity> entities = accountRepository.findAll();
+		final List<AccountReferenceOutput> output = new ArrayList<>();
+		for(final AccountEntity entity : entities) {
+			output.add(new AccountReferenceOutput(entity));
+		}
+		return output;
 	}
 }
