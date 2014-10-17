@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import lombok.extern.apachecommons.CommonsLog;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,15 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.data.account.RegisterInput;
-import com.gagror.service.accesscontrol.AccessControlService;
 
 @Controller
 @RequestMapping("/access")
 @CommonsLog
 public class AccessController extends AbstractController {
-
-	@Autowired
-	AccessControlService accessControl;
 
 	@PreAuthorize(IS_PUBLIC)
 	@RequestMapping(value="/login", method = RequestMethod.GET)
