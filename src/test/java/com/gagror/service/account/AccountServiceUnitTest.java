@@ -1,19 +1,26 @@
 package com.gagror.service.account;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEditInput;
@@ -85,6 +92,14 @@ public class AccountServiceUnitTest {
 		assertEquals("Unexpected number of contacts", 2, contacts.size());
 		assertEquals("Unexpected first account", ACCOUNT_ID, contacts.get(0).getId());
 		assertEquals("Unexpected second account", ANOTHER_ID, contacts.get(1).getId());
+		final ArgumentCaptor<Sort> sortCaptor = ArgumentCaptor.forClass(Sort.class);
+		verify(accountRepository).findAll(sortCaptor.capture());
+		final Iterator<Order> orderIterator = sortCaptor.getValue().iterator();
+		assertTrue("Contacts should be sorted", orderIterator.hasNext());
+		final Order order = orderIterator.next();
+		assertEquals("Contacts sorted on wrong property", "username", order.getProperty());
+		assertEquals("Contacts sorted in wrong direction", Sort.Direction.ASC, order.getDirection());
+		assertFalse("Contacts should only be sorted on one property", orderIterator.hasNext());
 	}
 
 	@Before
@@ -108,7 +123,7 @@ public class AccountServiceUnitTest {
 		final List<AccountEntity> allAccounts = new ArrayList<>();
 		allAccounts.add(account);
 		allAccounts.add(anotherAccount);
-		when(accountRepository.findAll()).thenReturn(allAccounts);
+		when(accountRepository.findAll(any(Sort.class))).thenReturn(allAccounts);
 	}
 
 	@Before

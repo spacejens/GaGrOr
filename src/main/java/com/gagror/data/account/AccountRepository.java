@@ -1,10 +1,11 @@
 package com.gagror.data.account;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.Repository;
 
 public interface AccountRepository extends Repository<AccountEntity, Long> {
 
-	Iterable<AccountEntity> findAll();
+	Iterable<AccountEntity> findAll(final Sort sort);
 
 	AccountEntity findByUsername(final String username);
 

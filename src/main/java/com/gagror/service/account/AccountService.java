@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -53,8 +54,7 @@ public class AccountService {
 	public List<AccountReferenceOutput> loadContacts() {
 		log.debug("Loading contacts");
 		// TODO Add the concept of each user's address book (i.e. don't list every account)
-		// TODO Sort the contacts alphabetically by username
-		final Iterable<AccountEntity> entities = accountRepository.findAll();
+		final Iterable<AccountEntity> entities = accountRepository.findAll(new Sort("username"));
 		final List<AccountReferenceOutput> output = new ArrayList<>();
 		for(final AccountEntity entity : entities) {
 			output.add(new AccountReferenceOutput(entity));
