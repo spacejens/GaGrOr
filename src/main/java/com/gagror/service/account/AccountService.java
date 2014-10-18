@@ -70,8 +70,8 @@ public class AccountService {
 		if(editingOwnAccount) {
 			entity.setUsername(editAccountForm.getUsername());
 		}
+		entity.setPassword(accessControlService.encodePassword(editAccountForm.getPassword()));
 		// TODO Support editing account type (but not for yourself?)
-		// TODO Support password change
 		// If the currently logged in user was edited, make sure that the user is still logged in
 		if(editingOwnAccount) {
 			accessControlService.logInAs(entity);

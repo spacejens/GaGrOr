@@ -29,6 +29,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
@@ -189,6 +190,13 @@ public class AccessControlServiceUnitTest {
 		assertNotNull("Authentication not set in security context", SecurityContextHolder.getContext().getAuthentication());
 		assertEquals("Not logged in as correct user after registration", USERNAME, SecurityContextHolder.getContext().getAuthentication().getName());
 		assertTrue("Not authenticated after registration", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+	}
+
+	@Test
+	public void encodePassword() {
+		instance.passwordEncoder = mock(PasswordEncoder.class);
+		instance.encodePassword(PASSWORD);
+		verify(instance.passwordEncoder).encode(PASSWORD);
 	}
 
 	protected void whenNotLoggedIn() {

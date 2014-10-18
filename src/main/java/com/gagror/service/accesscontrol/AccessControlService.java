@@ -74,11 +74,15 @@ public class AccessControlService {
 			// Create the account
 			final AccountEntity account = new AccountEntity(
 					registerForm.getUsername(),
-					passwordEncoder.encode(registerForm.getPassword()));
+					encodePassword(registerForm.getPassword()));
 			accountRepository.save(account);
 			// Automatically log in the newly registered user
 			logInAs(account);
 		}
+	}
+
+	public String encodePassword(final String rawPassword) {
+		return passwordEncoder.encode(rawPassword);
 	}
 
 	public void logInAs(final AccountEntity account) {

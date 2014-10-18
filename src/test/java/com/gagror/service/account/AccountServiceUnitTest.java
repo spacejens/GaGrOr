@@ -43,6 +43,8 @@ public class AccountServiceUnitTest {
 
 	private static final String ENTITY_USERNAME = "OldUsername";
 	private static final String FORM_USERNAME = "NewUsername";
+	private static final String FORM_PASSWORD = "NewPassword";
+	private static final String ENCODED_PASSWORD = "EncodedPassword";
 
 	AccountService instance;
 
@@ -82,6 +84,7 @@ public class AccountServiceUnitTest {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(account);
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account).setUsername(FORM_USERNAME);
+		verify(account).setPassword(ENCODED_PASSWORD);
 		verify(accessControlService).logInAs(account);
 	}
 
@@ -90,6 +93,7 @@ public class AccountServiceUnitTest {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account, never()).setUsername(FORM_USERNAME);
+		verify(account).setPassword(ENCODED_PASSWORD);
 		verify(accessControlService, never()).logInAs(account);
 	}
 
@@ -100,6 +104,7 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
 		verify(account, never()).setUsername(anyString());
+		verify(account, never()).setPassword(anyString());
 	}
 
 	@Test
@@ -154,6 +159,8 @@ public class AccountServiceUnitTest {
 		when(editAccountForm.getId()).thenReturn(ACCOUNT_ID);
 		when(editAccountForm.getVersion()).thenReturn(VERSION);
 		when(editAccountForm.getUsername()).thenReturn(FORM_USERNAME);
+		when(editAccountForm.getPassword()).thenReturn(FORM_PASSWORD);
+		when(editAccountForm.getPasswordRepeat()).thenReturn(FORM_PASSWORD);
 	}
 
 	@Before
@@ -167,6 +174,7 @@ public class AccountServiceUnitTest {
 	@Before
 	public void setupAccessControlService() {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(account);
+		when(accessControlService.encodePassword(FORM_PASSWORD)).thenReturn(ENCODED_PASSWORD);
 	}
 
 	@Before
