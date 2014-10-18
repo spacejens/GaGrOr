@@ -98,10 +98,14 @@ public class AccountServiceUnitTest {
 		verify(account, never()).setPassword(anyString());
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test
 	public void saveAccount_simultaneousEdit() {
 		when(account.getVersion()).thenReturn(VERSION+1);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		instance.saveAccount(editAccountForm, bindingResult);
+		verify(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
+		verify(account, never()).setUsername(anyString());
+		verify(account, never()).setPassword(anyString());
 	}
 
 	@Test(expected=IllegalStateException.class)

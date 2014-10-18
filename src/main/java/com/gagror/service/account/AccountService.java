@@ -53,18 +53,18 @@ public class AccountService {
 				&& null != accountRepository.findByUsername(editAccountForm.getUsername())) {
 			editAccountForm.addErrorUsernameBusy(bindingResult);
 		}
+		if(! editAccountForm.getVersion().equals(entity.getVersion())) {
+			editAccountForm.addErrorSimultaneuosEdit(bindingResult);
+		}
 		// Stop if errors have been detected
 		if(bindingResult.hasErrors()) {
 			return;
-		}
-		if(! editAccountForm.getVersion().equals(entity.getVersion())) {
-			// TODO Add an error message instead of crashing on simultaneous edit
-			throw new IllegalStateException(String.format("Simultaneous edit of account ID %d detected when saving", editAccountForm.getId()));
 		}
 		// Everything is OK, update the entity
 		entity.setUsername(editAccountForm.getUsername());
 		// TODO Support editing account type (but not for yourself?)
 		// TODO Support password change (requires changing of security authentication when editing for current user)
+		// TODO Editing username will require changing security authentication, and seems weird if done to someone other than yourself (they will be thrown out and cannot log back in)
 	}
 
 	public List<AccountReferenceOutput> loadContacts() {

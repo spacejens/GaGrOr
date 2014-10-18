@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+
 @Data
 @EqualsAndHashCode(callSuper=true)
 @ToString(callSuper=true)
@@ -19,5 +22,9 @@ public class AccountEditInput extends RegisterInput {
 		setId(currentState.getId());
 		setVersion(currentState.getVersion());
 		setUsername(currentState.getUsername());
+	}
+
+	public void addErrorSimultaneuosEdit(final BindingResult bindingResult) {
+		bindingResult.addError(new ObjectError(bindingResult.getObjectName(), "Simultaneous edit of this user detected, cannot proceed"));
 	}
 }
