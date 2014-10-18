@@ -2,11 +2,8 @@ package com.gagror.controller;
 
 import static org.junit.Assert.fail;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.reflections.Reflections;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)
-public class ControllerDesignRulesTest {
+public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 
 	private final String name;
 
@@ -58,15 +54,6 @@ public class ControllerDesignRulesTest {
 		return hasAnyAnnotation(clazzOrMethod, RequestMapping.class);
 	}
 
-	@SuppressWarnings("unchecked")
-	private boolean hasAnyAnnotation(final AnnotatedElement annotatedElement, @SuppressWarnings("rawtypes") final Class... annotations) {
-		boolean success = false;
-		for(final Class<? extends Annotation> annotation : annotations) {
-			success |= null != annotatedElement.getAnnotation(annotation);
-		}
-		return success;
-	}
-
 	@Test
 	public void inheritsFromCommonSuperclass() {
 		final Class<AbstractController> expectedSuperclass = AbstractController.class;
@@ -83,11 +70,6 @@ public class ControllerDesignRulesTest {
 
 	@Parameters(name="{0}")
 	public static Iterable<Object[]> findControllers() {
-		final Set<Object[]> controllers = new HashSet<>();
-		final Reflections reflections = new Reflections("com.gagror");
-		for(final Class<?> clazz : reflections.getTypesAnnotatedWith(Controller.class)) {
-			controllers.add(new Object[]{clazz.getCanonicalName(), clazz});
-		}
-		return controllers;
+		return parameterizeForAnnotation(Controller.class);
 	}
 }
