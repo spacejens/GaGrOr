@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)
-public class ControllerUnitTest {
+public class ControllerDesignRulesTest {
 
 	private final String name;
 
