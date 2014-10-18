@@ -5,18 +5,18 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEntity;
 
 @Data
 @RequiredArgsConstructor
-// TODO Get ID class from target class generic ID type
-public abstract class AbstractGagrorPermission<I> implements GagrorPermission {
+public abstract class AbstractGagrorPermission<I extends Serializable, E extends Identifiable<I>> implements GagrorPermission {
 
 	private final String name;
 
 	private final String targetType;
 
-	protected AbstractGagrorPermission(final String name, final Class<?> targetClass) {
+	protected AbstractGagrorPermission(final String name, final Class<E> targetClass) {
 		this(name, targetClass.getCanonicalName());
 	}
 

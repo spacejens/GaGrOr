@@ -11,12 +11,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import com.gagror.data.Identifiable;
+
 @Data
 @NoArgsConstructor
 @Entity
 @ToString(exclude="password")
 @Table(name="account")
-public class AccountEntity {
+public class AccountEntity implements Identifiable<Long> {
 
 	@Id
 	@GeneratedValue

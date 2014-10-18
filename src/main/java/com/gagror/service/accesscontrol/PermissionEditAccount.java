@@ -6,7 +6,7 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountType;
 
 @CommonsLog
-public class PermissionEditAccount extends AbstractGagrorPermission<Long> {
+public class PermissionEditAccount extends AbstractGagrorPermission<Long, AccountEntity> {
 
 	public PermissionEditAccount() {
 		super("editAccount", AccountEntity.class);

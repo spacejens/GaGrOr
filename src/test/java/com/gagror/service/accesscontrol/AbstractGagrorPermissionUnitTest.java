@@ -3,6 +3,7 @@ package com.gagror.service.accesscontrol;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+import lombok.Getter;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEntity;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -59,7 +61,7 @@ public class AbstractGagrorPermissionUnitTest {
 		when(accountEntity.getUsername()).thenReturn(PERMISSION_NAME);
 	}
 
-	private class Impl extends AbstractGagrorPermission<String> {
+	private class Impl extends AbstractGagrorPermission<String, Target> {
 
 		public Impl() {
 			super(PERMISSION_NAME, Target.class);
@@ -76,6 +78,8 @@ public class AbstractGagrorPermissionUnitTest {
 		}
 	}
 
-	private class Target {
+	private class Target implements Identifiable<String> {
+		@Getter
+		private String id;
 	}
 }
