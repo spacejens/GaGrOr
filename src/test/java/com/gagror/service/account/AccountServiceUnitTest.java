@@ -151,6 +151,15 @@ public class AccountServiceUnitTest {
 	}
 
 	@Test
+	public void saveAccount_passwordTooWeak() {
+		when(accessControlService.isPasswordTooWeak(FORM_PASSWORD)).thenReturn(true);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(editAccountForm).addErrorPasswordTooWeak(bindingResult);
+		verify(account, never()).setPassword(anyString());
+	}
+
+	@Test
 	public void saveAccount_simultaneousEdit() {
 		when(account.getVersion()).thenReturn(VERSION+1);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked

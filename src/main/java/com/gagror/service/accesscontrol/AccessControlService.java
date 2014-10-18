@@ -63,9 +63,13 @@ public class AccessControlService {
 
 	public void register(final RegisterInput registerForm, final BindingResult bindingResult) {
 		// Verify that the account can be created
+		// TODO Should be able to show several form errors at once (add unit test for this)
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
 			log.warn(String.format("Attempt to create user '%s' failed, username busy", registerForm.getUsername()));
 			registerForm.addErrorUsernameBusy(bindingResult);
+		} else if(isPasswordTooWeak(registerForm.getPassword())) {
+			log.warn(String.format("Attempt to create user '%s' failed, password too weak", registerForm.getUsername()));
+			registerForm.addErrorPasswordTooWeak(bindingResult);
 		} else if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
 			log.warn(String.format("Attempt to create user '%s' failed, password repeat mismatch", registerForm.getUsername()));
 			registerForm.addErrorPasswordMismatch(bindingResult);
@@ -81,7 +85,14 @@ public class AccessControlService {
 		}
 	}
 
+	public boolean isPasswordTooWeak(final String rawPassword) {
+		return rawPassword.length() < 5;
+	}
+
 	public String encodePassword(final String rawPassword) {
+		if(isPasswordTooWeak(rawPassword)) {
+			throw new IllegalArgumentException("Password was too weak, refusing to encode (it should have been verified)");
+		}
 		return passwordEncoder.encode(rawPassword);
 	}
 

@@ -49,10 +49,15 @@ public class AccountService {
 		}
 		final boolean editingOwnAccount = entity.getId().equals(accessControlService.getRequestAccountEntity().getId());
 		// Validate input before updating the entity
-		if((! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())
-				|| ! StringUtils.isEmptyOrWhitespace(editAccountForm.getPasswordRepeat()))
-				&& ! editAccountForm.getPassword().equals(editAccountForm.getPasswordRepeat())) {
-			editAccountForm.addErrorPasswordMismatch(bindingResult);
+		if(! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())
+				|| ! StringUtils.isEmptyOrWhitespace(editAccountForm.getPasswordRepeat())) {
+			// Only validate password input if there was any input
+			if(! editAccountForm.getPassword().equals(editAccountForm.getPasswordRepeat())) {
+				editAccountForm.addErrorPasswordMismatch(bindingResult);
+			}
+			if(accessControlService.isPasswordTooWeak(editAccountForm.getPassword())) {
+				editAccountForm.addErrorPasswordTooWeak(bindingResult);
+			}
 		}
 		if(editingOwnAccount
 				&& ! entity.getUsername().equals(editAccountForm.getUsername())

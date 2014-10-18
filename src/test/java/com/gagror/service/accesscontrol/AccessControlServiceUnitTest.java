@@ -44,7 +44,7 @@ public class AccessControlServiceUnitTest {
 
 	private static final Long ID = 23L;
 	private static final String USERNAME = "user";
-	private static final String PASSWORD = "pass";
+	private static final String PASSWORD = "password";
 	private static final AccountType TYPE = AccountType.SYSTEM_OWNER;
 
 	@Mock
@@ -184,6 +184,23 @@ public class AccessControlServiceUnitTest {
 		instance.register(registerForm, bindingResult);
 		verify(registerForm).addErrorPasswordMismatch(bindingResult);
 		verify(accountRepository, never()).save(any(AccountEntity.class));
+	}
+
+	@Test
+	public void register_passwordTooWeak() {
+		whenNotLoggedIn();
+		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
+		when(registerForm.getPassword()).thenReturn("weak");
+		when(registerForm.getPasswordRepeat()).thenReturn("weak");
+		instance.register(registerForm, bindingResult);
+		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
+		verify(accountRepository, never()).save(any(AccountEntity.class));
+	}
+
+	@Test
+	public void isPasswordTooWeak() {
+		assertTrue("This should be a weak password", instance.isPasswordTooWeak("weak"));
+		assertFalse("This should be a strong password", instance.isPasswordTooWeak("strong"));
 	}
 
 	@Test

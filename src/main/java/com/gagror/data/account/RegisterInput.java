@@ -23,6 +23,10 @@ public class RegisterInput {
 		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "username", "must be unique"));
 	}
 
+	public void addErrorPasswordTooWeak(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "password", "too weak"));
+	}
+
 	public void addErrorPasswordMismatch(final BindingResult bindingResult) {
 		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "passwordRepeat", "must match"));
 	}
