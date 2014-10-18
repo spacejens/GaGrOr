@@ -13,14 +13,19 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public enum AccountType {
+import com.gagror.data.EnumIdMapping;
+import com.gagror.data.Identifiable;
+
+public enum AccountType implements Identifiable<Integer> {
 
 	STANDARD(0),
 	SYSTEM_OWNER(1,
 			SecurityRoles.ROLE_ADMIN);
 
+	private static final EnumIdMapping<Integer, AccountType> IDMAP = new EnumIdMapping<>(AccountType.class);
+
 	@Getter
-	private final int id;
+	private final Integer id;
 
 	/**
 	 * Sorted as needed by {@link UserDetails#getAuthorities()}.
@@ -28,7 +33,7 @@ public enum AccountType {
 	@Getter
 	private final Collection<GrantedAuthority> authorities;
 
-	private AccountType(final int id, final String... roles) {
+	private AccountType(final Integer id, final String... roles) {
 		this.id = id;
 		Arrays.sort(roles);
 		final List<GrantedAuthority> tempAuthorities = new ArrayList<>();
@@ -38,14 +43,8 @@ public enum AccountType {
 		authorities = unmodifiableList(tempAuthorities);
 	}
 
-	public static AccountType fromId(final int id) {
-		// TODO Move enum fromId logic to a id-enum mapping from a utility class
-		for(final AccountType type : AccountType.values()) {
-			if(id == type.getId()) {
-				return type;
-			}
-		}
-		throw new IllegalArgumentException(String.format("Unknown id: %d", id));
+	public static AccountType fromId(final Integer id) {
+		return IDMAP.fromId(id);
 	}
 
 	public boolean isStandard() {

@@ -23,7 +23,7 @@ public class AccountTypeConverterUnitTest {
 
 	@Test
 	public void convertToDatabaseColumn() {
-		assertEquals(accountType.getId(), instance.convertToDatabaseColumn(accountType).intValue());
+		assertEquals(accountType.getId(), instance.convertToDatabaseColumn(accountType));
 	}
 
 	@Test
