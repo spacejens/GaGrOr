@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+import org.thymeleaf.util.StringUtils;
 
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
@@ -37,15 +38,30 @@ public class AccountService {
 	}
 
 	public void saveAccount(final AccountEditInput editAccountForm, final BindingResult bindingResult) {
-		// TODO Fail if password does not match in form
 		// Find the account to update
 		final AccountEntity entity = accountRepository.findById(editAccountForm.getId());
 		if(null == entity) {
 			throw new IllegalStateException(String.format("Failed to find edited account ID %d when saving", editAccountForm.getId()));
 		}
+		// Validate input before updating the entity
+		if((! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())
+				|| ! StringUtils.isEmptyOrWhitespace(editAccountForm.getPasswordRepeat()))
+				&& ! editAccountForm.getPassword().equals(editAccountForm.getPasswordRepeat())) {
+			editAccountForm.addErrorPasswordMismatch(bindingResult);
+		}
+		if(! entity.getUsername().equals(editAccountForm.getUsername())
+				&& null != accountRepository.findByUsername(editAccountForm.getUsername())) {
+			editAccountForm.addErrorUsernameBusy(bindingResult);
+		}
+		// Stop if errors have been detected
+		if(bindingResult.hasErrors()) {
+			return;
+		}
 		if(! editAccountForm.getVersion().equals(entity.getVersion())) {
+			// TODO Add an error message instead of crashing on simultaneous edit
 			throw new IllegalStateException(String.format("Simultaneous edit of account ID %d detected when saving", editAccountForm.getId()));
 		}
+		// Everything is OK, update the entity
 		entity.setUsername(editAccountForm.getUsername());
 		// TODO Support editing account type (but not for yourself?)
 		// TODO Support password change (requires changing of security authentication when editing for current user)

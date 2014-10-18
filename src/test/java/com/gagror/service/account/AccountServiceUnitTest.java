@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,6 +40,7 @@ public class AccountServiceUnitTest {
 
 	private static final Long VERSION = 3L;
 
+	private static final String ENTITY_USERNAME = "OldUsername";
 	private static final String FORM_USERNAME = "NewUsername";
 
 	AccountService instance;
@@ -50,6 +54,7 @@ public class AccountServiceUnitTest {
 	@Mock
 	AccountEntity anotherAccount;
 
+	@Mock
 	AccountEditInput editAccountForm;
 
 	@Mock
@@ -72,6 +77,25 @@ public class AccountServiceUnitTest {
 	public void saveAccount_ok() {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account).setUsername(FORM_USERNAME);
+	}
+
+	@Test
+	public void saveAccount_usernameBusy() {
+		when(accountRepository.findByUsername(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
+		verify(account, never()).setUsername(anyString());
+	}
+
+	@Test
+	public void saveAccount_passwordMismatch() {
+		when(editAccountForm.getPassword()).thenReturn("Something");
+		when(editAccountForm.getPasswordRepeat()).thenReturn("Something Else");
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(editAccountForm).addErrorPasswordMismatch(bindingResult);
+		verify(account, never()).setPassword(anyString());
 	}
 
 	@Test(expected=IllegalStateException.class)
@@ -103,17 +127,22 @@ public class AccountServiceUnitTest {
 	}
 
 	@Before
+	public void setupBindingResult() {
+		when(bindingResult.getObjectName()).thenReturn("");
+	}
+
+	@Before
 	public void setupEditAccountForm() {
-		editAccountForm = new AccountEditInput();
-		editAccountForm.setId(ACCOUNT_ID);
-		editAccountForm.setVersion(VERSION);
-		editAccountForm.setUsername(FORM_USERNAME);
+		when(editAccountForm.getId()).thenReturn(ACCOUNT_ID);
+		when(editAccountForm.getVersion()).thenReturn(VERSION);
+		when(editAccountForm.getUsername()).thenReturn(FORM_USERNAME);
 	}
 
 	@Before
 	public void setupAccount() {
 		when(account.getId()).thenReturn(ACCOUNT_ID);
 		when(account.getVersion()).thenReturn(VERSION);
+		when(account.getUsername()).thenReturn(ENTITY_USERNAME);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ID);
 	}
 
