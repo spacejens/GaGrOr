@@ -77,11 +77,15 @@ public class AccessControlService {
 					passwordEncoder.encode(registerForm.getPassword()));
 			accountRepository.save(account);
 			// Automatically log in the newly registered user
-			SecurityContextHolder.getContext().setAuthentication(
-					new PreAuthenticatedAuthenticationToken(
-							account.getUsername(),
-							account.getPassword(),
-							account.getAccountType().getAuthorities()));
+			logInAs(account);
 		}
+	}
+
+	public void logInAs(final AccountEntity account) {
+		SecurityContextHolder.getContext().setAuthentication(
+				new PreAuthenticatedAuthenticationToken(
+						account.getUsername(),
+						account.getPassword(),
+						account.getAccountType().getAuthorities()));
 	}
 }

@@ -40,8 +40,10 @@ import com.gagror.data.account.RegisterInput;
 @RunWith(MockitoJUnitRunner.class)
 public class AccessControlServiceUnitTest {
 
+	private static final Long ID = 23L;
 	private static final String USERNAME = "user";
 	private static final String PASSWORD = "pass";
+	private static final AccountType TYPE = AccountType.SYSTEM_OWNER;
 
 	@Mock
 	AccountRepository accountRepository;
@@ -56,7 +58,8 @@ public class AccessControlServiceUnitTest {
 	@Mock
 	BindingResult bindingResult;
 
-	AccountEntity account = new AccountEntity();
+	@Mock
+	AccountEntity account;
 
 	@Test
 	public void loadAccountEntity_ok() {
@@ -179,6 +182,15 @@ public class AccessControlServiceUnitTest {
 		verify(accountRepository, never()).save(any(AccountEntity.class));
 	}
 
+	@Test
+	public void logInAs() {
+		whenNotLoggedIn();
+		instance.logInAs(account);
+		assertNotNull("Authentication not set in security context", SecurityContextHolder.getContext().getAuthentication());
+		assertEquals("Not logged in as correct user after registration", USERNAME, SecurityContextHolder.getContext().getAuthentication().getName());
+		assertTrue("Not authenticated after registration", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+	}
+
 	protected void whenNotLoggedIn() {
 		SecurityContextHolder.getContext().setAuthentication(getAnonymousAuthentication());
 	}
@@ -209,7 +221,10 @@ public class AccessControlServiceUnitTest {
 
 	@Before
 	public void setupAccount() {
-		account.setUsername(USERNAME);
+		when(account.getId()).thenReturn(ID);
+		when(account.getUsername()).thenReturn(USERNAME);
+		when(account.getPassword()).thenReturn(PASSWORD);
+		when(account.getAccountType()).thenReturn(TYPE);
 	}
 
 	@SuppressWarnings("rawtypes")
