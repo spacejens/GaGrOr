@@ -94,11 +94,37 @@ public class AccountServiceUnitTest {
 	}
 
 	@Test
+	public void saveAccount_editingOwnAccount_dontChangePassword_ok() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(account);
+		when(editAccountForm.getPassword()).thenReturn("");
+		when(editAccountForm.getPasswordRepeat()).thenReturn("");
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(account).setUsername(FORM_USERNAME);
+		verify(account, never()).setPassword(anyString());
+		verify(account, never()).setActive(anyBoolean());
+		verify(account, never()).setLocked(anyBoolean());
+		verify(accessControlService).logInAs(account);
+	}
+
+	@Test
 	public void saveAccount_editingOtherAccount_ok() {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account, never()).setUsername(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
+		verify(account).setActive(FORM_ACTIVE);
+		verify(account).setLocked(FORM_LOCKED);
+		verify(accessControlService, never()).logInAs(account);
+	}
+
+	@Test
+	public void saveAccount_editingOtherAccount_dontChangePassword_ok() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
+		when(editAccountForm.getPassword()).thenReturn("");
+		when(editAccountForm.getPasswordRepeat()).thenReturn("");
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(account, never()).setUsername(FORM_USERNAME);
+		verify(account, never()).setPassword(anyString());
 		verify(account).setActive(FORM_ACTIVE);
 		verify(account).setLocked(FORM_LOCKED);
 		verify(accessControlService, never()).logInAs(account);

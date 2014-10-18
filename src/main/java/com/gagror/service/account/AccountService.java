@@ -74,7 +74,9 @@ public class AccountService {
 			 */
 			entity.setUsername(editAccountForm.getUsername());
 		}
-		entity.setPassword(accessControlService.encodePassword(editAccountForm.getPassword()));
+		if(! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())) {
+			entity.setPassword(accessControlService.encodePassword(editAccountForm.getPassword()));
+		}
 		// TODO Support editing account type (but not for yourself?)
 		if(! editingOwnAccount) {
 			// Cannot edit account flags of one's own account
