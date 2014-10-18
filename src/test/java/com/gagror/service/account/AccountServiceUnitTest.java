@@ -169,6 +169,22 @@ public class AccountServiceUnitTest {
 		verify(account, never()).setPassword(anyString());
 	}
 
+	@Test
+	public void saveAccount_manyErrors() {
+		when(accountRepository.findByUsername(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
+		when(editAccountForm.getPasswordRepeat()).thenReturn("Doesn't match");
+		when(accessControlService.isPasswordTooWeak(FORM_PASSWORD)).thenReturn(true);
+		when(account.getVersion()).thenReturn(VERSION+1);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
+		verify(editAccountForm).addErrorPasswordMismatch(bindingResult);
+		verify(editAccountForm).addErrorPasswordTooWeak(bindingResult);
+		verify(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
+		verify(account, never()).setUsername(anyString());
+		verify(account, never()).setPassword(anyString());
+	}
+
 	@Test(expected=IllegalStateException.class)
 	public void saveAccount_accountNotFound() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(null);
