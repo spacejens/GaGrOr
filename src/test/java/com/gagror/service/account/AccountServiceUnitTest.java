@@ -31,6 +31,7 @@ import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
+import com.gagror.service.accesscontrol.AccessControlService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceUnitTest {
@@ -47,6 +48,9 @@ public class AccountServiceUnitTest {
 
 	@Mock
 	AccountRepository accountRepository;
+
+	@Mock
+	AccessControlService accessControlService;
 
 	@Mock
 	AccountEntity account;
@@ -74,9 +78,19 @@ public class AccountServiceUnitTest {
 	}
 
 	@Test
-	public void saveAccount_ok() {
+	public void saveAccount_editingOwnAccount_ok() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(account);
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account).setUsername(FORM_USERNAME);
+		verify(accessControlService).logInAs(account);
+	}
+
+	@Test
+	public void saveAccount_editingOtherAccount_ok() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(account).setUsername(FORM_USERNAME);
+		verify(accessControlService, never()).logInAs(account);
 	}
 
 	@Test
@@ -151,6 +165,11 @@ public class AccountServiceUnitTest {
 	}
 
 	@Before
+	public void setupAccessControlService() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
+	}
+
+	@Before
 	public void setupAccountRepository() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
 		final List<AccountEntity> allAccounts = new ArrayList<>();
@@ -163,5 +182,6 @@ public class AccountServiceUnitTest {
 	public void setupInstance() {
 		instance = new AccountService();
 		instance.accountRepository = accountRepository;
+		instance.accessControlService = accessControlService;
 	}
 }

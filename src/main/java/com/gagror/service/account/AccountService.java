@@ -17,6 +17,7 @@ import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
+import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
 @Transactional
@@ -25,6 +26,9 @@ public class AccountService {
 
 	@Autowired
 	AccountRepository accountRepository;
+
+	@Autowired
+	AccessControlService accessControlService;
 
 	public AccountEditOutput loadAccountForEditing(final Long accountId) {
 		final AccountEntity entity = accountRepository.findById(accountId);
@@ -49,6 +53,7 @@ public class AccountService {
 				&& ! editAccountForm.getPassword().equals(editAccountForm.getPasswordRepeat())) {
 			editAccountForm.addErrorPasswordMismatch(bindingResult);
 		}
+		// TODO Editing username seems weird if done to someone other than yourself (they will be thrown out and cannot log back in)
 		if(! entity.getUsername().equals(editAccountForm.getUsername())
 				&& null != accountRepository.findByUsername(editAccountForm.getUsername())) {
 			editAccountForm.addErrorUsernameBusy(bindingResult);
@@ -63,8 +68,11 @@ public class AccountService {
 		// Everything is OK, update the entity
 		entity.setUsername(editAccountForm.getUsername());
 		// TODO Support editing account type (but not for yourself?)
-		// TODO Support password change (requires changing of security authentication when editing for current user)
-		// TODO Editing username will require changing security authentication, and seems weird if done to someone other than yourself (they will be thrown out and cannot log back in)
+		// TODO Support password change
+		// If the currently logged in user was edited, make sure that the user is still logged in
+		if(entity.getId().equals(accessControlService.getRequestAccountEntity().getId())) {
+			accessControlService.logInAs(entity);
+		}
 	}
 
 	public List<AccountReferenceOutput> loadContacts() {
