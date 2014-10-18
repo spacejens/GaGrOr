@@ -34,6 +34,8 @@ public class AccountController extends AbstractController {
 		log.info("Viewing contacts page");
 		// TODO Place contacts as a separate ModelAttribute controller method
 		model.addAttribute("contacts", accountService.loadContacts());
+		// TODO Edit HTML to display security-sensitive links
+		// TODO https://github.com/thymeleaf/thymeleaf-extras-springsecurity3
 		return "contacts";
 	}
 

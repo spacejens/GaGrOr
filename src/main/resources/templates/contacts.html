@@ -1,18 +1,30 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Contacts</h1>
+	<p sec:authentication="name">Security name</p>
+	<p sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</p>
 	<table>
 		<thead>
 			<tr>
 				<td>Username</td>
+				<td>Actions</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="contact : ${contacts}">
 				<td th:text="${contact.username}">Name</td>
+				<td>
+					<a sec:authorize="hasRole('ADMIN')" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Role</a>
+					<a sec:authorize="hasPermission('1', 'editAccount')" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Permission-1</a>
+					<a sec:authorize-url="/account/edit/1" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-1</a>
+					<a sec:authorize-url="${/account/edit/1}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-th-1</a>
+					<a sec:authorize-url="@{/account/edit/{accountId}(accountId=${contact.id})}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-th</a>
+					<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">exp-Role</a>
+					<a th:if="${#authorization.expression('hasPermission(''1'', ''editAccount'')')}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">exp-Permission-1</a>
+				</td>
 			</tr>
 		</tbody>
 	</table>
