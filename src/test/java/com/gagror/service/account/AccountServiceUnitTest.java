@@ -89,7 +89,7 @@ public class AccountServiceUnitTest {
 	public void saveAccount_editingOtherAccount_ok() {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
 		instance.saveAccount(editAccountForm, bindingResult);
-		verify(account).setUsername(FORM_USERNAME);
+		verify(account, never()).setUsername(FORM_USERNAME);
 		verify(accessControlService, never()).logInAs(account);
 	}
 
@@ -166,7 +166,7 @@ public class AccountServiceUnitTest {
 
 	@Before
 	public void setupAccessControlService() {
-		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
+		when(accessControlService.getRequestAccountEntity()).thenReturn(account);
 	}
 
 	@Before

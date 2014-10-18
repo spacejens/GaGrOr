@@ -47,14 +47,15 @@ public class AccountService {
 		if(null == entity) {
 			throw new IllegalStateException(String.format("Failed to find edited account ID %d when saving", editAccountForm.getId()));
 		}
+		final boolean editingOwnAccount = entity.getId().equals(accessControlService.getRequestAccountEntity().getId());
 		// Validate input before updating the entity
 		if((! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())
 				|| ! StringUtils.isEmptyOrWhitespace(editAccountForm.getPasswordRepeat()))
 				&& ! editAccountForm.getPassword().equals(editAccountForm.getPasswordRepeat())) {
 			editAccountForm.addErrorPasswordMismatch(bindingResult);
 		}
-		// TODO Editing username seems weird if done to someone other than yourself (they will be thrown out and cannot log back in)
-		if(! entity.getUsername().equals(editAccountForm.getUsername())
+		if(editingOwnAccount
+				&& ! entity.getUsername().equals(editAccountForm.getUsername())
 				&& null != accountRepository.findByUsername(editAccountForm.getUsername())) {
 			editAccountForm.addErrorUsernameBusy(bindingResult);
 		}
@@ -66,11 +67,13 @@ public class AccountService {
 			return;
 		}
 		// Everything is OK, update the entity
-		entity.setUsername(editAccountForm.getUsername());
+		if(editingOwnAccount) {
+			entity.setUsername(editAccountForm.getUsername());
+		}
 		// TODO Support editing account type (but not for yourself?)
 		// TODO Support password change
 		// If the currently logged in user was edited, make sure that the user is still logged in
-		if(entity.getId().equals(accessControlService.getRequestAccountEntity().getId())) {
+		if(editingOwnAccount) {
 			accessControlService.logInAs(entity);
 		}
 	}
