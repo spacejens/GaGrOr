@@ -17,7 +17,7 @@ public abstract class AbstractController {
 
 	@ModelAttribute("currentUser")
 	public AccountReferenceOutput getCurrentUser() {
-		log.debug("Getting current user model attribute");
+		log.trace("Getting current user model attribute");
 		return accessControl.getRequestAccount();
 	}
 
