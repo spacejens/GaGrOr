@@ -63,26 +63,29 @@ public class AccessControlService {
 
 	public void register(final RegisterInput registerForm, final BindingResult bindingResult) {
 		// Verify that the account can be created
-		// TODO Should be able to show several form errors at once (add unit test for this)
 		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
 			log.warn(String.format("Attempt to create user '%s' failed, username busy", registerForm.getUsername()));
 			registerForm.addErrorUsernameBusy(bindingResult);
-		} else if(isPasswordTooWeak(registerForm.getPassword())) {
+		}
+		if(isPasswordTooWeak(registerForm.getPassword())) {
 			log.warn(String.format("Attempt to create user '%s' failed, password too weak", registerForm.getUsername()));
 			registerForm.addErrorPasswordTooWeak(bindingResult);
-		} else if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
+		}
+		if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
 			log.warn(String.format("Attempt to create user '%s' failed, password repeat mismatch", registerForm.getUsername()));
 			registerForm.addErrorPasswordMismatch(bindingResult);
-		} else {
-			log.info(String.format("Registering user '%s'", registerForm.getUsername()));
-			// Create the account
-			final AccountEntity account = new AccountEntity(
-					registerForm.getUsername(),
-					encodePassword(registerForm.getPassword()));
-			accountRepository.save(account);
-			// Automatically log in the newly registered user
-			logInAs(account);
 		}
+		if(bindingResult.hasErrors()) {
+			return;
+		}
+		log.info(String.format("Registering user '%s'", registerForm.getUsername()));
+		// Create the account
+		final AccountEntity account = new AccountEntity(
+				registerForm.getUsername(),
+				encodePassword(registerForm.getPassword()));
+		accountRepository.save(account);
+		// Automatically log in the newly registered user
+		logInAs(account);
 	}
 
 	public boolean isPasswordTooWeak(final String rawPassword) {

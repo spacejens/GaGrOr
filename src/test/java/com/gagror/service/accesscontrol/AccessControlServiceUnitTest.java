@@ -155,6 +155,7 @@ public class AccessControlServiceUnitTest {
 		whenNotLoggedIn();
 		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
 		instance.register(registerForm, bindingResult);
+		verify(bindingResult).hasErrors();
 		verifyNoMoreInteractions(bindingResult);
 		final ArgumentCaptor<AccountEntity> savedAccount = ArgumentCaptor.forClass(AccountEntity.class);
 		verify(accountRepository).save(savedAccount.capture());
@@ -171,6 +172,7 @@ public class AccessControlServiceUnitTest {
 	@Test
 	public void register_usernameBusy() {
 		whenNotLoggedIn();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		instance.register(registerForm, bindingResult);
 		verify(registerForm).addErrorUsernameBusy(bindingResult);
 		verify(accountRepository, never()).save(any(AccountEntity.class));
@@ -181,6 +183,7 @@ public class AccessControlServiceUnitTest {
 		whenNotLoggedIn();
 		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
 		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		instance.register(registerForm, bindingResult);
 		verify(registerForm).addErrorPasswordMismatch(bindingResult);
 		verify(accountRepository, never()).save(any(AccountEntity.class));
@@ -192,7 +195,21 @@ public class AccessControlServiceUnitTest {
 		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
 		when(registerForm.getPassword()).thenReturn("weak");
 		when(registerForm.getPasswordRepeat()).thenReturn("weak");
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		instance.register(registerForm, bindingResult);
+		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
+		verify(accountRepository, never()).save(any(AccountEntity.class));
+	}
+
+	@Test
+	public void register_manyErrors() {
+		whenNotLoggedIn();
+		when(registerForm.getPassword()).thenReturn("weak");
+		when(registerForm.getPasswordRepeat()).thenReturn("abcd");
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		instance.register(registerForm, bindingResult);
+		verify(registerForm).addErrorUsernameBusy(bindingResult);
+		verify(registerForm).addErrorPasswordMismatch(bindingResult);
 		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
 		verify(accountRepository, never()).save(any(AccountEntity.class));
 	}
