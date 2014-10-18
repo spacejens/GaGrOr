@@ -68,10 +68,19 @@ public class AccountService {
 		}
 		// Everything is OK, update the entity
 		if(editingOwnAccount) {
+			/*
+			 * Editing username for other accounts is forbidden, since it would be very confusing.
+			 * That user would be thrown out and unable to log in again.
+			 */
 			entity.setUsername(editAccountForm.getUsername());
 		}
 		entity.setPassword(accessControlService.encodePassword(editAccountForm.getPassword()));
 		// TODO Support editing account type (but not for yourself?)
+		if(! editingOwnAccount) {
+			// Cannot edit account flags of one's own account
+			entity.setActive(editAccountForm.isActive());
+			entity.setLocked(editAccountForm.isLocked());
+		}
 		// If the currently logged in user was edited, make sure that the user is still logged in
 		if(editingOwnAccount) {
 			accessControlService.logInAs(entity);

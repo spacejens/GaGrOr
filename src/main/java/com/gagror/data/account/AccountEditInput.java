@@ -18,10 +18,16 @@ public class AccountEditInput extends RegisterInput {
 
 	private Long version;
 
+	private boolean active;
+
+	private boolean locked;
+
 	public AccountEditInput(final AccountEditOutput currentState) {
 		setId(currentState.getId());
 		setVersion(currentState.getVersion());
 		setUsername(currentState.getUsername());
+		setActive(currentState.isActive());
+		setLocked(currentState.isLocked());
 	}
 
 	public void addErrorSimultaneuosEdit(final BindingResult bindingResult) {

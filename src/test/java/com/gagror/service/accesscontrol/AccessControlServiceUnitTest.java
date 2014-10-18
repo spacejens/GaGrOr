@@ -1,6 +1,7 @@
 package com.gagror.service.accesscontrol;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -160,6 +161,8 @@ public class AccessControlServiceUnitTest {
 		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getUsername());
 		assertEquals("Wrong password", PASSWORD, savedAccount.getValue().getPassword());
 		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
+		assertTrue("Registered account should become active", savedAccount.getValue().isActive());
+		assertFalse("Registered account should not become locked", savedAccount.getValue().isLocked());
 		assertNotNull("Authentication not set in security context", SecurityContextHolder.getContext().getAuthentication());
 		assertEquals("Not logged in as correct user after registration", USERNAME, SecurityContextHolder.getContext().getAuthentication().getName());
 		assertTrue("Not authenticated after registration", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());

@@ -13,6 +13,16 @@
 			Username <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>
 			<input type="text" th:field="*{username}" />
 		</label>
+		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{active}" />
+		<label th:unless="${currentUser.id} == ${currentState.id}">
+			Active
+			<input type="checkbox" th:field="*{active}" />
+		</label>
+		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{locked}" />
+		<label th:unless="${currentUser.id} == ${currentState.id}">
+			Locked
+			<input type="checkbox" th:field="*{locked}" />
+		</label>
 		<fieldset>
 			<legend>Change password</legend>
 			<label>

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -44,6 +45,8 @@ public class AccountServiceUnitTest {
 	private static final String ENTITY_USERNAME = "OldUsername";
 	private static final String FORM_USERNAME = "NewUsername";
 	private static final String FORM_PASSWORD = "NewPassword";
+	private static final boolean FORM_ACTIVE = true;
+	private static final boolean FORM_LOCKED = false;
 	private static final String ENCODED_PASSWORD = "EncodedPassword";
 
 	AccountService instance;
@@ -85,6 +88,8 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account).setUsername(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
+		verify(account, never()).setActive(anyBoolean());
+		verify(account, never()).setLocked(anyBoolean());
 		verify(accessControlService).logInAs(account);
 	}
 
@@ -94,6 +99,8 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account, never()).setUsername(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
+		verify(account).setActive(FORM_ACTIVE);
+		verify(account).setLocked(FORM_LOCKED);
 		verify(accessControlService, never()).logInAs(account);
 	}
 
@@ -161,6 +168,8 @@ public class AccountServiceUnitTest {
 		when(editAccountForm.getUsername()).thenReturn(FORM_USERNAME);
 		when(editAccountForm.getPassword()).thenReturn(FORM_PASSWORD);
 		when(editAccountForm.getPasswordRepeat()).thenReturn(FORM_PASSWORD);
+		when(editAccountForm.isActive()).thenReturn(FORM_ACTIVE);
+		when(editAccountForm.isLocked()).thenReturn(FORM_LOCKED);
 	}
 
 	@Before

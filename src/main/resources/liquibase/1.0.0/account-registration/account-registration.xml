@@ -21,6 +21,12 @@
 			<column name="account_type" type="tinyint">
 				<constraints nullable="false" />
 			</column>
+			<column name="active" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="locked" type="boolean">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 
@@ -39,6 +45,8 @@
 			<column name="username" value="admin"/>
 			<column name="password" value="$2a$10$LtpG/uRFVYW33i8kp5XW1ehLzJv.fFmuOy8jST65Hz6o4CD6N5cju"/> <!-- password -->
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->
+			<column name="active" valueBoolean="true"/>
+			<column name="locked" valueBoolean="false"/>
 		</insert>
 	</changeSet>
 </databaseChangeLog>

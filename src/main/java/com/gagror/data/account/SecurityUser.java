@@ -21,11 +21,10 @@ public class SecurityUser implements UserDetails {
 	public SecurityUser(final AccountEntity account) {
 		username = account.getUsername();
 		password = account.getPassword();
-		// TODO Various security account flags need changing when data model supports them
 		accountNonExpired = true;
-		accountNonLocked = true;
+		accountNonLocked = ! account.isLocked();
 		credentialsNonExpired = true;
-		enabled = true;
+		enabled = account.isActive();
 		authorities = account.getAccountType().getAuthorities();
 	}
 }

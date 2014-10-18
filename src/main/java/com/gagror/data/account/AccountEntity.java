@@ -36,9 +36,17 @@ public class AccountEntity implements Identifiable<Long> {
 	@Column(nullable = false)
 	private AccountType accountType;
 
+	@Column(nullable = false)
+	private boolean active;
+
+	@Column(nullable = false)
+	private boolean locked;
+
 	public AccountEntity(final String username, final String encryptedPassword) {
 		setUsername(username);
 		setPassword(encryptedPassword);
 		setAccountType(AccountType.STANDARD);
+		setActive(true);
+		setLocked(false);
 	}
 }
