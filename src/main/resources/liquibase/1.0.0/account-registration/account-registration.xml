@@ -25,7 +25,13 @@
 	</changeSet>
 
 	<changeSet id="username-unique" author="spacejens">
-		<addUniqueConstraint tableName="account" columnNames="username"/>
+		<addUniqueConstraint constraintName="account_username_u" tableName="account" columnNames="username"/>
+	</changeSet>
+
+	<changeSet id="username-index" author="spacejens">
+		<createIndex indexName="account_username_ix" tableName="account">
+			<column name="username" type="varchar(64)" />
+		</createIndex>
 	</changeSet>
 
 	<changeSet id="account-admin" author="spacejens">
