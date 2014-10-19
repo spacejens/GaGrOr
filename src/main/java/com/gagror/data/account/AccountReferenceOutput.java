@@ -22,6 +22,7 @@ public class AccountReferenceOutput {
 		username = entity.getUsername();
 		accountType = entity.getAccountType();
 		created = entity.getCreated();
+		// TODO Move the account CSS classes to properties (i.e. view layer), only return property here
 		if(! entity.isActive()) {
 			cssClass = "fi-skull";
 		} else if(entity.isLocked()) {

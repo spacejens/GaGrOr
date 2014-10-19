@@ -82,7 +82,7 @@ public class AccountService {
 		if(! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())) {
 			entity.setPassword(accessControlService.encodePassword(editAccountForm.getPassword()));
 		}
-		// TODO Support editing account type (but not for yourself?)
+		// TODO Support editing account type (but not for yourself), http://blog.florentlim.com/listing-enum-on-select-element-using-thymeleaf/
 		if(! editingOwnAccount) {
 			// Cannot edit account flags of one's own account
 			entity.setActive(editAccountForm.isActive());
