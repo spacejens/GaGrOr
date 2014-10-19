@@ -1,4 +1,4 @@
-package com.gagror.data;
+package com.gagror;
 
 import java.util.HashSet;
 import java.util.Set;

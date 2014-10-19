@@ -15,7 +15,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.gagror.data.EnumUnitTestSupport;
+import com.gagror.EnumUnitTestSupport;
 
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)
