@@ -1,5 +1,6 @@
 package com.gagror.data.account;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -22,17 +23,18 @@ public class AccountTypeUnitTest extends EnumUnitTestSupport<AccountType> {
 
 	@RequiredArgsConstructor
 	private enum ExpectedResults {
-		STANDARD(AccountType.STANDARD,
+		STANDARD(AccountType.STANDARD, 0,
 				Collections.<AccountType>emptyList(),
 				Collections.<String>emptyList()),
-		ADMIN(AccountType.ADMIN,
+		ADMIN(AccountType.ADMIN, 2,
 				Arrays.asList(AccountType.STANDARD, AccountType.ADMIN),
 				Arrays.asList(SecurityRoles.ROLE_ADMIN)),
-		SYSTEM_OWNER(AccountType.SYSTEM_OWNER,
+		SYSTEM_OWNER(AccountType.SYSTEM_OWNER, 1,
 				Arrays.asList(AccountType.STANDARD, AccountType.ADMIN),
 				Arrays.asList(SecurityRoles.ROLE_ADMIN));
 
 		private final AccountType accountType;
+		private final Integer databaseId;
 		private final List<AccountType> mayEdit;
 		private final List<String> authorities;
 
@@ -59,6 +61,13 @@ public class AccountTypeUnitTest extends EnumUnitTestSupport<AccountType> {
 	@Test
 	public void getAuthorities() {
 		assertAuthorities(accountType, ExpectedResults.forAccountType(accountType).authorities);
+	}
+
+	@Test
+	public void getId() {
+		assertEquals(String.format("ID of account type %s is used in database and may not change", accountType),
+				ExpectedResults.forAccountType(accountType).databaseId,
+				accountType.getId());
 	}
 
 	@Parameters(name="{0}")
