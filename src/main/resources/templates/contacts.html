@@ -8,11 +8,13 @@
 		<thead>
 			<tr>
 				<td>Username</td>
+				<td>Registered</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="contact : ${contacts}">
 				<td th:text="${contact.username}">Name</td>
+				<td th:text="${#calendars.format(contact.created,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</td>
 			</tr>
 		</tbody>
 	</table>

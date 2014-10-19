@@ -2,7 +2,10 @@ package com.gagror.data.account;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +46,13 @@ public class AccountEntityUnitTest {
 	@Test
 	public void locked() {
 		assertFalse("Created account should not be locked", instance.isLocked());
+	}
+
+	@Test
+	public void created() {
+		assertNotNull("Creation timestamp should have been set", instance.getCreated());
+		final long difference = new Date().getTime() - instance.getCreated().getTime();
+		assertTrue("Creation timestamp should have been set to current time", Math.abs(difference) < 5000);
 	}
 
 	@Before

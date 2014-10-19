@@ -1,5 +1,7 @@
 package com.gagror.data.account;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,7 +44,8 @@ public class AccountEntity implements Identifiable<Long> {
 	@Column(nullable = false)
 	private boolean locked;
 
-	// TODO Add creation timestamp
+	@Column(nullable = false, insertable = true, updatable = false)
+	private Date created;
 
 	public AccountEntity(final String username, final String encryptedPassword) {
 		setUsername(username);
@@ -50,5 +53,6 @@ public class AccountEntity implements Identifiable<Long> {
 		setAccountType(AccountType.STANDARD);
 		setActive(true);
 		setLocked(false);
+		setCreated(new Date());
 	}
 }

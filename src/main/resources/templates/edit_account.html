@@ -5,6 +5,7 @@
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Edit user <span th:text="${currentState.username}">name</span></h1>
 	<form action="#" th:action="@{/account/edit/{accountId}(accountId=${currentState.id})}" th:object="${editAccountForm}" method="post">
+		<p>Registered: <span th:text="${#calendars.format(currentState.created,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</span></p>
 		<p class="error" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Global errors</p>
 		<input type="hidden" th:field="*{id}" />
 		<input type="hidden" th:field="*{version}" />
