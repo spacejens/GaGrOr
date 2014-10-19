@@ -5,6 +5,7 @@ import static java.util.Collections.unmodifiableList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Getter;
@@ -19,7 +20,11 @@ import com.gagror.data.Identifiable;
 public enum AccountType implements Identifiable<Integer> {
 
 	STANDARD(0, "fi-torso"),
+	ADMIN(2, "fi-sheriff-badge",
+			Arrays.asList(STANDARD), true,
+			SecurityRoles.ROLE_ADMIN),
 	SYSTEM_OWNER(1, "fi-crown",
+			Arrays.asList(STANDARD, ADMIN), false,
 			SecurityRoles.ROLE_ADMIN);
 
 	private static final EnumIdMapping<Integer, AccountType> IDMAP = new EnumIdMapping<>(AccountType.class);
@@ -30,6 +35,9 @@ public enum AccountType implements Identifiable<Integer> {
 	@Getter
 	private final String cssClass;
 
+	@Getter
+	private final List<AccountType> mayEdit;
+
 	/**
 	 * Sorted as needed by {@link UserDetails#getAuthorities()}.
 	 */
@@ -37,8 +45,20 @@ public enum AccountType implements Identifiable<Integer> {
 	private final Collection<GrantedAuthority> authorities;
 
 	private AccountType(final Integer id, final String cssClass, final String... roles) {
+		this(id, cssClass, Collections.<AccountType>emptyList(), false, roles);
+	}
+
+	private AccountType(final Integer id, final String cssClass, final List<AccountType> mayEdit, final boolean mayEditPeers, final String... roles) {
 		this.id = id;
 		this.cssClass = cssClass;
+		// Finalize what account types may be edited
+		final List<AccountType> mayEditTemp = new ArrayList<>();
+		mayEditTemp.addAll(mayEdit);
+		if(mayEditPeers) {
+			mayEditTemp.add(this);
+		}
+		this.mayEdit = unmodifiableList(mayEditTemp);
+		// Add authorities
 		Arrays.sort(roles);
 		final List<GrantedAuthority> tempAuthorities = new ArrayList<>();
 		for(final String role : roles) {

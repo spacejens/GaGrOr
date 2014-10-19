@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,7 +24,13 @@ public class PermissionEditAccountUnitTest {
 	PermissionEditAccount instance;
 
 	@Mock
+	AccountRepository accountRepository;
+
+	@Mock
 	AccountEntity account;
+
+	@Mock
+	AccountEntity editedAccount;
 
 	@Test
 	public void hasPermission_ownAccount_ok() {
@@ -47,13 +54,25 @@ public class PermissionEditAccountUnitTest {
 	}
 
 	@Before
+	public void setupEditedAccount() {
+		when(editedAccount.getAccountType()).thenReturn(AccountType.STANDARD);
+		when(editedAccount.getId()).thenReturn(ID_OTHER);
+	}
+
+	@Before
 	public void setupAccount() {
 		when(account.getAccountType()).thenReturn(AccountType.STANDARD);
 		when(account.getId()).thenReturn(ID_ACCOUNT);
 	}
 
 	@Before
+	public void setupAccountRepository() {
+		when(accountRepository.findById(ID_OTHER)).thenReturn(editedAccount);
+	}
+
+	@Before
 	public void setupInstance() {
 		instance = new PermissionEditAccount();
+		instance.accountRepository = accountRepository;
 	}
 }
