@@ -30,6 +30,8 @@ public class GagrorPermissionEvaluatorUnitTest {
 
 	GagrorPermissionEvaluator instance;
 
+	GagrorPermissionEvaluator instanceDefault;
+
 	@Mock
 	GagrorPermission permission;
 
@@ -46,8 +48,7 @@ public class GagrorPermissionEvaluatorUnitTest {
 	AccountEntity accountEntity;
 
 	@Test
-	public void allPermissionsAddedByDefaultConstructor() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		final GagrorPermissionEvaluator instanceDefault = new GagrorPermissionEvaluator();
+	public void allPermissionsAddedByDefault() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		final Reflections reflections = new Reflections("com.gagror");
 		int count = 0;
 		for(final Class<? extends GagrorPermission> clazz : reflections.getSubTypesOf(GagrorPermission.class)) {
@@ -61,6 +62,12 @@ public class GagrorPermissionEvaluatorUnitTest {
 			}
 		}
 		assertNotEquals("At least one permission should have been added", 0, count);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void permissionsAddedByDefaultPreventsNull() {
+		instanceDefault.editAccount = null;
+		instanceDefault.getPermission("any");
 	}
 
 	@Test
@@ -126,5 +133,13 @@ public class GagrorPermissionEvaluatorUnitTest {
 		instance.accessControlService = accessControlService;
 		instance.addPermission(permission);
 		instance.addPermission(anotherPermission);
+	}
+
+	@Before
+	public void setupInstanceDefault() {
+		instanceDefault = new GagrorPermissionEvaluator();
+		instanceDefault.accessControlService = accessControlService;
+		// Fill in what would normally be autowired here. The instance will then use these permissions.
+		instanceDefault.editAccount = new PermissionEditAccount();
 	}
 }

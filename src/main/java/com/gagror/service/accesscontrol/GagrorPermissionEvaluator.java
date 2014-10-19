@@ -23,9 +23,15 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 
 	private final Map<String, GagrorPermission> permissions;
 
+	@Autowired
+	PermissionEditAccount editAccount;
+
 	public GagrorPermissionEvaluator() {
 		this(new HashMap<String, GagrorPermission>());
-		addPermission(new PermissionEditAccount());
+	}
+
+	private void initializePermissions() {
+		addPermission(editAccount);
 	}
 
 	@Override
@@ -65,6 +71,9 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 	}
 
 	protected void addPermission(final GagrorPermission permission) {
+		if(null == permission) {
+			throw new IllegalArgumentException("Cannot add null permission");
+		}
 		if(permissions.containsKey(permission.getName())) {
 			throw new IllegalStateException(String.format("Cannot add duplicate permission definitions: %s", permission.getName()));
 		}
@@ -73,6 +82,9 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 	}
 
 	protected GagrorPermission getPermission(final Object permission) {
+		if(permissions.isEmpty()) {
+			initializePermissions();
+		}
 		return permissions.get(permission);
 	}
 }

@@ -2,10 +2,13 @@ package com.gagror.service.accesscontrol;
 
 import lombok.extern.apachecommons.CommonsLog;
 
+import org.springframework.stereotype.Component;
+
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountType;
 
 @CommonsLog
+@Component
 public class PermissionEditAccount extends AbstractGagrorPermission<Long, AccountEntity> {
 
 	public PermissionEditAccount() {
