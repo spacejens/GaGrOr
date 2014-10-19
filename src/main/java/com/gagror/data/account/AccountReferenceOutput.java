@@ -15,10 +15,19 @@ public class AccountReferenceOutput {
 
 	private final Date created;
 
+	private final String cssClass;
+
 	public AccountReferenceOutput(final AccountEntity entity) {
 		id = entity.getId();
 		username = entity.getUsername();
 		accountType = entity.getAccountType();
 		created = entity.getCreated();
+		if(! entity.isActive()) {
+			cssClass = "fi-skull";
+		} else if(entity.isLocked()) {
+			cssClass = "fi-prohibited";
+		} else {
+			cssClass = getAccountType().getCssClass();
+		}
 	}
 }

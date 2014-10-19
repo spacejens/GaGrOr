@@ -14,7 +14,7 @@
 				<label>Contacts</label>
 			</a>
 			<a class="item" href="../edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${currentUser.id})}">
-				<i class="fi-torso" th:class="${currentUser.accountType.cssClass}"></i>
+				<i class="fi-torso" th:class="${currentUser.cssClass}"></i>
 				<label th:text="${currentUser.username}">Current user</label>
 			</a>
 			<a class="item" href="#" onclick="javascript: document.getElementById('logout-form').submit();return false;">
