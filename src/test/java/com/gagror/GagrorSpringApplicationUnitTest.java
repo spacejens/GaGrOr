@@ -1,6 +1,7 @@
 package com.gagror;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -56,6 +57,7 @@ public class GagrorSpringApplicationUnitTest {
 	public void messageSource() throws Exception {
 		final MessageSource source = instance.messageSource();
 		final Object[] noArgs = new Object[]{};
+		int countResolved = 0;
 		// Verify that all property files in the messages directory can be resolved
 		final File directory = new File("src/main/resources/messages");
 		for(final File propertyFile : directory.listFiles(new PatternFilenameFilter(".*\\.properties"))) {
@@ -68,6 +70,7 @@ public class GagrorSpringApplicationUnitTest {
 				// Verify that the property does not require parameters
 				if(! expected.contains("{")) {
 					final String resolved = source.getMessage(key.toString(), noArgs, Locale.getDefault());
+					countResolved++;
 					System.out.println(String.format("Resolving property %s from file %s", key, propertyFile.getName()));
 					assertEquals(String.format("Property %s from file %s resolved to wrong message", key, propertyFile.getName()), expected, resolved);
 					// Resolve and verify the result
@@ -75,6 +78,7 @@ public class GagrorSpringApplicationUnitTest {
 				}
 			}
 		}
+		assertNotEquals("Should have resolved at least one property", 0, countResolved);
 	}
 
 	@Before
