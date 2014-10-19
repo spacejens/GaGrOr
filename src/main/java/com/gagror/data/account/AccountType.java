@@ -19,11 +19,11 @@ import com.gagror.data.Identifiable;
 
 public enum AccountType implements Identifiable<Integer> {
 
-	STANDARD(0, "fi-torso"),
-	ADMIN(2, "fi-sheriff-badge",
+	STANDARD(0, "account.icon.standard"),
+	ADMIN(2, "account.icon.admin",
 			Arrays.asList(STANDARD), true,
 			SecurityRoles.ROLE_ADMIN),
-	SYSTEM_OWNER(1, "fi-crown",
+	SYSTEM_OWNER(1, "account.icon.systemowner",
 			Arrays.asList(STANDARD, ADMIN), false,
 			SecurityRoles.ROLE_ADMIN);
 

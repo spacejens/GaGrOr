@@ -11,9 +11,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
@@ -58,5 +60,13 @@ public class GagrorSpringApplication extends SpringBootServletInitializer {
 	public PermissionEvaluator permissionEvaluator() {
 		log.info("Adding permission evaluator");
 		return new GagrorPermissionEvaluator();
+	}
+
+	@Bean
+	public MessageSource messageSource() {
+		log.info("Adding message source");
+		final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasenames("messages.cssclasses");
+		return messageSource;
 	}
 }
