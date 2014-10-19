@@ -18,8 +18,8 @@ import com.gagror.data.Identifiable;
 
 public enum AccountType implements Identifiable<Integer> {
 
-	STANDARD(0),
-	SYSTEM_OWNER(1,
+	STANDARD(0, "fi-torso"),
+	SYSTEM_OWNER(1, "fi-crown",
 			SecurityRoles.ROLE_ADMIN);
 
 	private static final EnumIdMapping<Integer, AccountType> IDMAP = new EnumIdMapping<>(AccountType.class);
@@ -27,14 +27,18 @@ public enum AccountType implements Identifiable<Integer> {
 	@Getter
 	private final Integer id;
 
+	@Getter
+	private final String cssClass;
+
 	/**
 	 * Sorted as needed by {@link UserDetails#getAuthorities()}.
 	 */
 	@Getter
 	private final Collection<GrantedAuthority> authorities;
 
-	private AccountType(final Integer id, final String... roles) {
+	private AccountType(final Integer id, final String cssClass, final String... roles) {
 		this.id = id;
+		this.cssClass = cssClass;
 		Arrays.sort(roles);
 		final List<GrantedAuthority> tempAuthorities = new ArrayList<>();
 		for(final String role : roles) {
