@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.gagror.controller.DesignRulesTestSupport;
+import com.gagror.DesignRulesTestSupport;
 
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)

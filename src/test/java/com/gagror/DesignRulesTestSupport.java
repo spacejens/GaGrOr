@@ -1,4 +1,4 @@
-package com.gagror.controller;
+package com.gagror;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
