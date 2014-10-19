@@ -42,6 +42,8 @@ public class AccountEntity implements Identifiable<Long> {
 	@Column(nullable = false)
 	private boolean locked;
 
+	// TODO Add creation timestamp
+
 	public AccountEntity(final String username, final String encryptedPassword) {
 		setUsername(username);
 		setPassword(encryptedPassword);
