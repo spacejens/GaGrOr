@@ -70,12 +70,4 @@ public enum AccountType implements Identifiable<Integer> {
 	public static AccountType fromId(final Integer id) {
 		return IDMAP.fromId(id);
 	}
-
-	public boolean isStandard() {
-		return STANDARD == this;
-	}
-
-	public boolean isSystemOwner() {
-		return SYSTEM_OWNER == this;
-	}
 }
