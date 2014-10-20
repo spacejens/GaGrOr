@@ -64,6 +64,10 @@ public class AccountService {
 				&& null != accountRepository.findByUsername(editAccountForm.getUsername())) {
 			editAccountForm.addErrorUsernameBusy(bindingResult);
 		}
+		if(! editingOwnAccount
+				&& ! accessControlService.getRequestAccountEntity().getAccountType().getMayEdit().contains(editAccountForm.getAccountType())) {
+			editAccountForm.addErrorDisallowedAccountType(bindingResult);
+		}
 		if(! editAccountForm.getVersion().equals(entity.getVersion())) {
 			editAccountForm.addErrorSimultaneuosEdit(bindingResult);
 		}
@@ -82,9 +86,9 @@ public class AccountService {
 		if(! StringUtils.isEmptyOrWhitespace(editAccountForm.getPassword())) {
 			entity.setPassword(accessControlService.encodePassword(editAccountForm.getPassword()));
 		}
-		// TODO Support editing account type (but not for yourself), http://blog.florentlim.com/listing-enum-on-select-element-using-thymeleaf/
 		if(! editingOwnAccount) {
-			// Cannot edit account flags of one's own account
+			// Cannot edit account type or flags of one's own account
+			entity.setAccountType(editAccountForm.getAccountType());
 			entity.setActive(editAccountForm.isActive());
 			entity.setLocked(editAccountForm.isLocked());
 		}

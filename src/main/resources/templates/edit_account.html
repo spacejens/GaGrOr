@@ -14,6 +14,13 @@
 			Username <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>
 			<input type="text" th:field="*{username}" />
 		</label>
+		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{accountType}" />
+		<label th:unless="${currentUser.id} == ${currentState.id}">
+			Account type <span class="error" th:if="${#fields.hasErrors('accountType')}" th:errors="*{accountType}">Account type error</span>
+			<select th:field="*{accountType}">
+				<option th:each="type : ${currentUser.accountType.mayEdit}" th:value="${type}" th:text="#{${type.displayNameProperty}}">Standard user</option>
+			</select>
+		</label>
 		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{active}" />
 		<label th:unless="${currentUser.id} == ${currentState.id}">
 			Active

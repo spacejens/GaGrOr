@@ -32,6 +32,7 @@ import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
+import com.gagror.data.account.AccountType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -43,8 +44,10 @@ public class AccountServiceUnitTest {
 	private static final Long VERSION = 3L;
 
 	private static final String ENTITY_USERNAME = "OldUsername";
+	private static final AccountType ENTITY_ACCOUNT_TYPE = AccountType.ADMIN;
 	private static final String FORM_USERNAME = "NewUsername";
 	private static final String FORM_PASSWORD = "NewPassword";
+	private static final AccountType FORM_ACCOUNT_TYPE = AccountType.STANDARD;
 	private static final boolean FORM_ACTIVE = true;
 	private static final boolean FORM_LOCKED = false;
 	private static final String ENCODED_PASSWORD = "EncodedPassword";
@@ -88,6 +91,7 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account).setUsername(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
+		verify(account, never()).setAccountType(any(AccountType.class));
 		verify(account, never()).setActive(anyBoolean());
 		verify(account, never()).setLocked(anyBoolean());
 		verify(accessControlService).logInAs(account);
@@ -101,6 +105,7 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account).setUsername(FORM_USERNAME);
 		verify(account, never()).setPassword(anyString());
+		verify(account, never()).setAccountType(any(AccountType.class));
 		verify(account, never()).setActive(anyBoolean());
 		verify(account, never()).setLocked(anyBoolean());
 		verify(accessControlService).logInAs(account);
@@ -112,6 +117,7 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account, never()).setUsername(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
+		verify(account).setAccountType(FORM_ACCOUNT_TYPE);
 		verify(account).setActive(FORM_ACTIVE);
 		verify(account).setLocked(FORM_LOCKED);
 		verify(accessControlService, never()).logInAs(account);
@@ -125,6 +131,7 @@ public class AccountServiceUnitTest {
 		instance.saveAccount(editAccountForm, bindingResult);
 		verify(account, never()).setUsername(FORM_USERNAME);
 		verify(account, never()).setPassword(anyString());
+		verify(account).setAccountType(FORM_ACCOUNT_TYPE);
 		verify(account).setActive(FORM_ACTIVE);
 		verify(account).setLocked(FORM_LOCKED);
 		verify(accessControlService, never()).logInAs(account);
@@ -160,6 +167,16 @@ public class AccountServiceUnitTest {
 	}
 
 	@Test
+	public void saveAccount_disallowedAccountType() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount); // Needed to be allowed to edit
+		when(editAccountForm.getAccountType()).thenReturn(AccountType.SYSTEM_OWNER);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		instance.saveAccount(editAccountForm, bindingResult);
+		verify(editAccountForm).addErrorDisallowedAccountType(bindingResult);
+		verify(account, never()).setAccountType(any(AccountType.class));
+	}
+
+	@Test
 	public void saveAccount_simultaneousEdit() {
 		when(account.getVersion()).thenReturn(VERSION+1);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
@@ -183,6 +200,10 @@ public class AccountServiceUnitTest {
 		verify(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
 		verify(account, never()).setUsername(anyString());
 		verify(account, never()).setPassword(anyString());
+		verify(account, never()).setAccountType(any(AccountType.class));
+		/* Not trying to edit account type, since it can never be edited at the same time as username
+		 * Account type is only editable for other accounts, username only for your own account.
+		 */
 	}
 
 	@Test(expected=IllegalStateException.class)
@@ -219,6 +240,7 @@ public class AccountServiceUnitTest {
 		when(editAccountForm.getUsername()).thenReturn(FORM_USERNAME);
 		when(editAccountForm.getPassword()).thenReturn(FORM_PASSWORD);
 		when(editAccountForm.getPasswordRepeat()).thenReturn(FORM_PASSWORD);
+		when(editAccountForm.getAccountType()).thenReturn(FORM_ACCOUNT_TYPE);
 		when(editAccountForm.isActive()).thenReturn(FORM_ACTIVE);
 		when(editAccountForm.isLocked()).thenReturn(FORM_LOCKED);
 	}
@@ -228,7 +250,9 @@ public class AccountServiceUnitTest {
 		when(account.getId()).thenReturn(ACCOUNT_ID);
 		when(account.getVersion()).thenReturn(VERSION);
 		when(account.getUsername()).thenReturn(ENTITY_USERNAME);
+		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ID);
+		when(anotherAccount.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 	}
 
 	@Before

@@ -67,6 +67,10 @@ public enum AccountType implements Identifiable<Integer> {
 		authorities = unmodifiableList(tempAuthorities);
 	}
 
+	public String getDisplayNameProperty() {
+		return String.format("account.type.%s", name());
+	}
+
 	public static AccountType fromId(final Integer id) {
 		return IDMAP.fromId(id);
 	}
