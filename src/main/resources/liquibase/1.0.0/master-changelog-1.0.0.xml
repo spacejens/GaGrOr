@@ -6,4 +6,6 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<include relativeToChangelogFile="true" file="account-registration/account-registration.xml"/>
+
+	<include relativeToChangelogFile="true" file="contacts-and-groups/contacts-and-groups.xml"/>
 </databaseChangeLog>

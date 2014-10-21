@@ -1,0 +1,51 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="contact-table" author="spacejens">
+		<createTable tableName="contact">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="owner" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="contact" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="contact_type" type="tinyint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="contact-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="account_contact_owner_fk"
+			referencedTableName="account"
+			referencedColumnNames="id"
+			baseTableName="contact"
+			baseColumnNames="owner"/>
+		<addForeignKeyConstraint
+			constraintName="account_contact_contact_fk"
+			referencedTableName="account"
+			referencedColumnNames="id"
+			baseTableName="contact"
+			baseColumnNames="contact"/>
+	</changeSet>
+
+	<changeSet id="indices-for-contacts" author="spacejens">
+		<createIndex indexName="contact_owner_ix" tableName="contact">
+			<column name="owner" type="bigint" />
+		</createIndex>
+		<createIndex indexName="contact_contact_ix" tableName="contact">
+			<column name="contact" type="bigint" />
+		</createIndex>
+	</changeSet>
+</databaseChangeLog>

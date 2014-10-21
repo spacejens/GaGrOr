@@ -1,15 +1,19 @@
 package com.gagror.data.account;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -20,6 +24,7 @@ import com.gagror.data.Identifiable;
 @Entity
 @ToString(exclude="password")
 @Table(name="account")
+@EqualsAndHashCode(of="id")
 public class AccountEntity implements Identifiable<Long> {
 
 	@Id
@@ -46,6 +51,10 @@ public class AccountEntity implements Identifiable<Long> {
 
 	@Column(nullable = false, insertable = true, updatable = false)
 	private Date created;
+
+	@OneToMany(mappedBy="owner", fetch=FetchType.LAZY)
+	// TODO Order contact list by category, then by name
+	private Set<ContactEntity> contacts;
 
 	public AccountEntity(final String username, final String encryptedPassword) {
 		setUsername(username);
