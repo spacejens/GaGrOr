@@ -2,6 +2,8 @@ package com.gagror.controller;
 
 import static com.gagror.data.account.SecurityRoles.IS_LOGGED_IN;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import lombok.extern.apachecommons.CommonsLog;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
+import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.service.account.AccountService;
 
 @Controller
@@ -32,9 +35,12 @@ public class AccountController extends AbstractController {
 	@RequestMapping("/contacts")
 	public String contacts(final Model model) {
 		log.info("Viewing contacts page");
-		// TODO Place contacts as a separate ModelAttribute controller method
-		model.addAttribute("contacts", accountService.loadContacts());
 		return "contacts";
+	}
+
+	@ModelAttribute("contacts")
+	public List<AccountReferenceOutput> getContacts() {
+		return accountService.loadContacts();
 	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
