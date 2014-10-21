@@ -15,7 +15,7 @@ dependencies {
 	compile 'org.webjars:foundation-icon-fonts:d596a3cfb3'
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.1.8.RELEASE'
 	compile 'org.springframework.boot:spring-boot-starter-security:1.1.8.RELEASE'
-	compile 'mysql:mysql-connector-java:5.1.32'
+	compile 'mysql:mysql-connector-java:5.1.33'
 	compile 'org.liquibase:liquibase-core:3.2.2'
 	compile 'org.projectlombok:lombok:1.14.8'
 	testCompile 'org.springframework.boot:spring-boot-starter-test:1.1.8.RELEASE'
