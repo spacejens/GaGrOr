@@ -16,8 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.gagror.data.EnumIdMapping;
 import com.gagror.data.Identifiable;
+import com.gagror.data.PropertyNameDisplayable;
 
-public enum AccountType implements Identifiable<Integer> {
+public enum AccountType implements Identifiable<Integer>, PropertyNameDisplayable {
 
 	STANDARD(0, "account.icon.standard"),
 	ADMIN(2, "account.icon.admin",
@@ -67,6 +68,7 @@ public enum AccountType implements Identifiable<Integer> {
 		authorities = unmodifiableList(tempAuthorities);
 	}
 
+	@Override
 	public String getDisplayNameProperty() {
 		return String.format("account.type.%s", name());
 	}

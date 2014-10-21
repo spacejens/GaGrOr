@@ -48,9 +48,6 @@ public class AccountTypeUnitTest extends EnumUnitTestSupport<AccountType> {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private final String name;
-
 	private final AccountType accountType;
 
 	@Test
