@@ -20,7 +20,7 @@
 					<a sec:authorize="hasRole('ADMIN')" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Role</a>
 					<a sec:authorize="hasPermission('1', 'editAccount')" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Permission-1</a>
 					<a sec:authorize-url="/account/edit/1" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-1</a>
-					<a sec:authorize-url="${/account/edit/1}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-th-1</a>
+					<a sec:authorize-url="@{/account/edit/1}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-th-1</a>
 					<a sec:authorize-url="@{/account/edit/{accountId}(accountId=${contact.id})}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">URL-th</a>
 					<a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">exp-Role</a>
 					<a th:if="${#authorization.expression('hasPermission(''1'', ''editAccount'')')}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">exp-Permission-1</a>
