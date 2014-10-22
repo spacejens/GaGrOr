@@ -1,10 +1,8 @@
 package com.gagror.service.account;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
@@ -14,25 +12,25 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
-import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
+import com.gagror.data.account.ContactEntity;
+import com.gagror.data.account.ContactReferenceOutput;
+import com.gagror.data.account.ContactType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -45,6 +43,7 @@ public class AccountServiceUnitTest {
 
 	private static final String ENTITY_USERNAME = "OldUsername";
 	private static final AccountType ENTITY_ACCOUNT_TYPE = AccountType.ADMIN;
+	private static final ContactType ENTITY_CONTACT_TYPE = ContactType.APPROVED;
 	private static final String FORM_USERNAME = "NewUsername";
 	private static final String FORM_PASSWORD = "NewPassword";
 	private static final AccountType FORM_ACCOUNT_TYPE = AccountType.STANDARD;
@@ -62,6 +61,9 @@ public class AccountServiceUnitTest {
 
 	@Mock
 	AccountEntity account;
+
+	@Mock
+	ContactEntity contact;
 
 	@Mock
 	AccountEntity anotherAccount;
@@ -214,18 +216,9 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void loadContacts() {
-		final List<AccountReferenceOutput> contacts = instance.loadContacts();
-		assertEquals("Unexpected number of contacts", 2, contacts.size());
-		assertEquals("Unexpected first account", ACCOUNT_ID, contacts.get(0).getId());
-		assertEquals("Unexpected second account", ANOTHER_ID, contacts.get(1).getId());
-		final ArgumentCaptor<Sort> sortCaptor = ArgumentCaptor.forClass(Sort.class);
-		verify(accountRepository).findAll(sortCaptor.capture());
-		final Iterator<Order> orderIterator = sortCaptor.getValue().iterator();
-		assertTrue("Contacts should be sorted", orderIterator.hasNext());
-		final Order order = orderIterator.next();
-		assertEquals("Contacts sorted on wrong property", "username", order.getProperty());
-		assertEquals("Contacts sorted in wrong direction", Sort.Direction.ASC, order.getDirection());
-		assertFalse("Contacts should only be sorted on one property", orderIterator.hasNext());
+		final List<ContactReferenceOutput> contacts = instance.loadContacts();
+		assertEquals("Unexpected number of contacts", 1, contacts.size());
+		assertEquals("Unexpected contact", ANOTHER_ID, contacts.get(0).getId());
 	}
 
 	@Before
@@ -253,6 +246,11 @@ public class AccountServiceUnitTest {
 		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ID);
 		when(anotherAccount.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
+		when(contact.getOwner()).thenReturn(account);
+		when(contact.getContact()).thenReturn(anotherAccount);
+		when(contact.getContactType()).thenReturn(ENTITY_CONTACT_TYPE);
+		when(account.getContacts()).thenReturn(Collections.singleton(contact));
+		when(anotherAccount.getIncomingContacts()).thenReturn(Collections.singleton(contact));
 	}
 
 	@Before

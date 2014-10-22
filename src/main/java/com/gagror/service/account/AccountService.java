@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,9 @@ import org.thymeleaf.util.StringUtils;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
-import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
+import com.gagror.data.account.ContactEntity;
+import com.gagror.data.account.ContactReferenceOutput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
@@ -98,13 +98,11 @@ public class AccountService {
 		}
 	}
 
-	public List<AccountReferenceOutput> loadContacts() {
+	public List<ContactReferenceOutput> loadContacts() {
 		log.debug("Loading contacts");
-		// TODO Add the concept of each user's address book (i.e. don't list every account)
-		final Iterable<AccountEntity> entities = accountRepository.findAll(new Sort("username"));
-		final List<AccountReferenceOutput> output = new ArrayList<>();
-		for(final AccountEntity entity : entities) {
-			output.add(new AccountReferenceOutput(entity));
+		final List<ContactReferenceOutput> output = new ArrayList<>();
+		for(final ContactEntity entity : accessControlService.getRequestAccountEntity().getContacts()) {
+			output.add(new ContactReferenceOutput(entity));
 		}
 		return output;
 	}

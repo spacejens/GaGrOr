@@ -13,10 +13,10 @@
 			<column name="version" type="bigint" defaultValueNumeric="0">
 				<constraints nullable="false" />
 			</column>
-			<column name="owner" type="bigint">
+			<column name="owner_id" type="bigint">
 				<constraints nullable="false" />
 			</column>
-			<column name="contact" type="bigint">
+			<column name="contact_id" type="bigint">
 				<constraints nullable="false" />
 			</column>
 			<column name="contact_type" type="tinyint">
@@ -31,21 +31,21 @@
 			referencedTableName="account"
 			referencedColumnNames="id"
 			baseTableName="contact"
-			baseColumnNames="owner"/>
+			baseColumnNames="owner_id"/>
 		<addForeignKeyConstraint
 			constraintName="account_contact_contact_fk"
 			referencedTableName="account"
 			referencedColumnNames="id"
 			baseTableName="contact"
-			baseColumnNames="contact"/>
+			baseColumnNames="contact_id"/>
 	</changeSet>
 
 	<changeSet id="indices-for-contacts" author="spacejens">
-		<createIndex indexName="contact_owner_ix" tableName="contact">
-			<column name="owner" type="bigint" />
+		<createIndex indexName="contact_owner_id_ix" tableName="contact">
+			<column name="owner_id" type="bigint" />
 		</createIndex>
-		<createIndex indexName="contact_contact_ix" tableName="contact">
-			<column name="contact" type="bigint" />
+		<createIndex indexName="contact_contact_id_ix" tableName="contact">
+			<column name="contact_id" type="bigint" />
 		</createIndex>
 	</changeSet>
 </databaseChangeLog>

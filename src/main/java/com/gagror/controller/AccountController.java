@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
-import com.gagror.data.account.AccountReferenceOutput;
+import com.gagror.data.account.ContactReferenceOutput;
 import com.gagror.service.account.AccountService;
 
 @Controller
@@ -39,7 +39,7 @@ public class AccountController extends AbstractController {
 	}
 
 	@ModelAttribute("contacts")
-	public List<AccountReferenceOutput> getContacts() {
+	public List<ContactReferenceOutput> getContacts() {
 		return accountService.loadContacts();
 	}
 

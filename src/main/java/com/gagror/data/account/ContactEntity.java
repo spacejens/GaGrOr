@@ -18,7 +18,7 @@ import com.gagror.data.Identifiable;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="account")
+@Table(name="contact")
 @EqualsAndHashCode(of="id")
 public class ContactEntity implements Identifiable<Long> {
 
