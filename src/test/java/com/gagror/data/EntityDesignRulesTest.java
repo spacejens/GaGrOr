@@ -8,10 +8,13 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +29,8 @@ import com.gagror.DesignRulesTestSupport;
 @RunWith(Parameterized.class)
 public class EntityDesignRulesTest extends DesignRulesTestSupport {
 
-	@SuppressWarnings("unused")
+	private static final Map<String, String> tableToName = new HashMap<>();
+
 	private final String name;
 
 	private final Class<?> entity;
@@ -55,6 +59,14 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 	@Test
 	public void identifiable() {
 		assertTrue("All entities should extend Identifiable", Identifiable.class.isAssignableFrom(entity));
+	}
+
+	@Test
+	public void explicitTableAnnotation() {
+		assertTrue("All entities should have @Table", entity.isAnnotationPresent(Table.class));
+		final String tableName = entity.getAnnotation(Table.class).name();
+		assertFalse(String.format("Table name \"%s\" also used by %s", tableName, tableToName.get(tableName)), tableToName.containsKey(tableName));
+		tableToName.put(tableName, name);
 	}
 
 	@Parameters(name="{0}")
