@@ -56,6 +56,9 @@ public class AccountEntity implements Identifiable<Long> {
 	// TODO Order contact list by category, then by name
 	private Set<ContactEntity> contacts;
 
+	@OneToMany(mappedBy="contact", fetch=FetchType.LAZY)
+	private Set<ContactEntity> incomingContacts;
+
 	public AccountEntity(final String username, final String encryptedPassword) {
 		setUsername(username);
 		setPassword(encryptedPassword);

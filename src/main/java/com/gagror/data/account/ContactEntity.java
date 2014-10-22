@@ -39,4 +39,13 @@ public class ContactEntity implements Identifiable<Long> {
 
 	@Column(nullable = false)
 	private ContactType contactType;
+
+	public ContactEntity(final AccountEntity owner, final ContactType contactType, final AccountEntity contact) {
+		setOwner(owner);
+		setContactType(contactType);
+		setContact(contact);
+		// Add the new entity to the referencing collections
+		owner.getContacts().add(this);
+		contact.getIncomingContacts().add(this);
+	}
 }
