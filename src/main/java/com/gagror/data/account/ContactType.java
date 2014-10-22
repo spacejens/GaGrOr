@@ -10,16 +10,21 @@ import com.gagror.data.PropertyNameDisplayable;
 @RequiredArgsConstructor
 public enum ContactType implements Identifiable<Integer>, PropertyNameDisplayable {
 
-	BLOCKED(-1),
-	NEUTRAL(0),
-	REQUESTED(1),
-	AUTOMATIC(2),
-	APPROVED(3);
+	BLOCKED(0, false, false),
+	REQUESTED(1, false, true),
+	AUTOMATIC(2, true, false),
+	APPROVED(3, true, false);
 
 	private static final EnumIdMapping<Integer, ContactType> IDMAP = new EnumIdMapping<>(ContactType.class);
 
 	@Getter
 	private final Integer id;
+
+	@Getter
+	private final boolean contact;
+
+	@Getter
+	private final boolean request;
 
 	@Override
 	public String getDisplayNameProperty() {
