@@ -38,9 +38,22 @@ public class AccountController extends AbstractController {
 		return "contacts";
 	}
 
+	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
 	public List<ContactReferenceOutput> getContacts() {
 		return accountService.loadContacts();
+	}
+
+	@PreAuthorize(IS_LOGGED_IN)
+	@ModelAttribute("sentContactRequests")
+	public List<ContactReferenceOutput> getSentContactRequests() {
+		return accountService.loadSentContactRequests();
+	}
+
+	@PreAuthorize(IS_LOGGED_IN)
+	@ModelAttribute("receivedContactRequests")
+	public List<ContactReferenceOutput> getReceivedContactRequests() {
+		return accountService.loadReceivedContactRequests();
 	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")

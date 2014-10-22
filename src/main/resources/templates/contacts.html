@@ -4,7 +4,8 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Contacts</h1>
-	<table>
+	<p th:if="${#lists.isEmpty(contacts)}">You have no contacts</p>
+	<table th:fragment="contactTable (contacts)" th:unless="${#lists.isEmpty(contacts)}">
 		<thead>
 			<tr>
 				<td>Username</td>
@@ -22,6 +23,10 @@
 			</tr>
 		</tbody>
 	</table>
+	<h2 th:unless="${#lists.isEmpty(sentContactRequests)}">Sent contact requests</h2>
+	<table th:replace=":: contactTable (contacts=${sentContactRequests})"></table>
+	<h2 th:unless="${#lists.isEmpty(receivedContactRequests)}">Received contact requests</h2>
+	<table th:replace=":: contactTable (contacts=${receivedContactRequests})"></table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

@@ -12,8 +12,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,13 +39,13 @@ import com.gagror.service.accesscontrol.AccessControlService;
 public class AccountServiceUnitTest {
 
 	private static final Long ACCOUNT_ID = 47L;
+	private static final Long CONTACT_ID = 67L;
 	private static final Long ANOTHER_ID = 23L;
 
 	private static final Long VERSION = 3L;
 
 	private static final String ENTITY_USERNAME = "OldUsername";
 	private static final AccountType ENTITY_ACCOUNT_TYPE = AccountType.ADMIN;
-	private static final ContactType ENTITY_CONTACT_TYPE = ContactType.APPROVED;
 	private static final String FORM_USERNAME = "NewUsername";
 	private static final String FORM_PASSWORD = "NewPassword";
 	private static final AccountType FORM_ACCOUNT_TYPE = AccountType.STANDARD;
@@ -64,6 +66,12 @@ public class AccountServiceUnitTest {
 
 	@Mock
 	ContactEntity contact;
+
+	@Mock
+	AccountEntity contactAccount;
+
+	@Mock
+	ContactEntity anotherContact;
 
 	@Mock
 	AccountEntity anotherAccount;
@@ -217,8 +225,33 @@ public class AccountServiceUnitTest {
 	@Test
 	public void loadContacts() {
 		final List<ContactReferenceOutput> contacts = instance.loadContacts();
-		assertEquals("Unexpected number of contacts", 1, contacts.size());
-		assertEquals("Unexpected contact", ANOTHER_ID, contacts.get(0).getId());
+		assertContactAccountIDs(contacts, CONTACT_ID);
+	}
+
+	@Test
+	public void loadSentContactRequests() {
+		final List<ContactReferenceOutput> contacts = instance.loadSentContactRequests();
+		assertContactAccountIDs(contacts, ANOTHER_ID);
+	}
+
+	@Test
+	public void loadReceivedContactRequests() {
+		when(anotherContact.getOwner()).thenReturn(anotherAccount);
+		when(anotherContact.getContact()).thenReturn(account);
+		account.getContacts().remove(anotherContact);
+		account.getIncomingContacts().add(anotherContact);
+		final List<ContactReferenceOutput> contacts = instance.loadReceivedContactRequests();
+		assertContactAccountIDs(contacts, ANOTHER_ID);
+	}
+
+	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
+		final Set<Long> expected = new HashSet<>();
+		expected.addAll(Arrays.asList(accountIDs));
+		final Set<Long> actual = new HashSet<>();
+		for(final ContactReferenceOutput contact : contacts) {
+			actual.add(contact.getId());
+		}
+		assertEquals("Unexpected account IDs in contacts", expected, actual);
 	}
 
 	@Before
@@ -240,17 +273,29 @@ public class AccountServiceUnitTest {
 
 	@Before
 	public void setupAccount() {
+		// Set up accounts
 		when(account.getId()).thenReturn(ACCOUNT_ID);
 		when(account.getVersion()).thenReturn(VERSION);
 		when(account.getUsername()).thenReturn(ENTITY_USERNAME);
 		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
+		when(contactAccount.getId()).thenReturn(CONTACT_ID);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ID);
 		when(anotherAccount.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
+		// Set up a contact
 		when(contact.getOwner()).thenReturn(account);
-		when(contact.getContact()).thenReturn(anotherAccount);
-		when(contact.getContactType()).thenReturn(ENTITY_CONTACT_TYPE);
-		when(account.getContacts()).thenReturn(Collections.singleton(contact));
-		when(anotherAccount.getIncomingContacts()).thenReturn(Collections.singleton(contact));
+		when(contact.getContact()).thenReturn(contactAccount);
+		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
+		// Set up another contact
+		when(anotherContact.getOwner()).thenReturn(account);
+		when(anotherContact.getContact()).thenReturn(anotherAccount);
+		when(anotherContact.getContactType()).thenReturn(ContactType.REQUESTED);
+		// Set up contact collection
+		final Set<ContactEntity> contacts = new HashSet<>();
+		contacts.add(contact);
+		contacts.add(anotherContact);
+		when(account.getContacts()).thenReturn(contacts);
+		final Set<ContactEntity> incomingContacts = new HashSet<>();
+		when(account.getIncomingContacts()).thenReturn(incomingContacts);
 	}
 
 	@Before

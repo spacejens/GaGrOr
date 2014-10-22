@@ -9,8 +9,8 @@ public class ContactReferenceOutput extends AccountReferenceOutput {
 
 	private final ContactType contactType;
 
-	public ContactReferenceOutput(final ContactEntity entity) {
-		super(entity.getContact());
+	public ContactReferenceOutput(final ContactEntity entity, final boolean showOwner) {
+		super(showOwner ? entity.getOwner() : entity.getContact());
 		contactType = entity.getContactType();
 	}
 }

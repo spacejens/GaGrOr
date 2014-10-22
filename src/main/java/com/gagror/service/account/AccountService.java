@@ -102,7 +102,31 @@ public class AccountService {
 		log.debug("Loading contacts");
 		final List<ContactReferenceOutput> output = new ArrayList<>();
 		for(final ContactEntity entity : accessControlService.getRequestAccountEntity().getContacts()) {
-			output.add(new ContactReferenceOutput(entity));
+			if(entity.getContactType().isContact()) {
+				output.add(new ContactReferenceOutput(entity, false));
+			}
+		}
+		return output;
+	}
+
+	public List<ContactReferenceOutput> loadSentContactRequests() {
+		log.debug("Loading sent contact requests");
+		final List<ContactReferenceOutput> output = new ArrayList<>();
+		for(final ContactEntity entity : accessControlService.getRequestAccountEntity().getContacts()) {
+			if(entity.getContactType().isRequest()) {
+				output.add(new ContactReferenceOutput(entity, false));
+			}
+		}
+		return output;
+	}
+
+	public List<ContactReferenceOutput> loadReceivedContactRequests() {
+		log.debug("Loading received contact requests");
+		final List<ContactReferenceOutput> output = new ArrayList<>();
+		for(final ContactEntity entity : accessControlService.getRequestAccountEntity().getIncomingContacts()) {
+			if(entity.getContactType().isRequest()) {
+				output.add(new ContactReferenceOutput(entity, true));
+			}
 		}
 		return output;
 	}
