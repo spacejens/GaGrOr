@@ -56,6 +56,12 @@ public class AccountController extends AbstractController {
 		return accountService.loadReceivedContactRequests();
 	}
 
+	@PreAuthorize(IS_LOGGED_IN)
+	@ModelAttribute("notMyContacts")
+	public List<ContactReferenceOutput> getNotMyContacts() {
+		return accountService.loadAccountsNotContacts();
+	}
+
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
 	@RequestMapping(value="/edit/{accountId}", method=RequestMethod.GET)
 	public String editUserForm(@PathVariable("accountId") final Long accountId, final Model model) {

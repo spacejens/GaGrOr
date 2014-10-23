@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class AccountReferenceOutput {
+public class AccountReferenceOutput implements Comparable<AccountReferenceOutput>{
 
 	private final Long id;
 
@@ -29,5 +29,10 @@ public class AccountReferenceOutput {
 		} else {
 			cssClass = getAccountType().getCssClass();
 		}
+	}
+
+	@Override
+	public int compareTo(final AccountReferenceOutput other) {
+		return getUsername().compareTo(other.getUsername());
 	}
 }

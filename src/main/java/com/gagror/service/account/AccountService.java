@@ -1,11 +1,13 @@
 package com.gagror.service.account;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -106,6 +108,7 @@ public class AccountService {
 				output.add(new ContactReferenceOutput(entity, false));
 			}
 		}
+		Collections.sort(output);
 		return output;
 	}
 
@@ -117,6 +120,7 @@ public class AccountService {
 				output.add(new ContactReferenceOutput(entity, false));
 			}
 		}
+		Collections.sort(output);
 		return output;
 	}
 
@@ -127,6 +131,34 @@ public class AccountService {
 			if(entity.getContactType().isRequest()) {
 				output.add(new ContactReferenceOutput(entity, true));
 			}
+		}
+		Collections.sort(output);
+		return output;
+	}
+
+	public List<ContactReferenceOutput> loadAccountsNotContacts() {
+		log.debug("Loading non-contact accounts as contacts");
+		final List<ContactReferenceOutput> output = new ArrayList<>();
+		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+		filterAccounts: for(final AccountEntity account : accountRepository.findAll(new Sort("username"))) {
+			// Filter out contacts
+			for(final ContactEntity contact : requestAccount.getContacts()) {
+				if(contact.getContact().equals(account)) {
+					continue filterAccounts;
+				}
+			}
+			// Filter out incoming contact requests
+			for(final ContactEntity incoming : requestAccount.getIncomingContacts()) {
+				if(incoming.getOwner().equals(account)) {
+					continue filterAccounts;
+				}
+			}
+			// Filter out the user's own account
+			if(requestAccount.equals(account)) {
+				continue filterAccounts;
+			}
+			// Passed filtering, add this account
+			output.add(new ContactReferenceOutput(account));
 		}
 		return output;
 	}

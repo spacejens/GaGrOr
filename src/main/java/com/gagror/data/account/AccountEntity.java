@@ -53,7 +53,6 @@ public class AccountEntity implements Identifiable<Long> {
 	private Date created;
 
 	@OneToMany(mappedBy="owner", fetch=FetchType.LAZY)
-	// TODO Order contact list by category, then by name
 	private Set<ContactEntity> contacts;
 
 	@OneToMany(mappedBy="contact", fetch=FetchType.LAZY)

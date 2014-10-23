@@ -13,4 +13,9 @@ public class ContactReferenceOutput extends AccountReferenceOutput {
 		super(showOwner ? entity.getOwner() : entity.getContact());
 		contactType = entity.getContactType();
 	}
+
+	public ContactReferenceOutput(final AccountEntity account) {
+		super(account);
+		contactType = null;
+	}
 }

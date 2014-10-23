@@ -1,8 +1,10 @@
 package com.gagror.service.account;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
@@ -14,15 +16,18 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEditInput;
@@ -57,6 +62,7 @@ public class AccountServiceUnitTest {
 
 	@Mock
 	AccountRepository accountRepository;
+	List<AccountEntity> allAccounts;
 
 	@Mock
 	AccessControlService accessControlService;
@@ -224,32 +230,97 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void loadContacts() {
+		// Add name to the first contact
+		when(contactAccount.getUsername()).thenReturn("ZZZ");
+		// Add a second contact (needed to verify sort order)
+		final AccountEntity secondContactAccount = mock(AccountEntity.class);
+		final Long secondContactId = 555L;
+		when(secondContactAccount.getId()).thenReturn(secondContactId);
+		when(secondContactAccount.getUsername()).thenReturn("AAA");
+		final ContactEntity secondContact = mock(ContactEntity.class);
+		when(secondContact.getContactType()).thenReturn(ContactType.APPROVED);
+		when(secondContact.getContact()).thenReturn(secondContactAccount);
+		account.getContacts().add(secondContact);
+		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadContacts();
-		assertContactAccountIDs(contacts, CONTACT_ID);
+		assertContactAccountIDs(contacts, secondContactId, CONTACT_ID);
 	}
 
 	@Test
 	public void loadSentContactRequests() {
+		// Add name to the first sent contact request
+		when(anotherAccount.getUsername()).thenReturn("ZZZ");
+		// Add a second contact request (needed to verify sort order)
+		final AccountEntity secondContactAccount = mock(AccountEntity.class);
+		final Long secondContactId = 555L;
+		when(secondContactAccount.getId()).thenReturn(secondContactId);
+		when(secondContactAccount.getUsername()).thenReturn("AAA");
+		final ContactEntity secondContact = mock(ContactEntity.class);
+		when(secondContact.getContactType()).thenReturn(ContactType.REQUESTED);
+		when(secondContact.getContact()).thenReturn(secondContactAccount);
+		account.getContacts().add(secondContact);
+		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadSentContactRequests();
-		assertContactAccountIDs(contacts, ANOTHER_ID);
+		assertContactAccountIDs(contacts, secondContactId, ANOTHER_ID);
 	}
 
 	@Test
 	public void loadReceivedContactRequests() {
+		// Redefine the default test data
+		when(anotherAccount.getUsername()).thenReturn("ZZZ");
 		when(anotherContact.getOwner()).thenReturn(anotherAccount);
 		when(anotherContact.getContact()).thenReturn(account);
 		account.getContacts().remove(anotherContact);
 		account.getIncomingContacts().add(anotherContact);
+		// Add a second contact request (needed to verify sort order)
+		final AccountEntity secondIncomingRequestAccount = mock(AccountEntity.class);
+		final Long secondIncomingRequestAccountId = 555L;
+		when(secondIncomingRequestAccount.getId()).thenReturn(secondIncomingRequestAccountId);
+		when(secondIncomingRequestAccount.getUsername()).thenReturn("AAA");
+		final ContactEntity secondIncomingRequest = mock(ContactEntity.class);
+		when(secondIncomingRequest.getContactType()).thenReturn(ContactType.REQUESTED);
+		when(secondIncomingRequest.getOwner()).thenReturn(secondIncomingRequestAccount);
+		account.getIncomingContacts().add(secondIncomingRequest);
+		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadReceivedContactRequests();
-		assertContactAccountIDs(contacts, ANOTHER_ID);
+		assertContactAccountIDs(contacts, secondIncomingRequestAccountId, ANOTHER_ID);
 	}
 
-	// TODO Add second contact of each type, add tests to verify that loaded contact lists are sorted
+	@Test
+	public void loadAccountsNotContacts() {
+		// Own account is added by default test setup (and will be filtered out)
+		// Contact account is added by default test setup (and will be filtered out)
+		// Add an incoming request account (that will be filtered out)
+		final AccountEntity incomingAccount = mock(AccountEntity.class);
+		when(incomingAccount.getId()).thenReturn(123L);
+		allAccounts.add(incomingAccount);
+		final ContactEntity incomingContact = mock(ContactEntity.class);
+		when(incomingContact.getOwner()).thenReturn(incomingAccount);
+		account.getIncomingContacts().add(incomingContact);
+		// Add two non-contact accounts
+		final AccountEntity firstNonContact = mock(AccountEntity.class);
+		final Long firstId = 555L;
+		when(firstNonContact.getId()).thenReturn(firstId);
+		allAccounts.add(firstNonContact);
+		final AccountEntity secondNonContact = mock(AccountEntity.class);
+		final Long secondId = 777L;
+		when(secondNonContact.getId()).thenReturn(secondId);
+		allAccounts.add(secondNonContact);
+		// Call the method and verify the results
+		final List<ContactReferenceOutput> contacts = instance.loadAccountsNotContacts();
+		assertContactAccountIDs(contacts, firstId, secondId);
+		// Verify that sorting occurred on the database level (since that is what test data setup is based on)
+		final ArgumentCaptor<Sort> sort = ArgumentCaptor.forClass(Sort.class);
+		verify(accountRepository).findAll(sort.capture());
+		final Iterator<Order> orderIterator = sort.getValue().iterator();
+		assertTrue("Missing sort order", orderIterator.hasNext());
+		assertEquals("Unexpected sort order", "username", orderIterator.next().getProperty());
+		assertFalse("Should only sort on username", orderIterator.hasNext());
+	}
 
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
-		final Set<Long> expected = new HashSet<>();
-		expected.addAll(Arrays.asList(accountIDs));
-		final Set<Long> actual = new HashSet<>();
+		final List<Long> expected = Arrays.asList(accountIDs);
+		final List<Long> actual = new ArrayList<>();
 		for(final ContactReferenceOutput contact : contacts) {
 			actual.add(contact.getId());
 		}
@@ -309,7 +380,7 @@ public class AccountServiceUnitTest {
 	@Before
 	public void setupAccountRepository() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
-		final List<AccountEntity> allAccounts = new ArrayList<>();
+		allAccounts = new ArrayList<>();
 		allAccounts.add(account);
 		allAccounts.add(anotherAccount);
 		when(accountRepository.findAll(any(Sort.class))).thenReturn(allAccounts);

@@ -27,6 +27,9 @@
 	<table th:replace=":: contactTable (contacts=${sentContactRequests})"></table>
 	<h2 th:unless="${#lists.isEmpty(receivedContactRequests)}">Received contact requests</h2>
 	<table th:replace=":: contactTable (contacts=${receivedContactRequests})"></table>
+	<h2>Other users</h2>
+	<p th:if="${#lists.isEmpty(notMyContacts)}">All users are your contacts</p>
+	<table th:replace=":: contactTable (contacts=${notMyContacts})"></table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
