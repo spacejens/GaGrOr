@@ -48,6 +48,8 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 		}
 	}
 
+	// TODO Test to check that all model attribute methods have security annotations (even in abstract superclass)
+
 	private boolean hasSecurityAnnotation(final AnnotatedElement clazzOrMethod) {
 		return hasAnyAnnotation(clazzOrMethod, PreAuthorize.class);
 	}

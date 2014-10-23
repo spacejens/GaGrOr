@@ -244,6 +244,8 @@ public class AccountServiceUnitTest {
 		assertContactAccountIDs(contacts, ANOTHER_ID);
 	}
 
+	// TODO Add second contact of each type, add tests to verify that loaded contact lists are sorted
+
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
 		final Set<Long> expected = new HashSet<>();
 		expected.addAll(Arrays.asList(accountIDs));

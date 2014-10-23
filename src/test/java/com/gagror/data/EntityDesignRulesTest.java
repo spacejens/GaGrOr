@@ -41,6 +41,10 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 		assertFalse("No args constructor should not be private", Modifier.isPrivate(noArgsConstructor.getModifiers()));
 	}
 
+	// TODO Test to verify that equals is overridden
+
+	// TODO Test to verify that hashCode is overridden
+
 	@Test
 	public void joinColumnNullability() {
 		for(final Field field : entity.getDeclaredFields()) {
