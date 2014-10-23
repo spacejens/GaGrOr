@@ -9,6 +9,7 @@
 		<thead>
 			<tr>
 				<td>Username</td>
+				<td>User type</td>
 				<td>Registered</td>
 				<td>Actions</td>
 			</tr>
@@ -16,6 +17,7 @@
 		<tbody>
 			<tr th:each="contact : ${contacts}">
 				<td class="fi-torso" th:class="#{${contact.cssClass}}" th:text="${contact.username}">Name</td>
+				<td th:text="#{${contact.accountType.displayNameProperty}}">Standard user</td>
 				<td th:text="${#calendars.format(contact.created,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</td>
 				<td>
 					<ul>
