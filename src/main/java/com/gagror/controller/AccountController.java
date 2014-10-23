@@ -38,6 +38,18 @@ public class AccountController extends AbstractController {
 		return "contacts";
 	}
 
+	// TODO Add page for viewing a contact (linked from actions in contacts table)
+
+	// TODO Add action to send contact requests
+
+	// TODO Add action to accept contact requests
+
+	// TODO Add action to decline contact requests
+
+	// TODO Add action to delete sent contact request or contact
+
+	// TODO Add action for administrators to log in as other users (for which they have edit permission)
+
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
 	public List<ContactReferenceOutput> getContacts() {
