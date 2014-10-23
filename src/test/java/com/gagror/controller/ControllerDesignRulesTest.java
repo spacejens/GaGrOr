@@ -13,6 +13,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gagror.DesignRulesTestSupport;
@@ -35,27 +36,41 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 			System.out.println(String.format("Class %s has security annotation", name));
 			return;
 		}
-		// Check all methods that have a request mapping
+		// Check all methods that have a request mapping, even in superclasses
 		for(final Method method : controller.getMethods()) {
-			if(hasRequestMappingAnnotation(method)) {
+			if(method.isAnnotationPresent(RequestMapping.class)) {
 				if(! hasSecurityAnnotation(method)) {
 					fail(String.format("Method %s on class %s should have a security annotation",
-							method.getName(), name));
+							method.getName(), method.getDeclaringClass().getCanonicalName()));
 				}
 				System.out.println(String.format("Method %s of class %s has security annotation",
-						method.getName(), name));
+						method.getName(), method.getDeclaringClass().getCanonicalName()));
 			}
 		}
 	}
 
-	// TODO Test to check that all model attribute methods have security annotations (even in abstract superclass)
+	@Test
+	public void allModelAttributeMethodsHaveSecurityAnnotations() {
+		// If the controller class has a security annotation, it is valid for all methods
+		if(hasSecurityAnnotation(controller)) {
+			System.out.println(String.format("Class %s has security annotation", name));
+			return;
+		}
+		// Check all methods that are model attributes, even in superclasses
+		for(final Method method : controller.getMethods()) {
+			if(method.isAnnotationPresent(ModelAttribute.class)) {
+				if(! hasSecurityAnnotation(method)) {
+					fail(String.format("Method %s on class %s should have a security annotation",
+							method.getName(), method.getDeclaringClass().getCanonicalName()));
+				}
+				System.out.println(String.format("Method %s of class %s has security annotation",
+						method.getName(), method.getDeclaringClass().getCanonicalName()));
+			}
+		}
+	}
 
 	private boolean hasSecurityAnnotation(final AnnotatedElement clazzOrMethod) {
 		return hasAnyAnnotation(clazzOrMethod, PreAuthorize.class);
-	}
-
-	private boolean hasRequestMappingAnnotation(final AnnotatedElement clazzOrMethod) {
-		return hasAnyAnnotation(clazzOrMethod, RequestMapping.class);
 	}
 
 	@Test

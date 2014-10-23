@@ -1,8 +1,10 @@
 package com.gagror.controller;
 
+import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -15,6 +17,7 @@ public abstract class AbstractController {
 	@Autowired
 	AccessControlService accessControl;
 
+	@PreAuthorize(IS_PUBLIC)
 	@ModelAttribute("currentUser")
 	public AccountReferenceOutput getCurrentUser() {
 		log.trace("Getting current user model attribute");
