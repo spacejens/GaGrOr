@@ -1,15 +1,11 @@
 package com.gagror.data.account;
 
-import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-@Converter(autoApply = true)
-public class AccountTypeConverter implements AttributeConverter<AccountType, Integer> {
+import com.gagror.data.AttributeConverterSupport;
 
-	@Override
-	public Integer convertToDatabaseColumn(final AccountType attribute) {
-		return attribute.getId();
-	}
+@Converter(autoApply = true)
+public class AccountTypeConverter extends AttributeConverterSupport<Integer, AccountType> {
 
 	@Override
 	public AccountType convertToEntityAttribute(final Integer dbData) {
