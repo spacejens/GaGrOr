@@ -18,7 +18,11 @@
 				<td class="fi-torso" th:class="#{${contact.cssClass}}" th:text="${contact.username}">Name</td>
 				<td th:text="${#calendars.format(contact.created,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</td>
 				<td>
-					<a th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}" href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit</a>
+					<ul>
+						<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
+							<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit account</a>
+						</li>
+					</ul>
 				</td>
 			</tr>
 		</tbody>
