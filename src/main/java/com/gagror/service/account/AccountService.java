@@ -19,6 +19,8 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactReferenceOutput;
+import com.gagror.data.account.ContactRepository;
+import com.gagror.data.account.ContactType;
 import com.gagror.data.account.ContactViewOutput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -29,6 +31,9 @@ public class AccountService {
 
 	@Autowired
 	AccountRepository accountRepository;
+
+	@Autowired
+	ContactRepository contactRepository;
 
 	@Autowired
 	AccessControlService accessControlService;
@@ -150,28 +155,34 @@ public class AccountService {
 	public List<ContactReferenceOutput> loadAccountsNotContacts() {
 		log.debug("Loading non-contact accounts as contacts");
 		final List<ContactReferenceOutput> output = new ArrayList<>();
-		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
-		filterAccounts: for(final AccountEntity account : accountRepository.findAll(new Sort("username"))) {
-			// Filter out contacts
-			for(final ContactEntity contact : requestAccount.getContacts()) {
-				if(contact.getContact().equals(account)) {
-					continue filterAccounts;
-				}
+		for(final AccountEntity account : accountRepository.findAll(new Sort("username"))) {
+			if(isNonContactAccount(account)) {
+				output.add(new ContactReferenceOutput(account));
 			}
-			// Filter out incoming contact requests
-			for(final ContactEntity incoming : requestAccount.getIncomingContacts()) {
-				if(incoming.getOwner().equals(account)) {
-					continue filterAccounts;
-				}
-			}
-			// Filter out the user's own account
-			if(requestAccount.equals(account)) {
-				continue filterAccounts;
-			}
-			// Passed filtering, add this account
-			output.add(new ContactReferenceOutput(account));
 		}
 		return output;
+	}
+
+	private boolean isNonContactAccount(final AccountEntity account) {
+		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+		// Filter out contacts
+		for(final ContactEntity contact : requestAccount.getContacts()) {
+			if(contact.getContact().equals(account)) {
+				return false;
+			}
+		}
+		// Filter out incoming contact requests
+		for(final ContactEntity incoming : requestAccount.getIncomingContacts()) {
+			if(incoming.getOwner().equals(account)) {
+				return false;
+			}
+		}
+		// Filter out the user's own account
+		if(requestAccount.equals(account)) {
+			return false;
+		}
+		// Account was not filtered out
+		return true;
 	}
 
 	public ContactViewOutput loadContact(final Long contactId) {
@@ -183,5 +194,14 @@ public class AccountService {
 		}
 		log.error(String.format("Failed to find contact %d for account %d", contactId, requestAccount.getId()));
 		return null;
+	}
+
+	public void createContactRequest(final Long accountId) {
+		final AccountEntity account = accountRepository.findById(accountId);
+		if(isNonContactAccount(account)) {
+			final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+			final ContactEntity contact = new ContactEntity(requestAccount, ContactType.REQUESTED, account);
+			contactRepository.save(contact);
+		}
 	}
 }

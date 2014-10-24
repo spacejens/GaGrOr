@@ -71,7 +71,13 @@ public class AccountController extends AbstractController {
 		return "view_contact";
 	}
 
-	// TODO Add action to send contact requests
+	@PreAuthorize(IS_LOGGED_IN)
+	@RequestMapping("/request/{accountId}")
+	public RedirectView requestContact(@PathVariable("accountId") final Long accountId) {
+		log.info(String.format("Sending contact request to account %d", accountId));
+		accountService.createContactRequest(accountId);
+		return redirect("/account/contacts");
+	}
 
 	// TODO Add action to accept contact requests
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
@@ -37,6 +38,7 @@ import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactReferenceOutput;
+import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.account.ContactViewOutput;
 import com.gagror.service.accesscontrol.AccessControlService;
@@ -66,6 +68,9 @@ public class AccountServiceUnitTest {
 	@Mock
 	AccountRepository accountRepository;
 	List<AccountEntity> allAccounts;
+
+	@Mock
+	ContactRepository contactRepository;
 
 	@Mock
 	AccessControlService accessControlService;
@@ -99,6 +104,7 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void loginAsUser_notFound() {
+		when(accountRepository.findById(ANOTHER_ACCOUNT_ID)).thenReturn(null);
 		instance.loginAsUser(ANOTHER_ACCOUNT_ID);
 		verify(accessControlService, never()).logInAs(any(AccountEntity.class));
 	}
@@ -112,6 +118,7 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void loadAccountForEditing_notFound() {
+		when(accountRepository.findById(ANOTHER_ACCOUNT_ID)).thenReturn(null);
 		final AccountEditOutput result = instance.loadAccountForEditing(ANOTHER_ACCOUNT_ID);
 		assertNull("Should not have found any account", result);
 	}
@@ -346,6 +353,64 @@ public class AccountServiceUnitTest {
 		assertNull("Contact should not have been loaded", result);
 	}
 
+	@Test
+	public void createContactRequest_ok() {
+		account.getContacts().remove(contact);
+		final int sizeBefore = account.getContacts().size();
+		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
+		instance.createContactRequest(CONTACT_ACCOUNT_ID);
+		final ArgumentCaptor<ContactEntity> saved = ArgumentCaptor.forClass(ContactEntity.class);
+		verify(contactRepository).save(saved.capture());
+		assertSame("Unexpected owner of created contact", account, saved.getValue().getOwner());
+		assertSame("Unexpected contact of created contact", contactAccount, saved.getValue().getContact());
+		assertSame("Unexpected contact type of created contact", ContactType.REQUESTED, saved.getValue().getContactType());
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should have added one contact", sizeBefore+1, sizeAfter);
+		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
+		assertEquals("Should not have added any incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
+	@Test
+	public void createContactRequest_alreadyContact() {
+		final int sizeBefore = account.getContacts().size();
+		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
+		instance.createContactRequest(CONTACT_ACCOUNT_ID);
+		verify(contactRepository, never()).save(any(ContactEntity.class));
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
+		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
+		assertEquals("Should not have added any incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
+	@Test
+	public void createContactRequest_alreadyIncomingRequest() {
+		account.getContacts().remove(contact);
+		account.getIncomingContacts().add(contact);
+		when(contact.getOwner()).thenReturn(contactAccount);
+		when(contact.getContact()).thenReturn(account);
+		when(contact.getContactType()).thenReturn(ContactType.REQUESTED);
+		final int sizeBefore = contactAccount.getContacts().size();
+		final int incomingSizeBefore = account.getIncomingContacts().size();
+		instance.createContactRequest(CONTACT_ACCOUNT_ID);
+		verify(contactRepository, never()).save(any(ContactEntity.class));
+		final int sizeAfter = contactAccount.getContacts().size();
+		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
+		final int incomingSizeAfter = account.getIncomingContacts().size();
+		assertEquals("Should not have added any incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
+	@Test
+	public void createContactRequest_ownAccount() {
+		final int sizeBefore = account.getContacts().size();
+		final int incomingSizeBefore = account.getIncomingContacts().size();
+		instance.createContactRequest(ACCOUNT_ID);
+		verify(contactRepository, never()).save(any(ContactEntity.class));
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
+		final int incomingSizeAfter = account.getIncomingContacts().size();
+		assertEquals("Should not have added any incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
 		final List<Long> expected = Arrays.asList(accountIDs);
 		final List<Long> actual = new ArrayList<>();
@@ -410,9 +475,12 @@ public class AccountServiceUnitTest {
 	@Before
 	public void setupAccountRepository() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
+		when(accountRepository.findById(ANOTHER_ACCOUNT_ID)).thenReturn(anotherAccount);
+		when(accountRepository.findById(CONTACT_ACCOUNT_ID)).thenReturn(contactAccount);
 		allAccounts = new ArrayList<>();
 		allAccounts.add(account);
 		allAccounts.add(anotherAccount);
+		allAccounts.add(contactAccount);
 		when(accountRepository.findAll(any(Sort.class))).thenReturn(allAccounts);
 	}
 
@@ -420,6 +488,7 @@ public class AccountServiceUnitTest {
 	public void setupInstance() {
 		instance = new AccountService();
 		instance.accountRepository = accountRepository;
+		instance.contactRepository = contactRepository;
 		instance.accessControlService = accessControlService;
 	}
 }
