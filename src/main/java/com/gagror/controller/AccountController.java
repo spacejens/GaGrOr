@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
@@ -48,8 +49,6 @@ public class AccountController extends AbstractController {
 
 	// TODO Add action to delete sent contact request or contact
 
-	// TODO Add action for administrators to log in as other users (for which they have edit permission)
-
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
 	public List<ContactReferenceOutput> getContacts() {
@@ -72,6 +71,14 @@ public class AccountController extends AbstractController {
 	@ModelAttribute("notMyContacts")
 	public List<ContactReferenceOutput> getNotMyContacts() {
 		return accountService.loadAccountsNotContacts();
+	}
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
+	@RequestMapping(value="/login/{accountId}", method=RequestMethod.GET)
+	public RedirectView loginAsUser(@PathVariable("accountId") final Long accountId) {
+		log.info(String.format("Logging in as user %d", accountId));
+		accountService.loginAsUser(accountId);
+		return redirect("/");
 	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")

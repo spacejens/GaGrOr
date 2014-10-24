@@ -24,6 +24,9 @@
 						<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
 							<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit account</a>
 						</li>
+						<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
+							<a href="#" th:href="@{/account/login/{accountId}(accountId=${contact.id})}">Log in as user</a>
+						</li>
 					</ul>
 				</td>
 			</tr>

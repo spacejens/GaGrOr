@@ -32,6 +32,16 @@ public class AccountService {
 	@Autowired
 	AccessControlService accessControlService;
 
+	public void loginAsUser(final Long accountId) {
+		final AccountEntity entity = accountRepository.findById(accountId);
+		if(null != entity) {
+			log.debug(String.format("Loaded account ID %d (%s) for logging in", accountId, entity.getUsername()));
+			accessControlService.logInAs(entity);
+		} else {
+			log.error(String.format("Failed to load account ID %d for editing", accountId));
+		}
+	}
+
 	public AccountEditOutput loadAccountForEditing(final Long accountId) {
 		final AccountEntity entity = accountRepository.findById(accountId);
 		if(null != entity) {

@@ -89,6 +89,18 @@ public class AccountServiceUnitTest {
 	BindingResult bindingResult;
 
 	@Test
+	public void loginAsUser_ok() {
+		instance.loginAsUser(ACCOUNT_ID);
+		verify(accessControlService).logInAs(account);
+	}
+
+	@Test
+	public void loginAsUser_notFound() {
+		instance.loginAsUser(ANOTHER_ID);
+		verify(accessControlService, never()).logInAs(any(AccountEntity.class));
+	}
+
+	@Test
 	public void loadAccountForEditing_ok() {
 		final AccountEditOutput result = instance.loadAccountForEditing(ACCOUNT_ID);
 		assertNotNull("Failed to load account", result);
