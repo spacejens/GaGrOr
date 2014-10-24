@@ -38,14 +38,17 @@ import com.gagror.data.account.AccountType;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactReferenceOutput;
 import com.gagror.data.account.ContactType;
+import com.gagror.data.account.ContactViewOutput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceUnitTest {
 
 	private static final Long ACCOUNT_ID = 47L;
-	private static final Long CONTACT_ID = 67L;
-	private static final Long ANOTHER_ID = 23L;
+	private static final Long CONTACT_ACCOUNT_ID = 67L;
+	private static final Long ANOTHER_ACCOUNT_ID = 23L;
+	private static final Long CONTACT_ID = 111L;
+	private static final Long ANOTHER_CONTACT_ID = 222L;
 
 	private static final Long VERSION = 3L;
 
@@ -96,7 +99,7 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void loginAsUser_notFound() {
-		instance.loginAsUser(ANOTHER_ID);
+		instance.loginAsUser(ANOTHER_ACCOUNT_ID);
 		verify(accessControlService, never()).logInAs(any(AccountEntity.class));
 	}
 
@@ -109,7 +112,7 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void loadAccountForEditing_notFound() {
-		final AccountEditOutput result = instance.loadAccountForEditing(ANOTHER_ID);
+		final AccountEditOutput result = instance.loadAccountForEditing(ANOTHER_ACCOUNT_ID);
 		assertNull("Should not have found any account", result);
 	}
 
@@ -255,7 +258,7 @@ public class AccountServiceUnitTest {
 		account.getContacts().add(secondContact);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadContacts();
-		assertContactAccountIDs(contacts, secondContactId, CONTACT_ID);
+		assertContactAccountIDs(contacts, secondContactId, CONTACT_ACCOUNT_ID);
 	}
 
 	@Test
@@ -273,7 +276,7 @@ public class AccountServiceUnitTest {
 		account.getContacts().add(secondContact);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadSentContactRequests();
-		assertContactAccountIDs(contacts, secondContactId, ANOTHER_ID);
+		assertContactAccountIDs(contacts, secondContactId, ANOTHER_ACCOUNT_ID);
 	}
 
 	@Test
@@ -295,7 +298,7 @@ public class AccountServiceUnitTest {
 		account.getIncomingContacts().add(secondIncomingRequest);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadReceivedContactRequests();
-		assertContactAccountIDs(contacts, secondIncomingRequestAccountId, ANOTHER_ID);
+		assertContactAccountIDs(contacts, secondIncomingRequestAccountId, ANOTHER_ACCOUNT_ID);
 	}
 
 	@Test
@@ -328,6 +331,19 @@ public class AccountServiceUnitTest {
 		assertTrue("Missing sort order", orderIterator.hasNext());
 		assertEquals("Unexpected sort order", "username", orderIterator.next().getProperty());
 		assertFalse("Should only sort on username", orderIterator.hasNext());
+	}
+
+	@Test
+	public void loadContact_ok() {
+		final ContactViewOutput result = instance.loadContact(CONTACT_ID);
+		assertNotNull("Contact should have been loaded", result);
+		assertEquals("Unexpected contact loaded", CONTACT_ID, result.getContactId());
+	}
+
+	@Test
+	public void loadContact_notFound() {
+		final ContactViewOutput result = instance.loadContact(9574L);
+		assertNull("Contact should not have been loaded", result);
 	}
 
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
@@ -363,14 +379,16 @@ public class AccountServiceUnitTest {
 		when(account.getVersion()).thenReturn(VERSION);
 		when(account.getUsername()).thenReturn(ENTITY_USERNAME);
 		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
-		when(contactAccount.getId()).thenReturn(CONTACT_ID);
-		when(anotherAccount.getId()).thenReturn(ANOTHER_ID);
+		when(contactAccount.getId()).thenReturn(CONTACT_ACCOUNT_ID);
+		when(anotherAccount.getId()).thenReturn(ANOTHER_ACCOUNT_ID);
 		when(anotherAccount.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 		// Set up a contact
+		when(contact.getId()).thenReturn(CONTACT_ID);
 		when(contact.getOwner()).thenReturn(account);
 		when(contact.getContact()).thenReturn(contactAccount);
 		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
 		// Set up another contact
+		when(anotherContact.getId()).thenReturn(ANOTHER_CONTACT_ID);
 		when(anotherContact.getOwner()).thenReturn(account);
 		when(anotherContact.getContact()).thenReturn(anotherAccount);
 		when(anotherContact.getContactType()).thenReturn(ContactType.REQUESTED);

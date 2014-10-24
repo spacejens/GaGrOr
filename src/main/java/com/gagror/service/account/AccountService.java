@@ -19,6 +19,7 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactReferenceOutput;
+import com.gagror.data.account.ContactViewOutput;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
@@ -171,5 +172,16 @@ public class AccountService {
 			output.add(new ContactReferenceOutput(account));
 		}
 		return output;
+	}
+
+	public ContactViewOutput loadContact(final Long contactId) {
+		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+		for(final ContactEntity contact : requestAccount.getContacts()) {
+			if(contact.getId().equals(contactId)) {
+				return new ContactViewOutput(contact);
+			}
+		}
+		log.error(String.format("Failed to find contact %d for account %d", contactId, requestAccount.getId()));
+		return null;
 	}
 }

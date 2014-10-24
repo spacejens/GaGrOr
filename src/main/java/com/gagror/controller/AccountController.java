@@ -35,19 +35,9 @@ public class AccountController extends AbstractController {
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping("/contacts")
 	public String contacts(final Model model) {
-		log.info("Viewing contacts page");
+		log.info("Viewing contact list page");
 		return "contacts";
 	}
-
-	// TODO Add page for viewing a contact (linked from actions in contacts table)
-
-	// TODO Add action to send contact requests
-
-	// TODO Add action to accept contact requests
-
-	// TODO Add action to decline contact requests
-
-	// TODO Add action to delete sent contact request or contact
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
@@ -72,6 +62,22 @@ public class AccountController extends AbstractController {
 	public List<ContactReferenceOutput> getNotMyContacts() {
 		return accountService.loadAccountsNotContacts();
 	}
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContact')")
+	@RequestMapping("/viewcontact/{contactId}")
+	public String viewContact(@PathVariable("contactId") final Long contactId, final Model model) {
+		log.info(String.format("Viewing contact %d", contactId));
+		model.addAttribute("contact", accountService.loadContact(contactId));
+		return "view_contact";
+	}
+
+	// TODO Add action to send contact requests
+
+	// TODO Add action to accept contact requests
+
+	// TODO Add action to decline contact requests
+
+	// TODO Add action to delete sent contact request or contact
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
 	@RequestMapping(value="/login/{accountId}", method=RequestMethod.GET)
