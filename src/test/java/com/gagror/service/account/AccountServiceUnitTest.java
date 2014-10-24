@@ -367,7 +367,7 @@ public class AccountServiceUnitTest {
 		final int sizeAfter = account.getContacts().size();
 		assertEquals("Should have added one contact", sizeBefore+1, sizeAfter);
 		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
-		assertEquals("Should not have added any incoming contact", incomingSizeBefore, incomingSizeAfter);
+		assertEquals("Should have added one incoming contact", incomingSizeBefore+1, incomingSizeAfter);
 	}
 
 	@Test
@@ -409,6 +409,27 @@ public class AccountServiceUnitTest {
 		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
 		final int incomingSizeAfter = account.getIncomingContacts().size();
 		assertEquals("Should not have added any incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
+	@Test
+	public void deleteContact_ok() {
+		final int sizeBefore = account.getContacts().size();
+		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
+		instance.deleteContact(CONTACT_ID);
+		verify(contactRepository).delete(contact);
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should have removed one contact", sizeBefore-1, sizeAfter);
+		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
+		assertEquals("Should have removed one incoming contact", incomingSizeBefore-1, incomingSizeAfter);
+	}
+
+	@Test
+	public void deleteContact_contactNotFound() {
+		final int sizeBefore = account.getContacts().size();
+		instance.deleteContact(9999L);
+		verify(contactRepository, never()).delete(any(ContactEntity.class));
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should not have removed any contact", sizeBefore, sizeAfter);
 	}
 
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
@@ -457,13 +478,17 @@ public class AccountServiceUnitTest {
 		when(anotherContact.getOwner()).thenReturn(account);
 		when(anotherContact.getContact()).thenReturn(anotherAccount);
 		when(anotherContact.getContactType()).thenReturn(ContactType.REQUESTED);
-		// Set up contact collection
+		// Set up contact collections for account
 		final Set<ContactEntity> contacts = new HashSet<>();
 		contacts.add(contact);
 		contacts.add(anotherContact);
 		when(account.getContacts()).thenReturn(contacts);
 		final Set<ContactEntity> incomingContacts = new HashSet<>();
 		when(account.getIncomingContacts()).thenReturn(incomingContacts);
+		// Set up incoming contact collection for contact account
+		final Set<ContactEntity> contactIncomingContacts = new HashSet<>();
+		contactIncomingContacts.add(contact);
+		when(contactAccount.getIncomingContacts()).thenReturn(contactIncomingContacts);
 	}
 
 	@Before

@@ -83,7 +83,13 @@ public class AccountController extends AbstractController {
 
 	// TODO Add action to decline contact requests
 
-	// TODO Add action to delete sent contact request or contact
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContact')")
+	@RequestMapping("/delete/{contactId}")
+	public RedirectView deleteContact(@PathVariable("contactId") final Long contactId) {
+		log.info(String.format("Deleting contact %d", contactId));
+		accountService.deleteContact(contactId);
+		return redirect("/account/contacts");
+	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
 	@RequestMapping(value="/login/{accountId}", method=RequestMethod.GET)

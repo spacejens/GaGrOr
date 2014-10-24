@@ -204,4 +204,17 @@ public class AccountService {
 			contactRepository.save(contact);
 		}
 	}
+
+	public void deleteContact(final Long contactId) {
+		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+		for(final ContactEntity contact : requestAccount.getContacts()) {
+			if(contactId.equals(contact.getId())) {
+				requestAccount.getContacts().remove(contact);
+				contact.getContact().getIncomingContacts().remove(contact);
+				contactRepository.delete(contact);
+				log.debug(String.format("Deleted contact %d for account %d", contactId, requestAccount.getId()));
+				break;
+			}
+		}
+	}
 }
