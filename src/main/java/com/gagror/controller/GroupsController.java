@@ -18,4 +18,14 @@ public class GroupsController extends AbstractController {
 		log.info("Viewing groups list page");
 		return "groups";
 	}
+
+	// TODO Add data model for groups and membership, with different membership status (invited, member, group owner)
+
+	// TODO List groups on the page
+
+	// TODO List received invitations for groups on the page
+
+	// TODO Allow creating groups on the page
+
+	// TODO Allow inviting other users to your group
 }
