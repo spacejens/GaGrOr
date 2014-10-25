@@ -10,18 +10,13 @@ import com.gagror.data.account.AccountRepository;
 
 @CommonsLog
 @Component
-public class PermissionEditAccount extends AbstractGagrorPermission<Long, AccountEntity> {
+public class PermissionEditAccount extends AbstractGagrorPermissionLongId<AccountEntity> {
 
 	@Autowired
 	AccountRepository accountRepository;
 
 	public PermissionEditAccount() {
 		super("editAccount", AccountEntity.class);
-	}
-
-	@Override
-	protected Long parseId(final String rawId) {
-		return Long.parseLong(rawId);
 	}
 
 	@Override

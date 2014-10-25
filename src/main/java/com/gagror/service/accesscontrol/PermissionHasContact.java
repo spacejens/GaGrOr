@@ -9,15 +9,10 @@ import com.gagror.data.account.ContactEntity;
 
 @CommonsLog
 @Component
-public class PermissionHasContact extends AbstractGagrorPermission<Long, ContactEntity> {
+public class PermissionHasContact extends AbstractGagrorPermissionLongId<ContactEntity> {
 
 	public PermissionHasContact() {
 		super("hasContact", ContactEntity.class);
-	}
-
-	@Override
-	protected Long parseId(final String rawId) {
-		return Long.parseLong(rawId);
 	}
 
 	@Override
