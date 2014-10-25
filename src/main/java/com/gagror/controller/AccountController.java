@@ -79,9 +79,21 @@ public class AccountController extends AbstractController {
 		return redirect("/account/contacts");
 	}
 
-	// TODO Add action to accept contact requests
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContactRequest')")
+	@RequestMapping("/accept/{contactId}")
+	public RedirectView acceptContactRequest(@PathVariable("contactId") final Long contactId) {
+		log.info(String.format("Accepting contact request %d", contactId));
+		accountService.acceptContactRequest(contactId);
+		return redirect("/account/contacts");
+	}
 
-	// TODO Add action to decline contact requests
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContactRequest')")
+	@RequestMapping("/decline/{contactId}")
+	public RedirectView declineContactRequest(@PathVariable("contactId") final Long contactId) {
+		log.info(String.format("Declining contact request %d", contactId));
+		accountService.declineContactRequest(contactId);
+		return redirect("/account/contacts");
+	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContact')")
 	@RequestMapping("/delete/{contactId}")

@@ -27,6 +27,12 @@
 						<li th:unless="${contact.contactType}">
 							<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}">Send contact request</a>
 						</li>
+						<li th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
+							<a href="contacts.html" th:href="@{/account/accept/{contactId}(contactId=${contact.contactId})}">Accept request</a>
+						</li>
+						<li th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
+							<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}">Decline request</a>
+						</li>
 						<li th:if="${contact.contactType != null and not contact.incoming}">
 							<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}">Delete</a>
 						</li>

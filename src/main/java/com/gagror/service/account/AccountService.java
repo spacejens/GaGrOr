@@ -3,6 +3,7 @@ package com.gagror.service.account;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import lombok.extern.apachecommons.CommonsLog;
 
@@ -185,6 +186,8 @@ public class AccountService {
 		return true;
 	}
 
+	// TODO Extract the various contact ID searching loops to a private method
+
 	public ContactViewOutput loadContact(final Long contactId) {
 		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
 		for(final ContactEntity contact : requestAccount.getContacts()) {
@@ -206,15 +209,35 @@ public class AccountService {
 	}
 
 	public void deleteContact(final Long contactId) {
-		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
-		for(final ContactEntity contact : requestAccount.getContacts()) {
+		deleteContact(contactId, accessControlService.getRequestAccountEntity().getContacts());
+	}
+
+	private void deleteContact(final Long contactId, final Set<ContactEntity> contacts) {
+		for(final ContactEntity contact : contacts) {
 			if(contactId.equals(contact.getId())) {
-				requestAccount.getContacts().remove(contact);
+				log.debug(String.format("Deleting contact %d for account %d, owned by %d", contactId, contact.getContact().getId(), contact.getOwner().getId()));
+				contact.getOwner().getContacts().remove(contact);
 				contact.getContact().getIncomingContacts().remove(contact);
 				contactRepository.delete(contact);
-				log.debug(String.format("Deleted contact %d for account %d", contactId, requestAccount.getId()));
-				break;
+				return;
 			}
 		}
+	}
+
+	public void declineContactRequest(final Long contactId) {
+		deleteContact(contactId, accessControlService.getRequestAccountEntity().getIncomingContacts());
+	}
+
+	public void acceptContactRequest(final Long contactId) {
+		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getIncomingContacts()) {
+			if(contactId.equals(contact.getId()) && contact.getContactType().isRequest()) {
+				log.debug(String.format("Accepting contact request %d from account %d to %d", contactId, contact.getOwner().getId(), contact.getContact().getId()));
+				contact.setContactType(ContactType.APPROVED);
+				final ContactEntity mirroredContact = new ContactEntity(contact.getContact(), ContactType.APPROVED, contact.getOwner());
+				contactRepository.save(mirroredContact);
+				return;
+			}
+		}
+		log.error(String.format("Failed to find incoming contact request %d", contactId));
 	}
 }

@@ -432,6 +432,89 @@ public class AccountServiceUnitTest {
 		assertEquals("Should not have removed any contact", sizeBefore, sizeAfter);
 	}
 
+	@Test
+	public void acceptContactRequest_ok() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
+		when(contact.getContactType()).thenReturn(ContactType.REQUESTED);
+		instance.acceptContactRequest(CONTACT_ID);
+		verify(contact).setContactType(ContactType.APPROVED);
+		final ArgumentCaptor<ContactEntity> mirroredContact = ArgumentCaptor.forClass(ContactEntity.class);
+		verify(contactRepository).save(mirroredContact.capture());
+		assertTrue("Mirrored contact should be added to acting account", contactAccount.getContacts().contains(mirroredContact.getValue()));
+		assertTrue("Mirrored contact should be added as incoming for requesting account", account.getIncomingContacts().contains(mirroredContact.getValue()));
+	}
+
+	@Test
+	public void acceptContactRequest_alreadyAccepted() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
+		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
+		final int sizeBefore = contactAccount.getContacts().size();
+		final int incomingSizeBefore = account.getIncomingContacts().size();
+		instance.acceptContactRequest(CONTACT_ID);
+		verify(contact, never()).setContactType(any(ContactType.class));
+		verify(contactRepository, never()).save(any(ContactEntity.class));
+		final int sizeAfter = contactAccount.getContacts().size();
+		assertEquals("Should not have added contact", sizeBefore, sizeAfter);
+		final int incomingSizeAfter = account.getIncomingContacts().size();
+		assertEquals("Should not have added incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
+	@Test
+	public void acceptContactRequest_notFound() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
+		final int sizeBefore = contactAccount.getContacts().size();
+		final int incomingSizeBefore = account.getIncomingContacts().size();
+		instance.acceptContactRequest(99999L);
+		verify(contact, never()).setContactType(any(ContactType.class));
+		verify(contactRepository, never()).save(any(ContactEntity.class));
+		final int sizeAfter = contactAccount.getContacts().size();
+		assertEquals("Should not have added contact", sizeBefore, sizeAfter);
+		final int incomingSizeAfter = account.getIncomingContacts().size();
+		assertEquals("Should not have added incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
+	@Test
+	public void declineContactRequest_ok() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
+		when(contact.getContactType()).thenReturn(ContactType.REQUESTED);
+		final int sizeBefore = account.getContacts().size();
+		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
+		instance.declineContactRequest(CONTACT_ID);
+		verify(contactRepository).delete(contact);
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should have removed contact", sizeBefore-1, sizeAfter);
+		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
+		assertEquals("Should have removed incoming contact", incomingSizeBefore-1, incomingSizeAfter);
+	}
+
+	@Test
+	public void declineContactRequest_alreadyAccepted() {
+		// Behavior is currently to delete the contact anyway
+		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
+		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
+		final int sizeBefore = account.getContacts().size();
+		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
+		instance.declineContactRequest(CONTACT_ID);
+		verify(contactRepository).delete(contact);
+		final int sizeAfter = account.getContacts().size();
+		assertEquals("Should have removed contact", sizeBefore-1, sizeAfter);
+		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
+		assertEquals("Should have removed incoming contact", incomingSizeBefore-1, incomingSizeAfter);
+	}
+
+	@Test
+	public void declineContactRequest_notFound() {
+		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
+		final int sizeBefore = contactAccount.getContacts().size();
+		final int incomingSizeBefore = account.getIncomingContacts().size();
+		instance.declineContactRequest(99999L);
+		verify(contactRepository, never()).delete(any(ContactEntity.class));
+		final int sizeAfter = contactAccount.getContacts().size();
+		assertEquals("Should not have deleted contact", sizeBefore, sizeAfter);
+		final int incomingSizeAfter = account.getIncomingContacts().size();
+		assertEquals("Should not have deleted incoming contact", incomingSizeBefore, incomingSizeAfter);
+	}
+
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
 		final List<Long> expected = Arrays.asList(accountIDs);
 		final List<Long> actual = new ArrayList<>();
@@ -485,7 +568,9 @@ public class AccountServiceUnitTest {
 		when(account.getContacts()).thenReturn(contacts);
 		final Set<ContactEntity> incomingContacts = new HashSet<>();
 		when(account.getIncomingContacts()).thenReturn(incomingContacts);
-		// Set up incoming contact collection for contact account
+		// Set up contact collections for contact account
+		final Set<ContactEntity> contactContacts = new HashSet<>();
+		when(contactAccount.getContacts()).thenReturn(contactContacts);
 		final Set<ContactEntity> contactIncomingContacts = new HashSet<>();
 		contactIncomingContacts.add(contact);
 		when(contactAccount.getIncomingContacts()).thenReturn(contactIncomingContacts);
