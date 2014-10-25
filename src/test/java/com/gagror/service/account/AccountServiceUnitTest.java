@@ -50,6 +50,7 @@ public class AccountServiceUnitTest {
 	private static final Long CONTACT_ACCOUNT_ID = 67L;
 	private static final Long ANOTHER_ACCOUNT_ID = 23L;
 	private static final Long CONTACT_ID = 111L;
+	private static final Long MIRRORED_CONTACT_ID = 112L;
 	private static final Long ANOTHER_CONTACT_ID = 222L;
 
 	private static final Long VERSION = 3L;
@@ -80,6 +81,9 @@ public class AccountServiceUnitTest {
 
 	@Mock
 	ContactEntity contact;
+
+	@Mock
+	ContactEntity mirroredContact;
 
 	@Mock
 	AccountEntity contactAccount;
@@ -356,6 +360,9 @@ public class AccountServiceUnitTest {
 	@Test
 	public void createContactRequest_ok() {
 		account.getContacts().remove(contact);
+		contactAccount.getIncomingContacts().remove(contact);
+		account.getIncomingContacts().remove(mirroredContact);
+		contactAccount.getContacts().remove(mirroredContact);
 		final int sizeBefore = account.getContacts().size();
 		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
 		instance.createContactRequest(CONTACT_ACCOUNT_ID);
@@ -413,14 +420,17 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void deleteContact_ok() {
-		final int sizeBefore = account.getContacts().size();
-		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
+		assertTrue("Contact should initially be present for account", account.getContacts().contains(contact));
+		assertTrue("Contact should initially be present for incoming", contactAccount.getIncomingContacts().contains(contact));
+		assertTrue("Mirrored contact should initially be present for incoming", account.getIncomingContacts().contains(mirroredContact));
+		assertTrue("Mirrored contact should initially be present for account", contactAccount.getContacts().contains(mirroredContact));
 		instance.deleteContact(CONTACT_ID);
 		verify(contactRepository).delete(contact);
-		final int sizeAfter = account.getContacts().size();
-		assertEquals("Should have removed one contact", sizeBefore-1, sizeAfter);
-		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
-		assertEquals("Should have removed one incoming contact", incomingSizeBefore-1, incomingSizeAfter);
+		verify(contactRepository).delete(mirroredContact);
+		assertFalse("Contact should have been removed from account", account.getContacts().contains(contact));
+		assertFalse("Contact should have been removed from incoming", contactAccount.getIncomingContacts().contains(contact));
+		assertFalse("Mirrored contact should have been removed from incoming", account.getIncomingContacts().contains(mirroredContact));
+		assertFalse("Mirrored contact should have been removed from account", contactAccount.getContacts().contains(mirroredContact));
 	}
 
 	@Test
@@ -489,17 +499,18 @@ public class AccountServiceUnitTest {
 
 	@Test
 	public void declineContactRequest_alreadyAccepted() {
-		// Behavior is currently to delete the contact anyway
-		when(accessControlService.getRequestAccountEntity()).thenReturn(contactAccount);
-		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
-		final int sizeBefore = account.getContacts().size();
-		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
-		instance.declineContactRequest(CONTACT_ID);
+		// Behavior is currently to delete the contact anyway, and also delete the mirrored contact
+		assertTrue("Contact should initially be present for account", account.getContacts().contains(contact));
+		assertTrue("Contact should initially be present for incoming", contactAccount.getIncomingContacts().contains(contact));
+		assertTrue("Mirrored contact should initially be present for incoming", account.getIncomingContacts().contains(mirroredContact));
+		assertTrue("Mirrored contact should initially be present for account", contactAccount.getContacts().contains(mirroredContact));
+		instance.declineContactRequest(MIRRORED_CONTACT_ID);
+		verify(contactRepository).delete(mirroredContact);
 		verify(contactRepository).delete(contact);
-		final int sizeAfter = account.getContacts().size();
-		assertEquals("Should have removed contact", sizeBefore-1, sizeAfter);
-		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
-		assertEquals("Should have removed incoming contact", incomingSizeBefore-1, incomingSizeAfter);
+		assertFalse("Contact should have been removed from account", account.getContacts().contains(contact));
+		assertFalse("Contact should have been removed from incoming", contactAccount.getIncomingContacts().contains(contact));
+		assertFalse("Mirrored contact should have been removed from incoming", account.getIncomingContacts().contains(mirroredContact));
+		assertFalse("Mirrored contact should have been removed from account", contactAccount.getContacts().contains(mirroredContact));
 	}
 
 	@Test
@@ -556,6 +567,11 @@ public class AccountServiceUnitTest {
 		when(contact.getOwner()).thenReturn(account);
 		when(contact.getContact()).thenReturn(contactAccount);
 		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
+		// Set up the mirrored contact
+		when(mirroredContact.getId()).thenReturn(MIRRORED_CONTACT_ID);
+		when(mirroredContact.getOwner()).thenReturn(contactAccount);
+		when(mirroredContact.getContact()).thenReturn(account);
+		when(mirroredContact.getContactType()).thenReturn(ContactType.APPROVED);
 		// Set up another contact
 		when(anotherContact.getId()).thenReturn(ANOTHER_CONTACT_ID);
 		when(anotherContact.getOwner()).thenReturn(account);
@@ -567,9 +583,11 @@ public class AccountServiceUnitTest {
 		contacts.add(anotherContact);
 		when(account.getContacts()).thenReturn(contacts);
 		final Set<ContactEntity> incomingContacts = new HashSet<>();
+		incomingContacts.add(mirroredContact);
 		when(account.getIncomingContacts()).thenReturn(incomingContacts);
 		// Set up contact collections for contact account
 		final Set<ContactEntity> contactContacts = new HashSet<>();
+		contactContacts.add(mirroredContact);
 		when(contactAccount.getContacts()).thenReturn(contactContacts);
 		final Set<ContactEntity> contactIncomingContacts = new HashSet<>();
 		contactIncomingContacts.add(contact);

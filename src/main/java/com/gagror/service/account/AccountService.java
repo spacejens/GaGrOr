@@ -169,20 +169,24 @@ public class AccountService {
 		// Filter out contacts
 		for(final ContactEntity contact : requestAccount.getContacts()) {
 			if(contact.getContact().equals(account)) {
+				log.trace(String.format("Account %d (%s) is contact account", account.getId(), account.getUsername()));
 				return false;
 			}
 		}
 		// Filter out incoming contact requests
 		for(final ContactEntity incoming : requestAccount.getIncomingContacts()) {
 			if(incoming.getOwner().equals(account)) {
+				log.trace(String.format("Account %d (%s) is incoming contact account", account.getId(), account.getUsername()));
 				return false;
 			}
 		}
 		// Filter out the user's own account
 		if(requestAccount.equals(account)) {
+			log.trace(String.format("Account %d (%s) is own account", account.getId(), account.getUsername()));
 			return false;
 		}
 		// Account was not filtered out
+		log.trace(String.format("Account %d (%s) is non contact account", account.getId(), account.getUsername()));
 		return true;
 	}
 
@@ -221,6 +225,15 @@ public class AccountService {
 	private void deleteContact(final Long contactId, final Set<ContactEntity> contacts) {
 		final ContactEntity contact = findContact(contacts, contactId);
 		if(null != contact) {
+			// Also delete the mirrored contact if it exists
+			for(final ContactEntity mirroredContact : contact.getOwner().getIncomingContacts()) {
+				if(mirroredContact.getOwner().equals(contact.getContact())) {
+					log.debug(String.format("Deleting mirrored contact %d for account %d, owned by %d", mirroredContact.getId(), mirroredContact.getContact().getId(), mirroredContact.getOwner().getId()));
+					mirroredContact.getOwner().getContacts().remove(mirroredContact);
+					mirroredContact.getContact().getIncomingContacts().remove(mirroredContact);
+					contactRepository.delete(mirroredContact);
+				}
+			}
 			log.debug(String.format("Deleting contact %d for account %d, owned by %d", contactId, contact.getContact().getId(), contact.getOwner().getId()));
 			contact.getOwner().getContacts().remove(contact);
 			contact.getContact().getIncomingContacts().remove(contact);
