@@ -4,10 +4,14 @@
 <body>
 	<div th:fragment="mainmenu" id="mainmenu">
 		<form id="logout-form" th:action="@{/access/logout}" method="post" style="display: none;"></form>
-		<nav th:if="${currentUser}" class="icon-bar four-up">
+		<nav th:if="${currentUser}" class="icon-bar five-up">
 			<a class="item" href="../about.html" th:href="@{/}">
 				<i class="fi-info"></i>
 				<label>Info</label>
+			</a>
+			<a class="item" href="../groups.html" th:href="@{/groups/list}">
+				<i class="fi-torsos-all"></i>
+				<label>Groups</label>
 			</a>
 			<a class="item" href="../contacts.html" th:href="@{/account/contacts}">
 				<i class="fi-address-book"></i>
