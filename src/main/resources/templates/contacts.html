@@ -24,7 +24,7 @@
 					<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}">Decline request</a>
 				</li>
 				<li th:if="${contact.contactType != null and not contact.incoming}">
-					<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}">Delete</a>
+					<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}" onclick="return window.confirm('Are you sure?');">Delete</a>
 				</li>
 				<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
 					<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit account</a>
