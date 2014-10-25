@@ -186,14 +186,20 @@ public class AccountService {
 		return true;
 	}
 
-	// TODO Extract the various contact ID searching loops to a private method
+	private ContactEntity findContact(final Set<ContactEntity> contacts, final Long contactId) {
+		for(final ContactEntity contact : contacts) {
+			if(contact.getId().equals(contactId)) {
+				return contact;
+			}
+		}
+		return null;
+	}
 
 	public ContactViewOutput loadContact(final Long contactId) {
 		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
-		for(final ContactEntity contact : requestAccount.getContacts()) {
-			if(contact.getId().equals(contactId)) {
-				return new ContactViewOutput(contact);
-			}
+		final ContactEntity contact = findContact(requestAccount.getContacts(), contactId);
+		if(null != contact) {
+			return new ContactViewOutput(contact);
 		}
 		log.error(String.format("Failed to find contact %d for account %d", contactId, requestAccount.getId()));
 		return null;
@@ -213,14 +219,13 @@ public class AccountService {
 	}
 
 	private void deleteContact(final Long contactId, final Set<ContactEntity> contacts) {
-		for(final ContactEntity contact : contacts) {
-			if(contactId.equals(contact.getId())) {
-				log.debug(String.format("Deleting contact %d for account %d, owned by %d", contactId, contact.getContact().getId(), contact.getOwner().getId()));
-				contact.getOwner().getContacts().remove(contact);
-				contact.getContact().getIncomingContacts().remove(contact);
-				contactRepository.delete(contact);
-				return;
-			}
+		final ContactEntity contact = findContact(contacts, contactId);
+		if(null != contact) {
+			log.debug(String.format("Deleting contact %d for account %d, owned by %d", contactId, contact.getContact().getId(), contact.getOwner().getId()));
+			contact.getOwner().getContacts().remove(contact);
+			contact.getContact().getIncomingContacts().remove(contact);
+			contactRepository.delete(contact);
+			return;
 		}
 	}
 
@@ -229,14 +234,13 @@ public class AccountService {
 	}
 
 	public void acceptContactRequest(final Long contactId) {
-		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getIncomingContacts()) {
-			if(contactId.equals(contact.getId()) && contact.getContactType().isRequest()) {
-				log.debug(String.format("Accepting contact request %d from account %d to %d", contactId, contact.getOwner().getId(), contact.getContact().getId()));
-				contact.setContactType(ContactType.APPROVED);
-				final ContactEntity mirroredContact = new ContactEntity(contact.getContact(), ContactType.APPROVED, contact.getOwner());
-				contactRepository.save(mirroredContact);
-				return;
-			}
+		final ContactEntity contact = findContact(accessControlService.getRequestAccountEntity().getIncomingContacts(), contactId);
+		if(null != contact && contact.getContactType().isRequest()) {
+			log.debug(String.format("Accepting contact request %d from account %d to %d", contactId, contact.getOwner().getId(), contact.getContact().getId()));
+			contact.setContactType(ContactType.APPROVED);
+			final ContactEntity mirroredContact = new ContactEntity(contact.getContact(), ContactType.APPROVED, contact.getOwner());
+			contactRepository.save(mirroredContact);
+			return;
 		}
 		log.error(String.format("Failed to find incoming contact request %d", contactId));
 	}
