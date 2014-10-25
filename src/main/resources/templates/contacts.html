@@ -6,7 +6,7 @@
 	<h1>Contacts</h1>
 	<p th:if="${#lists.isEmpty(contacts)}">You have no contacts</p>
 	<div th:fragment="contactTable (contacts)" th:unless="${#lists.isEmpty(contacts)}">
-		<p th:each="contact : ${contacts}">
+		<div th:each="contact : ${contacts}">
 			<ul class="breadcrumbs">
 				<li class="current">
 					<span class="fi-torso" th:class="#{${contact.cssClass}}" th:text="${contact.username}">Name</span>
@@ -33,7 +33,7 @@
 					<a href="#" th:href="@{/account/login/{accountId}(accountId=${contact.id})}">Log in as user</a>
 				</li>
 			</ul>
-		</p>
+		</div>
 	</div>
 	<h2 th:unless="${#lists.isEmpty(sentContactRequests)}">Sent contact requests</h2>
 	<table th:replace=":: contactTable (contacts=${sentContactRequests})"></table>
