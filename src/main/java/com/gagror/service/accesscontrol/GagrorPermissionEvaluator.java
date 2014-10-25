@@ -29,6 +29,9 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 	@Autowired
 	PermissionHasContact hasContact;
 
+	@Autowired
+	PermissionHasContactRequest hasContactRequest;
+
 	public GagrorPermissionEvaluator() {
 		this(new HashMap<String, GagrorPermission>());
 	}
@@ -36,6 +39,7 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 	private void initializePermissions() {
 		addPermission(editAccount);
 		addPermission(hasContact);
+		addPermission(hasContactRequest);
 	}
 
 	@Override

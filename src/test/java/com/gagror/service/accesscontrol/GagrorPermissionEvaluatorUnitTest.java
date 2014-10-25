@@ -142,5 +142,6 @@ public class GagrorPermissionEvaluatorUnitTest {
 		// Fill in what would normally be autowired here. The instance will then use these permissions.
 		instanceDefault.editAccount = new PermissionEditAccount();
 		instanceDefault.hasContact = new PermissionHasContact();
+		instanceDefault.hasContactRequest = new PermissionHasContactRequest();
 	}
 }
