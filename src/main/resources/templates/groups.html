@@ -4,6 +4,13 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1>Groups</h1>
+	<dl class="tabs" data-tab="">
+		<dd class="active"><a href="#tablist">My groups</a></dd>
+	</dl>
+	<div class="tabs-content">
+		<div class="content active" id="tablist">
+		</div>
+	</div>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
