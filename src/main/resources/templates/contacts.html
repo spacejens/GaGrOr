@@ -36,12 +36,12 @@
 		</div>
 	</div>
 	<h2 th:unless="${#lists.isEmpty(sentContactRequests)}">Sent contact requests</h2>
-	<table th:replace=":: contactTable (contacts=${sentContactRequests})"></table>
+	<div th:replace=":: contactTable (contacts=${sentContactRequests})"></div>
 	<h2 th:unless="${#lists.isEmpty(receivedContactRequests)}">Received contact requests</h2>
-	<table th:replace=":: contactTable (contacts=${receivedContactRequests})"></table>
+	<div th:replace=":: contactTable (contacts=${receivedContactRequests})"></div>
 	<h2>Other users</h2>
 	<p th:if="${#lists.isEmpty(notMyContacts)}">All users are your contacts</p>
-	<table th:replace=":: contactTable (contacts=${notMyContacts})"></table>
+	<div th:replace=":: contactTable (contacts=${notMyContacts})"></div>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
