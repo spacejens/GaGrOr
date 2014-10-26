@@ -8,11 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
+@ToString // TODO Provide a final implementation of toString for all entities
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @MappedSuperclass
@@ -20,15 +21,15 @@ public abstract class AbstractEntity implements Identifiable<Long> {
 
 	@Id
 	@GeneratedValue
+	@Getter
 	private Long id;
 
-	// TODO Can setter for creation timestamp be something else than public?
 	@Column(nullable = false, insertable = true, updatable = false)
+	@Getter
 	private Date created;
 
-	// TODO Can this callback method be something else than public?
 	@PrePersist
-	public void initializeCreated() {
+	private void initializeCreated() {
 		if(null == created) {
 			created = new Date();
 		}
