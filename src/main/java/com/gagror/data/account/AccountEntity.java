@@ -6,18 +6,15 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import com.gagror.data.Identifiable;
+import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupMemberEntity;
 
 @Data
@@ -25,15 +22,8 @@ import com.gagror.data.group.GroupMemberEntity;
 @Entity
 @ToString(exclude="password")
 @Table(name="account")
-@EqualsAndHashCode(of="id")
-public class AccountEntity implements Identifiable<Long> {
-
-	@Id
-	@GeneratedValue
-	private Long id;
-
-	@Version
-	private Long version;
+@EqualsAndHashCode(of={}, callSuper=true)
+public class AccountEntity extends AbstractEditableEntity {
 
 	@Column(nullable = false)
 	private String username;

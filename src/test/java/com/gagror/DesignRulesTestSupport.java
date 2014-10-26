@@ -1,5 +1,7 @@
 package com.gagror;
 
+import static org.junit.Assert.assertTrue;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.HashSet;
@@ -16,6 +18,10 @@ public abstract class DesignRulesTestSupport {
 			success |= null != annotatedElement.getAnnotation(annotation);
 		}
 		return success;
+	}
+
+	protected void assertSuperclass(final Class<?> clazz, final Class<?> superclass) {
+		assertTrue(String.format("Class %s should have superclass %s", clazz.getCanonicalName(), superclass.getCanonicalName()), superclass.isAssignableFrom(clazz));
 	}
 
 	protected static Iterable<Object[]> parameterizeForAnnotation(final Class<? extends Annotation> annotation) {

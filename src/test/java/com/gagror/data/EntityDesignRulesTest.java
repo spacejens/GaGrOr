@@ -79,6 +79,11 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 		tableToName.put(tableName, name);
 	}
 
+	@Test
+	public void inheritsFromCommonSuperclass() {
+		assertSuperclass(entity, AbstractEntity.class);
+	}
+
 	@Parameters(name="{0}")
 	public static Iterable<Object[]> findEntities() {
 		return parameterizeForAnnotation(Entity.class);

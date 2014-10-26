@@ -2,32 +2,22 @@ package com.gagror.data.account;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import com.gagror.data.Identifiable;
+import com.gagror.data.AbstractEditableEntity;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name="contact")
-@EqualsAndHashCode(of="id")
-public class ContactEntity implements Identifiable<Long> {
-
-	@Id
-	@GeneratedValue
-	private Long id;
-
-	@Version
-	private Long version;
+@EqualsAndHashCode(of={}, callSuper=true)
+public class ContactEntity extends AbstractEditableEntity {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
@@ -39,8 +29,6 @@ public class ContactEntity implements Identifiable<Long> {
 
 	@Column(nullable = false)
 	private ContactType contactType;
-
-	// TODO Add creation timestamp for contacts
 
 	public ContactEntity(final AccountEntity owner, final ContactType contactType, final AccountEntity contact) {
 		setOwner(owner);

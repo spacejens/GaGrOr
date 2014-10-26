@@ -6,31 +6,21 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import com.gagror.data.Identifiable;
+import com.gagror.data.AbstractEditableEntity;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name="gaminggroup") // Table name doesn't match since 'group' is a reserved word
-@EqualsAndHashCode(of="id")
-public class GroupEntity implements Identifiable<Long> {
-
-	@Id
-	@GeneratedValue
-	private Long id;
-
-	@Version
-	private Long version;
+@EqualsAndHashCode(of={}, callSuper=true)
+public class GroupEntity extends AbstractEditableEntity {
 
 	@Column(nullable = false)
 	private String name;

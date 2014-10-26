@@ -75,16 +75,7 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 
 	@Test
 	public void inheritsFromCommonSuperclass() {
-		final Class<AbstractController> expectedSuperclass = AbstractController.class;
-		Class<?> clazz = controller;
-		while(clazz.getSuperclass() != null) {
-			System.out.println(String.format("Class %s inherits from %s", clazz.getCanonicalName(), clazz.getSuperclass().getCanonicalName()));
-			clazz = clazz.getSuperclass();
-			if(clazz.equals(expectedSuperclass)) {
-				return;
-			}
-		}
-		fail(String.format("Class %s does not inherit from %s", name, expectedSuperclass.getCanonicalName()));
+		assertSuperclass(controller, AbstractController.class);
 	}
 
 	@Parameters(name="{0}")
