@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import com.gagror.data.Identifiable;
+import com.gagror.data.group.GroupMemberEntity;
 
 @Data
 @NoArgsConstructor
@@ -57,6 +58,9 @@ public class AccountEntity implements Identifiable<Long> {
 
 	@OneToMany(mappedBy="contact", fetch=FetchType.LAZY)
 	private Set<ContactEntity> incomingContacts;
+
+	@OneToMany(mappedBy="account", fetch=FetchType.LAZY)
+	private Set<GroupMemberEntity> groupMemberships;
 
 	public AccountEntity(final String username, final String encryptedPassword) {
 		setUsername(username);
