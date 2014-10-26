@@ -33,4 +33,16 @@ public class GroupService {
 		Collections.sort(output);
 		return output;
 	}
+
+	public List<GroupListOutput> loadInvitationsList() {
+		log.debug("Loading invitations list");
+		final List<GroupListOutput> output = new ArrayList<>();
+		for(final GroupMemberEntity member : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
+			if(member.getMemberType().isInvitation()) {
+				output.add(new GroupListOutput(member));
+			}
+		}
+		Collections.sort(output);
+		return output;
+	}
 }

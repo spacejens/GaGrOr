@@ -36,7 +36,11 @@ public class GroupsController extends AbstractController {
 		return groupService.loadGroupList();
 	}
 
-	// TODO List received invitations for groups on the page
+	@PreAuthorize(IS_LOGGED_IN)
+	@ModelAttribute("invitations")
+	public List<GroupListOutput> getInvitations() {
+		return groupService.loadInvitationsList();
+	}
 
 	// TODO Allow creating groups on the page
 

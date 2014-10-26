@@ -27,9 +27,11 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="content active" id="tabinvitations">
+		<div class="content" id="tabinvitations">
+			<p th:if="${#lists.isEmpty(invitations)}">You have not received any invitations</p>
+			<table th:replace=":: groupsTable (groups=${invitations})"></table>
 		</div>
-		<div class="content active" id="tabcreate">
+		<div class="content" id="tabcreate">
 		</div>
 	</div>
 	<script th:replace="/fragments/framework :: init"></script>
