@@ -1,6 +1,11 @@
 package com.gagror.data;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
 import lombok.Data;
@@ -16,7 +21,12 @@ public abstract class AbstractEditableEntity extends AbstractEntity {
 	@Version
 	private Long version;
 
-	// TODO Move modified timestamp here, as all editable entities should have it
+	@Column(nullable = false, insertable = true, updatable = true)
+	private Date modified;
 
-	// TODO Auto-set the modified timestamp with a @PrePersist, @PreUpdate callback
+	@PrePersist
+	@PreUpdate
+	private void updateModified() {
+		modified = new Date();
+	}
 }

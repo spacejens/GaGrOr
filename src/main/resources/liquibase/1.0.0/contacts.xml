@@ -13,6 +13,12 @@
 			<column name="version" type="bigint" defaultValueNumeric="0">
 				<constraints nullable="false" />
 			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
 			<column name="owner_id" type="bigint">
 				<constraints nullable="false" />
 			</column>
@@ -20,9 +26,6 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="contact_type" type="tinyint">
-				<constraints nullable="false" />
-			</column>
-			<column name="created" type="datetime">
 				<constraints nullable="false" />
 			</column>
 		</createTable>

@@ -15,6 +15,12 @@
 			<column name="version" type="bigint" defaultValueNumeric="0">
 				<constraints nullable="false" />
 			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
 			<column name="username" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
@@ -28,9 +34,6 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="locked" type="boolean">
-				<constraints nullable="false" />
-			</column>
-			<column name="created" type="datetime">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -54,6 +57,7 @@
 			<column name="active" valueBoolean="true"/>
 			<column name="locked" valueBoolean="false"/>
 			<column name="created" valueComputed="${now}"/>
+			<column name="modified" valueComputed="${now}"/>
 		</insert>
 	</changeSet>
 </databaseChangeLog>
