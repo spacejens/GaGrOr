@@ -10,9 +10,9 @@ import com.gagror.data.PropertyNameDisplayable;
 @RequiredArgsConstructor
 public enum MemberType implements Identifiable<Integer>, PropertyNameDisplayable {
 
-	INVITED(0, false, false),
-	MEMBER(1, true, false),
-	OWNER(2, true, true);
+	INVITED(0, false, false, true),
+	MEMBER(1, true, false, false),
+	OWNER(2, true, true, false);
 
 	private static final EnumIdMapping<Integer, MemberType> IDMAP = new EnumIdMapping<>(MemberType.class);
 
@@ -24,6 +24,9 @@ public enum MemberType implements Identifiable<Integer>, PropertyNameDisplayable
 
 	@Getter
 	private final boolean owner;
+
+	@Getter
+	private final boolean invitation;
 
 	@Override
 	public String getDisplayNameProperty() {

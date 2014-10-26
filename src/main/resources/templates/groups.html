@@ -11,6 +11,21 @@
 	</dl>
 	<div class="tabs-content">
 		<div class="content active" id="tablist">
+			<p th:if="${#lists.isEmpty(groups)}">You are not a member of any groups</p>
+			<table th:fragment="groupsTable (groups)" th:unless="${#lists.isEmpty(groups)}">
+				<thead>
+					<tr>
+						<td>Group name</td>
+						<td>My role</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="group : ${groups}">
+						<td th:text="${group.name}">A group</td>
+						<td th:text="#{${group.memberType.displayNameProperty}}">Member</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		<div class="content active" id="tabinvitations">
 		</div>
