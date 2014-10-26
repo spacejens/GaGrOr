@@ -40,6 +40,8 @@ public class ContactEntity implements Identifiable<Long> {
 	@Column(nullable = false)
 	private ContactType contactType;
 
+	// TODO Add creation timestamp for contacts
+
 	public ContactEntity(final AccountEntity owner, final ContactType contactType, final AccountEntity contact) {
 		setOwner(owner);
 		setContactType(contactType);
