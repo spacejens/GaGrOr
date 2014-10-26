@@ -22,6 +22,9 @@
 			<column name="contact_type" type="tinyint">
 				<constraints nullable="false" />
 			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 

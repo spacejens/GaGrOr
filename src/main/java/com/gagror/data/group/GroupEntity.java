@@ -1,6 +1,5 @@
 package com.gagror.data.group;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -24,9 +23,6 @@ public class GroupEntity extends AbstractEditableEntity {
 
 	@Column(nullable = false)
 	private String name;
-
-	@Column(nullable = false, insertable = true, updatable = false)
-	private Date created;
 
 	@OneToMany(mappedBy="group", fetch=FetchType.LAZY)
 	private Set<GroupMemberEntity> groupMemberships;

@@ -1,6 +1,5 @@
 package com.gagror.data.account;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -40,9 +39,6 @@ public class AccountEntity extends AbstractEditableEntity {
 	@Column(nullable = false)
 	private boolean locked;
 
-	@Column(nullable = false, insertable = true, updatable = false)
-	private Date created;
-
 	@OneToMany(mappedBy="owner", fetch=FetchType.LAZY)
 	private Set<ContactEntity> contacts;
 
@@ -58,6 +54,5 @@ public class AccountEntity extends AbstractEditableEntity {
 		setAccountType(AccountType.STANDARD);
 		setActive(true);
 		setLocked(false);
-		setCreated(new Date());
 	}
 }
