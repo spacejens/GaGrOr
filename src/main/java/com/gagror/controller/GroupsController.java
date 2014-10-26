@@ -45,4 +45,12 @@ public class GroupsController extends AbstractController {
 	// TODO Allow creating groups on the page
 
 	// TODO Allow inviting other users to your group
+
+	// TODO Make it possible to accept invitations to groups
+
+	// TODO Make it possible to decline invitations to groups
+
+	// TODO Make it possible to edit the group membership level of members, or to kick members out
+
+	// TODO Make it possible to leave groups (unless you are the only group owner)
 }
