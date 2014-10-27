@@ -25,6 +25,11 @@ public abstract class AbstractEditableEntity extends AbstractEntity {
 	@Getter
 	private Date modified;
 
+	@Override
+	public String toString() {
+		return String.format("id=%d, version=%d", getId(), getVersion());
+	}
+
 	@PrePersist
 	@PreUpdate
 	private void updateModified() {

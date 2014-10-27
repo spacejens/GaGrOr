@@ -18,8 +18,8 @@ import com.gagror.data.group.GroupMemberEntity;
 
 @Data
 @NoArgsConstructor
+@ToString(of={"username", "accountType"}, callSuper=true)
 @Entity
-@ToString(exclude="password")
 @Table(name="account")
 @EqualsAndHashCode(of={}, callSuper=true)
 public class AccountEntity extends AbstractEditableEntity {

@@ -11,9 +11,7 @@ import javax.persistence.PrePersist;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@ToString // TODO Provide a final implementation of toString for all entities
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
 @MappedSuperclass
@@ -27,6 +25,11 @@ public abstract class AbstractEntity implements Identifiable<Long> {
 	@Column(nullable = false, insertable = true, updatable = false)
 	@Getter
 	private Date created;
+
+	@Override
+	public String toString() {
+		return String.format("id=%d", getId());
+	}
 
 	@PrePersist
 	private void initializeCreated() {

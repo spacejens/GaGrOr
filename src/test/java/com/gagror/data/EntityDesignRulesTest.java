@@ -52,6 +52,11 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 	}
 
 	@Test
+	public void overridesToString() throws Exception {
+		entity.getDeclaredMethod("toString");
+	}
+
+	@Test
 	public void joinColumnNullability() {
 		for(final Field field : entity.getDeclaredFields()) {
 			if(field.isAnnotationPresent(JoinColumn.class)) {

@@ -9,12 +9,14 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.account.AccountEntity;
 
 @Data
 @NoArgsConstructor
+@ToString(of={"group", "account", "memberType"}, callSuper=true)
 @Entity
 @Table(name="groupmember")
 @EqualsAndHashCode(of={}, callSuper=true)

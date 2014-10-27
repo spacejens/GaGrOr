@@ -9,11 +9,13 @@ import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
 
 @Data
 @NoArgsConstructor
+@ToString(of={"owner", "contact", "contactType"}, callSuper=true)
 @Entity
 @Table(name="contact")
 @EqualsAndHashCode(of={}, callSuper=true)
