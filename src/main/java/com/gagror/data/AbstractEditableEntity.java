@@ -8,20 +8,21 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @EqualsAndHashCode(of={}, callSuper=true)
 @MappedSuperclass
 public abstract class AbstractEditableEntity extends AbstractEntity {
 
 	@Version
+	@Getter
 	private Long version;
 
 	@Column(nullable = false, insertable = true, updatable = true)
+	@Getter
 	private Date modified;
 
 	@PrePersist
