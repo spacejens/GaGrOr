@@ -18,4 +18,6 @@ public class PublicController extends AbstractController {
 		log.info("Viewing about page");
 		return "about";
 	}
+
+	// TODO Split about page into separate tabs for different types of info
 }
