@@ -8,24 +8,25 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
 
-@Data
 @NoArgsConstructor
 @ToString(of={"name"}, callSuper=true)
 @Entity
 @Table(name="gaminggroup") // Table name doesn't match since 'group' is a reserved word
-@EqualsAndHashCode(of={}, callSuper=true)
 public class GroupEntity extends AbstractEditableEntity {
 
 	@Column(nullable = false)
+	@Getter
+	@Setter
 	private String name;
 
 	@OneToMany(mappedBy="group", fetch=FetchType.LAZY)
+	@Getter
 	private Set<GroupMemberEntity> groupMemberships;
 }

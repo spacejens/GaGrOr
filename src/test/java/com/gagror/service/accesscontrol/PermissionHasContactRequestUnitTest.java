@@ -57,15 +57,13 @@ public class PermissionHasContactRequestUnitTest {
 	}
 
 	@Before
-	public void setupContacts() {
+	public void setupAccount() {
+		// Set IDs of contacts before attempting to add them to the set
 		when(approvedContact.getId()).thenReturn(APPROVED_CONTACT_ID);
 		when(approvedContact.getContactType()).thenReturn(ContactType.APPROVED);
 		when(requestedContact.getId()).thenReturn(REQUESTED_CONTACT_ID);
 		when(requestedContact.getContactType()).thenReturn(ContactType.REQUESTED);
-	}
-
-	@Before
-	public void setupAccount() {
+		// Create the incoming contact set
 		final Set<ContactEntity> contacts = new HashSet<>();
 		contacts.add(approvedContact);
 		contacts.add(requestedContact);

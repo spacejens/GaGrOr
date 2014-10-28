@@ -41,13 +41,13 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 		assertFalse("No args constructor should not be private", Modifier.isPrivate(noArgsConstructor.getModifiers()));
 	}
 
-	@Test
-	public void overridesEquals() throws Exception {
+	@Test(expected=NoSuchMethodException.class)
+	public void doesntOverrideEquals() throws Exception {
 		entity.getDeclaredMethod("equals", Object.class);
 	}
 
-	@Test
-	public void overridesHashCode() throws Exception {
+	@Test(expected=NoSuchMethodException.class)
+	public void doesntOverrideHashCode() throws Exception {
 		entity.getDeclaredMethod("hashCode");
 	}
 

@@ -33,6 +33,10 @@ public class GroupServiceUnitTest {
 	private static final String SECOND_GROUP_NAME = "Second";
 	private static final String THIRD_GROUP_NAME = "Third";
 	private static final String FOURTH_GROUP_NAME = "Fourth";
+	private static final Long FIRST_MEMBERSHIP_ID = 111L;
+	private static final Long SECOND_MEMBERSHIP_ID = 222L;
+	private static final Long THIRD_MEMBERSHIP_ID = 333L;
+	private static final Long FOURTH_MEMBERSHIP_ID = 444L;
 
 	GroupService instance;
 
@@ -98,33 +102,34 @@ public class GroupServiceUnitTest {
 	}
 
 	@Before
-	public void setupRequestAccount() {
+	public void setupGroups() {
+		when(firstGroup.getId()).thenReturn(FIRST_GROUP_ID);
+		when(firstGroup.getName()).thenReturn(FIRST_GROUP_NAME);
+		when(firstGroupOwner.getId()).thenReturn(FIRST_MEMBERSHIP_ID);
+		when(firstGroupOwner.getGroup()).thenReturn(firstGroup);
+		when(firstGroupOwner.getMemberType()).thenReturn(MemberType.OWNER);
+		when(secondGroup.getId()).thenReturn(SECOND_GROUP_ID);
+		when(secondGroup.getName()).thenReturn(SECOND_GROUP_NAME);
+		when(secondGroupMember.getId()).thenReturn(SECOND_MEMBERSHIP_ID);
+		when(secondGroupMember.getGroup()).thenReturn(secondGroup);
+		when(secondGroupMember.getMemberType()).thenReturn(MemberType.MEMBER);
+		when(thirdGroup.getId()).thenReturn(THIRD_GROUP_ID);
+		when(thirdGroup.getName()).thenReturn(THIRD_GROUP_NAME);
+		when(thirdGroupInvited.getId()).thenReturn(THIRD_MEMBERSHIP_ID);
+		when(thirdGroupInvited.getGroup()).thenReturn(thirdGroup);
+		when(thirdGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
+		when(fourthGroup.getId()).thenReturn(FOURTH_GROUP_ID);
+		when(fourthGroup.getName()).thenReturn(FOURTH_GROUP_NAME);
+		when(fourthGroupInvited.getId()).thenReturn(FOURTH_MEMBERSHIP_ID);
+		when(fourthGroupInvited.getGroup()).thenReturn(fourthGroup);
+		when(fourthGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
+		// Add the memberships to the account
 		final Set<GroupMemberEntity> memberships = new HashSet<>();
 		memberships.add(firstGroupOwner);
 		memberships.add(secondGroupMember);
 		memberships.add(thirdGroupInvited);
 		memberships.add(fourthGroupInvited);
 		when(requestAccount.getGroupMemberships()).thenReturn(memberships);
-	}
-
-	@Before
-	public void setupGroups() {
-		when(firstGroup.getId()).thenReturn(FIRST_GROUP_ID);
-		when(firstGroup.getName()).thenReturn(FIRST_GROUP_NAME);
-		when(firstGroupOwner.getGroup()).thenReturn(firstGroup);
-		when(firstGroupOwner.getMemberType()).thenReturn(MemberType.OWNER);
-		when(secondGroup.getId()).thenReturn(SECOND_GROUP_ID);
-		when(secondGroup.getName()).thenReturn(SECOND_GROUP_NAME);
-		when(secondGroupMember.getGroup()).thenReturn(secondGroup);
-		when(secondGroupMember.getMemberType()).thenReturn(MemberType.MEMBER);
-		when(thirdGroup.getId()).thenReturn(THIRD_GROUP_ID);
-		when(thirdGroup.getName()).thenReturn(THIRD_GROUP_NAME);
-		when(thirdGroupInvited.getGroup()).thenReturn(thirdGroup);
-		when(thirdGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
-		when(fourthGroup.getId()).thenReturn(FOURTH_GROUP_ID);
-		when(fourthGroup.getName()).thenReturn(FOURTH_GROUP_NAME);
-		when(fourthGroupInvited.getGroup()).thenReturn(fourthGroup);
-		when(fourthGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
 	}
 
 	@Before

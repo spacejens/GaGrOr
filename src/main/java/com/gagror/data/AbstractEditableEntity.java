@@ -8,12 +8,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@EqualsAndHashCode(of={}, callSuper=true)
 @MappedSuperclass
 public abstract class AbstractEditableEntity extends AbstractEntity {
 
@@ -27,7 +25,7 @@ public abstract class AbstractEditableEntity extends AbstractEntity {
 
 	@Override
 	public String toString() {
-		return String.format("id=%d, version=%d", getId(), getVersion());
+		return String.format("%s, version=%d", super.toString(), getVersion());
 	}
 
 	@PrePersist
