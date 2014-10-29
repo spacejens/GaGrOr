@@ -1,4 +1,4 @@
-package com.gagror.service.account;
+package com.gagror.service.social;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

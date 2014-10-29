@@ -22,7 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.ContactReferenceOutput;
-import com.gagror.service.account.AccountService;
+import com.gagror.service.social.AccountService;
 
 @Controller
 @RequestMapping("/account")

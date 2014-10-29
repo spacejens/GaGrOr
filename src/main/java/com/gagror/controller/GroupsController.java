@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupListOutput;
-import com.gagror.service.group.GroupService;
+import com.gagror.service.social.GroupService;
 
 @Controller
 @RequestMapping("/groups")

@@ -1,4 +1,4 @@
-package com.gagror.service.account;
+package com.gagror.service.social;
 
 import java.util.ArrayList;
 import java.util.Collections;
