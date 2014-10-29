@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<h1>Create group</h1>
+	<form action="#" th:action="@{/groups/create}" th:object="${groupCreateForm}" method="post">
+		<label>
+			Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+			<input type="text" th:field="*{name}" />
+		</label>
+		<button type="submit">Create group</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

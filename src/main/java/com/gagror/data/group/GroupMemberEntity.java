@@ -34,4 +34,16 @@ public class GroupMemberEntity extends AbstractEditableEntity {
 	@Getter
 	@Setter
 	private MemberType memberType;
+
+	public GroupMemberEntity(
+			final GroupEntity group,
+			final AccountEntity account,
+			final MemberType memberType) {
+		this.group = group;
+		this.account = account;
+		setMemberType(memberType);
+		// Add the new entity to the referencing collections
+		group.getGroupMemberships().add(this);
+		account.getGroupMemberships().add(this);
+	}
 }

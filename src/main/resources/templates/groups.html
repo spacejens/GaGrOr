@@ -7,11 +7,11 @@
 	<dl class="tabs" data-tab="">
 		<dd class="active"><a href="#tablist">My groups</a></dd>
 		<dd><a href="#tabinvitations">Invitations</a></dd>
-		<dd><a href="#tabcreate">Create group</a></dd>
 	</dl>
 	<div class="tabs-content">
 		<div class="content active" id="tablist">
 			<p th:if="${#lists.isEmpty(groups)}">You are not a member of any groups</p>
+			<p><a href="#" th:href="@{/groups/create}">Create group</a></p>
 			<table th:fragment="groupsTable (groups)" th:unless="${#lists.isEmpty(groups)}">
 				<thead>
 					<tr>
@@ -30,8 +30,6 @@
 		<div class="content" id="tabinvitations">
 			<p th:if="${#lists.isEmpty(invitations)}">You have not received any invitations</p>
 			<table th:replace=":: groupsTable (groups=${invitations})"></table>
-		</div>
-		<div class="content" id="tabcreate">
 		</div>
 	</div>
 	<script th:replace="/fragments/framework :: init"></script>

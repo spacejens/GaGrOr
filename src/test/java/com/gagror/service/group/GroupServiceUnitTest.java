@@ -1,6 +1,10 @@
 package com.gagror.service.group;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -12,13 +16,20 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
+import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -33,6 +44,7 @@ public class GroupServiceUnitTest {
 	private static final String SECOND_GROUP_NAME = "Second";
 	private static final String THIRD_GROUP_NAME = "Third";
 	private static final String FOURTH_GROUP_NAME = "Fourth";
+	private static final String NEW_GROUP_NAME = "New group";
 	private static final Long FIRST_MEMBERSHIP_ID = 111L;
 	private static final Long SECOND_MEMBERSHIP_ID = 222L;
 	private static final Long THIRD_MEMBERSHIP_ID = 333L;
@@ -42,6 +54,12 @@ public class GroupServiceUnitTest {
 
 	@Mock
 	AccessControlService accessControlService;
+
+	@Mock
+	GroupRepository groupRepository;
+
+	@Mock
+	GroupMemberRepository groupMemberRepository;
 
 	@Mock
 	AccountEntity requestAccount;
@@ -70,6 +88,12 @@ public class GroupServiceUnitTest {
 	@Mock
 	GroupEntity fourthGroup;
 
+	@Mock
+	GroupCreateInput groupCreateForm;
+
+	@Mock
+	BindingResult bindingResult;
+
 	@Test
 	public void loadGroupList_ok() {
 		assertGroups(instance.loadGroupList(), FIRST_GROUP_ID, SECOND_GROUP_ID);
@@ -92,6 +116,21 @@ public class GroupServiceUnitTest {
 		assertGroups(instance.loadInvitationsList());
 	}
 
+	@Test
+	public void createGroup_ok() {
+		instance.createGroup(groupCreateForm, bindingResult);
+		final ArgumentCaptor<GroupEntity> group = ArgumentCaptor.forClass(GroupEntity.class);
+		verify(groupRepository).save(group.capture());
+		assertEquals("Wrong name of created group", NEW_GROUP_NAME, group.getValue().getName());
+		final ArgumentCaptor<GroupMemberEntity> groupMember = ArgumentCaptor.forClass(GroupMemberEntity.class);
+		verify(groupMemberRepository).save(groupMember.capture());
+		assertSame("Group member should be for saved group", group.getValue(), groupMember.getValue().getGroup());
+		assertSame("Group member should be for request account", requestAccount, groupMember.getValue().getAccount());
+		assertEquals("Group member should be owner", MemberType.OWNER, groupMember.getValue().getMemberType());
+		assertTrue("Group should have member", group.getValue().getGroupMemberships().contains(groupMember.getValue()));
+		assertTrue("Account should be member", requestAccount.getGroupMemberships().contains(groupMember.getValue()));
+	}
+
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);
 		final List<Long> actual = new ArrayList<>();
@@ -99,6 +138,22 @@ public class GroupServiceUnitTest {
 			actual.add(output.getId());
 		}
 		assertEquals("Unexpected groups returned", expected, actual);
+	}
+
+	@Before
+	public void setupGroupCreateForm() {
+		when(groupCreateForm.getName()).thenReturn(NEW_GROUP_NAME);
+	}
+
+	@Before
+	public void setupGroupRepository() {
+		when(groupRepository.save(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>(){
+			@Override
+			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {
+				final GroupEntity group = (GroupEntity)invocation.getArguments()[0];
+				return group;
+			}
+		});
 	}
 
 	@Before
@@ -141,5 +196,7 @@ public class GroupServiceUnitTest {
 	public void setupInstance() {
 		instance = new GroupService();
 		instance.accessControlService = accessControlService;
+		instance.groupRepository = groupRepository;
+		instance.groupMemberRepository = groupMemberRepository;
 	}
 }

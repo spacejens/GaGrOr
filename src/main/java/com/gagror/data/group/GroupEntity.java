@@ -1,5 +1,6 @@
 package com.gagror.data.group;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -29,4 +30,9 @@ public class GroupEntity extends AbstractEditableEntity {
 	@OneToMany(mappedBy="group", fetch=FetchType.LAZY)
 	@Getter
 	private Set<GroupMemberEntity> groupMemberships;
+
+	public GroupEntity(final String name) {
+		setName(name);
+		groupMemberships = new HashSet<>();
+	}
 }
