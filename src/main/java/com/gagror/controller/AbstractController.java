@@ -15,7 +15,7 @@ import com.gagror.service.accesscontrol.AccessControlService;
 public abstract class AbstractController {
 
 	@Autowired
-	AccessControlService accessControl;
+	protected AccessControlService accessControl;
 
 	@PreAuthorize(IS_PUBLIC)
 	@ModelAttribute("currentUser")

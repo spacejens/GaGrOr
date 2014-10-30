@@ -1,4 +1,4 @@
-package com.gagror.controller;
+package com.gagror.controller.system;
 
 import static com.gagror.data.account.SecurityRoles.IS_LOGGED_IN;
 
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.gagror.controller.AbstractController;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.ContactReferenceOutput;

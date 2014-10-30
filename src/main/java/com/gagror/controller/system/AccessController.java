@@ -1,4 +1,4 @@
-package com.gagror.controller;
+package com.gagror.controller.system;
 
 import static com.gagror.data.account.SecurityRoles.IS_NOT_LOGGED_IN;
 import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.gagror.controller.AbstractController;
 import com.gagror.data.account.RegisterInput;
 
 @Controller

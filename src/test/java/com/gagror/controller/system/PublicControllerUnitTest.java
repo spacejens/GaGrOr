@@ -1,4 +1,4 @@
-package com.gagror.controller;
+package com.gagror.controller.system;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.Model;
+
+import com.gagror.controller.system.PublicController;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PublicControllerUnitTest {
