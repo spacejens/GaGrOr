@@ -17,12 +17,14 @@
 					<tr>
 						<td>Group name</td>
 						<td>My role</td>
+						<td>Members</td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="group : ${groups}">
 						<td th:text="${group.name}">A group</td>
 						<td th:text="#{${group.memberType.displayNameProperty}}">Member</td>
+						<td th:text="${group.memberCount} + (${group.invitationCount}? ' (+' + ${group.invitationCount} + ')' : '')">2</td>
 					</tr>
 				</tbody>
 			</table>
