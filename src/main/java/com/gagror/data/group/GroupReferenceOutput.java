@@ -9,6 +9,7 @@ public class GroupReferenceOutput implements Comparable<GroupReferenceOutput> {
 
 	private final String name;
 
+	// TODO Move counts to group list output
 	private final int memberCount;
 
 	private final int invitationCount;

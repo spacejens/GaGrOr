@@ -11,8 +11,10 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -71,6 +73,14 @@ public class GroupsController extends AbstractController {
 		}
 		log.info(String.format("Successfully created group '%s'", groupCreateForm.getName()));
 		return redirect("/groups/list");
+	}
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'viewGroup')")
+	@RequestMapping("/view/{groupId}")
+	public String viewGroup(@PathVariable("groupId") final Long groupId, final Model model) {
+		log.info(String.format("Viewing group %d", groupId));
+		model.addAttribute("group", groupService.viewGroup(groupId));
+		return "view_group";
 	}
 
 	// TODO Allow inviting other users to your group

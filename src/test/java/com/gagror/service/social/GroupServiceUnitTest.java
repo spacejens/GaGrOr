@@ -30,6 +30,7 @@ import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
 import com.gagror.data.group.GroupRepository;
+import com.gagror.data.group.GroupViewOutput;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -131,6 +132,17 @@ public class GroupServiceUnitTest {
 		assertTrue("Account should be member", requestAccount.getGroupMemberships().contains(groupMember.getValue()));
 	}
 
+	@Test
+	public void viewGroup_ok() {
+		final GroupViewOutput result = instance.viewGroup(FIRST_GROUP_ID);
+		assertEquals("Wrong group found", FIRST_GROUP_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewGroup_notFound() {
+		instance.viewGroup(34578095L);
+	}
+
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);
 		final List<Long> actual = new ArrayList<>();
@@ -147,6 +159,10 @@ public class GroupServiceUnitTest {
 
 	@Before
 	public void setupGroupRepository() {
+		when(groupRepository.findOne(FIRST_GROUP_ID)).thenReturn(firstGroup);
+		when(groupRepository.findOne(SECOND_GROUP_ID)).thenReturn(secondGroup);
+		when(groupRepository.findOne(THIRD_GROUP_ID)).thenReturn(thirdGroup);
+		when(groupRepository.findOne(FOURTH_GROUP_ID)).thenReturn(fourthGroup);
 		when(groupRepository.save(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>(){
 			@Override
 			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {

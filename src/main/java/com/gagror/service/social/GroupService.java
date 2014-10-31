@@ -17,6 +17,7 @@ import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
 import com.gagror.data.group.GroupRepository;
+import com.gagror.data.group.GroupViewOutput;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -72,5 +73,14 @@ public class GroupService {
 				accessControlService.getRequestAccountEntity(),
 				MemberType.OWNER);
 		groupMemberRepository.save(owner);
+	}
+
+	public GroupViewOutput viewGroup(final Long groupId) {
+		final GroupEntity group = groupRepository.findOne(groupId);
+		if(null == group) {
+			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
+		}
+		log.debug(String.format("Loaded group %s for viewing", group));
+		return new GroupViewOutput(group);
 	}
 }

@@ -22,7 +22,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="group : ${groups}">
-						<td th:text="${group.name}">A group</td>
+						<td><a href="view_group.html" th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}">A group</a></td>
 						<td th:text="#{${group.memberType.displayNameProperty}}">Member</td>
 						<td th:text="${group.memberCount} + (${group.invitationCount}? ' (+' + ${group.invitationCount} + ')' : '')">2</td>
 					</tr>
