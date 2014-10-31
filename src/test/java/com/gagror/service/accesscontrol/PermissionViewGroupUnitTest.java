@@ -25,6 +25,9 @@ public class PermissionViewGroupUnitTest {
 	private static final Long SECOND_GROUP_ID = 456L;
 	private static final Long OTHER_GROUP_ID = 999L;
 
+	private static final Long FIRST_MEMBER_ID = 123L;
+	private static final Long SECOND_MEMBER_ID = 456L;
+
 	PermissionViewGroup instance;
 
 	@Mock
@@ -49,7 +52,7 @@ public class PermissionViewGroupUnitTest {
 
 	@Test
 	public void hasPermission_invited() {
-		assertFalse("Invited member should not have permission", instance.hasPermission(SECOND_GROUP_ID, account));
+		assertTrue("Invited member should have permission", instance.hasPermission(SECOND_GROUP_ID, account));
 	}
 
 	@Test
@@ -60,9 +63,11 @@ public class PermissionViewGroupUnitTest {
 	@Before
 	public void setupAccount() {
 		when(firstGroup.getId()).thenReturn(FIRST_GROUP_ID);
+		when(firstGroupMember.getId()).thenReturn(FIRST_MEMBER_ID);
 		when(firstGroupMember.getMemberType()).thenReturn(MemberType.MEMBER);
 		when(firstGroupMember.getGroup()).thenReturn(firstGroup);
 		when(secondGroup.getId()).thenReturn(SECOND_GROUP_ID);
+		when(secondGroupInvited.getId()).thenReturn(SECOND_MEMBER_ID);
 		when(secondGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
 		when(secondGroupInvited.getGroup()).thenReturn(secondGroup);
 		final Set<GroupMemberEntity> memberships = new HashSet<>();

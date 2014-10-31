@@ -20,7 +20,7 @@ public class PermissionViewGroup extends AbstractGagrorPermissionLongId<GroupEnt
 	protected boolean hasPermission(final Long id, final AccountEntity account) {
 		// TODO Add setting for groups to be viewable by anyone (and add a public page listing such groups)
 		for(final GroupMemberEntity membership : account.getGroupMemberships()) {
-			if(id.equals(membership.getGroup().getId()) && membership.getMemberType().isMember()) {
+			if(id.equals(membership.getGroup().getId())) {
 				log.debug(String.format("Account %s has permission to view group %s", account, membership.getGroup()));
 				return true;
 			}
