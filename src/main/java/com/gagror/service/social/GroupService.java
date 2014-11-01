@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
@@ -81,6 +82,12 @@ public class GroupService {
 			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
 		}
 		log.debug(String.format("Loaded group %s for viewing", group));
+		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
+		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
+			if(membership.getAccount().equals(currentUser)) {
+				return new GroupViewOutput(membership);
+			}
+		}
 		return new GroupViewOutput(group);
 	}
 }

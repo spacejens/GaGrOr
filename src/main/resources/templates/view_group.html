@@ -4,6 +4,7 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1 th:text="${group.name}">Group name</h1>
+	<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
 	<p>Created: <span th:text="${#calendars.format(group.created,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</span></p>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>

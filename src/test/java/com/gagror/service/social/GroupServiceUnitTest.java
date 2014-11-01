@@ -41,10 +41,12 @@ public class GroupServiceUnitTest {
 	private static final Long SECOND_GROUP_ID = 22L;
 	private static final Long THIRD_GROUP_ID = 33L;
 	private static final Long FOURTH_GROUP_ID = 44L;
+	private static final Long ANOTHER_GROUP_ID = 55L;
 	private static final String FIRST_GROUP_NAME = "First";
 	private static final String SECOND_GROUP_NAME = "Second";
 	private static final String THIRD_GROUP_NAME = "Third";
 	private static final String FOURTH_GROUP_NAME = "Fourth";
+	private static final String ANOTHER_GROUP_NAME = "Another";
 	private static final String NEW_GROUP_NAME = "New group";
 	private static final Long FIRST_MEMBERSHIP_ID = 111L;
 	private static final Long SECOND_MEMBERSHIP_ID = 222L;
@@ -90,6 +92,9 @@ public class GroupServiceUnitTest {
 	GroupEntity fourthGroup;
 
 	@Mock
+	GroupEntity anotherGroup;
+
+	@Mock
 	GroupCreateInput groupCreateForm;
 
 	@Mock
@@ -133,9 +138,29 @@ public class GroupServiceUnitTest {
 	}
 
 	@Test
-	public void viewGroup_ok() {
-		final GroupViewOutput result = instance.viewGroup(FIRST_GROUP_ID);
-		assertEquals("Wrong group found", FIRST_GROUP_NAME, result.getName());
+	public void viewGroup_owner() {
+		viewGroup_ok(FIRST_GROUP_ID, FIRST_GROUP_NAME, MemberType.OWNER);
+	}
+
+	@Test
+	public void viewGroup_member() {
+		viewGroup_ok(SECOND_GROUP_ID, SECOND_GROUP_NAME, MemberType.MEMBER);
+	}
+
+	@Test
+	public void viewGroup_invited() {
+		viewGroup_ok(THIRD_GROUP_ID, THIRD_GROUP_NAME, MemberType.INVITED);
+	}
+
+	@Test
+	public void viewGroup_notMember() {
+		viewGroup_ok(ANOTHER_GROUP_ID, ANOTHER_GROUP_NAME, null);
+	}
+
+	private void viewGroup_ok(final Long id, final String expectedName, final MemberType expectedMemberType) {
+		final GroupViewOutput result = instance.viewGroup(id);
+		assertEquals("Wrong group found", expectedName, result.getName());
+		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -159,10 +184,6 @@ public class GroupServiceUnitTest {
 
 	@Before
 	public void setupGroupRepository() {
-		when(groupRepository.findOne(FIRST_GROUP_ID)).thenReturn(firstGroup);
-		when(groupRepository.findOne(SECOND_GROUP_ID)).thenReturn(secondGroup);
-		when(groupRepository.findOne(THIRD_GROUP_ID)).thenReturn(thirdGroup);
-		when(groupRepository.findOne(FOURTH_GROUP_ID)).thenReturn(fourthGroup);
 		when(groupRepository.save(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>(){
 			@Override
 			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {
@@ -174,33 +195,34 @@ public class GroupServiceUnitTest {
 
 	@Before
 	public void setupGroups() {
-		when(firstGroup.getId()).thenReturn(FIRST_GROUP_ID);
-		when(firstGroup.getName()).thenReturn(FIRST_GROUP_NAME);
-		when(firstGroupOwner.getId()).thenReturn(FIRST_MEMBERSHIP_ID);
-		when(firstGroupOwner.getGroup()).thenReturn(firstGroup);
-		when(firstGroupOwner.getMemberType()).thenReturn(MemberType.OWNER);
-		when(secondGroup.getId()).thenReturn(SECOND_GROUP_ID);
-		when(secondGroup.getName()).thenReturn(SECOND_GROUP_NAME);
-		when(secondGroupMember.getId()).thenReturn(SECOND_MEMBERSHIP_ID);
-		when(secondGroupMember.getGroup()).thenReturn(secondGroup);
-		when(secondGroupMember.getMemberType()).thenReturn(MemberType.MEMBER);
-		when(thirdGroup.getId()).thenReturn(THIRD_GROUP_ID);
-		when(thirdGroup.getName()).thenReturn(THIRD_GROUP_NAME);
-		when(thirdGroupInvited.getId()).thenReturn(THIRD_MEMBERSHIP_ID);
-		when(thirdGroupInvited.getGroup()).thenReturn(thirdGroup);
-		when(thirdGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
-		when(fourthGroup.getId()).thenReturn(FOURTH_GROUP_ID);
-		when(fourthGroup.getName()).thenReturn(FOURTH_GROUP_NAME);
-		when(fourthGroupInvited.getId()).thenReturn(FOURTH_MEMBERSHIP_ID);
-		when(fourthGroupInvited.getGroup()).thenReturn(fourthGroup);
-		when(fourthGroupInvited.getMemberType()).thenReturn(MemberType.INVITED);
-		// Add the memberships to the account
 		final Set<GroupMemberEntity> memberships = new HashSet<>();
-		memberships.add(firstGroupOwner);
-		memberships.add(secondGroupMember);
-		memberships.add(thirdGroupInvited);
-		memberships.add(fourthGroupInvited);
 		when(requestAccount.getGroupMemberships()).thenReturn(memberships);
+		mockGroup(firstGroup, FIRST_GROUP_ID, FIRST_GROUP_NAME);
+		mockGroupMember(firstGroupOwner, firstGroup, FIRST_MEMBERSHIP_ID, MemberType.OWNER, requestAccount);
+		mockGroup(secondGroup, SECOND_GROUP_ID, SECOND_GROUP_NAME);
+		mockGroupMember(secondGroupMember, secondGroup, SECOND_MEMBERSHIP_ID, MemberType.MEMBER, requestAccount);
+		mockGroup(thirdGroup, THIRD_GROUP_ID, THIRD_GROUP_NAME);
+		mockGroupMember(thirdGroupInvited, thirdGroup, THIRD_MEMBERSHIP_ID, MemberType.INVITED, requestAccount);
+		mockGroup(fourthGroup, FOURTH_GROUP_ID, FOURTH_GROUP_NAME);
+		mockGroupMember(fourthGroupInvited, fourthGroup, FOURTH_MEMBERSHIP_ID, MemberType.INVITED, requestAccount);
+		mockGroup(anotherGroup, ANOTHER_GROUP_ID, ANOTHER_GROUP_NAME);
+	}
+
+	private void mockGroup(final GroupEntity group, final Long id, final String name) {
+		when(group.getId()).thenReturn(id);
+		when(group.getName()).thenReturn(name);
+		final Set<GroupMemberEntity> memberships = new HashSet<>();
+		when(group.getGroupMemberships()).thenReturn(memberships);
+		when(groupRepository.findOne(id)).thenReturn(group);
+	}
+
+	private void mockGroupMember(final GroupMemberEntity member, final GroupEntity group, final Long id, final MemberType memberType, final AccountEntity account) {
+		when(member.getId()).thenReturn(id);
+		when(member.getGroup()).thenReturn(group);
+		when(member.getAccount()).thenReturn(account);
+		when(member.getMemberType()).thenReturn(memberType);
+		group.getGroupMemberships().add(member);
+		account.getGroupMemberships().add(member);
 	}
 
 	@Before

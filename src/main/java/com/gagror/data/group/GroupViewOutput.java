@@ -11,8 +11,13 @@ public class GroupViewOutput extends GroupReferenceOutput {
 
 	private final Date created;
 
-	public GroupViewOutput(final GroupEntity entity) {
-		super(entity);
-		created = entity.getCreated();
+	public GroupViewOutput(final GroupMemberEntity membership) {
+		super(membership);
+		created = membership.getGroup().getCreated();
+	}
+
+	public GroupViewOutput(final GroupEntity group) {
+		super(group);
+		created = group.getCreated();
 	}
 }

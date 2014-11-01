@@ -9,9 +9,19 @@ public class GroupReferenceOutput implements Comparable<GroupReferenceOutput> {
 
 	private final String name;
 
-	public GroupReferenceOutput(final GroupEntity entity) {
-		id = entity.getId();
-		name = entity.getName();
+	private final MemberType memberType;
+
+	public GroupReferenceOutput(final GroupEntity group) {
+		id = group.getId();
+		name = group.getName();
+		memberType = null;
+	}
+
+	public GroupReferenceOutput(final GroupMemberEntity membership) {
+		final GroupEntity group = membership.getGroup();
+		id = group.getId();
+		name = group.getName();
+		memberType = membership.getMemberType();
 	}
 
 	@Override
