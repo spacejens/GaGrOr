@@ -58,6 +58,8 @@ public class AccountController extends AbstractController {
 		return accountService.loadReceivedContactRequests();
 	}
 
+	// TODO Place the functionality for finding new contacts on a separate page
+
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("notMyContacts")
 	public List<ContactReferenceOutput> getNotMyContacts() {

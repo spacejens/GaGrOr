@@ -3,60 +3,49 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1>Contacts</h1>
-	<dl class="tabs" data-tab="">
-		<dd class="active"><a href="#tabcontacts">My contacts</a></dd>
-		<dd><a href="#tabreceived">Received requests</a></dd>
-		<dd><a href="#tabsent">Sent requests</a></dd>
-		<dd><a href="#tabother">Other users</a></dd>
-	</dl>
-	<div class="tabs-content">
-		<div class="content active" id="tabcontacts">
-			<p th:if="${#lists.isEmpty(contacts)}">You have no contacts</p>
-			<div th:fragment="contactTable (contacts)" th:unless="${#lists.isEmpty(contacts)}">
-				<div th:each="contact : ${contacts}">
-					<ul class="breadcrumbs">
-						<li class="current">
-							<span th:replace="/fragments/formatting :: username (account=${contact})"></span>
-						</li>
-						<li th:if="${contact.contactType} ? ${contact.contactType.contact}">
-							<a href="view_contact.html" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}">View contact</a>
-						</li>
-						<li th:unless="${contact.contactType}">
-							<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}">Send contact request</a>
-						</li>
-						<li th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
-							<a href="contacts.html" th:href="@{/account/accept/{contactId}(contactId=${contact.contactId})}">Accept request</a>
-						</li>
-						<li th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
-							<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}">Decline request</a>
-						</li>
-						<li th:if="${contact.contactType != null and not contact.incoming}">
-							<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}" onclick="return window.confirm('Are you sure?');">Delete</a>
-						</li>
-						<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
-							<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit account</a>
-						</li>
-						<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
-							<a href="#" th:href="@{/account/login/{accountId}(accountId=${contact.id})}">Log in as user</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="content" id="tabreceived">
-			<p th:if="${#lists.isEmpty(receivedContactRequests)}">You have no received contact requests</p>
-			<div th:replace=":: contactTable (contacts=${receivedContactRequests})"></div>
-		</div>
-		<div class="content" id="tabsent">
-			<p th:if="${#lists.isEmpty(sentContactRequests)}">You have no sent contact requests</p>
-			<div th:replace=":: contactTable (contacts=${sentContactRequests})"></div>
-		</div>
-		<div class="content" id="tabother">
-			<p th:if="${#lists.isEmpty(notMyContacts)}">There are no other users</p>
-			<div th:replace=":: contactTable (contacts=${notMyContacts})"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a class="current" th:text="#{menu.contacts}"></a>
+	</nav>
+	<p th:if="${#lists.isEmpty(contacts)}">You have no contacts</p>
+	<div th:fragment="contactTable (contacts)" th:unless="${#lists.isEmpty(contacts)}">
+		<div th:each="contact : ${contacts}">
+			<ul class="breadcrumbs">
+				<li class="current">
+					<span th:replace="/fragments/formatting :: username (account=${contact})"></span>
+				</li>
+				<li th:if="${contact.contactType} ? ${contact.contactType.contact}">
+					<a href="view_contact.html" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}">View contact</a>
+				</li>
+				<li th:unless="${contact.contactType}">
+					<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}">Send contact request</a>
+				</li>
+				<li th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
+					<a href="contacts.html" th:href="@{/account/accept/{contactId}(contactId=${contact.contactId})}">Accept request</a>
+				</li>
+				<li th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
+					<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}">Decline request</a>
+				</li>
+				<li th:if="${contact.contactType != null and not contact.incoming}">
+					<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}" onclick="return window.confirm('Are you sure?');">Delete</a>
+				</li>
+				<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
+					<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit account</a>
+				</li>
+				<li th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
+					<a href="#" th:href="@{/account/login/{accountId}(accountId=${contact.id})}">Log in as user</a>
+				</li>
+			</ul>
 		</div>
 	</div>
+	<p th:if="${#lists.isEmpty(receivedContactRequests)}">You have no received contact requests</p>
+	<p th:unless="${#lists.isEmpty(receivedContactRequests)}">You have received the following contact requests</p>
+	<div th:replace=":: contactTable (contacts=${receivedContactRequests})"></div>
+	<p th:if="${#lists.isEmpty(sentContactRequests)}">You have no sent contact requests</p>
+	<p th:unless="${#lists.isEmpty(sentContactRequests)}">You have sent the following contact requests</p>
+	<div th:replace=":: contactTable (contacts=${sentContactRequests})"></div>
+	<p th:if="${#lists.isEmpty(notMyContacts)}">There are no other users</p>
+	<p th:unless="${#lists.isEmpty(notMyContacts)}">The following users are not your contacts</p>
+	<div th:replace=":: contactTable (contacts=${notMyContacts})"></div>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

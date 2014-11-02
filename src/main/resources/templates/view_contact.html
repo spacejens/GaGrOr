@@ -3,7 +3,10 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1 th:text="${contact.username}" th:class="#{${contact.cssClass}}" class="fi-torso">Username</h1>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/account/contacts}" th:text="#{menu.contacts}"></a>
+		<a class="current" th:text="${contact.username}"></a>
+	</nav>
 	<p>Contact type: <span th:text="#{${contact.contactType.displayNameProperty}}">Normal contact</span></p>
 	<p>Account type: <span th:text="#{${contact.accountType.displayNameProperty}}">Standard user</span></p>
 	<p>Registered: <span th:replace="/fragments/formatting :: datetime (date=${contact.created})"></span></p>
