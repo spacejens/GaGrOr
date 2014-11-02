@@ -4,8 +4,11 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<h1 th:text="${group.name}">Group name</h1>
-	<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
 	<p>Created: <span th:replace="/fragments/formatting :: datetime (date=${group.created})"></span></p>
+	<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
+	<p th:unless="${#lists.isEmpty(group.owners)}">Owners: <span th:replace="/fragments/formatting :: usernames (accounts=${group.owners})"></span></p>
+	<p th:unless="${#lists.isEmpty(group.members)}">Members: <span th:replace="/fragments/formatting :: usernames (accounts=${group.members})"></span></p>
+	<p th:unless="${#lists.isEmpty(group.invited)}">Invited: <span th:replace="/fragments/formatting :: usernames (accounts=${group.invited})"></span></p>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
