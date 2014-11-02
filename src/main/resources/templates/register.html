@@ -3,7 +3,9 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1>Register</h1>
+	<nav class="breadcrumbs" id="submenu">
+		<a class="current" th:text="#{menu.register}"></a>
+	</nav>
 	<form action="#" th:action="@{/access/register}" th:object="${registerForm}" method="post">
 		<label>
 			Username <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</span>

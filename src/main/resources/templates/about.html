@@ -3,6 +3,9 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a class="current" th:text="#{menu.public}"></a>
+	</nav>
 	<h1>GaGrOr - Gaming Group Organizer</h1>
 	<p>GaGrOr is a web system that helps you keep track of gaming groups,
 	typically for face to face games.</p>

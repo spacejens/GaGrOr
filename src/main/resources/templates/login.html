@@ -3,7 +3,9 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1>Log in</h1>
+	<nav class="breadcrumbs" id="submenu">
+		<a class="current" th:text="#{menu.login}"></a>
+	</nav>
 	<div th:if="${param.error}">
 		Invalid username and password.
 	</div>
