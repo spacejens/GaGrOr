@@ -83,6 +83,14 @@ public class GroupsController extends AbstractController {
 		return "view_group";
 	}
 
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'viewGroup')")
+	@RequestMapping("/members/{groupId}")
+	public String groupMembers(@PathVariable("groupId") final Long groupId, final Model model) {
+		log.info(String.format("Viewing members of group %d", groupId));
+		model.addAttribute("group", groupService.viewGroup(groupId));
+		return "group_members";
+	}
+
 	// TODO Allow inviting other users to your group
 
 	// TODO Make it possible to accept invitations to groups

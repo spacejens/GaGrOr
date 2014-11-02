@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
+		<a class="current" th:text="#{menu.groups.members}"></a>
+	</nav>
+	<p th:unless="${#lists.isEmpty(group.owners)}">Owners: <span th:replace="/fragments/formatting :: usernames (accounts=${group.owners})"></span></p>
+	<p th:unless="${#lists.isEmpty(group.members)}">Members: <span th:replace="/fragments/formatting :: usernames (accounts=${group.members})"></span></p>
+	<p th:unless="${#lists.isEmpty(group.invited)}">Invited: <span th:replace="/fragments/formatting :: usernames (accounts=${group.invited})"></span></p>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

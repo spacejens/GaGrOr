@@ -9,9 +9,9 @@
 	</nav>
 	<p>Created: <span th:replace="/fragments/formatting :: datetime (date=${group.created})"></span></p>
 	<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
-	<p th:unless="${#lists.isEmpty(group.owners)}">Owners: <span th:replace="/fragments/formatting :: usernames (accounts=${group.owners})"></span></p>
-	<p th:unless="${#lists.isEmpty(group.members)}">Members: <span th:replace="/fragments/formatting :: usernames (accounts=${group.members})"></span></p>
-	<p th:unless="${#lists.isEmpty(group.invited)}">Invited: <span th:replace="/fragments/formatting :: usernames (accounts=${group.invited})"></span></p>
+	<ul class="button-group">
+		<li><a class="button" th:href="@{/groups/members/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members}"></a></li>
+	</ul>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
