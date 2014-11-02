@@ -3,7 +3,10 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1>Edit user <span th:text="${currentState.username}">name</span></h1>
+	<nav class="breadcrumbs" id="submenu">
+		<a class="unavailable" th:text="#{menu.profile}"></a>
+		<a class="current" th:text="${currentState.username}"></a>
+	</nav>
 	<form action="#" th:action="@{/account/edit/{accountId}(accountId=${currentState.id})}" th:object="${editAccountForm}" method="post">
 		<p>Registered: <span th:replace="/fragments/formatting :: datetime (date=${currentState.created})"></span></p>
 		<p class="error" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Global errors</p>
