@@ -8,6 +8,12 @@
 	</nav>
 	<p th:if="${#lists.isEmpty(contacts)}">You have no contacts</p>
 	<table th:fragment="contactTable (contacts)" th:unless="${#lists.isEmpty(contacts)}">
+		<thead>
+			<tr>
+				<td>User</td>
+				<td colspan="7">Action</td>
+			</tr>
+		</thead>
 		<tbody>
 			<tr th:each="contact : ${contacts}">
 				<td>
