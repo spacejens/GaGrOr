@@ -3,7 +3,10 @@
 <head th:replace="/fragments/framework :: head" />
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
-	<h1 th:text="${group.name}">Group name</h1>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a class="current" th:text="${group.name}"></a>
+	</nav>
 	<p>Created: <span th:replace="/fragments/formatting :: datetime (date=${group.created})"></span></p>
 	<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
 	<p th:unless="${#lists.isEmpty(group.owners)}">Owners: <span th:replace="/fragments/formatting :: usernames (accounts=${group.owners})"></span></p>
