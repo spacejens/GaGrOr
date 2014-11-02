@@ -4,6 +4,7 @@
 <body>
 	<h1>Data formatting and output</h1>
 	<span th:fragment="datetime (date)" th:text="${#calendars.format(date,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</span>
+	<span th:fragment="username (account)" class="fi-torso" th:class="#{${account.cssClass}}" th:text="${account.username}">Name</span>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

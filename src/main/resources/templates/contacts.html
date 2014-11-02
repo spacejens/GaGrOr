@@ -17,7 +17,7 @@
 				<div th:each="contact : ${contacts}">
 					<ul class="breadcrumbs">
 						<li class="current">
-							<span class="fi-torso" th:class="#{${contact.cssClass}}" th:text="${contact.username}">Name</span>
+							<span th:replace="/fragments/formatting :: username (account=${contact})"></span>
 						</li>
 						<li th:if="${contact.contactType} ? ${contact.contactType.contact}">
 							<a href="view_contact.html" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}">View contact</a>
