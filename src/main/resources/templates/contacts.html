@@ -20,25 +20,25 @@
 					<span th:replace="/fragments/formatting :: username (account=${contact})"></span>
 				</td>
 				<td th:if="${contact.contactType} ? ${contact.contactType.contact}">
-					<a href="view_contact.html" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}">View contact</a>
+					<a href="view_contact.html" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}" th:text="#{menu.contacts.view}"></a>
 				</td>
 				<td th:unless="${contact.contactType}">
-					<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}">Send contact request</a>
+					<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}" th:text="#{menu.contacts.request}"></a>
 				</td>
 				<td th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
-					<a href="contacts.html" th:href="@{/account/accept/{contactId}(contactId=${contact.contactId})}">Accept request</a>
+					<a href="contacts.html" th:href="@{/account/accept/{contactId}(contactId=${contact.contactId})}" th:text="#{menu.contacts.accept}"></a>
 				</td>
 				<td th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
-					<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}">Decline request</a>
+					<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}" th:text="#{menu.contacts.decline}"></a>
 				</td>
 				<td th:if="${contact.contactType != null and not contact.incoming}">
-					<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}" onclick="return window.confirm('Are you sure?');">Delete</a>
+					<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}" onclick="return window.confirm('Are you sure?');" th:text="#{menu.contacts.delete}"></a>
 				</td>
 				<td th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
-					<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}">Edit account</a>
+					<a href="edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${contact.id})}" th:text="#{menu.profile}"></a>
 				</td>
 				<td th:if="${#lists.contains(currentUser.accountType.mayEdit, contact.accountType)}">
-					<a href="#" th:href="@{/account/login/{accountId}(accountId=${contact.id})}">Log in as user</a>
+					<a href="#" th:href="@{/account/login/{accountId}(accountId=${contact.id})}" th:text="#{menu.contacts.login}"></a>
 				</td>
 			</tr>
 		</tbody>
