@@ -7,37 +7,37 @@
 		<nav th:if="${currentUser}" class="icon-bar five-up">
 			<a class="item" href="../about.html" th:href="@{/}">
 				<i class="fi-info"></i>
-				<label>Info</label>
+				<label th:text="#{menu.public}"></label>
 			</a>
 			<a class="item" href="../groups.html" th:href="@{/groups/list}">
 				<i class="fi-torsos-all"></i>
-				<label>Groups</label>
+				<label th:text="#{menu.groups}"></label>
 			</a>
 			<a class="item" href="../contacts.html" th:href="@{/account/contacts}">
 				<i class="fi-address-book"></i>
-				<label>Contacts</label>
+				<label th:text="#{menu.contacts}"></label>
 			</a>
 			<a class="item" href="../edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${currentUser.id})}">
 				<i class="fi-torso" th:class="#{${currentUser.cssClass}}"></i>
-				<label th:text="${currentUser.username}">Current user</label>
+				<label th:text="${currentUser.username}"></label>
 			</a>
 			<a class="item" href="#" onclick="javascript: document.getElementById('logout-form').submit();return false;">
 				<i class="fi-lock"></i>
-				<label>Log out</label>
+				<label th:text="#{menu.logout}"></label>
 			</a>
 		</nav>
 		<nav th:unless="${currentUser}" class="icon-bar three-up">
 			<a class="item" href="../about.html" th:href="@{/}">
 				<i class="fi-info"></i>
-				<label>Info</label>
+				<label th:text="#{menu.public}"></label>
 			</a>
 			<a class="item" href="../register.html" th:href="@{/access/register}">
 				<i class="fi-plus"></i>
-				<label>Register</label>
+				<label th:text="#{menu.register}"></label>
 			</a>
 			<a class="item" href="../login.html" th:href="@{/access/login}">
 				<i class="fi-unlock"></i>
-				<label>Log in</label>
+				<label th:text="#{menu.login}"></label>
 			</a>
 		</nav>
 	</div>

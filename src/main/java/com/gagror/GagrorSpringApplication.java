@@ -67,6 +67,7 @@ public class GagrorSpringApplication extends SpringBootServletInitializer {
 		log.info("Adding message source");
 		final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasenames(
+				"messages.menus",
 				"messages.cssclasses",
 				"messages.enums");
 		return messageSource;
