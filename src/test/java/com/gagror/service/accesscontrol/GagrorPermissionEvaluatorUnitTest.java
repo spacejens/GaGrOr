@@ -11,6 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
+import lombok.extern.apachecommons.CommonsLog;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import com.gagror.data.account.AccountEntity;
 
 @RunWith(MockitoJUnitRunner.class)
+@CommonsLog
 public class GagrorPermissionEvaluatorUnitTest {
 
 	private static final String PERMISSION_NAME = "testPermission";
@@ -53,7 +56,7 @@ public class GagrorPermissionEvaluatorUnitTest {
 		int count = 0;
 		for(final Class<? extends GagrorPermission> clazz : reflections.getSubTypesOf(GagrorPermission.class)) {
 			if(! Modifier.isAbstract(clazz.getModifiers()) && ! Modifier.isPrivate(clazz.getModifiers())) {
-				System.out.println(String.format("Verifying that permission has been added: %s", clazz.getCanonicalName()));
+				log.debug(String.format("Verifying that permission has been added: %s", clazz.getCanonicalName()));
 				count++;
 				final GagrorPermission expected = clazz.getConstructor().newInstance();
 				final GagrorPermission actual = instanceDefault.getPermission(expected.getName());

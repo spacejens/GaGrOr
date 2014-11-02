@@ -6,6 +6,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ import com.gagror.DesignRulesTestSupport;
  */
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)
+@CommonsLog
 public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 
 	private final String name;
@@ -33,7 +35,7 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 	public void allRequestMappingMethodsHaveSecurityAnnotations() {
 		// If the controller class has a security annotation, it is valid for all methods
 		if(hasSecurityAnnotation(controller)) {
-			System.out.println(String.format("Class %s has security annotation", name));
+			log.debug(String.format("Class %s has security annotation", name));
 			return;
 		}
 		// Check all methods that have a request mapping, even in superclasses
@@ -43,7 +45,7 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 					fail(String.format("Method %s on class %s should have a security annotation",
 							method.getName(), method.getDeclaringClass().getCanonicalName()));
 				}
-				System.out.println(String.format("Method %s of class %s has security annotation",
+				log.debug(String.format("Method %s of class %s has security annotation",
 						method.getName(), method.getDeclaringClass().getCanonicalName()));
 			}
 		}
@@ -53,7 +55,7 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 	public void allModelAttributeMethodsHaveSecurityAnnotations() {
 		// If the controller class has a security annotation, it is valid for all methods
 		if(hasSecurityAnnotation(controller)) {
-			System.out.println(String.format("Class %s has security annotation", name));
+			log.debug(String.format("Class %s has security annotation", name));
 			return;
 		}
 		// Check all methods that are model attributes, even in superclasses
@@ -63,7 +65,7 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 					fail(String.format("Method %s on class %s should have a security annotation",
 							method.getName(), method.getDeclaringClass().getCanonicalName()));
 				}
-				System.out.println(String.format("Method %s of class %s has security annotation",
+				log.debug(String.format("Method %s of class %s has security annotation",
 						method.getName(), method.getDeclaringClass().getCanonicalName()));
 			}
 		}

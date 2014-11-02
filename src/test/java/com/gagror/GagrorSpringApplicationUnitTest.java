@@ -13,6 +13,8 @@ import java.util.Properties;
 
 import javax.servlet.Filter;
 
+import lombok.extern.apachecommons.CommonsLog;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,7 @@ import com.gagror.service.accesscontrol.GagrorPermissionEvaluator;
 import com.google.common.io.PatternFilenameFilter;
 
 @RunWith(MockitoJUnitRunner.class)
+@CommonsLog
 public class GagrorSpringApplicationUnitTest {
 
 	GagrorSpringApplication instance;
@@ -71,7 +74,7 @@ public class GagrorSpringApplicationUnitTest {
 				if(! expected.contains("{")) {
 					final String resolved = source.getMessage(key.toString(), noArgs, Locale.getDefault());
 					countResolved++;
-					System.out.println(String.format("Resolving property %s from file %s", key, propertyFile.getName()));
+					log.debug(String.format("Resolving property %s from file %s", key, propertyFile.getName()));
 					assertEquals(String.format("Property %s from file %s resolved to wrong message", key, propertyFile.getName()), expected, resolved);
 					// Resolve and verify the result
 					break propertykey;
