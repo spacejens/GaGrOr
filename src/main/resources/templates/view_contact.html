@@ -6,7 +6,7 @@
 	<h1 th:text="${contact.username}" th:class="#{${contact.cssClass}}" class="fi-torso">Username</h1>
 	<p>Contact type: <span th:text="#{${contact.contactType.displayNameProperty}}">Normal contact</span></p>
 	<p>Account type: <span th:text="#{${contact.accountType.displayNameProperty}}">Standard user</span></p>
-	<p>Registered: <span th:text="${#calendars.format(contact.created,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</span></p>
+	<p>Registered: <span th:replace="/fragments/formatting :: datetime (date=${contact.created})"></span></p>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

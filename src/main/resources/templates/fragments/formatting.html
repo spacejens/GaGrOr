@@ -1,0 +1,9 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<h1>Data formatting and output</h1>
+	<span th:fragment="datetime (date)" th:text="${#calendars.format(date,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</span>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>
