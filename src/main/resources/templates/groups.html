@@ -6,6 +6,10 @@
 	<nav class="breadcrumbs" id="submenu">
 		<a class="current" th:text="#{menu.groups}"></a>
 	</nav>
+	<dl class="sub-nav" id="pageactions">
+		<dt th:text="#{menu.subpages}"></dt>
+		<dd><a th:href="@{/groups/create}" th:text="#{menu.groups.create}"></a></dd>
+	</dl>
 	<p th:if="${#lists.isEmpty(groups)}">You are not a member of any groups</p>
 	<table th:fragment="groupsTable (groups)" th:unless="${#lists.isEmpty(groups)}">
 		<thead>
@@ -23,9 +27,6 @@
 			</tr>
 		</tbody>
 	</table>
-	<ul class="button-group">
-		<li><a class="button" href="#" th:href="@{/groups/create}" th:text="#{menu.groups.create}"></a></li>
-	</ul>
 	<p th:unless="${#lists.isEmpty(invitations)}">You have been invited to the following groups:</p>
 	<table th:replace=":: groupsTable (groups=${invitations})"></table>
 	<script th:replace="/fragments/framework :: init"></script>
