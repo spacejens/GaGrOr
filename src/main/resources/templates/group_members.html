@@ -8,6 +8,10 @@
 		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
 		<a class="current" th:text="#{menu.groups.members}"></a>
 	</nav>
+	<dl class="sub-nav" id="pageactions">
+		<dt th:text="#{menu.subpages}"></dt>
+		<dd><a th:href="@{/groups/invite/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members.invite}"></a></dd>
+	</dl>
 	<p th:unless="${#lists.isEmpty(group.owners)}">Owners: <span th:replace="/fragments/formatting :: usernames (accounts=${group.owners})"></span></p>
 	<p th:unless="${#lists.isEmpty(group.members)}">Members: <span th:replace="/fragments/formatting :: usernames (accounts=${group.members})"></span></p>
 	<p th:unless="${#lists.isEmpty(group.invited)}">Invited: <span th:replace="/fragments/formatting :: usernames (accounts=${group.invited})"></span></p>
