@@ -40,8 +40,6 @@ public class AccountController extends AbstractController {
 		return "contacts";
 	}
 
-	// TODO Display contact lists and actions more cleanly, without using navigation breadcrumbs
-
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
 	public List<ContactReferenceOutput> getContacts() {
