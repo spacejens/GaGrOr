@@ -1,14 +1,13 @@
 package com.gagror.data.group;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-@Data
-@EqualsAndHashCode(callSuper=true)
 public class GroupListOutput extends GroupReferenceOutput {
 
+	@Getter
 	private final int memberCount;
 
+	@Getter
 	private final int invitationCount;
 
 	public GroupListOutput(final GroupMemberEntity membership) {

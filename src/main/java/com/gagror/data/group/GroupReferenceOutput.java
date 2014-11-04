@@ -1,25 +1,30 @@
 package com.gagror.data.group;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
-public class GroupReferenceOutput implements Comparable<GroupReferenceOutput> {
+import com.gagror.data.AbstractEntityOutput;
 
-	private final Long id;
+@ToString(of="name", callSuper=true)
+public class GroupReferenceOutput
+extends AbstractEntityOutput
+implements Comparable<GroupReferenceOutput> {
 
+	@Getter
 	private final String name;
 
+	@Getter
 	private final MemberType memberType;
 
 	public GroupReferenceOutput(final GroupEntity group) {
-		id = group.getId();
+		super(group);
 		name = group.getName();
 		memberType = null;
 	}
 
 	public GroupReferenceOutput(final GroupMemberEntity membership) {
+		super(membership.getGroup());
 		final GroupEntity group = membership.getGroup();
-		id = group.getId();
 		name = group.getName();
 		memberType = membership.getMemberType();
 	}

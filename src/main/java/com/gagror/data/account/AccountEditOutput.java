@@ -1,16 +1,16 @@
 package com.gagror.data.account;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-@Data
-@EqualsAndHashCode(callSuper=true)
 public class AccountEditOutput extends AccountReferenceOutput {
 
+	@Getter
 	private final Long version;
 
+	@Getter
 	private final boolean active;
 
+	@Getter
 	private final boolean locked;
 
 	public AccountEditOutput(final AccountEntity entity) {

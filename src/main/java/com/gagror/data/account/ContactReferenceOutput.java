@@ -1,16 +1,16 @@
 package com.gagror.data.account;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
-@Data
-@EqualsAndHashCode(callSuper=true)
 public class ContactReferenceOutput extends AccountReferenceOutput {
 
+	@Getter
 	private final ContactType contactType;
 
+	@Getter
 	private final Long contactId;
 
+	@Getter
 	private final boolean incoming;
 
 	public ContactReferenceOutput(final ContactEntity entity, final boolean showOwner) {

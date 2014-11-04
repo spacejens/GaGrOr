@@ -1,27 +1,28 @@
 package com.gagror.data.account;
 
-import java.util.Date;
+import lombok.Getter;
+import lombok.ToString;
 
-import lombok.Data;
+import com.gagror.data.AbstractEntityOutput;
 
-@Data
-public class AccountReferenceOutput implements Comparable<AccountReferenceOutput>{
+@ToString(of="username", callSuper=true)
+public class AccountReferenceOutput
+extends AbstractEntityOutput
+implements Comparable<AccountReferenceOutput>{
 
-	private final Long id;
-
+	@Getter
 	private final String username;
 
+	@Getter
 	private final AccountType accountType;
 
-	private final Date created;
-
+	@Getter
 	private final String cssClass;
 
 	public AccountReferenceOutput(final AccountEntity entity) {
-		id = entity.getId();
+		super(entity);
 		username = entity.getUsername();
 		accountType = entity.getAccountType();
-		created = entity.getCreated();
 		if(! entity.isActive()) {
 			cssClass = "account.icon.inactive";
 		} else if(entity.isLocked()) {
