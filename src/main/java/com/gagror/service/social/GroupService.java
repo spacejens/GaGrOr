@@ -104,7 +104,6 @@ public class GroupService {
 				return new GroupViewMembersOutput(membership);
 			}
 		}
-		// TODO Should never be asked to view group members for group user is not a member, what to do?
-		return new GroupViewMembersOutput(group);
+		throw new IllegalArgumentException(String.format("Could not load members for group %d, request account is not a member", groupId));
 	}
 }

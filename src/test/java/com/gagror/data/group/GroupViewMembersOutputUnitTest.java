@@ -1,7 +1,6 @@
 package com.gagror.data.group;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -73,13 +72,7 @@ public class GroupViewMembersOutputUnitTest {
 	private AccountEntity accountSecondInvited;
 
 	@Test
-	public void getCreated_fromGroup() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
-		assertEquals("Created date should be from group", DATE_GROUP, instance.getCreated());
-	}
-
-	@Test
-	public void getCreated_fromMembership() {
+	public void getCreated_ok() {
 		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
 		assertEquals("Created date should be from group", DATE_GROUP, instance.getCreated());
 	}
@@ -100,24 +93,6 @@ public class GroupViewMembersOutputUnitTest {
 	public void getInvited_fromMembership() {
 		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
 		assertUsers(instance.getInvited(), USERNAME_FIRST_INVITED, USERNAME_SECOND_INVITED);
-	}
-
-	@Test
-	public void getOwners_emptyWhenNotMember() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
-		assertTrue("Should not list owners when not member of group", instance.getOwners().isEmpty());
-	}
-
-	@Test
-	public void getMembers_emptyWhenNotMember() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
-		assertTrue("Should not list members when not member of group", instance.getMembers().isEmpty());
-	}
-
-	@Test
-	public void getInvited_emptyWhenNotMember() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
-		assertTrue("Should not list invited when not member of group", instance.getInvited().isEmpty());
 	}
 
 	private void assertUsers(final List<AccountReferenceOutput> accounts, final String... expectedUsernames) {

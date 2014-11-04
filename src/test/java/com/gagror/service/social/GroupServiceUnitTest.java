@@ -183,15 +183,15 @@ public class GroupServiceUnitTest {
 		viewGroupMembers_ok(THIRD_GROUP_ID, THIRD_GROUP_NAME, MemberType.INVITED);
 	}
 
-	@Test
-	public void viewGroupMembers_notMember() {
-		viewGroupMembers_ok(ANOTHER_GROUP_ID, ANOTHER_GROUP_NAME, null);
-	}
-
 	private void viewGroupMembers_ok(final Long id, final String expectedName, final MemberType expectedMemberType) {
 		final GroupReferenceOutput result = instance.viewGroupMembers(id);
 		assertEquals("Wrong group found", expectedName, result.getName());
 		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewGroupMembers_notMember() {
+		instance.viewGroupMembers(ANOTHER_GROUP_ID);
 	}
 
 	@Test(expected=IllegalArgumentException.class)

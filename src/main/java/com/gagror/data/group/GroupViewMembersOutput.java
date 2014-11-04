@@ -26,14 +26,6 @@ public class GroupViewMembersOutput extends GroupReferenceOutput {
 		invited = extract(membership.getGroup(), MemberType.INVITED);
 	}
 
-	public GroupViewMembersOutput(final GroupEntity group) {
-		super(group);
-		// Not listing members of group when viewing user is not a member
-		owners = Collections.emptyList();
-		members = Collections.emptyList();
-		invited = Collections.emptyList();
-	}
-
 	private List<AccountReferenceOutput> extract(final GroupEntity group, final MemberType memberType) {
 		final List<AccountReferenceOutput> output = new ArrayList<>();
 		for(final GroupMemberEntity member : group.getGroupMemberships()) {
