@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class AbstractEntity implements Identifiable<Long> {
+public abstract class AbstractEntity
+extends AbstractIdentifiable {
 
 	@Id
 	@GeneratedValue
@@ -23,29 +24,6 @@ public abstract class AbstractEntity implements Identifiable<Long> {
 	@Column(nullable = false, insertable = true, updatable = false)
 	@Getter
 	private Date created;
-
-	@Override
-	public final boolean equals(final Object other) {
-		if(this == other) {
-			return true;
-		}
-		if(null == other
-				|| ! this.getClass().equals(other.getClass())
-				|| null == getId()) {
-			return false;
-		}
-		final AbstractEntity castOther = (AbstractEntity)other;
-		return getId().equals(castOther.getId());
-	}
-
-	@Override
-	public final int hashCode() {
-		if(null == getId()) {
-			return 0;
-		} else {
-			return getId().hashCode();
-		}
-	}
 
 	@Override
 	public String toString() {
