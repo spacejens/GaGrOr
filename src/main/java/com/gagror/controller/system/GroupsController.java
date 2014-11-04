@@ -87,7 +87,7 @@ public class GroupsController extends AbstractController {
 	@RequestMapping("/members/{groupId}")
 	public String groupMembers(@PathVariable("groupId") final Long groupId, final Model model) {
 		log.info(String.format("Viewing members of group %d", groupId));
-		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("group", groupService.viewGroupMembers(groupId));
 		return "group_members";
 	}
 
@@ -100,8 +100,6 @@ public class GroupsController extends AbstractController {
 	}
 	// TODO Allow inviting other users to your group
 	// TODO Only show invitations link if the user has permission to do that
-
-	// TODO Restructure group output objects so that only the required data is loaded for each page
 
 	// TODO Make it possible to accept invitations to groups
 

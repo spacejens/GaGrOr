@@ -17,8 +17,9 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.GroupViewOutput;
+import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -76,7 +77,7 @@ public class GroupService {
 		groupMemberRepository.save(owner);
 	}
 
-	public GroupViewOutput viewGroup(final Long groupId) {
+	public GroupReferenceOutput viewGroup(final Long groupId) {
 		final GroupEntity group = groupRepository.findOne(groupId);
 		if(null == group) {
 			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
@@ -85,9 +86,25 @@ public class GroupService {
 		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
 			if(membership.getAccount().equals(currentUser)) {
-				return new GroupViewOutput(membership);
+				return new GroupReferenceOutput(membership);
 			}
 		}
-		return new GroupViewOutput(group);
+		return new GroupReferenceOutput(group);
+	}
+
+	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {
+		final GroupEntity group = groupRepository.findOne(groupId);
+		if(null == group) {
+			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
+		}
+		log.debug(String.format("Loaded group %s for viewing", group));
+		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
+		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
+			if(membership.getAccount().equals(currentUser)) {
+				return new GroupViewMembersOutput(membership);
+			}
+		}
+		// TODO Should never be asked to view group members for group user is not a member, what to do?
+		return new GroupViewMembersOutput(group);
 	}
 }

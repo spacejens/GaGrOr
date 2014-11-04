@@ -29,8 +29,8 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.GroupViewOutput;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -158,7 +158,7 @@ public class GroupServiceUnitTest {
 	}
 
 	private void viewGroup_ok(final Long id, final String expectedName, final MemberType expectedMemberType) {
-		final GroupViewOutput result = instance.viewGroup(id);
+		final GroupReferenceOutput result = instance.viewGroup(id);
 		assertEquals("Wrong group found", expectedName, result.getName());
 		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
 	}
@@ -166,6 +166,37 @@ public class GroupServiceUnitTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void viewGroup_notFound() {
 		instance.viewGroup(34578095L);
+	}
+
+	@Test
+	public void viewGroupMembers_owner() {
+		viewGroupMembers_ok(FIRST_GROUP_ID, FIRST_GROUP_NAME, MemberType.OWNER);
+	}
+
+	@Test
+	public void viewGroupMembers_member() {
+		viewGroupMembers_ok(SECOND_GROUP_ID, SECOND_GROUP_NAME, MemberType.MEMBER);
+	}
+
+	@Test
+	public void viewGroupMembers_invited() {
+		viewGroupMembers_ok(THIRD_GROUP_ID, THIRD_GROUP_NAME, MemberType.INVITED);
+	}
+
+	@Test
+	public void viewGroupMembers_notMember() {
+		viewGroupMembers_ok(ANOTHER_GROUP_ID, ANOTHER_GROUP_NAME, null);
+	}
+
+	private void viewGroupMembers_ok(final Long id, final String expectedName, final MemberType expectedMemberType) {
+		final GroupReferenceOutput result = instance.viewGroupMembers(id);
+		assertEquals("Wrong group found", expectedName, result.getName());
+		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewGroupMembers_notFound() {
+		instance.viewGroupMembers(34578095L);
 	}
 
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {

@@ -21,7 +21,7 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GroupViewOutputUnitTest {
+public class GroupViewMembersOutputUnitTest {
 
 	private static final Date DATE_MEMBER = new Date();
 	private static final Date DATE_GROUP = new Date(0);
@@ -74,49 +74,49 @@ public class GroupViewOutputUnitTest {
 
 	@Test
 	public void getCreated_fromGroup() {
-		final GroupViewOutput instance = new GroupViewOutput(group);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
 		assertEquals("Created date should be from group", DATE_GROUP, instance.getCreated());
 	}
 
 	@Test
 	public void getCreated_fromMembership() {
-		final GroupViewOutput instance = new GroupViewOutput(memberFirstOwner);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
 		assertEquals("Created date should be from group", DATE_GROUP, instance.getCreated());
 	}
 
 	@Test
 	public void getOwners_fromMembership() {
-		final GroupViewOutput instance = new GroupViewOutput(memberFirstOwner);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
 		assertUsers(instance.getOwners(), USERNAME_FIRST_OWNER, USERNAME_SECOND_OWNER);
 	}
 
 	@Test
 	public void getMembers_fromMembership() {
-		final GroupViewOutput instance = new GroupViewOutput(memberFirstOwner);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
 		assertUsers(instance.getMembers(), USERNAME_FIRST_MEMBER, USERNAME_SECOND_MEMBER);
 	}
 
 	@Test
 	public void getInvited_fromMembership() {
-		final GroupViewOutput instance = new GroupViewOutput(memberFirstOwner);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
 		assertUsers(instance.getInvited(), USERNAME_FIRST_INVITED, USERNAME_SECOND_INVITED);
 	}
 
 	@Test
 	public void getOwners_emptyWhenNotMember() {
-		final GroupViewOutput instance = new GroupViewOutput(group);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
 		assertTrue("Should not list owners when not member of group", instance.getOwners().isEmpty());
 	}
 
 	@Test
 	public void getMembers_emptyWhenNotMember() {
-		final GroupViewOutput instance = new GroupViewOutput(group);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
 		assertTrue("Should not list members when not member of group", instance.getMembers().isEmpty());
 	}
 
 	@Test
 	public void getInvited_emptyWhenNotMember() {
-		final GroupViewOutput instance = new GroupViewOutput(group);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
 		assertTrue("Should not list invited when not member of group", instance.getInvited().isEmpty());
 	}
 
