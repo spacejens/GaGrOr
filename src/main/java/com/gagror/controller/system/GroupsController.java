@@ -99,7 +99,6 @@ public class GroupsController extends AbstractController {
 		return "group_invite";
 	}
 	// TODO Allow inviting other users to your group
-	// TODO Only show invitations link if the user has permission to do that
 
 	// TODO Make it possible to accept invitations to groups
 
