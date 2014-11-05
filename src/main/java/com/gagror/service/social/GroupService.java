@@ -140,6 +140,7 @@ public class GroupService {
 	public void sendInvitations(final GroupInviteInput groupInviteForm, final BindingResult bindingResult) {
 		final GroupEntity group = loadGroup(groupInviteForm.getId());
 		for(final Long invited : groupInviteForm.getSelected()) {
+			// TODO If invited user is not a contact, fail or ignore?
 			// TODO If invited user cannot be found, do what? Ignore or fail?
 			// TODO If any invited users are already invited or members, ignore them
 			groupMemberRepository.save(new GroupMemberEntity(

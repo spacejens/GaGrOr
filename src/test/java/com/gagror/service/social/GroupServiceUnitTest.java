@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
@@ -118,6 +121,9 @@ public class GroupServiceUnitTest {
 
 	@Mock
 	ContactEntity contact;
+
+	@Mock
+	GroupInviteInput groupInviteForm;
 
 	@Test
 	public void loadGroupList_ok() {
@@ -256,7 +262,41 @@ public class GroupServiceUnitTest {
 		verify(groupMember, never()).getMemberType(); // Member type shouldn't matter
 	}
 
-	// TODO Tests for sendInvitations
+	@Test
+	public void sendInvitations_ok() {
+		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
+		instance.sendInvitations(groupInviteForm, bindingResult);
+		verifyNoMoreInteractions(bindingResult);
+		final ArgumentCaptor<GroupMemberEntity> member = ArgumentCaptor.forClass(GroupMemberEntity.class);
+		verify(groupMemberRepository).save(member.capture());
+		assertSame("Wrong group", firstGroup, member.getValue().getGroup());
+		assertSame("Wrong account", contactAccount, member.getValue().getAccount());
+		assertEquals("Wrong member type", MemberType.INVITED, member.getValue().getMemberType());
+		assertTrue("Group should have member", firstGroup.getGroupMemberships().contains(member.getValue()));
+		assertTrue("Account should have member", contactAccount.getGroupMemberships().contains(member.getValue()));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void sendInvitations_groupNotFound() {
+		when(groupInviteForm.getId()).thenReturn(7964336L);
+		instance.sendInvitations(groupInviteForm, bindingResult);
+	}
+
+	@Test
+	public void sendInvitations_inviteMultipleUsers() {
+		final long anotherAccountID = 476593L;
+		final AccountEntity anotherAccount = mock(AccountEntity.class);
+		mockAccount(anotherAccount, anotherAccountID);
+		final ContactEntity anotherContact = mock(ContactEntity.class);
+		mockContact(anotherContact, 57697L, requestAccount, anotherAccount, ContactType.APPROVED);
+		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
+		groupInviteForm.getSelected().add(anotherAccountID);
+		instance.sendInvitations(groupInviteForm, bindingResult);
+		verify(groupMemberRepository, times(2)).save(any(GroupMemberEntity.class));
+	}
+	// TODO Add test: Invited user is not a contact
+	// TODO Add test: Invited user not found
+	// TODO Add test: Invited user already member
 
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);
@@ -270,6 +310,13 @@ public class GroupServiceUnitTest {
 	@Before
 	public void setupGroupCreateForm() {
 		when(groupCreateForm.getName()).thenReturn(NEW_GROUP_NAME);
+	}
+
+	@Before
+	public void setupGroupInviteForm() {
+		when(groupInviteForm.getId()).thenReturn(FIRST_GROUP_ID);
+		final Set<Long> invited = new HashSet<>();
+		when(groupInviteForm.getSelected()).thenReturn(invited);
 	}
 
 	@Before
@@ -327,6 +374,8 @@ public class GroupServiceUnitTest {
 		when(accountRepository.findById(id)).thenReturn(account);
 		final Set<ContactEntity> contacts = new HashSet<>();
 		when(account.getContacts()).thenReturn(contacts);
+		final Set<GroupMemberEntity> memberships = new HashSet<>();
+		when(account.getGroupMemberships()).thenReturn(memberships);
 	}
 
 	private void mockContact(final ContactEntity contact, final Long id, final AccountEntity owner, final AccountEntity other, final ContactType contactType) {
