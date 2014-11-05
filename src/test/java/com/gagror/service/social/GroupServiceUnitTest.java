@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -227,6 +226,20 @@ public class GroupServiceUnitTest {
 	}
 
 	@Test
+	public void loadPossibleUsersToInvite_sorted() {
+		final AccountEntity anotherContactAccount = mock(AccountEntity.class);
+		mockAccount(anotherContactAccount, 56736L);
+		when(anotherContactAccount.getUsername()).thenReturn("AAAA");
+		when(contactAccount.getUsername()).thenReturn("BBBB");
+		final ContactEntity anotherContact = mock(ContactEntity.class);
+		mockContact(anotherContact, 39999L, requestAccount, anotherContactAccount, ContactType.APPROVED);
+		final List<AccountReferenceOutput> result = instance.loadPossibleUsersToInvite(FIRST_GROUP_ID);
+		assertEquals("Wrong number of candidates loaded", 2, result.size());
+		assertEquals("Wrong candidate first", anotherContactAccount.getId(), result.get(0).getId());
+		assertEquals("Wrong candidate second", contactAccount.getId(), result.get(1).getId());
+	}
+
+	@Test
 	public void loadPossibleUsersToInvite_alreadyMember() {
 		final Long id = 34675L;
 		final GroupMemberEntity groupMember = mock(GroupMemberEntity.class);
@@ -297,15 +310,24 @@ public class GroupServiceUnitTest {
 
 	@Before
 	public void setupAccounts() {
-		when(requestAccount.getId()).thenReturn(ACCOUNT_ID_REQUEST);
-		when(accountRepository.findById(ACCOUNT_ID_REQUEST)).thenReturn(requestAccount);
-		when(contactAccount.getId()).thenReturn(ACCOUNT_ID_CONTACT);
-		when(accountRepository.findById(ACCOUNT_ID_CONTACT)).thenReturn(contactAccount);
-		when(contact.getId()).thenReturn(CONTACT_ID);
-		when(contact.getOwner()).thenReturn(requestAccount);
-		when(contact.getContact()).thenReturn(contactAccount);
-		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
-		when(requestAccount.getContacts()).thenReturn(Collections.singleton(contact));
+		mockAccount(requestAccount, ACCOUNT_ID_REQUEST);
+		mockAccount(contactAccount, ACCOUNT_ID_CONTACT);
+		mockContact(contact, CONTACT_ID, requestAccount, contactAccount, ContactType.APPROVED);
+	}
+
+	private void mockAccount(final AccountEntity account, final Long id) {
+		when(account.getId()).thenReturn(id);
+		when(accountRepository.findById(id)).thenReturn(account);
+		final Set<ContactEntity> contacts = new HashSet<>();
+		when(account.getContacts()).thenReturn(contacts);
+	}
+
+	private void mockContact(final ContactEntity contact, final Long id, final AccountEntity owner, final AccountEntity other, final ContactType contactType) {
+		when(contact.getId()).thenReturn(id);
+		when(contact.getOwner()).thenReturn(owner);
+		when(contact.getContact()).thenReturn(other);
+		when(contact.getContactType()).thenReturn(contactType);
+		owner.getContacts().add(contact);
 	}
 
 	@Before
