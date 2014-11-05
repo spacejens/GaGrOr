@@ -2,7 +2,9 @@ package com.gagror.service.social;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.extern.apachecommons.CommonsLog;
 
@@ -12,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountReferenceOutput;
+import com.gagror.data.account.AccountRepository;
+import com.gagror.data.account.ContactEntity;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
@@ -33,6 +39,9 @@ public class GroupService {
 
 	@Autowired
 	GroupRepository groupRepository;
+
+	@Autowired
+	AccountRepository accountRepository;
 
 	@Autowired
 	GroupMemberRepository groupMemberRepository;
@@ -78,10 +87,7 @@ public class GroupService {
 	}
 
 	public GroupReferenceOutput viewGroup(final Long groupId) {
-		final GroupEntity group = groupRepository.findOne(groupId);
-		if(null == group) {
-			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
-		}
+		final GroupEntity group = loadGroup(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
 		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
@@ -93,10 +99,7 @@ public class GroupService {
 	}
 
 	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {
-		final GroupEntity group = groupRepository.findOne(groupId);
-		if(null == group) {
-			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
-		}
+		final GroupEntity group = loadGroup(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
 		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
@@ -105,5 +108,44 @@ public class GroupService {
 			}
 		}
 		throw new IllegalArgumentException(String.format("Could not load members for group %d, request account is not a member", groupId));
+	}
+
+	private GroupEntity loadGroup(final Long groupId) {
+		final GroupEntity group = groupRepository.findOne(groupId);
+		if(null == group) {
+			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
+		}
+		return group;
+	}
+
+	public List<AccountReferenceOutput> loadPossibleUsersToInvite(final Long groupId) {
+		final GroupEntity group = loadGroup(groupId);
+		// Find the group of users who are already invited or members
+		final Set<AccountEntity> groupMemberAccounts = new HashSet<>();
+		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
+			groupMemberAccounts.add(membership.getAccount());
+		}
+		// Find the possible users
+		final List<AccountReferenceOutput> output = new ArrayList<>();
+		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getContacts()) {
+			// Filter out group members, and contacts who have not been accepted
+			if(! groupMemberAccounts.contains(contact.getContact()) && contact.getContactType().isContact()) {
+				output.add(new AccountReferenceOutput(contact.getContact()));
+			}
+		}
+		Collections.sort(output);
+		return output;
+	}
+
+	public void sendInvitations(final GroupInviteInput groupInviteForm, final BindingResult bindingResult) {
+		final GroupEntity group = loadGroup(groupInviteForm.getId());
+		for(final Long invited : groupInviteForm.getSelected()) {
+			// TODO If invited user cannot be found, do what? Ignore or fail?
+			// TODO If any invited users are already invited or members, ignore them
+			groupMemberRepository.save(new GroupMemberEntity(
+					group,
+					accountRepository.findById(invited),
+					MemberType.INVITED));
+		}
 	}
 }

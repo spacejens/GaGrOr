@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.data.group.GroupCreateInput;
+import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.service.social.GroupService;
 
@@ -92,13 +93,45 @@ public class GroupsController extends AbstractController {
 	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping("/invite/{groupId}")
-	public String inviteForm(@PathVariable("groupId") final Long groupId, final Model model) {
+	@RequestMapping(value="/invite/{groupId}", method=RequestMethod.GET)
+	public String inviteForm(
+			@Valid @ModelAttribute("groupInviteForm") final GroupInviteInput groupInviteForm,
+			@PathVariable("groupId") final Long groupId,
+			final Model model) {
 		log.info(String.format("Showing member invite form for group %d", groupId));
+		groupInviteForm.setId(groupId);
+		return showInviteForm(groupId, model);
+	}
+
+	private String showInviteForm(final Long groupId, final Model model) {
 		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("candidates", groupService.loadPossibleUsersToInvite(groupId));
 		return "group_invite";
 	}
-	// TODO Allow inviting other users to your group
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
+	@RequestMapping(value="/invite/{groupId}", method=RequestMethod.POST)
+	public Object invite(
+			@Valid @ModelAttribute("groupInviteForm") final GroupInviteInput groupInviteForm,
+			final BindingResult bindingResult,
+			@PathVariable("groupId") final Long groupId,
+			final Model model) {
+		if(! groupId.equals(groupInviteForm.getId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to invite users", groupId, groupInviteForm.getId()));
+			throw new IllegalArgumentException("Unexpected group ID in invite form");
+		}
+		if(bindingResult.hasErrors()) {
+			log.info(String.format("Failed to invite users to group %d, form had errors", groupId));
+			return showInviteForm(groupId, model);
+		}
+		groupService.sendInvitations(groupInviteForm, bindingResult);
+		if(bindingResult.hasErrors()) {
+			log.info(String.format("Failed to invite users to group %d, rejected by service layer", groupId));
+			return showInviteForm(groupId, model);
+		}
+		log.info(String.format("Invited users %s to group %d", groupInviteForm.getSelected(), groupId));
+		return redirect(String.format("/groups/members/%d", groupId));
+	}
 
 	// TODO Make it possible to accept invitations to groups
 

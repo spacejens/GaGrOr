@@ -9,6 +9,15 @@
 		<a th:href="@{/groups/members/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members}"></a>
 		<a class="current" th:text="#{menu.groups.members.invite}"></a>
 	</nav>
+	<p th:if="${#lists.isEmpty(candidates)}">All of your contacts have already been invited</p>
+	<form th:unless="${#lists.isEmpty(candidates)}" action="#" th:action="@{/groups/invite/{groupId}(groupId=${group.id})}" th:object="${groupInviteForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<label th:each="candidate : ${candidates}">
+			<input type="checkbox" th:field="*{selected}" th:value="${candidate.id}"/>
+			<span th:replace="/fragments/formatting :: username (account=${candidate})"></span>
+		</label>
+		<button type="submit" th:text="#{menu.groups.members.invite}"></button>
+	</form>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

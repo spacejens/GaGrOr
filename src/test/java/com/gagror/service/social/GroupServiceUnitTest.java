@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +27,10 @@ import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.account.AccountReferenceOutput;
+import com.gagror.data.account.AccountRepository;
+import com.gagror.data.account.ContactEntity;
+import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
@@ -53,6 +60,10 @@ public class GroupServiceUnitTest {
 	private static final Long THIRD_MEMBERSHIP_ID = 333L;
 	private static final Long FOURTH_MEMBERSHIP_ID = 444L;
 
+	private static final Long ACCOUNT_ID_REQUEST = 123L;
+	private static final Long ACCOUNT_ID_CONTACT = 456L;
+	private static final Long CONTACT_ID = 789L;
+
 	GroupService instance;
 
 	@Mock
@@ -63,6 +74,9 @@ public class GroupServiceUnitTest {
 
 	@Mock
 	GroupMemberRepository groupMemberRepository;
+
+	@Mock
+	AccountRepository accountRepository;
 
 	@Mock
 	AccountEntity requestAccount;
@@ -99,6 +113,12 @@ public class GroupServiceUnitTest {
 
 	@Mock
 	BindingResult bindingResult;
+
+	@Mock
+	AccountEntity contactAccount;
+
+	@Mock
+	ContactEntity contact;
 
 	@Test
 	public void loadGroupList_ok() {
@@ -199,6 +219,25 @@ public class GroupServiceUnitTest {
 		instance.viewGroupMembers(34578095L);
 	}
 
+	@Test
+	public void loadPossibleUsersToInvite_ok() {
+		final List<AccountReferenceOutput> result = instance.loadPossibleUsersToInvite(FIRST_GROUP_ID);
+		assertEquals("Wrong number of candidates loaded", 1, result.size());
+		assertEquals("Wrong candidate loaded", ACCOUNT_ID_CONTACT, result.iterator().next().getId());
+	}
+
+	@Test
+	public void loadPossibleUsersToInvite_alreadyMember() {
+		final Long id = 34675L;
+		final GroupMemberEntity groupMember = mock(GroupMemberEntity.class);
+		mockGroupMember(groupMember, firstGroup, id, MemberType.MEMBER, contactAccount);
+		final List<AccountReferenceOutput> result = instance.loadPossibleUsersToInvite(FIRST_GROUP_ID);
+		assertTrue("Candidate that is already member should not have been loaded", result.isEmpty());
+		verify(groupMember, never()).getMemberType(); // Member type shouldn't matter
+	}
+
+	// TODO Tests for sendInvitations
+
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);
 		final List<Long> actual = new ArrayList<>();
@@ -257,6 +296,19 @@ public class GroupServiceUnitTest {
 	}
 
 	@Before
+	public void setupAccounts() {
+		when(requestAccount.getId()).thenReturn(ACCOUNT_ID_REQUEST);
+		when(accountRepository.findById(ACCOUNT_ID_REQUEST)).thenReturn(requestAccount);
+		when(contactAccount.getId()).thenReturn(ACCOUNT_ID_CONTACT);
+		when(accountRepository.findById(ACCOUNT_ID_CONTACT)).thenReturn(contactAccount);
+		when(contact.getId()).thenReturn(CONTACT_ID);
+		when(contact.getOwner()).thenReturn(requestAccount);
+		when(contact.getContact()).thenReturn(contactAccount);
+		when(contact.getContactType()).thenReturn(ContactType.APPROVED);
+		when(requestAccount.getContacts()).thenReturn(Collections.singleton(contact));
+	}
+
+	@Before
 	public void setupAccessControlService() {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(requestAccount);
 	}
@@ -267,5 +319,6 @@ public class GroupServiceUnitTest {
 		instance.accessControlService = accessControlService;
 		instance.groupRepository = groupRepository;
 		instance.groupMemberRepository = groupMemberRepository;
+		instance.accountRepository = accountRepository;
 	}
 }
