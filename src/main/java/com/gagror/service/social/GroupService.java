@@ -141,11 +141,14 @@ public class GroupService {
 		final GroupEntity group = loadGroup(groupInviteForm.getId());
 		for(final Long invited : groupInviteForm.getSelected()) {
 			// TODO If invited user is not a contact, fail or ignore?
-			// TODO If invited user cannot be found, do what? Ignore or fail?
 			// TODO If any invited users are already invited or members, ignore them
+			final AccountEntity account = accountRepository.findById(invited);
+			if(null == account) {
+				throw new IllegalArgumentException(String.format("Failed to load invited account %d", invited));
+			}
 			groupMemberRepository.save(new GroupMemberEntity(
 					group,
-					accountRepository.findById(invited),
+					account,
 					MemberType.INVITED));
 		}
 	}

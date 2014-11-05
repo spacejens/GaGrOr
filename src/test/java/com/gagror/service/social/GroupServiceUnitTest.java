@@ -294,8 +294,13 @@ public class GroupServiceUnitTest {
 		instance.sendInvitations(groupInviteForm, bindingResult);
 		verify(groupMemberRepository, times(2)).save(any(GroupMemberEntity.class));
 	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void sendInvitations_userNotFound() {
+		groupInviteForm.getSelected().add(74697834L);
+		instance.sendInvitations(groupInviteForm, bindingResult);
+	}
 	// TODO Add test: Invited user is not a contact
-	// TODO Add test: Invited user not found
 	// TODO Add test: Invited user already member
 
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
