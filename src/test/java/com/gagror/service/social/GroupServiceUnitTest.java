@@ -240,6 +240,13 @@ public class GroupServiceUnitTest {
 	}
 
 	@Test
+	public void loadPossibleUsersToInvite_contactNotAccepted() {
+		when(contact.getContactType()).thenReturn(ContactType.REQUESTED);
+		final List<AccountReferenceOutput> result = instance.loadPossibleUsersToInvite(FIRST_GROUP_ID);
+		assertTrue("Candidate that is not an accepted contact should not have been loaded", result.isEmpty());
+	}
+
+	@Test
 	public void loadPossibleUsersToInvite_alreadyMember() {
 		final Long id = 34675L;
 		final GroupMemberEntity groupMember = mock(GroupMemberEntity.class);
