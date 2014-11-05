@@ -14,16 +14,18 @@
 	<table th:fragment="groupsTable (groups)" th:unless="${#lists.isEmpty(groups)}">
 		<thead>
 			<tr>
-				<td>Group name</td>
-				<td>My role</td>
+				<td>Group</td>
+				<td>Role</td>
 				<td>Members</td>
+				<td>Action</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="group : ${groups}">
-				<td><a href="view_group.html" th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}">A group</a></td>
-				<td th:text="#{${group.memberType.displayNameProperty}}">Member</td>
-				<td th:text="${group.memberCount} + (${group.invitationCount}? ' (+' + ${group.invitationCount} + ')' : '')">2</td>
+				<td th:text="${group.name}"></td>
+				<td th:text="#{${group.memberType.displayNameProperty}}"></td>
+				<td th:text="${group.memberCount} + (${group.invitationCount}? ' (+' + ${group.invitationCount} + ')' : '')"></td>
+				<td><a href="view_group.html" th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.view}"></a></td>
 			</tr>
 		</tbody>
 	</table>
