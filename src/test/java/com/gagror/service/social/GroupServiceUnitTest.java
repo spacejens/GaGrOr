@@ -310,7 +310,15 @@ public class GroupServiceUnitTest {
 		instance.sendInvitations(groupInviteForm, bindingResult);
 		verify(groupMemberRepository, never()).save(any(GroupMemberEntity.class));
 	}
-	// TODO Add test: Invited user is not a contact
+
+	@Test(expected=IllegalArgumentException.class)
+	public void sendInvitations_notContact() {
+		final long anotherAccountID = 476593L;
+		final AccountEntity anotherAccount = mock(AccountEntity.class);
+		mockAccount(anotherAccount, anotherAccountID);
+		groupInviteForm.getSelected().add(anotherAccountID);
+		instance.sendInvitations(groupInviteForm, bindingResult);
+	}
 
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);

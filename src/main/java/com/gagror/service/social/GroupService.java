@@ -145,11 +145,19 @@ public class GroupService {
 	public void sendInvitations(final GroupInviteInput groupInviteForm, final BindingResult bindingResult) {
 		final GroupEntity group = loadGroup(groupInviteForm.getId());
 		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group);
+		final Set<AccountEntity> contacts = new HashSet<>();
+		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getContacts()) {
+			if(contact.getContactType().isContact()) {
+				contacts.add(contact.getContact());
+			}
+		}
 		for(final Long invited : groupInviteForm.getSelected()) {
-			// TODO If invited user is not a contact, fail or ignore?
 			final AccountEntity account = accountRepository.findById(invited);
 			if(null == account) {
 				throw new IllegalArgumentException(String.format("Failed to load invited account %d", invited));
+			}
+			if(! contacts.contains(account)) {
+				throw new IllegalArgumentException(String.format("Invited account %d is not a contact, cannot invite", invited));
 			}
 			if(! groupMemberAccounts.contains(account)) {
 				groupMemberRepository.save(new GroupMemberEntity(
