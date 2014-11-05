@@ -10,8 +10,12 @@ public class GroupListOutput extends GroupReferenceOutput {
 	@Getter
 	private final int invitationCount;
 
+	@Getter
+	private final Long memberId;
+
 	public GroupListOutput(final GroupMemberEntity membership) {
 		super(membership);
+		memberId = membership.getId();
 		// Count the number of members and pending membership invitations
 		int tempMemberCount = 0;
 		int tempInvitationCount = 0;
