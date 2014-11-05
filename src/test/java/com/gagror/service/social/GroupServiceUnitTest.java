@@ -300,8 +300,17 @@ public class GroupServiceUnitTest {
 		groupInviteForm.getSelected().add(74697834L);
 		instance.sendInvitations(groupInviteForm, bindingResult);
 	}
+
+	@Test
+	public void sendInvitations_alreadyMember() {
+		final Long id = 34675L;
+		final GroupMemberEntity groupMember = mock(GroupMemberEntity.class);
+		mockGroupMember(groupMember, firstGroup, id, MemberType.MEMBER, contactAccount);
+		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
+		instance.sendInvitations(groupInviteForm, bindingResult);
+		verify(groupMemberRepository, never()).save(any(GroupMemberEntity.class));
+	}
 	// TODO Add test: Invited user is not a contact
-	// TODO Add test: Invited user already member
 
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);

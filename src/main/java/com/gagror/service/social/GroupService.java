@@ -121,10 +121,7 @@ public class GroupService {
 	public List<AccountReferenceOutput> loadPossibleUsersToInvite(final Long groupId) {
 		final GroupEntity group = loadGroup(groupId);
 		// Find the group of users who are already invited or members
-		final Set<AccountEntity> groupMemberAccounts = new HashSet<>();
-		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
-			groupMemberAccounts.add(membership.getAccount());
-		}
+		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group);
 		// Find the possible users
 		final List<AccountReferenceOutput> output = new ArrayList<>();
 		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getContacts()) {
@@ -137,19 +134,29 @@ public class GroupService {
 		return output;
 	}
 
+	private Set<AccountEntity> findGroupMemberAccounts(final GroupEntity group) {
+		final Set<AccountEntity> groupMemberAccounts = new HashSet<>();
+		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
+			groupMemberAccounts.add(membership.getAccount());
+		}
+		return groupMemberAccounts;
+	}
+
 	public void sendInvitations(final GroupInviteInput groupInviteForm, final BindingResult bindingResult) {
 		final GroupEntity group = loadGroup(groupInviteForm.getId());
+		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group);
 		for(final Long invited : groupInviteForm.getSelected()) {
 			// TODO If invited user is not a contact, fail or ignore?
-			// TODO If any invited users are already invited or members, ignore them
 			final AccountEntity account = accountRepository.findById(invited);
 			if(null == account) {
 				throw new IllegalArgumentException(String.format("Failed to load invited account %d", invited));
 			}
-			groupMemberRepository.save(new GroupMemberEntity(
-					group,
-					account,
-					MemberType.INVITED));
+			if(! groupMemberAccounts.contains(account)) {
+				groupMemberRepository.save(new GroupMemberEntity(
+						group,
+						account,
+						MemberType.INVITED));
+			}
 		}
 	}
 }
