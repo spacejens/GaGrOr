@@ -12,7 +12,7 @@ public enum ContactType implements Identifiable<Integer>, PropertyNameDisplayabl
 
 	// BLOCKED(0, false, false),
 	REQUESTED(1, false, true),
-	AUTOMATIC(2, true, false), // TODO Add all group members as contacts automatically when joining
+	AUTOMATIC(2, true, false),
 	APPROVED(3, true, false);
 
 	private static final EnumIdMapping<Integer, ContactType> IDMAP = new EnumIdMapping<>(ContactType.class);

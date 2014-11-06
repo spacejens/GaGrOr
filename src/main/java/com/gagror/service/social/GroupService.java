@@ -17,6 +17,8 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
+import com.gagror.data.account.ContactRepository;
+import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupInviteInput;
@@ -45,6 +47,9 @@ public class GroupService {
 
 	@Autowired
 	GroupMemberRepository groupMemberRepository;
+
+	@Autowired
+	ContactRepository contactRepository;
 
 	public List<GroupListOutput> loadGroupList() {
 		log.debug("Loading group list");
@@ -121,7 +126,7 @@ public class GroupService {
 	public List<AccountReferenceOutput> loadPossibleUsersToInvite(final Long groupId) {
 		final GroupEntity group = loadGroup(groupId);
 		// Find the group of users who are already invited or members
-		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group);
+		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group, false);
 		// Find the possible users
 		final List<AccountReferenceOutput> output = new ArrayList<>();
 		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getContacts()) {
@@ -134,17 +139,19 @@ public class GroupService {
 		return output;
 	}
 
-	private Set<AccountEntity> findGroupMemberAccounts(final GroupEntity group) {
+	private Set<AccountEntity> findGroupMemberAccounts(final GroupEntity group, final boolean onlyFullMembers) {
 		final Set<AccountEntity> groupMemberAccounts = new HashSet<>();
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
-			groupMemberAccounts.add(membership.getAccount());
+			if(! onlyFullMembers || membership.getMemberType().isMember()) {
+				groupMemberAccounts.add(membership.getAccount());
+			}
 		}
 		return groupMemberAccounts;
 	}
 
 	public void sendInvitations(final GroupInviteInput groupInviteForm, final BindingResult bindingResult) {
 		final GroupEntity group = loadGroup(groupInviteForm.getId());
-		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group);
+		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group, false);
 		final Set<AccountEntity> contacts = new HashSet<>();
 		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getContacts()) {
 			if(contact.getContactType().isContact()) {
@@ -172,6 +179,39 @@ public class GroupService {
 		final GroupMemberEntity invitation = findInvitation(memberId);
 		if(null != invitation) {
 			invitation.setMemberType(MemberType.MEMBER);
+			// Add group members as contacts
+			final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+			for(final AccountEntity groupMember : findGroupMemberAccounts(invitation.getGroup(), true)) {
+				if(! requestAccount.equals(groupMember)) {
+					boolean foundContact = false;
+					for(final ContactEntity contact : requestAccount.getContacts()) {
+						if(contact.getContact().equals(groupMember)) {
+							foundContact = true;
+							if(contact.getContactType().isRequest()) {
+								// Auto-accept and mirror the requested contact
+								log.debug(String.format("Auto-accepting and mirroring requested contact: %s", contact));
+								contact.setContactType(ContactType.AUTOMATIC);
+								contactRepository.save(new ContactEntity(groupMember, ContactType.AUTOMATIC, requestAccount));
+							}
+						}
+					}
+					for(final ContactEntity incoming : requestAccount.getIncomingContacts()) {
+						if(incoming.getOwner().equals(groupMember) && incoming.getContactType().isRequest()) {
+							foundContact = true;
+							// Auto-accept and mirror the incoming contact request
+							log.debug(String.format("Auto-accepting and mirroring incoming contact request: %s", incoming));
+							incoming.setContactType(ContactType.AUTOMATIC);
+							contactRepository.save(new ContactEntity(requestAccount, ContactType.AUTOMATIC, groupMember));
+						}
+					}
+					if(! foundContact) {
+						// Create and mirror the contact with the non-contact user
+						log.debug(String.format("Creating and mirroring contact for %s and %s", requestAccount, groupMember));
+						contactRepository.save(new ContactEntity(requestAccount, ContactType.AUTOMATIC, groupMember));
+						contactRepository.save(new ContactEntity(groupMember, ContactType.AUTOMATIC, requestAccount));
+					}
+				}
+			}
 		}
 		// If invitation does no longer exist, just silently ignore it
 	}
