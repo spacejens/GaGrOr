@@ -16,7 +16,7 @@ public class ContactTypeUnitTest extends EnumUnitTestSupport<ContactType> {
 
 	@RequiredArgsConstructor
 	private enum ExpectedResults {
-		BLOCKED(ContactType.BLOCKED, 0),
+//		BLOCKED(ContactType.BLOCKED, 0),
 		REQUESTED(ContactType.REQUESTED, 1),
 		AUTOMATIC(ContactType.AUTOMATIC, 2),
 		APPROVED(ContactType.APPROVED, 3);
