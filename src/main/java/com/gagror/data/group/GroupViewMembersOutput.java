@@ -6,32 +6,20 @@ import java.util.List;
 
 import lombok.Getter;
 
-import com.gagror.data.account.AccountReferenceOutput;
-
 public class GroupViewMembersOutput extends GroupReferenceOutput {
 
 	@Getter
-	private final List<AccountReferenceOutput> owners;
-
-	@Getter
-	private final List<AccountReferenceOutput> members;
-
-	@Getter
-	private final List<AccountReferenceOutput> invited;
+	private final List<GroupMemberOutput> members;
 
 	public GroupViewMembersOutput(final GroupMemberEntity membership) {
 		super(membership);
-		owners = extract(membership.getGroup(), MemberType.OWNER);
-		members = extract(membership.getGroup(), MemberType.MEMBER);
-		invited = extract(membership.getGroup(), MemberType.INVITED);
+		members = extract(membership.getGroup());
 	}
 
-	private List<AccountReferenceOutput> extract(final GroupEntity group, final MemberType memberType) {
-		final List<AccountReferenceOutput> output = new ArrayList<>();
+	private List<GroupMemberOutput> extract(final GroupEntity group) {
+		final List<GroupMemberOutput> output = new ArrayList<>();
 		for(final GroupMemberEntity member : group.getGroupMemberships()) {
-			if(memberType.equals(member.getMemberType())) {
-				output.add(new AccountReferenceOutput(member.getAccount()));
-			}
+			output.add(new GroupMemberOutput(member));
 		}
 		Collections.sort(output);
 		return Collections.unmodifiableList(output);

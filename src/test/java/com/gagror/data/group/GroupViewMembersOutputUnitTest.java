@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.account.AccountEntity;
-import com.gagror.data.account.AccountReferenceOutput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GroupViewMembersOutputUnitTest {
@@ -78,27 +77,15 @@ public class GroupViewMembersOutputUnitTest {
 	}
 
 	@Test
-	public void getOwners_fromMembership() {
+	public void getMembers() {
 		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
-		assertUsers(instance.getOwners(), USERNAME_FIRST_OWNER, USERNAME_SECOND_OWNER);
+		assertUsers(instance.getMembers(), USERNAME_FIRST_INVITED, USERNAME_FIRST_MEMBER, USERNAME_FIRST_OWNER, USERNAME_SECOND_INVITED, USERNAME_SECOND_MEMBER, USERNAME_SECOND_OWNER);
 	}
 
-	@Test
-	public void getMembers_fromMembership() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
-		assertUsers(instance.getMembers(), USERNAME_FIRST_MEMBER, USERNAME_SECOND_MEMBER);
-	}
-
-	@Test
-	public void getInvited_fromMembership() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
-		assertUsers(instance.getInvited(), USERNAME_FIRST_INVITED, USERNAME_SECOND_INVITED);
-	}
-
-	private void assertUsers(final List<AccountReferenceOutput> accounts, final String... expectedUsernames) {
+	private void assertUsers(final List<GroupMemberOutput> accounts, final String... expectedUsernames) {
 		final List<String> expected = Arrays.asList(expectedUsernames);
 		final List<String> actual = new ArrayList<>(accounts.size());
-		for(final AccountReferenceOutput account : accounts) {
+		for(final GroupMemberOutput account : accounts) {
 			actual.add(account.getUsername());
 		}
 		assertEquals("Wrong usernames returned", expected, actual);

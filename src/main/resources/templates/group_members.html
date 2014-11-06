@@ -12,9 +12,20 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/groups/invite/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members.invite}"></a></dd>
 	</dl>
-	<p th:unless="${#lists.isEmpty(group.owners)}">Owners: <span th:replace="/fragments/formatting :: usernames (accounts=${group.owners})"></span></p>
-	<p th:unless="${#lists.isEmpty(group.members)}">Members: <span th:replace="/fragments/formatting :: usernames (accounts=${group.members})"></span></p>
-	<p th:unless="${#lists.isEmpty(group.invited)}">Invited: <span th:replace="/fragments/formatting :: usernames (accounts=${group.invited})"></span></p>
+	<table>
+		<thead>
+			<tr>
+				<td>User</td>
+				<td>Member type</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="member : ${group.members}">
+				<td><span th:replace="/fragments/formatting :: username (account=${member})"></span></td>
+				<td th:text="#{${member.memberType.displayNameProperty}}"></td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
