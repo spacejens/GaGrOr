@@ -1,6 +1,7 @@
 package com.gagror.service.social;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -318,6 +319,48 @@ public class GroupServiceUnitTest {
 		mockAccount(anotherAccount, anotherAccountID);
 		groupInviteForm.getSelected().add(anotherAccountID);
 		instance.sendInvitations(groupInviteForm, bindingResult);
+	}
+
+	@Test
+	public void accept_ok() {
+		instance.accept(THIRD_MEMBERSHIP_ID);
+		verify(thirdGroupInvited).setMemberType(MemberType.MEMBER);
+	}
+
+	@Test
+	public void accept_alreadyMember() {
+		instance.accept(SECOND_MEMBERSHIP_ID);
+		// Silently ignored, which seems good because the invitation has already been accepted
+		verify(secondGroupMember, never()).setMemberType(any(MemberType.class));
+	}
+
+	@Test
+	public void accept_invitationNotFound() {
+		instance.accept(74569793L);
+		// Silently ignored. Maybe not ideal, but showing an error accomplishes very little
+	}
+
+	@Test
+	public void decline_ok() {
+		instance.decline(THIRD_MEMBERSHIP_ID);
+		verify(groupMemberRepository).delete(thirdGroupInvited);
+		assertFalse("Declining invitation should remove it from group", secondGroup.getGroupMemberships().contains(thirdGroupInvited));
+		assertFalse("Declining invitation should remove it from account", requestAccount.getGroupMemberships().contains(thirdGroupInvited));
+	}
+
+	@Test
+	public void decline_alreadyMember() {
+		instance.decline(SECOND_MEMBERSHIP_ID);
+		// Silently ignored. Maybe not ideal, but it is a weird case
+		verify(groupMemberRepository, never()).delete(secondGroupMember);
+		assertTrue("Attempting to decline already accepted membership should not remove it from group", secondGroup.getGroupMemberships().contains(secondGroupMember));
+		assertTrue("Attempting to decline already accepted membership should not remove it from account", requestAccount.getGroupMemberships().contains(secondGroupMember));
+	}
+
+	@Test
+	public void decline_invitationNotFound() {
+		instance.decline(5789345L);
+		// Silently ignored, which seems good because the invitation no longer exists
 	}
 
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {

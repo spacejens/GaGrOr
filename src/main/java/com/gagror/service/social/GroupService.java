@@ -167,4 +167,31 @@ public class GroupService {
 			}
 		}
 	}
+
+	public void accept(final Long memberId) {
+		final GroupMemberEntity invitation = findInvitation(memberId);
+		if(null != invitation) {
+			invitation.setMemberType(MemberType.MEMBER);
+		}
+		// If invitation does no longer exist, just silently ignore it
+	}
+
+	public void decline(final Long memberId) {
+		final GroupMemberEntity invitation = findInvitation(memberId);
+		if(null != invitation) {
+			invitation.getAccount().getGroupMemberships().remove(invitation);
+			invitation.getGroup().getGroupMemberships().remove(invitation);
+			groupMemberRepository.delete(invitation);
+		}
+		// If invitation does no longer exist, just silently ignore it
+	}
+
+	private GroupMemberEntity findInvitation(final Long memberId) {
+		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
+			if(memberId.equals(membership.getId()) && membership.getMemberType().isInvitation()) {
+				return membership;
+			}
+		}
+		return null;
+	}
 }

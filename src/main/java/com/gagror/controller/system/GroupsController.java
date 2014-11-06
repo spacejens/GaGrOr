@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.data.group.GroupCreateInput;
@@ -133,9 +134,19 @@ public class GroupsController extends AbstractController {
 		return redirect(String.format("/groups/members/%d", groupId));
 	}
 
-	// TODO Make it possible to accept invitations to groups
+	@PreAuthorize(IS_LOGGED_IN)
+	@RequestMapping("/accept/{memberId}")
+	public RedirectView accept(@PathVariable("memberId") final Long memberId) {
+		groupService.accept(memberId);
+		return redirect("/groups/list");
+	}
 
-	// TODO Make it possible to decline invitations to groups
+	@PreAuthorize(IS_LOGGED_IN)
+	@RequestMapping("/decline/{memberId}")
+	public RedirectView decline(@PathVariable("memberId") final Long memberId) {
+		groupService.decline(memberId);
+		return redirect("/groups/list");
+	}
 
 	// TODO Make it possible to edit the group membership level of members, or to kick members out
 
