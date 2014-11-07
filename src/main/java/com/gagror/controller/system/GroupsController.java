@@ -132,6 +132,7 @@ public class GroupsController extends AbstractController {
 		}
 		log.info(String.format("Invited users %s to group %d", groupInviteForm.getSelected(), groupId));
 		return redirect(String.format("/groups/members/%d", groupId));
+		// TODO Extract persist form boilerplate (here and elsewhere) to a new type of persister service, with a common superclass defining the flow
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
