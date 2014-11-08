@@ -42,5 +42,4 @@ public class ContactEntity extends AbstractEditableEntity {
 		owner.getContacts().add(this);
 		contact.getIncomingContacts().add(this);
 	}
-	// TODO Add database constraint to prevent contacting yourself
 }
