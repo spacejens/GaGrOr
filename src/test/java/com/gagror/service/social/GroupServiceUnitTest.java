@@ -422,6 +422,35 @@ public class GroupServiceUnitTest {
 		// Silently ignored, which seems good because the invitation no longer exists
 	}
 
+	@Test
+	public void leave_member() {
+		instance.leave(SECOND_GROUP_ID);
+		verify(groupMemberRepository).delete(secondGroupMember);
+		assertFalse("Account should no longer have member", requestAccount.getGroupMemberships().contains(secondGroupMember));
+		assertFalse("Group should no longer have member", secondGroup.getGroupMemberships().contains(secondGroupMember));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void leave_onlyOwner() {
+		instance.leave(FIRST_GROUP_ID);
+	}
+
+	@Test
+	public void leave_severalOwners() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.OWNER, contactAccount);
+		instance.leave(FIRST_GROUP_ID);
+		verify(groupMemberRepository).delete(firstGroupOwner);
+		assertFalse("Account should no longer have member", requestAccount.getGroupMemberships().contains(firstGroupOwner));
+		assertFalse("Group should no longer have member", firstGroup.getGroupMemberships().contains(firstGroupOwner));
+	}
+
+	@Test
+	public void leave_notMember() {
+		instance.leave(346566535L);
+		// Silently ignored, which seems good because the user doesn't want to be a member anyway
+	}
+
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);
 		final List<Long> actual = new ArrayList<>();

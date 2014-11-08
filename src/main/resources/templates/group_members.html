@@ -17,12 +17,16 @@
 			<tr>
 				<td>User</td>
 				<td>Member type</td>
+				<td>Action</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="member : ${group.members}">
 				<td><span th:replace="/fragments/formatting :: username (account=${member})"></span></td>
 				<td th:text="#{${member.memberType.displayNameProperty}}"></td>
+				<td th:if="${member.id == currentUser.id and ! member.onlyOwner}">
+					<a th:href="@{/groups/leave/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members.leave}" onclick="return window.confirm('Are you sure?');"></a>
+				</td>
 			</tr>
 		</tbody>
 	</table>

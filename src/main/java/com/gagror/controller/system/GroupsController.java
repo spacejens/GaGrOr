@@ -149,7 +149,12 @@ public class GroupsController extends AbstractController {
 		return redirect("/groups/list");
 	}
 
-	// TODO Make it possible to edit the group membership level of members, or to kick members out
+	@PreAuthorize(IS_LOGGED_IN)
+	@RequestMapping("/leave/{groupId}")
+	public RedirectView leave(@PathVariable("groupId") final Long groupId) {
+		groupService.leave(groupId);
+		return redirect("/groups/list");
+	}
 
-	// TODO Make it possible to leave groups (unless you are the only group owner)
+	// TODO Make it possible to edit the group membership level of members, or to kick members out
 }

@@ -235,4 +235,28 @@ public class GroupService {
 		}
 		return null;
 	}
+
+	public void leave(final Long groupId) {
+		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
+			if(groupId.equals(membership.getGroup().getId())) {
+				// If the request account is the only owner, we cannot leave the group
+				if(membership.getMemberType().isOwner()) {
+					int countOwners = 0;
+					for(final GroupMemberEntity member : membership.getGroup().getGroupMemberships()) {
+						if(member.getMemberType().isOwner()) {
+							countOwners++;
+						}
+					}
+					if(1 == countOwners) {
+						throw new IllegalArgumentException(String.format("Only owner, cannot leave group %s", membership.getGroup()));
+					}
+				}
+				// Remove the membership
+				membership.getGroup().getGroupMemberships().remove(membership);
+				membership.getAccount().getGroupMemberships().remove(membership);
+				groupMemberRepository.delete(membership);
+				return;
+			}
+		}
+	}
 }
