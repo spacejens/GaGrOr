@@ -180,6 +180,7 @@ public class GroupService {
 		if(null != invitation) {
 			invitation.setMemberType(MemberType.MEMBER);
 			// Add group members as contacts
+			// TODO Gather functionality to add and mirror contacts in a single place (perhaps create a separate contact service?)
 			final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
 			for(final AccountEntity groupMember : findGroupMemberAccounts(invitation.getGroup(), true)) {
 				if(! requestAccount.equals(groupMember)) {
