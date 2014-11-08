@@ -54,4 +54,8 @@
 			<column name="contact_id" type="bigint" />
 		</createIndex>
 	</changeSet>
+
+	<changeSet id="no-duplicate-contacts" author="spacejens">
+		<addUniqueConstraint constraintName="contact_owner_id_contact_id_u" tableName="contact" columnNames="owner_id, contact_id"/>
+	</changeSet>
 </databaseChangeLog>
