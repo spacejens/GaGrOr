@@ -156,5 +156,24 @@ public class GroupsController extends AbstractController {
 		return redirect("/groups/list");
 	}
 
-	// TODO Make it possible to edit the group membership level of members, or to kick members out
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
+	@RequestMapping(value="/{groupId}/promote/{accountId}")
+	public RedirectView promote(@PathVariable("groupId") final Long groupId, @PathVariable("accountId") final Long accountId) {
+		groupService.promote(groupId, accountId);
+		return redirect(String.format("/groups/members/%d", groupId));
+	}
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
+	@RequestMapping(value="/{groupId}/demote/{accountId}")
+	public RedirectView demote(@PathVariable("groupId") final Long groupId, @PathVariable("accountId") final Long accountId) {
+		groupService.demote(groupId, accountId);
+		return redirect(String.format("/groups/members/%d", groupId));
+	}
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
+	@RequestMapping(value="/{groupId}/remove/{accountId}")
+	public RedirectView remove(@PathVariable("groupId") final Long groupId, @PathVariable("accountId") final Long accountId) {
+		groupService.remove(groupId, accountId);
+		return redirect(String.format("/groups/members/%d", groupId));
+	}
 }

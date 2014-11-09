@@ -252,11 +252,64 @@ public class GroupService {
 					}
 				}
 				// Remove the membership
-				membership.getGroup().getGroupMemberships().remove(membership);
-				membership.getAccount().getGroupMemberships().remove(membership);
-				groupMemberRepository.delete(membership);
+				deleteMembership(membership);
 				return;
 			}
 		}
+	}
+
+	private void deleteMembership(final GroupMemberEntity membership) {
+		membership.getGroup().getGroupMemberships().remove(membership);
+		membership.getAccount().getGroupMemberships().remove(membership);
+		groupMemberRepository.delete(membership);
+	}
+
+	public void promote(final Long groupId, final Long accountId) {
+		final GroupMemberEntity member = findAnotherGroupMemberFromMemberships(groupId, accountId);
+		if(null == member || ! member.getMemberType().isMember()) {
+			throw new IllegalArgumentException(String.format("Cannot promote, account %d is not a member of group %d", accountId, groupId));
+		}
+		member.setMemberType(MemberType.OWNER);
+	}
+
+	public void demote(final Long groupId, final Long accountId) {
+		final GroupMemberEntity member = findAnotherGroupMemberFromMemberships(groupId, accountId);
+		if(null == member || ! member.getMemberType().isMember()) {
+			throw new IllegalArgumentException(String.format("Cannot demote, account %d is not a member of group %d", accountId, groupId));
+		}
+		member.setMemberType(MemberType.MEMBER);
+	}
+
+	public void remove(final Long groupId, final Long accountId) {
+		final GroupMemberEntity member = findAnotherGroupMemberFromMemberships(groupId, accountId);
+		if(null == member) {
+			// Silently ignore that the account could not be found in the group, that's the end result we want anyway
+			return;
+		}
+		deleteMembership(member);
+	}
+
+	private GroupMemberEntity findAnotherGroupMemberFromMemberships(final Long groupId, final Long accountId) {
+		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
+		if(accountId.equals(requestAccount.getId())) {
+			throw new IllegalArgumentException("This action can only be performed on other accounts");
+		}
+		GroupEntity group = null;
+		for(final GroupMemberEntity membership : requestAccount.getGroupMemberships()) {
+			if(groupId.equals(membership.getGroup().getId())) {
+				group = membership.getGroup();
+				break;
+			}
+		}
+		if(null == group) {
+			throw new IllegalArgumentException(String.format("Request account is not a member of group %d", groupId));
+		}
+		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
+			if(accountId.equals(membership.getAccount().getId())) {
+				return membership;
+			}
+		}
+		// Member not found
+		return null;
 	}
 }

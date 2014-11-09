@@ -451,6 +451,131 @@ public class GroupServiceUnitTest {
 		// Silently ignored, which seems good because the user doesn't want to be a member anyway
 	}
 
+	@Test
+	public void promote_member() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.MEMBER, contactAccount);
+		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(contactMember).setMemberType(MemberType.OWNER);
+	}
+
+	@Test
+	public void promote_owner() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.OWNER, contactAccount);
+		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(contactMember).setMemberType(MemberType.OWNER);
+		// Silently ignored, which seems good because we want the user to be an owner
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void promote_invited() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.INVITED, contactAccount);
+		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void promote_self() {
+		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void promote_groupNotFound() {
+		instance.promote(348967346L, ACCOUNT_ID_CONTACT);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void promote_accountNotFound() {
+		instance.promote(FIRST_GROUP_ID, 4563458L);
+	}
+
+	@Test
+	public void demote_member() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.MEMBER, contactAccount);
+		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(contactMember).setMemberType(MemberType.MEMBER);
+		// Silently ignored, which seems good because we want the user to be a member
+	}
+
+	@Test
+	public void demote_owner() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.OWNER, contactAccount);
+		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(contactMember).setMemberType(MemberType.MEMBER);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void demote_invited() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.INVITED, contactAccount);
+		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void demote_self() {
+		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void demote_groupNotFound() {
+		instance.demote(348967346L, ACCOUNT_ID_CONTACT);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void demote_accountNotFound() {
+		instance.demote(FIRST_GROUP_ID, 4563458L);
+	}
+
+	@Test
+	public void remove_member() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.MEMBER, contactAccount);
+		instance.remove(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(groupMemberRepository).delete(contactMember);
+		assertFalse("Account should no longer have member", contactAccount.getGroupMemberships().contains(contactMember));
+		assertFalse("Group should no longer have member", firstGroup.getGroupMemberships().contains(contactMember));
+	}
+
+	@Test
+	public void remove_owner() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.OWNER, contactAccount);
+		instance.remove(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(groupMemberRepository).delete(contactMember);
+		assertFalse("Account should no longer have member", contactAccount.getGroupMemberships().contains(contactMember));
+		assertFalse("Group should no longer have member", firstGroup.getGroupMemberships().contains(contactMember));
+	}
+
+	@Test
+	public void remove_invited() {
+		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
+		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.INVITED, contactAccount);
+		instance.remove(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
+		verify(groupMemberRepository).delete(contactMember);
+		assertFalse("Account should no longer have member", contactAccount.getGroupMemberships().contains(contactMember));
+		assertFalse("Group should no longer have member", firstGroup.getGroupMemberships().contains(contactMember));
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void remove_self() {
+		instance.remove(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void remove_groupNotFound() {
+		instance.remove(348967346L, ACCOUNT_ID_CONTACT);
+	}
+
+	@Test
+	public void remove_accountNotFound() {
+		instance.remove(FIRST_GROUP_ID, 4563458L);
+		verify(groupMemberRepository, never()).delete(any(GroupMemberEntity.class));
+		// Silently ignored, which seems good because we don't want the user to be a member
+	}
+
 	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
 		final List<Long> expected = Arrays.asList(expectedGroupIds);
 		final List<Long> actual = new ArrayList<>();

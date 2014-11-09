@@ -17,7 +17,7 @@
 			<tr>
 				<td>User</td>
 				<td>Member type</td>
-				<td>Action</td>
+				<td colspan="4">Action</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -26,6 +26,15 @@
 				<td th:text="#{${member.memberType.displayNameProperty}}"></td>
 				<td th:if="${member.id == currentUser.id and ! member.onlyOwner}">
 					<a th:href="@{/groups/leave/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members.leave}" onclick="return window.confirm('Are you sure?');"></a>
+				</td>
+				<td th:if="${member.id != currentUser.id and group.memberType != null and group.memberType.owner and member.memberType.member and ! member.memberType.owner}">
+					<a th:href="@{/groups/{groupId}/promote/{accountId}(groupId=${group.id},accountId=${member.id})}" th:text="#{menu.groups.members.promote}"></a>
+				</td>
+				<td th:if="${member.id != currentUser.id and group.memberType != null and group.memberType.owner and member.memberType.owner}">
+					<a th:href="@{/groups/{groupId}/demote/{accountId}(groupId=${group.id},accountId=${member.id})}" th:text="#{menu.groups.members.demote}"></a>
+				</td>
+				<td th:if="${member.id != currentUser.id and group.memberType != null and group.memberType.owner}">
+					<a th:href="@{/groups/{groupId}/remove/{accountId}(groupId=${group.id},accountId=${member.id})}" th:text="#{menu.groups.members.remove}" onclick="return window.confirm('Are you sure?');"></a>
 				</td>
 			</tr>
 		</tbody>
