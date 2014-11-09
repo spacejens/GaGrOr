@@ -23,6 +23,7 @@ import com.gagror.controller.AbstractController;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
+import com.gagror.service.social.CreateGroupPersister;
 import com.gagror.service.social.GroupService;
 
 @Controller
@@ -32,6 +33,9 @@ public class GroupsController extends AbstractController {
 
 	@Autowired
 	GroupService groupService;
+
+	@Autowired
+	CreateGroupPersister createGroupPersister;
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping("/list")
@@ -64,17 +68,11 @@ public class GroupsController extends AbstractController {
 	public Object createGroup(
 			@Valid @ModelAttribute("groupCreateForm") final GroupCreateInput groupCreateForm,
 			final BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to create group '%s', form had errors", groupCreateForm.getName()));
+		if(createGroupPersister.save(groupCreateForm, bindingResult)) {
+			return redirect("/groups/list");
+		} else {
 			return "create_group";
 		}
-		groupService.createGroup(groupCreateForm, bindingResult);
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to create group '%s', rejected by service layer", groupCreateForm.getName()));
-			return "create_group";
-		}
-		log.info(String.format("Successfully created group '%s'", groupCreateForm.getName()));
-		return redirect("/groups/list");
 	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'viewGroup')")

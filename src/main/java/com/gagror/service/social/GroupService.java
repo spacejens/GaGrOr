@@ -19,7 +19,6 @@ import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
-import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
@@ -73,22 +72,6 @@ public class GroupService {
 		}
 		Collections.sort(output);
 		return output;
-	}
-
-	public void createGroup(final GroupCreateInput groupCreateForm, final BindingResult bindingResult) {
-		// Verify that the group can be created
-		// NOTE: Currently there are no rules preventing this
-		if(bindingResult.hasErrors()) {
-			return;
-		}
-		log.info(String.format("Creating group '%s'", groupCreateForm.getName()));
-		// Create the group
-		final GroupEntity group = groupRepository.save(new GroupEntity(groupCreateForm.getName()));
-		final GroupMemberEntity owner = new GroupMemberEntity(
-				group,
-				accessControlService.getRequestAccountEntity(),
-				MemberType.OWNER);
-		groupMemberRepository.save(owner);
 	}
 
 	public GroupReferenceOutput viewGroup(final Long groupId) {

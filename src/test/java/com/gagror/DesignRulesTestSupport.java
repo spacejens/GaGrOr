@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,17 @@ public abstract class DesignRulesTestSupport {
 		final Reflections reflections = new Reflections("com.gagror");
 		for(final Class<?> clazz : reflections.getTypesAnnotatedWith(annotation)) {
 			parameters.add(new Object[]{clazz.getCanonicalName(), clazz});
+		}
+		return parameters;
+	}
+
+	protected static Iterable<Object[]> parameterizeForConcreteSubclasses(final Class<?> parent) {
+		final Set<Object[]> parameters = new HashSet<>();
+		final Reflections reflections = new Reflections("com.gagror");
+		for(final Class<?> clazz : reflections.getSubTypesOf(parent)) {
+			if(! Modifier.isAbstract(clazz.getModifiers())) {
+				parameters.add(new Object[]{clazz.getCanonicalName(), clazz});
+			}
 		}
 		return parameters;
 	}

@@ -35,7 +35,6 @@ import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
-import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
@@ -59,7 +58,6 @@ public class GroupServiceUnitTest {
 	private static final String THIRD_GROUP_NAME = "Third";
 	private static final String FOURTH_GROUP_NAME = "Fourth";
 	private static final String ANOTHER_GROUP_NAME = "Another";
-	private static final String NEW_GROUP_NAME = "New group";
 	private static final Long FIRST_MEMBERSHIP_ID = 111L;
 	private static final Long SECOND_MEMBERSHIP_ID = 222L;
 	private static final Long THIRD_MEMBERSHIP_ID = 333L;
@@ -117,9 +115,6 @@ public class GroupServiceUnitTest {
 	GroupEntity anotherGroup;
 
 	@Mock
-	GroupCreateInput groupCreateForm;
-
-	@Mock
 	BindingResult bindingResult;
 
 	@Mock
@@ -151,21 +146,6 @@ public class GroupServiceUnitTest {
 	public void loadInvitationsList_noInvitations() {
 		requestAccount.getGroupMemberships().clear();
 		assertGroups(instance.loadInvitationsList());
-	}
-
-	@Test
-	public void createGroup_ok() {
-		instance.createGroup(groupCreateForm, bindingResult);
-		final ArgumentCaptor<GroupEntity> group = ArgumentCaptor.forClass(GroupEntity.class);
-		verify(groupRepository).save(group.capture());
-		assertEquals("Wrong name of created group", NEW_GROUP_NAME, group.getValue().getName());
-		final ArgumentCaptor<GroupMemberEntity> groupMember = ArgumentCaptor.forClass(GroupMemberEntity.class);
-		verify(groupMemberRepository).save(groupMember.capture());
-		assertSame("Group member should be for saved group", group.getValue(), groupMember.getValue().getGroup());
-		assertSame("Group member should be for request account", requestAccount, groupMember.getValue().getAccount());
-		assertEquals("Group member should be owner", MemberType.OWNER, groupMember.getValue().getMemberType());
-		assertTrue("Group should have member", group.getValue().getGroupMemberships().contains(groupMember.getValue()));
-		assertTrue("Account should be member", requestAccount.getGroupMemberships().contains(groupMember.getValue()));
 	}
 
 	@Test
@@ -583,11 +563,6 @@ public class GroupServiceUnitTest {
 			actual.add(output.getId());
 		}
 		assertEquals("Unexpected groups returned", expected, actual);
-	}
-
-	@Before
-	public void setupGroupCreateForm() {
-		when(groupCreateForm.getName()).thenReturn(NEW_GROUP_NAME);
 	}
 
 	@Before

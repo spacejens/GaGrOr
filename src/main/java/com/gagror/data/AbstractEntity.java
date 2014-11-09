@@ -36,4 +36,8 @@ extends AbstractIdentifiable {
 			created = new Date();
 		}
 	}
+
+	public final boolean isPersistent() {
+		return getId() != null;
+	}
 }
