@@ -74,4 +74,8 @@
 			<column name="account_id" type="bigint" />
 		</createIndex>
 	</changeSet>
+
+	<changeSet id="no-duplicate-memberships" author="spacejens">
+		<addUniqueConstraint constraintName="groupmember_group_id_account_id_u" tableName="groupmember" columnNames="group_id, account_id"/>
+	</changeSet>
 </databaseChangeLog>
