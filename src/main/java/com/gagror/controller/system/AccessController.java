@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import lombok.extern.apachecommons.CommonsLog;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,11 +17,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.data.account.RegisterInput;
+import com.gagror.service.accesscontrol.RegisterAccountPersister;
 
 @Controller
 @RequestMapping("/access")
 @CommonsLog
 public class AccessController extends AbstractController {
+
+	@Autowired
+	RegisterAccountPersister registerAccountPersister;
 
 	@PreAuthorize(IS_PUBLIC)
 	@RequestMapping(value="/login", method = RequestMethod.GET)
@@ -41,16 +46,12 @@ public class AccessController extends AbstractController {
 	public Object registerProcess(
 			@Valid @ModelAttribute("registerForm") final RegisterInput registerForm,
 			final BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to register user '%s', form had errors", registerForm.getUsername()));
+		if(registerAccountPersister.save(registerForm, bindingResult)) {
+			log.info(String.format("Successfully registered user '%s'", registerForm.getUsername()));
+			return redirect("/");
+		} else {
+			log.warn(String.format("Failed to register user: %s", registerForm));
 			return "register";
 		}
-		accessControl.register(registerForm, bindingResult);
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to register user '%s', rejected by service layer", registerForm.getUsername()));
-			return "register";
-		}
-		log.info(String.format("Successfully registered user '%s'", registerForm.getUsername()));
-		return redirect("/");
 	}
 }

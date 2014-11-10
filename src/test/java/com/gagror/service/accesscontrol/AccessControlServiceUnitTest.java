@@ -8,9 +8,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -19,7 +17,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -31,13 +28,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
-import com.gagror.data.account.RegisterInput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccessControlServiceUnitTest {
@@ -53,12 +48,6 @@ public class AccessControlServiceUnitTest {
 	RequestAccountComponent requestAccount = new RequestAccountComponent();
 
 	AccessControlService instance;
-
-	@Mock
-	RegisterInput registerForm;
-
-	@Mock
-	BindingResult bindingResult;
 
 	@Mock
 	AccountEntity account;
@@ -151,70 +140,6 @@ public class AccessControlServiceUnitTest {
 	}
 
 	@Test
-	public void register_ok() {
-		whenNotLoggedIn();
-		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
-		instance.register(registerForm, bindingResult);
-		verify(bindingResult).hasErrors();
-		verifyNoMoreInteractions(bindingResult);
-		final ArgumentCaptor<AccountEntity> savedAccount = ArgumentCaptor.forClass(AccountEntity.class);
-		verify(accountRepository).save(savedAccount.capture());
-		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getUsername());
-		assertEquals("Wrong password", PASSWORD, savedAccount.getValue().getPassword());
-		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
-		assertTrue("Registered account should become active", savedAccount.getValue().isActive());
-		assertFalse("Registered account should not become locked", savedAccount.getValue().isLocked());
-		assertNotNull("Authentication not set in security context", SecurityContextHolder.getContext().getAuthentication());
-		assertEquals("Not logged in as correct user after registration", USERNAME, SecurityContextHolder.getContext().getAuthentication().getName());
-		assertTrue("Not authenticated after registration", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
-	}
-
-	@Test
-	public void register_usernameBusy() {
-		whenNotLoggedIn();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
-		instance.register(registerForm, bindingResult);
-		verify(registerForm).addErrorUsernameBusy(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
-	}
-
-	@Test
-	public void register_passwordsDontMatch() {
-		whenNotLoggedIn();
-		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
-		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
-		instance.register(registerForm, bindingResult);
-		verify(registerForm).addErrorPasswordMismatch(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
-	}
-
-	@Test
-	public void register_passwordTooWeak() {
-		whenNotLoggedIn();
-		when(accountRepository.findByUsername(USERNAME)).thenReturn(null);
-		when(registerForm.getPassword()).thenReturn("weak");
-		when(registerForm.getPasswordRepeat()).thenReturn("weak");
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
-		instance.register(registerForm, bindingResult);
-		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
-	}
-
-	@Test
-	public void register_manyErrors() {
-		whenNotLoggedIn();
-		when(registerForm.getPassword()).thenReturn("weak");
-		when(registerForm.getPasswordRepeat()).thenReturn("abcd");
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
-		instance.register(registerForm, bindingResult);
-		verify(registerForm).addErrorUsernameBusy(bindingResult);
-		verify(registerForm).addErrorPasswordMismatch(bindingResult);
-		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
-	}
-
-	@Test
 	public void isPasswordTooWeak() {
 		assertTrue("This should be a weak password", instance.isPasswordTooWeak("weak"));
 		assertFalse("This should be a strong password", instance.isPasswordTooWeak("strong"));
@@ -255,13 +180,6 @@ public class AccessControlServiceUnitTest {
 		when(authentication.getName()).thenReturn(USERNAME);
 		when(authentication.isAuthenticated()).thenReturn(true);
 		return authentication;
-	}
-
-	@Before
-	public void setupRegisterForm() {
-		when(registerForm.getUsername()).thenReturn(USERNAME);
-		when(registerForm.getPassword()).thenReturn(PASSWORD);
-		when(registerForm.getPasswordRepeat()).thenReturn(PASSWORD);
 	}
 
 	@Before

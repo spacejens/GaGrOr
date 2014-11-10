@@ -10,12 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
-import com.gagror.data.account.RegisterInput;
 
 @Service
 @Transactional
@@ -59,33 +57,6 @@ public class AccessControlService {
 			log.trace("Cannot load request account for output, user not logged in");
 			return null;
 		}
-	}
-
-	public void register(final RegisterInput registerForm, final BindingResult bindingResult) {
-		// Verify that the account can be created
-		if(null != accountRepository.findByUsername(registerForm.getUsername())) {
-			log.warn(String.format("Attempt to create user '%s' failed, username busy", registerForm.getUsername()));
-			registerForm.addErrorUsernameBusy(bindingResult);
-		}
-		if(isPasswordTooWeak(registerForm.getPassword())) {
-			log.warn(String.format("Attempt to create user '%s' failed, password too weak", registerForm.getUsername()));
-			registerForm.addErrorPasswordTooWeak(bindingResult);
-		}
-		if(! registerForm.getPassword().equals(registerForm.getPasswordRepeat())) {
-			log.warn(String.format("Attempt to create user '%s' failed, password repeat mismatch", registerForm.getUsername()));
-			registerForm.addErrorPasswordMismatch(bindingResult);
-		}
-		if(bindingResult.hasErrors()) {
-			return;
-		}
-		log.info(String.format("Registering user '%s'", registerForm.getUsername()));
-		// Create the account
-		final AccountEntity account = new AccountEntity(
-				registerForm.getUsername(),
-				encodePassword(registerForm.getPassword()));
-		accountRepository.save(account);
-		// Automatically log in the newly registered user
-		logInAs(account);
 	}
 
 	public boolean isPasswordTooWeak(final String rawPassword) {
