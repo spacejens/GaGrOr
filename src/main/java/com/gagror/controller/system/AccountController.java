@@ -24,6 +24,7 @@ import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.ContactReferenceOutput;
 import com.gagror.service.social.AccountService;
+import com.gagror.service.social.EditAccountPersister;
 
 @Controller
 @RequestMapping("/account")
@@ -32,6 +33,9 @@ public class AccountController extends AbstractController {
 
 	@Autowired
 	AccountService accountService;
+
+	@Autowired
+	EditAccountPersister editAccountPersister;
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping("/contacts")
@@ -137,21 +141,15 @@ public class AccountController extends AbstractController {
 			log.error(String.format("Account ID URL (%d) and form (%d) mismatch when attempting to save user form", accountId, editAccountForm.getId()));
 			throw new IllegalArgumentException(String.format("Unexpected account ID in user form"));
 		}
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to edit account ID %d, form had errors", accountId));
+		if(editAccountPersister.save(editAccountForm, bindingResult)) {
+			log.info(String.format("Saving edited account %s (ID %d)", editAccountForm.getUsername(), accountId));
+			return redirect("/");
+		} else {
+			log.warn(String.format("Failed to edit account ID %d", accountId));
 			final AccountEditOutput currentState = loadCurrentState(accountId);
 			model.addAttribute("currentState", currentState);
 			return "edit_account";
 		}
-		accountService.saveAccount(editAccountForm, bindingResult);
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to edit account ID %d, rejected by service layer", accountId));
-			final AccountEditOutput currentState = loadCurrentState(accountId);
-			model.addAttribute("currentState", currentState);
-			return "edit_account";
-		}
-		log.info(String.format("Saving edited account %s (ID %d)", editAccountForm.getUsername(), accountId));
-		return redirect("/");
 	}
 
 	protected AccountEditOutput loadCurrentState(final Long accountId) {

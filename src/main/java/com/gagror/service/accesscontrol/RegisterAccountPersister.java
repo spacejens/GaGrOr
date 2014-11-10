@@ -52,6 +52,10 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 	@Override
 	protected void makePersistent(final AccountEntity entity) {
 		accountRepository.save(entity);
+	}
+
+	@Override
+	protected void updateApplicationState(final AccountEntity entity) {
 		accessControlService.logInAs(entity);
 	}
 }
