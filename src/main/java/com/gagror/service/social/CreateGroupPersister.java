@@ -31,7 +31,12 @@ public class CreateGroupPersister extends AbstractPersister<GroupCreateInput, Gr
 	}
 
 	@Override
-	protected GroupEntity createOrLoad(final GroupCreateInput form) {
+	protected boolean isCreateNew(final GroupCreateInput form) {
+		return true;
+	}
+
+	@Override
+	protected GroupEntity createNew(final GroupCreateInput form) {
 		return new GroupEntity(form.getName());
 	}
 

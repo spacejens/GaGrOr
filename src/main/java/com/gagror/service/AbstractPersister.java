@@ -13,15 +13,27 @@ import com.gagror.data.AbstractEntity;
 public abstract class AbstractPersister<I, E extends AbstractEntity> {
 
 	public final boolean save(final I form, final BindingResult bindingResult) {
+		E entity = null;
 		// Check for input errors
 		validateForm(form, bindingResult);
-		final E entity = createOrLoad(form); // TODO Persister workflow should distinguish between create and load (e.g. only verify vs existing state if needed)
-		validateFormVsExistingState(form, bindingResult, entity);
+		if(! isCreateNew(form)) {
+			entity = loadExisting(form);
+			if(null == entity) {
+				throw new IllegalStateException(String.format("Failed to load existing entity when saving: %s", form));
+			}
+			validateFormVsExistingState(form, bindingResult, entity);
+		}
 		if(bindingResult.hasErrors()) {
 			log.warn(String.format("Failed to persist, form had errors: %s", form));
 			return false;
 		}
 		// Update and persist the entity
+		if(isCreateNew(form)) {
+			entity = createNew(form);
+			if(null == entity) {
+				throw new IllegalStateException(String.format("Failed to create new entity when saving: %s", form));
+			}
+		}
 		updateValues(form, entity);
 		if(! entity.isPersistent()) {
 			makePersistent(entity);
@@ -33,12 +45,19 @@ public abstract class AbstractPersister<I, E extends AbstractEntity> {
 
 	protected abstract void validateForm(final I form, final BindingResult bindingResult);
 
-	protected void validateFormVsExistingState(final I form, final BindingResult bindingResult, final E entity) {
-		// TODO Validation vs existing state should be unsupported operation by default (when only called for already persistent entities)
-		// Override this method to add validations specific to the existing entity state
+	protected abstract boolean isCreateNew(final I form);
+
+	protected E loadExisting(final I form) {
+		throw new UnsupportedOperationException("This persister cannot load existing entities");
 	}
 
-	protected abstract E createOrLoad(final I form);
+	protected void validateFormVsExistingState(final I form, final BindingResult bindingResult, final E entity) {
+		throw new UnsupportedOperationException("This persister cannot verify form versus existing entity state");
+	}
+
+	protected E createNew(final I form) {
+		throw new UnsupportedOperationException("This persister cannot create new entities");
+	}
 
 	protected abstract void updateValues(final I form, final E entity);
 

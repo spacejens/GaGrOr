@@ -38,7 +38,12 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 	}
 
 	@Override
-	protected AccountEntity createOrLoad(final RegisterInput form) {
+	protected boolean isCreateNew(final RegisterInput form) {
+		return true;
+	}
+
+	@Override
+	protected AccountEntity createNew(final RegisterInput form) {
 		return new AccountEntity(
 				form.getUsername(),
 				accessControlService.encodePassword(form.getPassword()));
