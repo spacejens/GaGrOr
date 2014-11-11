@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/account/contacts}" th:text="#{menu.contacts}"></a>
+		<a class="current" th:text="#{menu.contacts.find}"></a>
+	</nav>
+	<p th:if="${#lists.isEmpty(notMyContacts)}">There are no other users</p>
+	<p th:unless="${#lists.isEmpty(notMyContacts)}">The following users are not your contacts</p>
+	<table th:replace="contacts :: contactTable (contacts=${notMyContacts})"></table>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

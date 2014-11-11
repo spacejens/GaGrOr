@@ -45,6 +45,13 @@ public class AccountController extends AbstractController {
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
+	@RequestMapping("/contacts/find")
+	public String findContacts(final Model model) {
+		log.info("Viewing find contacts page");
+		return "find_contacts";
+	}
+
+	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
 	public List<ContactReferenceOutput> getContacts() {
 		return accountService.loadContacts();
@@ -61,8 +68,6 @@ public class AccountController extends AbstractController {
 	public List<ContactReferenceOutput> getReceivedContactRequests() {
 		return accountService.loadReceivedContactRequests();
 	}
-
-	// TODO Place the functionality for finding new contacts on a separate page
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("notMyContacts")
