@@ -2,7 +2,6 @@ package com.gagror.service.social;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
@@ -10,7 +9,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -27,7 +25,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
@@ -36,7 +33,6 @@ import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
@@ -115,16 +111,10 @@ public class GroupServiceUnitTest {
 	GroupEntity anotherGroup;
 
 	@Mock
-	BindingResult bindingResult;
-
-	@Mock
 	AccountEntity contactAccount;
 
 	@Mock
 	ContactEntity contact;
-
-	@Mock
-	GroupInviteInput groupInviteForm;
 
 	@Test
 	public void loadGroupList_ok() {
@@ -246,64 +236,6 @@ public class GroupServiceUnitTest {
 		final List<AccountReferenceOutput> result = instance.loadPossibleUsersToInvite(FIRST_GROUP_ID);
 		assertTrue("Candidate that is already member should not have been loaded", result.isEmpty());
 		verify(groupMember, never()).getMemberType(); // Member type shouldn't matter
-	}
-
-	@Test
-	public void sendInvitations_ok() {
-		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
-		instance.sendInvitations(groupInviteForm, bindingResult);
-		verifyNoMoreInteractions(bindingResult);
-		final ArgumentCaptor<GroupMemberEntity> member = ArgumentCaptor.forClass(GroupMemberEntity.class);
-		verify(groupMemberRepository).save(member.capture());
-		assertSame("Wrong group", firstGroup, member.getValue().getGroup());
-		assertSame("Wrong account", contactAccount, member.getValue().getAccount());
-		assertEquals("Wrong member type", MemberType.INVITED, member.getValue().getMemberType());
-		assertTrue("Group should have member", firstGroup.getGroupMemberships().contains(member.getValue()));
-		assertTrue("Account should have member", contactAccount.getGroupMemberships().contains(member.getValue()));
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void sendInvitations_groupNotFound() {
-		when(groupInviteForm.getId()).thenReturn(7964336L);
-		instance.sendInvitations(groupInviteForm, bindingResult);
-	}
-
-	@Test
-	public void sendInvitations_inviteMultipleUsers() {
-		final long anotherAccountID = 476593L;
-		final AccountEntity anotherAccount = mock(AccountEntity.class);
-		mockAccount(anotherAccount, anotherAccountID);
-		final ContactEntity anotherContact = mock(ContactEntity.class);
-		mockContact(anotherContact, 57697L, requestAccount, anotherAccount, ContactType.APPROVED);
-		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
-		groupInviteForm.getSelected().add(anotherAccountID);
-		instance.sendInvitations(groupInviteForm, bindingResult);
-		verify(groupMemberRepository, times(2)).save(any(GroupMemberEntity.class));
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void sendInvitations_userNotFound() {
-		groupInviteForm.getSelected().add(74697834L);
-		instance.sendInvitations(groupInviteForm, bindingResult);
-	}
-
-	@Test
-	public void sendInvitations_alreadyMember() {
-		final Long id = 34675L;
-		final GroupMemberEntity groupMember = mock(GroupMemberEntity.class);
-		mockGroupMember(groupMember, firstGroup, id, MemberType.MEMBER, contactAccount);
-		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
-		instance.sendInvitations(groupInviteForm, bindingResult);
-		verify(groupMemberRepository, never()).save(any(GroupMemberEntity.class));
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void sendInvitations_notContact() {
-		final long anotherAccountID = 476593L;
-		final AccountEntity anotherAccount = mock(AccountEntity.class);
-		mockAccount(anotherAccount, anotherAccountID);
-		groupInviteForm.getSelected().add(anotherAccountID);
-		instance.sendInvitations(groupInviteForm, bindingResult);
 	}
 
 	@Test
@@ -563,13 +495,6 @@ public class GroupServiceUnitTest {
 			actual.add(output.getId());
 		}
 		assertEquals("Unexpected groups returned", expected, actual);
-	}
-
-	@Before
-	public void setupGroupInviteForm() {
-		when(groupInviteForm.getId()).thenReturn(FIRST_GROUP_ID);
-		final Set<Long> invited = new HashSet<>();
-		when(groupInviteForm.getSelected()).thenReturn(invited);
 	}
 
 	@Before

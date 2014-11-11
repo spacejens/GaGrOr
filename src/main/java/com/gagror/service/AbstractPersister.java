@@ -38,8 +38,7 @@ public abstract class AbstractPersister<I, E extends AbstractEntity> {
 		if(! entity.isPersistent()) {
 			makePersistent(entity);
 		}
-		// Optionally update application state before reporting success
-		updateApplicationState(entity);
+		postPersistenceUpdate(entity);
 		return true;
 	}
 
@@ -52,7 +51,7 @@ public abstract class AbstractPersister<I, E extends AbstractEntity> {
 	}
 
 	protected void validateFormVsExistingState(final I form, final BindingResult bindingResult, final E entity) {
-		throw new UnsupportedOperationException("This persister cannot verify form versus existing entity state");
+		// Override this method to add form verifications depending on the existing entity state
 	}
 
 	protected E createNew(final I form) {
@@ -62,10 +61,11 @@ public abstract class AbstractPersister<I, E extends AbstractEntity> {
 	protected abstract void updateValues(final I form, final E entity);
 
 	protected void makePersistent(final E entity) {
+		// TODO Persister workflow should support and use the returned entity from Spring Data
 		throw new UnsupportedOperationException("This persister cannot make new entities persistent");
 	}
 
-	protected void updateApplicationState(final E entity) {
+	protected void postPersistenceUpdate(final E entity) {
 		// Override this method to update application state after persisting
 	}
 }

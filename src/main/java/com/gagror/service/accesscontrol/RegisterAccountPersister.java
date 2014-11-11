@@ -60,7 +60,7 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 	}
 
 	@Override
-	protected void updateApplicationState(final AccountEntity entity) {
+	protected void postPersistenceUpdate(final AccountEntity entity) {
 		accessControlService.logInAs(entity);
 	}
 }

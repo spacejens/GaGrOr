@@ -25,6 +25,7 @@ import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.service.social.CreateGroupPersister;
 import com.gagror.service.social.GroupService;
+import com.gagror.service.social.InviteGroupPersister;
 
 @Controller
 @RequestMapping("/groups")
@@ -36,6 +37,9 @@ public class GroupsController extends AbstractController {
 
 	@Autowired
 	CreateGroupPersister createGroupPersister;
+
+	@Autowired
+	InviteGroupPersister inviteGroupPersister;
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping("/list")
@@ -119,18 +123,13 @@ public class GroupsController extends AbstractController {
 			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to invite users", groupId, groupInviteForm.getId()));
 			throw new IllegalArgumentException("Unexpected group ID in invite form");
 		}
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to invite users to group %d, form had errors", groupId));
+		if(inviteGroupPersister.save(groupInviteForm, bindingResult)) {
+			log.info(String.format("Invited users %s to group %d", groupInviteForm.getSelected(), groupId));
+			return redirect(String.format("/groups/members/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to invite users to group %d: %s", groupId, groupInviteForm));
 			return showInviteForm(groupId, model);
 		}
-		groupService.sendInvitations(groupInviteForm, bindingResult);
-		if(bindingResult.hasErrors()) {
-			log.info(String.format("Failed to invite users to group %d, rejected by service layer", groupId));
-			return showInviteForm(groupId, model);
-		}
-		log.info(String.format("Invited users %s to group %d", groupInviteForm.getSelected(), groupId));
-		return redirect(String.format("/groups/members/%d", groupId));
-		// TODO Extract persist form boilerplate (here and elsewhere) to a new type of persister service, with a common superclass defining the flow
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)

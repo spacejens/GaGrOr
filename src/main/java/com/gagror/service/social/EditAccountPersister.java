@@ -92,7 +92,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 	}
 
 	@Override
-	protected void updateApplicationState(final AccountEntity entity) {
+	protected void postPersistenceUpdate(final AccountEntity entity) {
 		if(isEditingOwnAccount(entity.getId())) {
 			accessControlService.logInAs(entity);
 		}

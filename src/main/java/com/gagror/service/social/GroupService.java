@@ -11,7 +11,6 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
@@ -20,7 +19,6 @@ import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
@@ -130,32 +128,6 @@ public class GroupService {
 			}
 		}
 		return groupMemberAccounts;
-	}
-
-	public void sendInvitations(final GroupInviteInput groupInviteForm, final BindingResult bindingResult) {
-		final GroupEntity group = loadGroup(groupInviteForm.getId());
-		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group, false);
-		final Set<AccountEntity> contacts = new HashSet<>();
-		for(final ContactEntity contact : accessControlService.getRequestAccountEntity().getContacts()) {
-			if(contact.getContactType().isContact()) {
-				contacts.add(contact.getContact());
-			}
-		}
-		for(final Long invited : groupInviteForm.getSelected()) {
-			final AccountEntity account = accountRepository.findById(invited);
-			if(null == account) {
-				throw new IllegalArgumentException(String.format("Failed to load invited account %d", invited));
-			}
-			if(! contacts.contains(account)) {
-				throw new IllegalArgumentException(String.format("Invited account %d is not a contact, cannot invite", invited));
-			}
-			if(! groupMemberAccounts.contains(account)) {
-				groupMemberRepository.save(new GroupMemberEntity(
-						group,
-						account,
-						MemberType.INVITED));
-			}
-		}
 	}
 
 	public void accept(final Long memberId) {
