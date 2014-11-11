@@ -12,7 +12,7 @@ import com.gagror.data.AbstractEntity;
 @CommonsLog
 public abstract class AbstractPersister<I, E extends AbstractEntity> {
 
-	public final boolean save(final I form, final BindingResult bindingResult) {
+	public boolean save(final I form, final BindingResult bindingResult) {
 		E entity = null;
 		// Check for input errors
 		validateForm(form, bindingResult);
