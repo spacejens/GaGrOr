@@ -36,7 +36,7 @@ public abstract class AbstractPersister<I, E extends AbstractEntity> {
 		}
 		updateValues(form, entity);
 		if(! entity.isPersistent()) {
-			makePersistent(entity);
+			entity = makePersistent(entity);
 		}
 		postPersistenceUpdate(entity);
 		return true;
@@ -60,8 +60,7 @@ public abstract class AbstractPersister<I, E extends AbstractEntity> {
 
 	protected abstract void updateValues(final I form, final E entity);
 
-	protected void makePersistent(final E entity) {
-		// TODO Persister workflow should support and use the returned entity from Spring Data
+	protected E makePersistent(final E entity) {
 		throw new UnsupportedOperationException("This persister cannot make new entities persistent");
 	}
 

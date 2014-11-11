@@ -55,8 +55,8 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 	}
 
 	@Override
-	protected void makePersistent(final AccountEntity entity) {
-		accountRepository.save(entity);
+	protected AccountEntity makePersistent(final AccountEntity entity) {
+		return accountRepository.save(entity);
 	}
 
 	@Override

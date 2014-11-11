@@ -15,7 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.account.AccountEntity;
@@ -110,6 +112,16 @@ public class RegisterAccountPersisterUnitTest {
 	@Before
 	public void setupAccessControlService() {
 		when(accessControlService.encodePassword(PASSWORD)).thenReturn(PASSWORD_ENCODED);
+	}
+
+	@Before
+	public void setupAccountRepository() {
+		when(accountRepository.save(any(AccountEntity.class))).thenAnswer(new Answer<AccountEntity>() {
+			@Override
+			public AccountEntity answer(final InvocationOnMock invocation) throws Throwable {
+				return (AccountEntity)invocation.getArguments()[0];
+			}
+		});
 	}
 
 	@Before
