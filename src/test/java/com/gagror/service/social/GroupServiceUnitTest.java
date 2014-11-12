@@ -3,12 +3,11 @@ package com.gagror.service.social;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -30,7 +28,6 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
-import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
@@ -78,7 +75,7 @@ public class GroupServiceUnitTest {
 	AccountRepository accountRepository;
 
 	@Mock
-	ContactRepository contactRepository;
+	AccountService accountService;
 
 	@Mock
 	AccountEntity requestAccount;
@@ -267,35 +264,19 @@ public class GroupServiceUnitTest {
 		mockContact(incomingRequestedContact, 634626272L, incomingRequestedContactAccount, requestAccount, ContactType.REQUESTED);
 		final GroupMemberEntity incomingRequestedContactMember = mock(GroupMemberEntity.class);
 		mockGroupMember(incomingRequestedContactMember, thirdGroup, 463456634L, MemberType.MEMBER, incomingRequestedContactAccount);
+		// Set up a dummy contact to be returned by contact creation (and used for verification of mirroring)
+		final ContactEntity toBeMirrored = mock(ContactEntity.class);
+		when(accountService.createContact(requestAccount, ContactType.AUTOMATIC, nonContactAccount)).thenReturn(toBeMirrored);
 		// Accept the invitation and verify that non-contact members (but not invited users) are added as contacts (and mirrored)
 		instance.accept(THIRD_MEMBERSHIP_ID);
 		verify(thirdGroupInvited).setMemberType(MemberType.MEMBER);
-		final ArgumentCaptor<ContactEntity> createdContacts = ArgumentCaptor.forClass(ContactEntity.class);
-		verify(contactRepository, times(4)).save(createdContacts.capture());
 		verify(requestedContact).setContactType(ContactType.AUTOMATIC);
 		verify(incomingRequestedContact).setContactType(ContactType.AUTOMATIC);
-		boolean foundForRequestAccount = false;
-		boolean foundMirrored = false;
-		boolean foundMirrorForRequested = false;
-		boolean foundMirrorForIncoming = false;
-		for(final ContactEntity createdContact : createdContacts.getAllValues()) {
-			if(createdContact.getOwner().equals(requestAccount) && createdContact.getContact().equals(nonContactAccount)) {
-				foundForRequestAccount = true;
-			} else if(createdContact.getOwner().equals(nonContactAccount) && createdContact.getContact().equals(requestAccount)) {
-				foundMirrored = true;
-			} else if (createdContact.getOwner().equals(requestedContactAccount) && createdContact.getContact().equals(requestAccount)) {
-				foundMirrorForRequested = true;
-			} else if (createdContact.getOwner().equals(requestAccount) && createdContact.getContact().equals(incomingRequestedContactAccount)) {
-				foundMirrorForIncoming = true;
-			} else {
-				fail(String.format("Unexpected created contact: %s", createdContact));
-			}
-			assertEquals(String.format("Wrong contact type: %s", createdContact), ContactType.AUTOMATIC, createdContact.getContactType());
-		}
-		assertTrue("Did not create contact for request account", foundForRequestAccount);
-		assertTrue("Did not create mirrored contact", foundMirrored);
-		assertTrue("Did not create mirrored contact for already requested contact", foundMirrorForRequested);
-		assertTrue("Did not create mirrored contact for incoming contact request", foundMirrorForIncoming);
+		verify(accountService).createContact(requestAccount, ContactType.AUTOMATIC, nonContactAccount);
+		verify(accountService).mirrorContact(toBeMirrored);
+		verify(accountService).mirrorContact(requestedContact);
+		verify(accountService).mirrorContact(incomingRequestedContact);
+		verifyNoMoreInteractions(accountService);
 	}
 
 	@Test
@@ -579,6 +560,6 @@ public class GroupServiceUnitTest {
 		instance.groupRepository = groupRepository;
 		instance.groupMemberRepository = groupMemberRepository;
 		instance.accountRepository = accountRepository;
-		instance.contactRepository = contactRepository;
+		instance.accountService = accountService;
 	}
 }

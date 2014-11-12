@@ -24,7 +24,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
@@ -383,6 +385,24 @@ public class AccountServiceUnitTest {
 		assertEquals("Should not have deleted incoming contact", incomingSizeBefore, incomingSizeAfter);
 	}
 
+	@Test
+	public void createContact_ok() {
+		final ContactEntity result = instance.createContact(account, ContactType.AUTOMATIC, anotherAccount);
+		verify(contactRepository).save(result);
+		assertSame("Wrong contact owner", account, result.getOwner());
+		assertEquals("Wrong contact type", ContactType.AUTOMATIC, result.getContactType());
+		assertSame("Wrong contact account", anotherAccount, result.getContact());
+	}
+
+	@Test
+	public void mirrorContact_ok() {
+		final ContactEntity result = instance.mirrorContact(contact);
+		verify(contactRepository).save(result);
+		assertSame("Wrong contact owner", contact.getContact(), result.getOwner());
+		assertEquals("Wrong contact type", contact.getContactType(), result.getContactType());
+		assertSame("Wrong contact account", contact.getOwner(), result.getContact());
+	}
+
 	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
 		final List<Long> expected = Arrays.asList(accountIDs);
 		final List<Long> actual = new ArrayList<>();
@@ -449,6 +469,16 @@ public class AccountServiceUnitTest {
 		allAccounts.add(anotherAccount);
 		allAccounts.add(contactAccount);
 		when(accountRepository.findAll(any(Sort.class))).thenReturn(allAccounts);
+	}
+
+	@Before
+	public void setupContactRepository() {
+		when(contactRepository.save(any(ContactEntity.class))).thenAnswer(new Answer<ContactEntity>(){
+			@Override
+			public ContactEntity answer(final InvocationOnMock invocation) throws Throwable {
+				return (ContactEntity)invocation.getArguments()[0];
+			}
+		});
 	}
 
 	@Before

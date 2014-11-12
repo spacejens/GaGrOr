@@ -16,7 +16,6 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
-import com.gagror.data.account.ContactRepository;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
@@ -46,7 +45,7 @@ public class GroupService {
 	GroupMemberRepository groupMemberRepository;
 
 	@Autowired
-	ContactRepository contactRepository;
+	AccountService accountService;
 
 	public List<GroupListOutput> loadGroupList() {
 		log.debug("Loading group list");
@@ -135,7 +134,6 @@ public class GroupService {
 		if(null != invitation) {
 			invitation.setMemberType(MemberType.MEMBER);
 			// Add group members as contacts
-			// TODO Gather functionality to add and mirror contacts in a single place (perhaps create a separate contact service?)
 			final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
 			for(final AccountEntity groupMember : findGroupMemberAccounts(invitation.getGroup(), true)) {
 				if(! requestAccount.equals(groupMember)) {
@@ -147,7 +145,7 @@ public class GroupService {
 								// Auto-accept and mirror the requested contact
 								log.debug(String.format("Auto-accepting and mirroring requested contact: %s", contact));
 								contact.setContactType(ContactType.AUTOMATIC);
-								contactRepository.save(new ContactEntity(groupMember, ContactType.AUTOMATIC, requestAccount));
+								accountService.mirrorContact(contact);
 							}
 						}
 					}
@@ -157,14 +155,14 @@ public class GroupService {
 							// Auto-accept and mirror the incoming contact request
 							log.debug(String.format("Auto-accepting and mirroring incoming contact request: %s", incoming));
 							incoming.setContactType(ContactType.AUTOMATIC);
-							contactRepository.save(new ContactEntity(requestAccount, ContactType.AUTOMATIC, groupMember));
+							accountService.mirrorContact(incoming);
 						}
 					}
 					if(! foundContact) {
 						// Create and mirror the contact with the non-contact user
 						log.debug(String.format("Creating and mirroring contact for %s and %s", requestAccount, groupMember));
-						contactRepository.save(new ContactEntity(requestAccount, ContactType.AUTOMATIC, groupMember));
-						contactRepository.save(new ContactEntity(groupMember, ContactType.AUTOMATIC, requestAccount));
+						final ContactEntity contact = accountService.createContact(requestAccount, ContactType.AUTOMATIC, groupMember);
+						accountService.mirrorContact(contact);
 					}
 				}
 			}

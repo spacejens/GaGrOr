@@ -153,8 +153,7 @@ public class AccountService {
 		final AccountEntity account = accountRepository.findById(accountId);
 		if(isNonContactAccount(account)) {
 			final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
-			final ContactEntity contact = new ContactEntity(requestAccount, ContactType.REQUESTED, account);
-			contactRepository.save(contact);
+			createContact(requestAccount, ContactType.REQUESTED, account);
 		}
 	}
 
@@ -191,10 +190,18 @@ public class AccountService {
 		if(null != contact && contact.getContactType().isRequest()) {
 			log.debug(String.format("Accepting contact request %d from account %d to %d", contactId, contact.getOwner().getId(), contact.getContact().getId()));
 			contact.setContactType(ContactType.APPROVED);
-			final ContactEntity mirroredContact = new ContactEntity(contact.getContact(), ContactType.APPROVED, contact.getOwner());
-			contactRepository.save(mirroredContact);
+			mirrorContact(contact);
 			return;
 		}
 		log.error(String.format("Failed to find incoming contact request %d", contactId));
+	}
+
+	public ContactEntity createContact(final AccountEntity owner, final ContactType contactType, final AccountEntity account) {
+		final ContactEntity contact = new ContactEntity(owner, contactType, account);
+		return contactRepository.save(contact);
+	}
+
+	public ContactEntity mirrorContact(final ContactEntity original) {
+		return createContact(original.getContact(), original.getContactType(), original.getOwner());
 	}
 }
