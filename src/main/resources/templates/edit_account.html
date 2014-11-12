@@ -35,7 +35,7 @@
 			<input type="checkbox" th:field="*{locked}" />
 		</label>
 		<fieldset>
-			<legend>Change password</legend>
+			<legend th:text="#{menu.profile.password}"></legend>
 			<label>
 				Password <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</span>
 				<input type="password" th:field="*{password}" />

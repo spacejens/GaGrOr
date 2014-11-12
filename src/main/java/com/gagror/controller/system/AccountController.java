@@ -123,8 +123,6 @@ public class AccountController extends AbstractController {
 		return redirect("/");
 	}
 
-	// TODO Split edit account page into separate tabs/forms (basic info, password)
-
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
 	@RequestMapping(value="/edit/{accountId}", method=RequestMethod.GET)
 	public String editUserForm(@PathVariable("accountId") final Long accountId, final Model model) {
