@@ -17,6 +17,7 @@ import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactType;
+import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
@@ -81,6 +82,15 @@ public class GroupService {
 			}
 		}
 		return new GroupReferenceOutput(group);
+	}
+
+	public GroupEditOutput editGroup(final Long groupId) {
+		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
+			if(groupId.equals(membership.getGroup().getId())) {
+				return new GroupEditOutput(membership);
+			}
+		}
+		throw new IllegalArgumentException(String.format("User is not a member of group %d", groupId));
 	}
 
 	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {

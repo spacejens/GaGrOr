@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
+		<a class="current" th:text="#{menu.groups.edit}"></a>
+	</nav>
+	<form action="#" th:action="@{/groups/edit/{groupId}(groupId=${group.id})}" th:object="${groupEditForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+		<input type="text" th:field="*{name}" />
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

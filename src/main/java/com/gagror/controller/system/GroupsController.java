@@ -21,9 +21,12 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.data.group.GroupCreateInput;
+import com.gagror.data.group.GroupEditInput;
+import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.service.social.CreateGroupPersister;
+import com.gagror.service.social.EditGroupPersister;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.social.InviteGroupPersister;
 
@@ -37,6 +40,9 @@ public class GroupsController extends AbstractController {
 
 	@Autowired
 	CreateGroupPersister createGroupPersister;
+
+	@Autowired
+	EditGroupPersister editGroupPersister;
 
 	@Autowired
 	InviteGroupPersister inviteGroupPersister;
@@ -95,7 +101,37 @@ public class GroupsController extends AbstractController {
 		return "group_members";
 	}
 
-	// TODO Add page to edit group settings
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
+	@RequestMapping(value="/edit/{groupId}", method=RequestMethod.GET)
+	public String editForm(
+			@PathVariable("groupId") final Long groupId,
+			final Model model) {
+		log.info(String.format("Showing settings edit form for group %d", groupId));
+		final GroupEditOutput currentState = groupService.editGroup(groupId);
+		model.addAttribute("group", currentState);
+		model.addAttribute("groupEditForm", new GroupEditInput(currentState));
+		return "edit_group";
+	}
+
+	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
+	@RequestMapping(value="/edit/{groupId}", method=RequestMethod.POST)
+	public Object edit(
+			@Valid @ModelAttribute("groupEditForm") final GroupEditInput groupEditForm,
+			final BindingResult bindingResult,
+			@PathVariable("groupId") final Long groupId,
+			final Model model) {
+		if(! groupId.equals(groupEditForm.getId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to edit group", groupId, groupEditForm.getId()));
+			throw new IllegalArgumentException("Unexpected group ID in edit form");
+		}
+		if(editGroupPersister.save(groupEditForm, bindingResult)) {
+			return redirect(String.format("/groups/view/%d", groupId));
+		} else {
+			final GroupEditOutput currentState = groupService.editGroup(groupId);
+			model.addAttribute("group", currentState);
+			return "edit_group";
+		}
+	}
 
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
 	@RequestMapping(value="/invite/{groupId}", method=RequestMethod.GET)

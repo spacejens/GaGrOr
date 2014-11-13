@@ -29,6 +29,7 @@ import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactType;
+import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
@@ -164,6 +165,17 @@ public class GroupServiceUnitTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void viewGroup_notFound() {
 		instance.viewGroup(34578095L);
+	}
+
+	@Test
+	public void editGroup_ok() {
+		final GroupEditOutput result = instance.editGroup(FIRST_GROUP_ID);
+		assertEquals("Wrong group found", FIRST_GROUP_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void editGroup_notMember() {
+		instance.editGroup(37598345L);
 	}
 
 	@Test
