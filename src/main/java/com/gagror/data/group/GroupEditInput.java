@@ -18,10 +18,13 @@ public class GroupEditInput extends GroupCreateInput {
 
 	private Long version;
 
+	private boolean viewableByAnyone;
+
 	public GroupEditInput(final GroupEditOutput currentState) {
 		setId(currentState.getId());
 		setVersion(currentState.getVersion());
 		setName(currentState.getName());
+		setViewableByAnyone(currentState.isViewableByAnyone());
 	}
 
 	public void addErrorSimultaneuosEdit(final BindingResult bindingResult) {

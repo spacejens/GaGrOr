@@ -22,6 +22,9 @@
 			<column name="name" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
+			<column name="viewable_by_anyone" type="boolean">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 

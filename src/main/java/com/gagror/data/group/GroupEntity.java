@@ -31,6 +31,11 @@ public class GroupEntity extends AbstractEditableEntity {
 	@Getter
 	private Set<GroupMemberEntity> groupMemberships;
 
+	@Column(nullable = false)
+	@Getter
+	@Setter
+	private boolean viewableByAnyone;
+
 	public GroupEntity(final String name) {
 		setName(name);
 		groupMemberships = new HashSet<>();

@@ -12,6 +12,8 @@
 		<dd><a th:if="${group.memberType != null and group.memberType.owner}" th:href="@{/groups/edit/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.edit}"></a></dd>
 		<dd><a th:href="@{/groups/members/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members}"></a></dd>
 	</dl>
+	<p th:if="${group.viewableByAnyone}">Public group, viewable by anyone</p>
+	<p th:unless="${group.viewableByAnyone}">Private group, viewable by members only</p>
 	<p>Created: <span th:replace="/fragments/formatting :: datetime (date=${group.created})"></span></p>
 	<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
 	<script th:replace="/fragments/framework :: init"></script>

@@ -44,5 +44,6 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 	@Override
 	protected void updateValues(final GroupEditInput form, final GroupEntity entity) {
 		entity.setName(form.getName());
+		entity.setViewableByAnyone(form.isViewableByAnyone());
 	}
 }

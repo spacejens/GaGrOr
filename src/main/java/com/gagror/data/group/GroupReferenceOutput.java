@@ -16,10 +16,14 @@ implements Comparable<GroupReferenceOutput> {
 	@Getter
 	private final MemberType memberType;
 
+	@Getter
+	private final boolean viewableByAnyone;
+
 	public GroupReferenceOutput(final GroupEntity group) {
 		super(group);
 		name = group.getName();
 		memberType = null;
+		viewableByAnyone = group.isViewableByAnyone();
 	}
 
 	public GroupReferenceOutput(final GroupMemberEntity membership) {
@@ -27,6 +31,7 @@ implements Comparable<GroupReferenceOutput> {
 		final GroupEntity group = membership.getGroup();
 		name = group.getName();
 		memberType = membership.getMemberType();
+		viewableByAnyone = group.isViewableByAnyone();
 	}
 
 	@Override

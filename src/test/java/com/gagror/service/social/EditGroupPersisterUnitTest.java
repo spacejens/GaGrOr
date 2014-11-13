@@ -23,6 +23,7 @@ public class EditGroupPersisterUnitTest {
 	private static final Long UNKNOWN_GROUP_ID = 456L;
 	private static final Long VERSION = 1L;
 	private static final String FORM_NAME = "Group name in form";
+	private static final boolean FORM_VIEWABLE = true;
 
 	EditGroupPersister instance;
 
@@ -43,6 +44,7 @@ public class EditGroupPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		verify(group).setName(FORM_NAME);
+		verify(group).setViewableByAnyone(FORM_VIEWABLE);
 	}
 
 	@Test(expected=IllegalStateException.class)
@@ -72,6 +74,7 @@ public class EditGroupPersisterUnitTest {
 		when(form.getId()).thenReturn(GROUP_ID);
 		when(form.getVersion()).thenReturn(VERSION);
 		when(form.getName()).thenReturn(FORM_NAME);
+		when(form.isViewableByAnyone()).thenReturn(FORM_VIEWABLE);
 	}
 
 	@Before
