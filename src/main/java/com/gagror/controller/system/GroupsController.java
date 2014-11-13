@@ -95,6 +95,8 @@ public class GroupsController extends AbstractController {
 		return "group_members";
 	}
 
+	// TODO Add page to edit group settings
+
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
 	@RequestMapping(value="/invite/{groupId}", method=RequestMethod.GET)
 	public String inviteForm(
