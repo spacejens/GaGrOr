@@ -51,6 +51,8 @@ public class AccountController extends AbstractController {
 		return "find_contacts";
 	}
 
+	// TODO Avoid using @ModelAttribute on methods, as that will load for all pages in the controller
+
 	@PreAuthorize(IS_LOGGED_IN)
 	@ModelAttribute("contacts")
 	public List<ContactReferenceOutput> getContacts() {

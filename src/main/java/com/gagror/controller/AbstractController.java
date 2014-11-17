@@ -18,7 +18,7 @@ public abstract class AbstractController {
 	protected AccessControlService accessControl;
 
 	@PreAuthorize(IS_PUBLIC)
-	@ModelAttribute("currentUser")
+	@ModelAttribute("currentUser") // This annotation is OK here because every page needs this data to render the menu
 	public AccountReferenceOutput getCurrentUser() {
 		log.trace("Getting current user model attribute");
 		return accessControl.getRequestAccount();
