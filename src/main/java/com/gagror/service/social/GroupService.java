@@ -72,6 +72,17 @@ public class GroupService {
 		return output;
 	}
 
+	public List<GroupListOutput> loadPublicGroupList() {
+		log.debug("Loading public group list");
+		final List<GroupListOutput> output = new ArrayList<>();
+		final List<GroupEntity> groups = groupRepository.findByViewableByAnyone(true);
+		for(final GroupEntity group : groups) {
+			output.add(new GroupListOutput(group));
+		}
+		Collections.sort(output);
+		return output;
+	}
+
 	public GroupReferenceOutput viewGroup(final Long groupId) {
 		final GroupEntity group = loadGroup(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));

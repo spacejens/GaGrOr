@@ -1,8 +1,7 @@
 package com.gagror.controller.system;
 
 import static com.gagror.data.account.SecurityRoles.IS_LOGGED_IN;
-
-import java.util.List;
+import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
 
 import javax.validation.Valid;
 
@@ -24,7 +23,6 @@ import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupInviteInput;
-import com.gagror.data.group.GroupListOutput;
 import com.gagror.service.social.CreateGroupPersister;
 import com.gagror.service.social.EditGroupPersister;
 import com.gagror.service.social.GroupService;
@@ -49,21 +47,19 @@ public class GroupsController extends AbstractController {
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping("/list")
-	public String listGroups() {
+	public String listGroups(final Model model) {
 		log.info("Viewing groups list page");
+		model.addAttribute("groups", groupService.loadGroupList());
+		model.addAttribute("invitations", groupService.loadInvitationsList());
 		return "groups";
 	}
 
-	@PreAuthorize(IS_LOGGED_IN)
-	@ModelAttribute("groups")
-	public List<GroupListOutput> getGroups() {
-		return groupService.loadGroupList();
-	}
-
-	@PreAuthorize(IS_LOGGED_IN)
-	@ModelAttribute("invitations")
-	public List<GroupListOutput> getInvitations() {
-		return groupService.loadInvitationsList();
+	@PreAuthorize(IS_PUBLIC)
+	@RequestMapping("/public")
+	public String listPublicGroups(final Model model) {
+		log.info("Viewing groups public list page");
+		model.addAttribute("publicGroups", groupService.loadPublicGroupList());
+		return "groups_public";
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
@@ -85,6 +81,7 @@ public class GroupsController extends AbstractController {
 		}
 	}
 
+	// TODO Group view permission should not require being logged in, and would work well as a pre-defined constant
 	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'viewGroup')")
 	@RequestMapping("/view/{groupId}")
 	public String viewGroup(@PathVariable("groupId") final Long groupId, final Model model) {

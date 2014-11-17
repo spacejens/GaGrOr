@@ -6,6 +6,10 @@
 	<nav class="breadcrumbs" id="submenu">
 		<a class="current" th:text="#{menu.public}"></a>
 	</nav>
+	<dl class="sub-nav" id="pageactions">
+		<dt th:text="#{menu.subpages}"></dt>
+		<dd><a th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a></dd>
+	</dl>
 	<h1>GaGrOr - Gaming Group Organizer</h1>
 	<p>GaGrOr is a web system that helps you keep track of gaming groups,
 	typically for face to face games.</p>

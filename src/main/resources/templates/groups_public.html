@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/}" th:text="#{menu.public}"></a>
+		<a class="current" th:text="#{menu.public.groups}"></a>
+	</nav>
+	<h1>Groups</h1>
+	<p>Each gaming group is represented by a group in the system.</p>
+	<h2>Groups viewable by anyone</h2>
+	<p th:if="${#lists.isEmpty(publicGroups)}">No groups are currently configured to be viewable by anyone, but it is
+	possible to do this for your group. This enables you to share your information with other interested persons.</p>
+	<p th:unless="${#lists.isEmpty(publicGroups)}">Some groups have been configured to be viewable by anyone. This is useful
+	both to share information with other interested persons, and as examples of what can be done with GaGrOr.</p>
+	<table th:replace="groups :: groupsTable (groups=${publicGroups}, public='true')"></table>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

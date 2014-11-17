@@ -137,6 +137,18 @@ public class GroupServiceUnitTest {
 	}
 
 	@Test
+	public void loadPublicGroupList_ok() {
+		assertGroups(instance.loadPublicGroupList(), FIRST_GROUP_ID, FOURTH_GROUP_ID, SECOND_GROUP_ID, THIRD_GROUP_ID);
+	}
+
+	@Test
+	public void loadPublicGroupList_noPublicGroups() {
+		final List<GroupEntity> noGroups = new ArrayList<>();
+		when(groupRepository.findByViewableByAnyone(true)).thenReturn(noGroups);
+		assertGroups(instance.loadPublicGroupList());
+	}
+
+	@Test
 	public void viewGroup_owner() {
 		viewGroup_ok(FIRST_GROUP_ID, FIRST_GROUP_NAME, MemberType.OWNER);
 	}
@@ -499,6 +511,7 @@ public class GroupServiceUnitTest {
 				return group;
 			}
 		});
+		when(groupRepository.findByViewableByAnyone(true)).thenReturn(Arrays.asList(firstGroup, secondGroup, thirdGroup, fourthGroup));
 	}
 
 	@Before
