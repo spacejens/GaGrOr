@@ -16,7 +16,7 @@ public abstract class AbstractController {
 
 	protected static final String IS_LOGGED_IN = "isAuthenticated()";
 	protected static final String IS_ADMIN = "hasRole('"+SecurityRoles.ROLE_ADMIN+"')";
-	public static final String IS_PUBLIC = "true";
+	protected static final String IS_PUBLIC = "true";
 	protected static final String IS_NOT_LOGGED_IN = "isAnonymous()";
 
 	protected static final String ATTR_ACCOUNT_ID = "accountId";

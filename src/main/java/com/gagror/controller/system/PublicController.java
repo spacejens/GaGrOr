@@ -11,9 +11,9 @@ import com.gagror.controller.AbstractController;
 
 @Controller
 @CommonsLog
-@PreAuthorize(AbstractController.IS_PUBLIC)
 public class PublicController extends AbstractController {
 
+	@PreAuthorize(IS_PUBLIC)
 	@RequestMapping("/")
 	public String about(final Model model) {
 		log.info("Viewing about page");

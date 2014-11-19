@@ -1,5 +1,6 @@
 package com.gagror.controller;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.AnnotatedElement;
@@ -27,17 +28,13 @@ import com.gagror.DesignRulesTestSupport;
 @CommonsLog
 public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 
+	@SuppressWarnings("unused")
 	private final String name;
 
 	private final Class<?> controller;
 
 	@Test
 	public void allRequestMappingMethodsHaveSecurityAnnotations() {
-		// If the controller class has a security annotation, it is valid for all methods
-		if(hasSecurityAnnotation(controller)) {
-			log.debug(String.format("Class %s has security annotation", name));
-			return;
-		}
 		// Check all methods that have a request mapping, even in superclasses
 		for(final Method method : controller.getMethods()) {
 			if(method.isAnnotationPresent(RequestMapping.class)) {
@@ -53,11 +50,6 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 
 	@Test
 	public void allModelAttributeMethodsHaveSecurityAnnotations() {
-		// If the controller class has a security annotation, it is valid for all methods
-		if(hasSecurityAnnotation(controller)) {
-			log.debug(String.format("Class %s has security annotation", name));
-			return;
-		}
 		// Check all methods that are model attributes, even in superclasses
 		for(final Method method : controller.getMethods()) {
 			if(method.isAnnotationPresent(ModelAttribute.class)) {
@@ -69,6 +61,11 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 						method.getName(), method.getDeclaringClass().getCanonicalName()));
 			}
 		}
+	}
+
+	@Test
+	public void noSecurityAnnotationsOnControllerClass() {
+		assertFalse("Security annotations on controller classes are disallowed", hasSecurityAnnotation(controller));
 	}
 
 	private boolean hasSecurityAnnotation(final AnnotatedElement clazzOrMethod) {
