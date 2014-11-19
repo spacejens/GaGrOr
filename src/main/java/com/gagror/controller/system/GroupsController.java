@@ -93,7 +93,6 @@ public class GroupsController extends AbstractController {
 		log.info(String.format("Viewing members of group %d", groupId));
 		model.addAttribute("group", groupService.viewGroupMembers(groupId));
 		return "group_members";
-		// TODO Viewing groups members page should be possible when not a member for public groups
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)

@@ -113,7 +113,7 @@ public class GroupService {
 				return new GroupViewMembersOutput(membership);
 			}
 		}
-		throw new IllegalArgumentException(String.format("Could not load members for group %d, request account is not a member", groupId));
+		return new GroupViewMembersOutput(group);
 	}
 
 	private GroupEntity loadGroup(final Long groupId) {

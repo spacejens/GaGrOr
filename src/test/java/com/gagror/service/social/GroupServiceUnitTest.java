@@ -211,9 +211,9 @@ public class GroupServiceUnitTest {
 		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void viewGroupMembers_notMember() {
-		instance.viewGroupMembers(ANOTHER_GROUP_ID);
+		viewGroupMembers_ok(ANOTHER_GROUP_ID, ANOTHER_GROUP_NAME, null);
 	}
 
 	@Test(expected=IllegalArgumentException.class)

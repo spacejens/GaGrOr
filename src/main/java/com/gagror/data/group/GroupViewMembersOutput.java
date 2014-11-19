@@ -16,6 +16,11 @@ public class GroupViewMembersOutput extends GroupReferenceOutput {
 		members = extract(membership.getGroup());
 	}
 
+	public GroupViewMembersOutput(final GroupEntity group) {
+		super(group);
+		members = extract(group);
+	}
+
 	private List<GroupMemberOutput> extract(final GroupEntity group) {
 		final List<GroupMemberOutput> output = new ArrayList<>();
 		for(final GroupMemberEntity member : group.getGroupMemberships()) {
