@@ -1,8 +1,5 @@
 package com.gagror.controller.system;
 
-import static com.gagror.data.account.SecurityRoles.IS_NOT_LOGGED_IN;
-import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
-
 import javax.validation.Valid;
 
 import lombok.extern.apachecommons.CommonsLog;

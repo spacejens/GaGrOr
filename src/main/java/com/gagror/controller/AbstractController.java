@@ -1,6 +1,5 @@
 package com.gagror.controller;
 
-import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +8,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.data.account.AccountReferenceOutput;
+import com.gagror.data.account.SecurityRoles;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @CommonsLog
-public abstract class AbstractController {
+public abstract class AbstractController implements SecurityRoles {
 
 	@Autowired
 	protected AccessControlService accessControl;

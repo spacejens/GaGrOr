@@ -1,8 +1,5 @@
 package com.gagror.controller.system;
 
-import static com.gagror.data.account.SecurityRoles.IS_LOGGED_IN;
-import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
-
 import javax.validation.Valid;
 
 import lombok.extern.apachecommons.CommonsLog;
@@ -81,27 +78,26 @@ public class GroupsController extends AbstractController {
 		}
 	}
 
-	// TODO Group view permission should not require being logged in, and would work well as a pre-defined constant
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'viewGroup')")
-	@RequestMapping("/view/{groupId}")
-	public String viewGroup(@PathVariable("groupId") final Long groupId, final Model model) {
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/view/{" + ATTR_GROUP_ID + "}")
+	public String viewGroup(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing group %d", groupId));
 		model.addAttribute("group", groupService.viewGroup(groupId));
 		return "view_group";
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'viewGroup')")
-	@RequestMapping("/members/{groupId}")
-	public String groupMembers(@PathVariable("groupId") final Long groupId, final Model model) {
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/members/{" + ATTR_GROUP_ID + "}")
+	public String groupMembers(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing members of group %d", groupId));
 		model.addAttribute("group", groupService.viewGroupMembers(groupId));
 		return "group_members";
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/edit/{groupId}", method=RequestMethod.GET)
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/edit/{" + ATTR_GROUP_ID + "}", method=RequestMethod.GET)
 	public String editForm(
-			@PathVariable("groupId") final Long groupId,
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
 		log.info(String.format("Showing settings edit form for group %d", groupId));
 		final GroupEditOutput currentState = groupService.editGroup(groupId);
@@ -110,12 +106,12 @@ public class GroupsController extends AbstractController {
 		return "edit_group";
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/edit/{groupId}", method=RequestMethod.POST)
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/edit/{" + ATTR_GROUP_ID + "}", method=RequestMethod.POST)
 	public Object edit(
 			@Valid @ModelAttribute("groupEditForm") final GroupEditInput groupEditForm,
 			final BindingResult bindingResult,
-			@PathVariable("groupId") final Long groupId,
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
 		if(! groupId.equals(groupEditForm.getId())) {
 			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to edit group", groupId, groupEditForm.getId()));
@@ -130,11 +126,11 @@ public class GroupsController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/invite/{groupId}", method=RequestMethod.GET)
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/invite/{" + ATTR_GROUP_ID + "}", method=RequestMethod.GET)
 	public String inviteForm(
 			@Valid @ModelAttribute("groupInviteForm") final GroupInviteInput groupInviteForm,
-			@PathVariable("groupId") final Long groupId,
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
 		log.info(String.format("Showing member invite form for group %d", groupId));
 		groupInviteForm.setId(groupId);
@@ -147,12 +143,12 @@ public class GroupsController extends AbstractController {
 		return "group_invite";
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/invite/{groupId}", method=RequestMethod.POST)
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/invite/{" + ATTR_GROUP_ID + "}", method=RequestMethod.POST)
 	public Object invite(
 			@Valid @ModelAttribute("groupInviteForm") final GroupInviteInput groupInviteForm,
 			final BindingResult bindingResult,
-			@PathVariable("groupId") final Long groupId,
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
 		if(! groupId.equals(groupInviteForm.getId())) {
 			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to invite users", groupId, groupInviteForm.getId()));
@@ -182,29 +178,29 @@ public class GroupsController extends AbstractController {
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
-	@RequestMapping("/leave/{groupId}")
-	public RedirectView leave(@PathVariable("groupId") final Long groupId) {
+	@RequestMapping("/leave/{" + ATTR_GROUP_ID + "}")
+	public RedirectView leave(@PathVariable(ATTR_GROUP_ID) final Long groupId) {
 		groupService.leave(groupId);
 		return redirect("/groups/list");
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/{groupId}/promote/{accountId}")
-	public RedirectView promote(@PathVariable("groupId") final Long groupId, @PathVariable("accountId") final Long accountId) {
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/promote/{" + ATTR_ACCOUNT_ID + "}")
+	public RedirectView promote(@PathVariable(ATTR_GROUP_ID) final Long groupId, @PathVariable(ATTR_ACCOUNT_ID) final Long accountId) {
 		groupService.promote(groupId, accountId);
 		return redirect(String.format("/groups/members/%d", groupId));
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/{groupId}/demote/{accountId}")
-	public RedirectView demote(@PathVariable("groupId") final Long groupId, @PathVariable("accountId") final Long accountId) {
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/demote/{" + ATTR_ACCOUNT_ID + "}")
+	public RedirectView demote(@PathVariable(ATTR_GROUP_ID) final Long groupId, @PathVariable(ATTR_ACCOUNT_ID) final Long accountId) {
 		groupService.demote(groupId, accountId);
 		return redirect(String.format("/groups/members/%d", groupId));
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#groupId, 'adminGroup')")
-	@RequestMapping(value="/{groupId}/remove/{accountId}")
-	public RedirectView remove(@PathVariable("groupId") final Long groupId, @PathVariable("accountId") final Long accountId) {
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/remove/{" + ATTR_ACCOUNT_ID + "}")
+	public RedirectView remove(@PathVariable(ATTR_GROUP_ID) final Long groupId, @PathVariable(ATTR_ACCOUNT_ID) final Long accountId) {
 		groupService.remove(groupId, accountId);
 		return redirect(String.format("/groups/members/%d", groupId));
 	}

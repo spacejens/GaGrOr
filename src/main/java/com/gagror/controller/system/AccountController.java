@@ -1,7 +1,5 @@
 package com.gagror.controller.system;
 
-import static com.gagror.data.account.SecurityRoles.IS_LOGGED_IN;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -77,57 +75,57 @@ public class AccountController extends AbstractController {
 		return accountService.loadAccountsNotContacts();
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContact')")
-	@RequestMapping("/viewcontact/{contactId}")
-	public String viewContact(@PathVariable("contactId") final Long contactId, final Model model) {
+	@PreAuthorize(HAS_CONTACT)
+	@RequestMapping("/viewcontact/{" + ATTR_CONTACT_ID + "}")
+	public String viewContact(@PathVariable(ATTR_CONTACT_ID) final Long contactId, final Model model) {
 		log.info(String.format("Viewing contact %d", contactId));
 		model.addAttribute("contact", accountService.loadContact(contactId));
 		return "view_contact";
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
-	@RequestMapping("/request/{accountId}")
-	public RedirectView requestContact(@PathVariable("accountId") final Long accountId) {
+	@RequestMapping("/request/{" + ATTR_ACCOUNT_ID + "}")
+	public RedirectView requestContact(@PathVariable(ATTR_ACCOUNT_ID) final Long accountId) {
 		log.info(String.format("Sending contact request to account %d", accountId));
 		accountService.createContactRequest(accountId);
 		return redirect("/account/contacts");
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContactRequest')")
-	@RequestMapping("/accept/{contactId}")
-	public RedirectView acceptContactRequest(@PathVariable("contactId") final Long contactId) {
+	@PreAuthorize(HAS_INCOMING_CONTACT_REQUEST)
+	@RequestMapping("/accept/{" + ATTR_CONTACT_ID + "}")
+	public RedirectView acceptContactRequest(@PathVariable(ATTR_CONTACT_ID) final Long contactId) {
 		log.info(String.format("Accepting contact request %d", contactId));
 		accountService.acceptContactRequest(contactId);
 		return redirect("/account/contacts");
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContactRequest')")
-	@RequestMapping("/decline/{contactId}")
-	public RedirectView declineContactRequest(@PathVariable("contactId") final Long contactId) {
+	@PreAuthorize(HAS_INCOMING_CONTACT_REQUEST)
+	@RequestMapping("/decline/{" + ATTR_CONTACT_ID + "}")
+	public RedirectView declineContactRequest(@PathVariable(ATTR_CONTACT_ID) final Long contactId) {
 		log.info(String.format("Declining contact request %d", contactId));
 		accountService.declineContactRequest(contactId);
 		return redirect("/account/contacts");
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#contactId, 'hasContact')")
-	@RequestMapping("/delete/{contactId}")
+	@PreAuthorize(HAS_CONTACT)
+	@RequestMapping("/delete/{" + ATTR_CONTACT_ID + "}")
 	public RedirectView deleteContact(@PathVariable("contactId") final Long contactId) {
 		log.info(String.format("Deleting contact %d", contactId));
 		accountService.deleteContact(contactId);
 		return redirect("/account/contacts");
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
-	@RequestMapping(value="/login/{accountId}", method=RequestMethod.GET)
-	public RedirectView loginAsUser(@PathVariable("accountId") final Long accountId) {
+	@PreAuthorize(MAY_EDIT_ACCOUNT)
+	@RequestMapping(value="/login/{" + ATTR_ACCOUNT_ID + "}", method=RequestMethod.GET)
+	public RedirectView loginAsUser(@PathVariable(ATTR_ACCOUNT_ID) final Long accountId) {
 		log.info(String.format("Logging in as user %d", accountId));
 		accountService.loginAsUser(accountId);
 		return redirect("/");
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
-	@RequestMapping(value="/edit/{accountId}", method=RequestMethod.GET)
-	public String editUserForm(@PathVariable("accountId") final Long accountId, final Model model) {
+	@PreAuthorize(MAY_EDIT_ACCOUNT)
+	@RequestMapping(value="/edit/{" + ATTR_ACCOUNT_ID + "}", method=RequestMethod.GET)
+	public String editUserForm(@PathVariable(ATTR_ACCOUNT_ID) final Long accountId, final Model model) {
 		log.info(String.format("Viewing edit account form for account ID %d", accountId));
 		final AccountEditOutput currentState = loadCurrentState(accountId);
 		model.addAttribute("currentState", currentState);
@@ -135,10 +133,10 @@ public class AccountController extends AbstractController {
 		return "edit_account";
 	}
 
-	@PreAuthorize(IS_LOGGED_IN + " and hasPermission(#accountId, 'editAccount')")
-	@RequestMapping(value="/edit/{accountId}", method=RequestMethod.POST)
+	@PreAuthorize(MAY_EDIT_ACCOUNT)
+	@RequestMapping(value="/edit/{" + ATTR_ACCOUNT_ID + "}", method=RequestMethod.POST)
 	public Object saveUserForm(
-			@PathVariable("accountId") final Long accountId,
+			@PathVariable(ATTR_ACCOUNT_ID) final Long accountId,
 			final Model model,
 			@Valid @ModelAttribute("editAccountForm") final AccountEditInput editAccountForm,
 			final BindingResult bindingResult) {
