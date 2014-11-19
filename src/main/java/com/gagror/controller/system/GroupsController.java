@@ -57,6 +57,7 @@ public class GroupsController extends AbstractController {
 		log.info("Viewing groups public list page");
 		model.addAttribute("publicGroups", groupService.loadPublicGroupList());
 		return "groups_public";
+		// TODO When viewing groups while not a member, breadcrumbs should start from public page
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
@@ -92,6 +93,7 @@ public class GroupsController extends AbstractController {
 		log.info(String.format("Viewing members of group %d", groupId));
 		model.addAttribute("group", groupService.viewGroupMembers(groupId));
 		return "group_members";
+		// TODO Viewing groups members page should be possible when not a member for public groups
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)

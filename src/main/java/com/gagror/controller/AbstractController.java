@@ -21,7 +21,7 @@ public abstract class AbstractController {
 
 	protected static final String ATTR_ACCOUNT_ID = "accountId";
 	protected static final String ATTR_GROUP_ID = "groupId";
-	protected static final String MAY_VIEW_GROUP = IS_LOGGED_IN + " and hasPermission(#" + ATTR_GROUP_ID + ", 'viewGroup')"; // TODO Group view permission should not require being logged in
+	protected static final String MAY_VIEW_GROUP = "hasPermission(#" + ATTR_GROUP_ID + ", 'viewGroup')";
 	protected static final String MAY_ADMIN_GROUP = IS_LOGGED_IN + " and hasPermission(#" + ATTR_GROUP_ID + ", 'adminGroup')";
 
 	@Autowired
