@@ -1,6 +1,5 @@
 package com.gagror.controller.system;
 
-import static com.gagror.data.account.SecurityRoles.IS_PUBLIC;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +11,7 @@ import com.gagror.controller.AbstractController;
 
 @Controller
 @CommonsLog
-@PreAuthorize(IS_PUBLIC)
+@PreAuthorize(AbstractController.IS_PUBLIC)
 public class PublicController extends AbstractController {
 
 	@RequestMapping("/")

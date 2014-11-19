@@ -29,6 +29,11 @@ import com.gagror.service.social.EditAccountPersister;
 @CommonsLog
 public class AccountController extends AbstractController {
 
+	protected static final String ATTR_CONTACT_ID = "contactId";
+	protected static final String HAS_CONTACT = IS_LOGGED_IN + " and hasPermission(#" + ATTR_CONTACT_ID + ", 'hasContact')";
+	protected static final String HAS_INCOMING_CONTACT_REQUEST = IS_LOGGED_IN + " and hasPermission(#" + ATTR_CONTACT_ID + ", 'hasContactRequest')";
+	protected static final String MAY_EDIT_ACCOUNT = IS_LOGGED_IN + " and hasPermission(#" + ATTR_ACCOUNT_ID + ", 'editAccount')";
+
 	@Autowired
 	AccountService accountService;
 

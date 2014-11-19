@@ -12,7 +12,17 @@ import com.gagror.data.account.SecurityRoles;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @CommonsLog
-public abstract class AbstractController implements SecurityRoles {
+public abstract class AbstractController {
+
+	protected static final String IS_LOGGED_IN = "isAuthenticated()";
+	protected static final String IS_ADMIN = "hasRole('"+SecurityRoles.ROLE_ADMIN+"')";
+	public static final String IS_PUBLIC = "true";
+	protected static final String IS_NOT_LOGGED_IN = "isAnonymous()";
+
+	protected static final String ATTR_ACCOUNT_ID = "accountId";
+	protected static final String ATTR_GROUP_ID = "groupId";
+	protected static final String MAY_VIEW_GROUP = IS_LOGGED_IN + " and hasPermission(#" + ATTR_GROUP_ID + ", 'viewGroup')"; // TODO Group view permission should not require being logged in
+	protected static final String MAY_ADMIN_GROUP = IS_LOGGED_IN + " and hasPermission(#" + ATTR_GROUP_ID + ", 'adminGroup')";
 
 	@Autowired
 	protected AccessControlService accessControl;
