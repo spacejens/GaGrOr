@@ -4,7 +4,9 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a class="current" th:text="${group.name}"></a>
 	</nav>
 	<dl class="sub-nav" id="pageactions">

@@ -57,7 +57,6 @@ public class GroupsController extends AbstractController {
 		log.info("Viewing groups public list page");
 		model.addAttribute("publicGroups", groupService.loadPublicGroupList());
 		return "groups_public";
-		// TODO When viewing groups while not a member, breadcrumbs should start from public page
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
