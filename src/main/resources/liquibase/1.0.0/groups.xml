@@ -25,6 +25,9 @@
 			<column name="viewable_by_anyone" type="boolean">
 				<constraints nullable="false" />
 			</column>
+			<column name="group_type" type="tinyint">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 

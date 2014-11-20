@@ -12,6 +12,12 @@
 			Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
 			<input type="text" th:field="*{name}" />
 		</label>
+		<label>
+			Group type <span class="error" th:if="${#fields.hasErrors('groupType')}" th:errors="*{groupType}">Group type error</span>
+			<select th:field="*{groupType}">
+				<option th:each="type : ${groupTypes}" th:value="${type}" th:text="#{${type.displayNameProperty}}"></option>
+			</select>
+		</label>
 		<button type="submit">Create group</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>

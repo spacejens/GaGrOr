@@ -20,6 +20,7 @@ import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupInviteInput;
+import com.gagror.data.group.GroupType;
 import com.gagror.service.social.CreateGroupPersister;
 import com.gagror.service.social.EditGroupPersister;
 import com.gagror.service.social.GroupService;
@@ -61,20 +62,29 @@ public class GroupsController extends AbstractController {
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping(value="/create", method=RequestMethod.GET)
-	public String createGroupForm(@Valid @ModelAttribute("groupCreateForm") final GroupCreateInput groupCreateForm) {
+	public String createGroupForm(
+			@Valid @ModelAttribute("groupCreateForm") final GroupCreateInput groupCreateForm,
+			final Model model) {
 		log.info("Viewing create group form");
+		groupCreateForm.setGroupType(GroupType.SOCIAL);
+		return showCreateGroupForm(model);
+	}
+
+	private String showCreateGroupForm(final Model model) {
+		model.addAttribute("groupTypes", GroupType.values());
 		return "create_group";
 	}
 
 	@PreAuthorize(IS_LOGGED_IN)
 	@RequestMapping(value="/create", method=RequestMethod.POST)
 	public Object createGroup(
+			final Model model,
 			@Valid @ModelAttribute("groupCreateForm") final GroupCreateInput groupCreateForm,
 			final BindingResult bindingResult) {
 		if(createGroupPersister.save(groupCreateForm, bindingResult)) {
 			return redirect("/groups/list");
 		} else {
-			return "create_group";
+			return showCreateGroupForm(model);
 		}
 	}
 

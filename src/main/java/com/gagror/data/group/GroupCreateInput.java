@@ -9,4 +9,6 @@ public class GroupCreateInput {
 
 	@Size(min=3, max=64)
 	private String name;
+
+	private GroupType groupType;
 }
