@@ -1,7 +1,5 @@
 package com.gagror.controller.system;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import lombok.extern.apachecommons.CommonsLog;
@@ -20,7 +18,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.gagror.controller.AbstractController;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
-import com.gagror.data.account.ContactReferenceOutput;
 import com.gagror.service.social.AccountService;
 import com.gagror.service.social.EditAccountPersister;
 
@@ -44,6 +41,9 @@ public class AccountController extends AbstractController {
 	@RequestMapping("/contacts")
 	public String contacts(final Model model) {
 		log.info("Viewing contact list page");
+		model.addAttribute("contacts", accountService.loadContacts());
+		model.addAttribute("sentContactRequests", accountService.loadSentContactRequests());
+		model.addAttribute("receivedContactRequests", accountService.loadReceivedContactRequests());
 		return "contacts";
 	}
 
@@ -51,33 +51,8 @@ public class AccountController extends AbstractController {
 	@RequestMapping("/contacts/find")
 	public String findContacts(final Model model) {
 		log.info("Viewing find contacts page");
+		model.addAttribute("notMyContacts", accountService.loadAccountsNotContacts());
 		return "find_contacts";
-	}
-
-	// TODO Avoid using @ModelAttribute on methods, as that will load for all pages in the controller
-
-	@PreAuthorize(IS_LOGGED_IN)
-	@ModelAttribute("contacts")
-	public List<ContactReferenceOutput> getContacts() {
-		return accountService.loadContacts();
-	}
-
-	@PreAuthorize(IS_LOGGED_IN)
-	@ModelAttribute("sentContactRequests")
-	public List<ContactReferenceOutput> getSentContactRequests() {
-		return accountService.loadSentContactRequests();
-	}
-
-	@PreAuthorize(IS_LOGGED_IN)
-	@ModelAttribute("receivedContactRequests")
-	public List<ContactReferenceOutput> getReceivedContactRequests() {
-		return accountService.loadReceivedContactRequests();
-	}
-
-	@PreAuthorize(IS_LOGGED_IN)
-	@ModelAttribute("notMyContacts")
-	public List<ContactReferenceOutput> getNotMyContacts() {
-		return accountService.loadAccountsNotContacts();
 	}
 
 	@PreAuthorize(HAS_CONTACT)

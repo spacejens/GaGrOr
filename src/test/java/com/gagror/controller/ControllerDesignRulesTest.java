@@ -49,6 +49,23 @@ public class ControllerDesignRulesTest extends DesignRulesTestSupport {
 	}
 
 	@Test
+	public void restrictUseOfModelAttributeMethods() {
+		// Disallow model attribute methods (to prevent them from loading for every page), except for a few exceptions
+		for(final Method method : controller.getMethods()) {
+			if(method.isAnnotationPresent(ModelAttribute.class)) {
+				if(! isAllowedModelAttributeMethod(method)) {
+					fail(String.format("Method %s on class %s is not allowed to have the @ModelAttribute annotation",
+							method.getName(), method.getDeclaringClass().getCanonicalName()));
+				}
+			}
+		}
+	}
+	private boolean isAllowedModelAttributeMethod(final Method method) {
+		return "getCurrentUser".equals(method.getName())
+				&& AbstractController.class.equals(method.getDeclaringClass());
+	}
+
+	@Test
 	public void allModelAttributeMethodsHaveSecurityAnnotations() {
 		// Check all methods that are model attributes, even in superclasses
 		for(final Method method : controller.getMethods()) {
