@@ -16,7 +16,8 @@ public class GroupTypeUnitTest extends EnumUnitTestSupport<GroupType> {
 
 	@RequiredArgsConstructor
 	private enum ExpectedResults {
-		SOCIAL(GroupType.SOCIAL, 0);
+		SOCIAL(GroupType.SOCIAL, 0),
+		WH40K_SKIRMISH(GroupType.WH40K_SKIRMISH, 1);
 
 		private final GroupType groupType;
 		private final Integer databaseId;
