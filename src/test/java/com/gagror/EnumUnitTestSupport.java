@@ -12,6 +12,4 @@ public abstract class EnumUnitTestSupport<E extends Enum<E>> {
 		}
 		return parameters;
 	}
-
-	// TODO Add enum design rules test to verify fromId method exists, and that property names exist in enums.properties
 }
