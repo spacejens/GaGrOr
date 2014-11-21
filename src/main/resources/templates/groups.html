@@ -15,6 +15,7 @@
 		<thead>
 			<tr>
 				<td>Group</td>
+				<td>Game</td>
 				<td th:unless="${public == 'true'}">Role</td>
 				<td>Members</td>
 				<td colspan="3">Action</td>
@@ -23,6 +24,7 @@
 		<tbody>
 			<tr th:each="group : ${groups}">
 				<td th:text="${group.name}"></td>
+				<td th:text="#{${group.groupType.displayNameProperty}}"></td>
 				<td th:unless="${public == 'true'}" th:text="#{${group.memberType.displayNameProperty}}"></td>
 				<td th:text="${group.memberCount} + (${group.invitationCount}? ' (+' + ${group.invitationCount} + ')' : '')"></td>
 				<td><a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.view}"></a></td>
