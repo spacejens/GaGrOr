@@ -14,6 +14,7 @@
 		<dd><a th:if="${group.memberType != null and group.memberType.owner}" th:href="@{/groups/edit/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.edit}"></a></dd>
 		<dd><a th:href="@{/groups/members/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members}"></a></dd>
 	</dl>
+	<p>Game: <span th:text="#{${group.groupType.displayNameProperty}}"></span></p>
 	<p th:if="${group.viewableByAnyone}">Public group, viewable by anyone</p>
 	<p th:unless="${group.viewableByAnyone}">Private group, viewable by members only</p>
 	<p>Created: <span th:replace="/fragments/formatting :: datetime (date=${group.created})"></span></p>

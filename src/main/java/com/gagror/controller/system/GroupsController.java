@@ -93,7 +93,6 @@ public class GroupsController extends AbstractController {
 	public String viewGroup(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing group %d", groupId));
 		model.addAttribute("group", groupService.viewGroup(groupId));
-		// TODO View group type when viewing group
 		return "view_group";
 	}
 
@@ -114,7 +113,6 @@ public class GroupsController extends AbstractController {
 		final GroupEditOutput currentState = groupService.editGroup(groupId);
 		model.addAttribute("group", currentState);
 		model.addAttribute("groupEditForm", new GroupEditInput(currentState));
-		// TODO Show group type (readonly) when editing group?
 		return "edit_group";
 	}
 
