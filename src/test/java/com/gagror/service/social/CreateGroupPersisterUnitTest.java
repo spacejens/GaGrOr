@@ -25,6 +25,7 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
 import com.gagror.data.group.GroupRepository;
+import com.gagror.data.group.GroupType;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
 
@@ -72,6 +73,7 @@ public class CreateGroupPersisterUnitTest {
 	@Before
 	public void setupForm() {
 		when(groupCreateForm.getName()).thenReturn(NEW_GROUP_NAME);
+		when(groupCreateForm.getGroupType()).thenReturn(GroupType.SOCIAL);
 	}
 
 	@Before

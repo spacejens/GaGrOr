@@ -10,4 +10,6 @@
 	<include relativeToChangelogFile="true" file="contacts.xml"/>
 
 	<include relativeToChangelogFile="true" file="groups.xml"/>
+
+	<include relativeToChangelogFile="true" file="wh40kskirmish.xml"/>
 </databaseChangeLog>

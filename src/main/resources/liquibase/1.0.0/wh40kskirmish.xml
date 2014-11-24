@@ -1,0 +1,68 @@
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="rules-table" author="spacejens">
+		<createTable tableName="wh40ksk_rules">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="group_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="rules-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="gaminggroup_rules_group_fk"
+			referencedTableName="gaminggroup"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_rules"
+			baseColumnNames="group_id"/>
+	</changeSet>
+
+	<changeSet id="gang-type-table" author="spacejens">
+		<createTable tableName="wh40ksk_gangtype">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="rules_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="gang-type-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="rules_gangtype_group_fk"
+			referencedTableName="wh40ksk_rules"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_gangtype"
+			baseColumnNames="rules_id"/>
+	</changeSet>
+</databaseChangeLog>
