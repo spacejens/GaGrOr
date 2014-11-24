@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,31 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 							field.getAnnotation(ManyToOne.class).optional());
 				} else {
 					fail(String.format("Field %s has @JoinColumn but no known join annotation", field.getName()));
+				}
+			}
+		}
+	}
+
+	@Test
+	public void oneToOneParentChildRelationship() {
+		for(final Field field : entity.getDeclaredFields()) {
+			if(field.isAnnotationPresent(OneToOne.class)) {
+				final OneToOne annotation = field.getAnnotation(OneToOne.class);
+				if(null != annotation.mappedBy() && ! annotation.mappedBy().isEmpty()) {
+					// This annotation is the parent, proceed to find the child
+					final Class<?> childEntity = field.getType();
+					boolean foundChildField = false;
+					for(final Field childField : childEntity.getDeclaredFields()) {
+						if(childField.getName().equals(annotation.mappedBy())) {
+							foundChildField = true;
+							assertTrue(String.format("Child field %s.%s should have reverse mapping", childEntity, childField.getName()),
+									childField.isAnnotationPresent(OneToOne.class));
+							assertFalse(String.format("Child field %s.%s should not be optional", childEntity, childField.getName()),
+									childField.getAnnotation(OneToOne.class).optional());
+						}
+					}
+					assertTrue(String.format("Failed to find child field of %s.%s", entity, field.getName()),
+							foundChildField);
 				}
 			}
 		}
