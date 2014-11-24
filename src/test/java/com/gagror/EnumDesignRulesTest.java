@@ -35,11 +35,6 @@ public class EnumDesignRulesTest extends DesignRulesTestSupport {
 
 	@Test
 	public void identifiableEnumsHaveReverseLookup() throws Exception {
-		// Don't require for inner classes, as they are used for tests
-		if(clazz.isMemberClass()) {
-			log.debug(String.format("Skipping reverse lookup for inner class enum %s", name));
-			return;
-		}
 		if(! Identifiable.class.isAssignableFrom(clazz)) {
 			log.debug(String.format("Skipping reverse lookup for non-identifiable enum %s", name));
 			return;

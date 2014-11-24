@@ -38,7 +38,8 @@ public abstract class DesignRulesTestSupport {
 		final Set<Object[]> parameters = new HashSet<>();
 		final Reflections reflections = new Reflections("com.gagror");
 		for(final Class<?> clazz : reflections.getSubTypesOf(parent)) {
-			if(! Modifier.isAbstract(clazz.getModifiers())) {
+			// Ignore inner classes for the purposes of design rule tests
+			if(! Modifier.isAbstract(clazz.getModifiers()) && ! clazz.isMemberClass()) {
 				parameters.add(new Object[]{clazz.getCanonicalName(), clazz});
 			}
 		}
