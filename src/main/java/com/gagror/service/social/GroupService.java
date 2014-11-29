@@ -122,7 +122,7 @@ public class GroupService {
 		return null;
 	}
 
-	private GroupEntity loadGroup(final Long groupId) {
+	public GroupEntity loadGroup(final Long groupId) {
 		final GroupEntity group = groupRepository.findOne(groupId);
 		if(null == group) {
 			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
