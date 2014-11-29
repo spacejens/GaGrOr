@@ -16,19 +16,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.gagror.data.AbstractEditableEntity;
+import com.gagror.data.AbstractEditableNamedEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
 
 @NoArgsConstructor
-@ToString(of={"name"}, callSuper=true)
+@ToString(of={}, callSuper=true)
 @Entity
 @Table(name="gaminggroup") // Table name doesn't match since 'group' is a reserved word
-public class GroupEntity extends AbstractEditableEntity {
-
-	@Column(nullable = false)
-	@Getter
-	@Setter
-	private String name;
+public class GroupEntity extends AbstractEditableNamedEntity {
 
 	@OneToMany(mappedBy="group", fetch=FetchType.LAZY)
 	@Getter
@@ -48,7 +43,7 @@ public class GroupEntity extends AbstractEditableEntity {
 	private Wh40kSkirmishRulesEntity wh40kSkirmishRules;
 
 	public GroupEntity(final String name, final GroupType groupType) {
-		setName(name);
+		super(name);
 		this.groupType = groupType;
 		switch(groupType) {
 		case SOCIAL:

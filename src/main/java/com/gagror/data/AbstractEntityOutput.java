@@ -15,6 +15,8 @@ extends AbstractIdentifiable {
 	@Getter
 	private final Date created;
 
+	// TODO Create AbstractEditableEntityOutput and AbstractEditableNamedEntityOutput
+
 	protected AbstractEntityOutput(final AbstractEntity entity) {
 		id = entity.getId();
 		created = entity.getCreated();

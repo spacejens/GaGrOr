@@ -19,8 +19,6 @@ public abstract class AbstractEditableEntity extends AbstractEntity {
 	@Getter
 	private Long version;
 
-	// TODO Create AbstractNamedEditableEntity (and corresponding output) to reduce duplicated code
-
 	@Column(nullable = false, insertable = true, updatable = true)
 	@Getter
 	private Date modified;
