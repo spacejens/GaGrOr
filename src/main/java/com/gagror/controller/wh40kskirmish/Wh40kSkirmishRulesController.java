@@ -54,8 +54,8 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		log.info(String.format("Viewing create gang type form for group %d", groupId));
 		model.addAttribute("group", groupService.viewGroup(groupId));
 		model.addAttribute("rules", rulesService.viewRules(groupId));
-		// TODO Use different HTML to create gang types (possibly the same HTML as the edit page)
-		return "wh40kskirmish/gangtypes_create";
+		// TODO Add HTML form to create (or edit) gang types
+		return "wh40kskirmish/gangtypes_edit";
 	}
 
 	// TODO Add logic to handle posting of create gang type form
