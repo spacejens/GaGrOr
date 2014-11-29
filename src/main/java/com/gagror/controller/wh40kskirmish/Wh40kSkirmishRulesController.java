@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.service.social.GroupService;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 
 @Controller
 @RequestMapping("/wh40kskirmish/rules")
@@ -21,12 +22,15 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	@Autowired
 	GroupService groupService;
 
+	@Autowired
+	Wh40kSkirmishRulesService rulesService;
+
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/view/{" + ATTR_GROUP_ID + "}")
 	public String viewRules(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing rules for group %d", groupId));
-		// TODO Use different data to view basic rules
 		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("rules", rulesService.viewRules(groupId));
 		// TODO Make initial territory allocation for gangs configurable
 		// TODO Make initial money per gang configurable
 		// TODO Make name of currency in game configurable
@@ -39,8 +43,8 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	@RequestMapping("/gangtypes/list/{" + ATTR_GROUP_ID + "}")
 	public String listGangTypes(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing gang types for group %d", groupId));
-		// TODO Use different data and HTML to list gang types
 		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("rules", rulesService.viewRulesWithGangTypes(groupId));
 		return "wh40kskirmish/gangtypes_list";
 	}
 
@@ -48,8 +52,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	@RequestMapping(value="/gangtypes/create/{" + ATTR_GROUP_ID + "}", method=RequestMethod.GET)
 	public String createGangTypeForm(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing create gang type form for group %d", groupId));
-		// TODO Use different data and HTML to create gang types
 		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("rules", rulesService.viewRules(groupId));
+		// TODO Use different HTML to create gang types (possibly the same HTML as the edit page)
 		return "wh40kskirmish/gangtypes_create";
 	}
 
