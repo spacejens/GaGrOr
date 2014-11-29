@@ -86,11 +86,9 @@ public class GroupService {
 	public GroupReferenceOutput viewGroup(final Long groupId) {
 		final GroupEntity group = loadGroup(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
-		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
-		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
-			if(membership.getAccount().equals(currentUser)) {
-				return new GroupReferenceOutput(membership);
-			}
+		final GroupMemberEntity membership = findGroupMemberForRequestAccount(group);
+		if(null != membership) {
+			return new GroupReferenceOutput(membership);
 		}
 		return new GroupReferenceOutput(group);
 	}
@@ -107,13 +105,21 @@ public class GroupService {
 	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {
 		final GroupEntity group = loadGroup(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
+		final GroupMemberEntity membership = findGroupMemberForRequestAccount(group);
+		if(null != membership) {
+			return new GroupViewMembersOutput(membership);
+		}
+		return new GroupViewMembersOutput(group);
+	}
+
+	private GroupMemberEntity findGroupMemberForRequestAccount(final GroupEntity group) {
 		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
 			if(membership.getAccount().equals(currentUser)) {
-				return new GroupViewMembersOutput(membership);
+				return membership;
 			}
 		}
-		return new GroupViewMembersOutput(group);
+		return null;
 	}
 
 	private GroupEntity loadGroup(final Long groupId) {
