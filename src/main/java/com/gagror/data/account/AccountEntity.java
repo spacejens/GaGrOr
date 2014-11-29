@@ -21,6 +21,7 @@ import com.gagror.data.group.GroupMemberEntity;
 @Entity
 @Table(name="account")
 public class AccountEntity extends AbstractEditableEntity {
+	// TODO AccountEntity should extend AbstractEditableNamedEntity
 
 	@Column(nullable = false)
 	@Getter
