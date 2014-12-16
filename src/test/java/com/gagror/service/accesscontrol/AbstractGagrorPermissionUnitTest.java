@@ -58,7 +58,7 @@ public class AbstractGagrorPermissionUnitTest {
 	@Before
 	public void setupAccount() {
 		// Set account name to permission name because that's how the test Impl checks permissions
-		when(accountEntity.getUsername()).thenReturn(PERMISSION_NAME);
+		when(accountEntity.getName()).thenReturn(PERMISSION_NAME);
 	}
 
 	private class Impl extends AbstractGagrorPermission<String, Target> {
@@ -74,7 +74,7 @@ public class AbstractGagrorPermissionUnitTest {
 
 		@Override
 		protected boolean hasPermission(final String id, final AccountEntity account) {
-			return id.equals(account.getUsername());
+			return id.equals(account.getName());
 		}
 	}
 

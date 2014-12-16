@@ -21,7 +21,7 @@ public class GagrorUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-		final AccountEntity account = accountRepository.findByUsername(username);
+		final AccountEntity account = accountRepository.findByName(username);
 		if(null == account) {
 			log.error(String.format("Failed to load security user '%s', account not found", username));
 			throw new UsernameNotFoundException(String.format("Security user %s not found", username));

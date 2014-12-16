@@ -33,7 +33,7 @@ public class AccessControlService {
 				&& authentication.isAuthenticated()
 				&& ! (authentication instanceof AnonymousAuthenticationToken)) {
 			log.trace(String.format("Loading request account '%s'", authentication.getName()));
-			return accountRepository.findByUsername(authentication.getName());
+			return accountRepository.findByName(authentication.getName());
 		} else {
 			return null;
 		}
@@ -51,7 +51,7 @@ public class AccessControlService {
 	public AccountReferenceOutput getRequestAccount() {
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
-			log.trace(String.format("Loaded request account '%s' for output", account.getUsername()));
+			log.trace(String.format("Loaded request account '%s' for output", account.getName()));
 			return new AccountReferenceOutput(account);
 		} else {
 			log.trace("Cannot load request account for output, user not logged in");
@@ -73,7 +73,7 @@ public class AccessControlService {
 	public void logInAs(final AccountEntity account) {
 		SecurityContextHolder.getContext().setAuthentication(
 				new PreAuthenticatedAuthenticationToken(
-						account.getUsername(),
+						account.getName(),
 						account.getPassword(),
 						account.getAccountType().getAuthorities()));
 	}

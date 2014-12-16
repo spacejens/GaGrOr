@@ -57,7 +57,7 @@ public class RegisterAccountPersisterUnitTest {
 		verifyNoMoreInteractions(bindingResult);
 		final ArgumentCaptor<AccountEntity> savedAccount = ArgumentCaptor.forClass(AccountEntity.class);
 		verify(accountRepository).save(savedAccount.capture());
-		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getUsername());
+		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getName());
 		assertEquals("Wrong password", PASSWORD_ENCODED, savedAccount.getValue().getPassword());
 		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
 		assertTrue("Registered account should become active", savedAccount.getValue().isActive());
@@ -67,7 +67,7 @@ public class RegisterAccountPersisterUnitTest {
 
 	@Test
 	public void register_usernameBusy() {
-		when(accountRepository.findByUsername(USERNAME)).thenReturn(anAccount);
+		when(accountRepository.findByName(USERNAME)).thenReturn(anAccount);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
@@ -97,7 +97,7 @@ public class RegisterAccountPersisterUnitTest {
 
 	@Test
 	public void register_manyErrors() {
-		when(accountRepository.findByUsername(USERNAME)).thenReturn(anAccount);
+		when(accountRepository.findByName(USERNAME)).thenReturn(anAccount);
 		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
 		when(accessControlService.isPasswordTooWeak(PASSWORD)).thenReturn(true);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked

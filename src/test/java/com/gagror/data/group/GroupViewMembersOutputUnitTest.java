@@ -120,7 +120,7 @@ public class GroupViewMembersOutputUnitTest {
 
 	private void setupAccount(final AccountEntity account, final String username) {
 		when(account.getId()).thenReturn(id++);
-		when(account.getUsername()).thenReturn(username);
+		when(account.getName()).thenReturn(username);
 	}
 
 	private void setupMembership(final GroupMemberEntity member, final AccountEntity account, final MemberType memberType) {

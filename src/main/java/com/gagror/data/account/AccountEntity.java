@@ -13,20 +13,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.gagror.data.AbstractEditableEntity;
+import com.gagror.data.AbstractEditableNamedEntity;
 import com.gagror.data.group.GroupMemberEntity;
 
 @NoArgsConstructor
-@ToString(of={"username", "accountType"}, callSuper=true)
+@ToString(of={"accountType"}, callSuper=true)
 @Entity
 @Table(name="account")
-public class AccountEntity extends AbstractEditableEntity {
-	// TODO AccountEntity should extend AbstractEditableNamedEntity
-
-	@Column(nullable = false)
-	@Getter
-	@Setter
-	private String username;
+public class AccountEntity extends AbstractEditableNamedEntity {
 
 	@Column(nullable = false)
 	@Getter
@@ -61,7 +55,7 @@ public class AccountEntity extends AbstractEditableEntity {
 	private Set<GroupMemberEntity> groupMemberships;
 
 	public AccountEntity(final String username, final String encryptedPassword) {
-		setUsername(username);
+		setName(username);
 		setPassword(encryptedPassword);
 		setAccountType(AccountType.STANDARD);
 		setActive(true);

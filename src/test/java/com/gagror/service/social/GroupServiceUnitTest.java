@@ -243,8 +243,8 @@ public class GroupServiceUnitTest {
 	public void loadPossibleUsersToInvite_sorted() {
 		final AccountEntity anotherContactAccount = mock(AccountEntity.class);
 		mockAccount(anotherContactAccount, 56736L);
-		when(anotherContactAccount.getUsername()).thenReturn("AAAA");
-		when(contactAccount.getUsername()).thenReturn("BBBB");
+		when(anotherContactAccount.getName()).thenReturn("AAAA");
+		when(contactAccount.getName()).thenReturn("BBBB");
 		final ContactEntity anotherContact = mock(ContactEntity.class);
 		mockContact(anotherContact, 39999L, requestAccount, anotherContactAccount, ContactType.APPROVED);
 		final List<AccountReferenceOutput> result = instance.loadPossibleUsersToInvite(FIRST_GROUP_ID);

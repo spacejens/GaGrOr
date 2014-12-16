@@ -116,12 +116,12 @@ public class AccountServiceUnitTest {
 	@Test
 	public void loadContacts() {
 		// Add name to the first contact
-		when(contactAccount.getUsername()).thenReturn("ZZZ");
+		when(contactAccount.getName()).thenReturn("ZZZ");
 		// Add a second contact (needed to verify sort order)
 		final AccountEntity secondContactAccount = mock(AccountEntity.class);
 		final Long secondContactId = 555L;
 		when(secondContactAccount.getId()).thenReturn(secondContactId);
-		when(secondContactAccount.getUsername()).thenReturn("AAA");
+		when(secondContactAccount.getName()).thenReturn("AAA");
 		final ContactEntity secondContact = mock(ContactEntity.class);
 		when(secondContact.getContactType()).thenReturn(ContactType.APPROVED);
 		when(secondContact.getContact()).thenReturn(secondContactAccount);
@@ -134,12 +134,12 @@ public class AccountServiceUnitTest {
 	@Test
 	public void loadSentContactRequests() {
 		// Add name to the first sent contact request
-		when(anotherAccount.getUsername()).thenReturn("ZZZ");
+		when(anotherAccount.getName()).thenReturn("ZZZ");
 		// Add a second contact request (needed to verify sort order)
 		final AccountEntity secondContactAccount = mock(AccountEntity.class);
 		final Long secondContactId = 555L;
 		when(secondContactAccount.getId()).thenReturn(secondContactId);
-		when(secondContactAccount.getUsername()).thenReturn("AAA");
+		when(secondContactAccount.getName()).thenReturn("AAA");
 		final ContactEntity secondContact = mock(ContactEntity.class);
 		when(secondContact.getContactType()).thenReturn(ContactType.REQUESTED);
 		when(secondContact.getContact()).thenReturn(secondContactAccount);
@@ -152,7 +152,7 @@ public class AccountServiceUnitTest {
 	@Test
 	public void loadReceivedContactRequests() {
 		// Redefine the default test data
-		when(anotherAccount.getUsername()).thenReturn("ZZZ");
+		when(anotherAccount.getName()).thenReturn("ZZZ");
 		when(anotherContact.getOwner()).thenReturn(anotherAccount);
 		when(anotherContact.getContact()).thenReturn(account);
 		account.getContacts().remove(anotherContact);
@@ -161,7 +161,7 @@ public class AccountServiceUnitTest {
 		final AccountEntity secondIncomingRequestAccount = mock(AccountEntity.class);
 		final Long secondIncomingRequestAccountId = 555L;
 		when(secondIncomingRequestAccount.getId()).thenReturn(secondIncomingRequestAccountId);
-		when(secondIncomingRequestAccount.getUsername()).thenReturn("AAA");
+		when(secondIncomingRequestAccount.getName()).thenReturn("AAA");
 		final ContactEntity secondIncomingRequest = mock(ContactEntity.class);
 		when(secondIncomingRequest.getContactType()).thenReturn(ContactType.REQUESTED);
 		when(secondIncomingRequest.getOwner()).thenReturn(secondIncomingRequestAccount);
@@ -417,7 +417,7 @@ public class AccountServiceUnitTest {
 		// Set up accounts
 		when(account.getId()).thenReturn(ACCOUNT_ID);
 		when(account.getVersion()).thenReturn(VERSION);
-		when(account.getUsername()).thenReturn(ENTITY_USERNAME);
+		when(account.getName()).thenReturn(ENTITY_USERNAME);
 		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 		when(contactAccount.getId()).thenReturn(CONTACT_ACCOUNT_ID);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ACCOUNT_ID);

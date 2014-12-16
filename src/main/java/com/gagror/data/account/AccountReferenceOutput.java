@@ -21,7 +21,7 @@ implements Comparable<AccountReferenceOutput>{
 
 	public AccountReferenceOutput(final AccountEntity entity) {
 		super(entity);
-		username = entity.getUsername();
+		username = entity.getName();
 		accountType = entity.getAccountType();
 		if(! entity.isActive()) {
 			cssClass = "account.icon.inactive";

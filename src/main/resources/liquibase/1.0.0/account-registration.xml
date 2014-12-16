@@ -21,7 +21,7 @@
 			<column name="modified" type="datetime">
 				<constraints nullable="false" />
 			</column>
-			<column name="username" type="varchar(64)">
+			<column name="name" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
 			<column name="password" type="char(60)"> <!-- BCrypt output -->
@@ -39,19 +39,19 @@
 		</createTable>
 	</changeSet>
 
-	<changeSet id="username-unique" author="spacejens">
-		<addUniqueConstraint constraintName="account_username_u" tableName="account" columnNames="username"/>
+	<changeSet id="name-unique" author="spacejens">
+		<addUniqueConstraint constraintName="account_name_u" tableName="account" columnNames="name"/>
 	</changeSet>
 
-	<changeSet id="username-index" author="spacejens">
-		<createIndex indexName="account_username_ix" tableName="account">
-			<column name="username" type="varchar(64)" />
+	<changeSet id="name-index" author="spacejens">
+		<createIndex indexName="account_name_ix" tableName="account">
+			<column name="name" type="varchar(64)" />
 		</createIndex>
 	</changeSet>
 
 	<changeSet id="account-admin" author="spacejens">
 		<insert tableName="account">
-			<column name="username" value="admin"/>
+			<column name="name" value="admin"/>
 			<column name="password" value="$2a$10$LtpG/uRFVYW33i8kp5XW1ehLzJv.fFmuOy8jST65Hz6o4CD6N5cju"/> <!-- password -->
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->
 			<column name="active" valueBoolean="true"/>

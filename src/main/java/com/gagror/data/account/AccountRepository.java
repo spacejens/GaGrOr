@@ -7,7 +7,7 @@ public interface AccountRepository extends Repository<AccountEntity, Long> {
 
 	Iterable<AccountEntity> findAll(final Sort sort);
 
-	AccountEntity findByUsername(final String username);
+	AccountEntity findByName(final String name);
 
 	AccountEntity findById(final Long id);
 

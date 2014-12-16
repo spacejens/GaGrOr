@@ -59,8 +59,8 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 	protected void validateFormVsExistingState(final AccountEditInput form, final BindingResult bindingResult, final AccountEntity entity) {
 		final boolean editingOwnAccount = isEditingOwnAccount(form.getId());
 		if(editingOwnAccount
-				&& ! entity.getUsername().equals(form.getUsername())
-				&& null != accountRepository.findByUsername(form.getUsername())) {
+				&& ! entity.getName().equals(form.getUsername())
+				&& null != accountRepository.findByName(form.getUsername())) {
 			log.warn(String.format("Attempt to edit account %d failed, username was busy", form.getId()));
 			form.addErrorUsernameBusy(bindingResult);
 		}
@@ -78,7 +78,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 			 * Editing username for other accounts is forbidden, since it would be very confusing.
 			 * That user would be thrown out and unable to log in again.
 			 */
-			entity.setUsername(form.getUsername());
+			entity.setName(form.getUsername());
 		}
 		if(! StringUtils.isEmptyOrWhitespace(form.getPassword())) {
 			entity.setPassword(accessControlService.encodePassword(form.getPassword()));

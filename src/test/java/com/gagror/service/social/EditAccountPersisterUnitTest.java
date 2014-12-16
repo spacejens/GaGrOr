@@ -63,7 +63,7 @@ public class EditAccountPersisterUnitTest {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(account);
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertTrue("Saving should have succeeded", result);
-		verify(account).setUsername(FORM_USERNAME);
+		verify(account).setName(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
 		verify(account, never()).setAccountType(any(AccountType.class));
 		verify(account, never()).setActive(anyBoolean());
@@ -78,7 +78,7 @@ public class EditAccountPersisterUnitTest {
 		when(editAccountForm.getPasswordRepeat()).thenReturn("");
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertTrue("Saving should have succeeded", result);
-		verify(account).setUsername(FORM_USERNAME);
+		verify(account).setName(FORM_USERNAME);
 		verify(account, never()).setPassword(anyString());
 		verify(account, never()).setAccountType(any(AccountType.class));
 		verify(account, never()).setActive(anyBoolean());
@@ -91,7 +91,7 @@ public class EditAccountPersisterUnitTest {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount);
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertTrue("Saving should have succeeded", result);
-		verify(account, never()).setUsername(FORM_USERNAME);
+		verify(account, never()).setName(FORM_USERNAME);
 		verify(account).setPassword(ENCODED_PASSWORD);
 		verify(account).setAccountType(FORM_ACCOUNT_TYPE);
 		verify(account).setActive(FORM_ACTIVE);
@@ -106,7 +106,7 @@ public class EditAccountPersisterUnitTest {
 		when(editAccountForm.getPasswordRepeat()).thenReturn("");
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertTrue("Saving should have succeeded", result);
-		verify(account, never()).setUsername(FORM_USERNAME);
+		verify(account, never()).setName(FORM_USERNAME);
 		verify(account, never()).setPassword(anyString());
 		verify(account).setAccountType(FORM_ACCOUNT_TYPE);
 		verify(account).setActive(FORM_ACTIVE);
@@ -116,12 +116,12 @@ public class EditAccountPersisterUnitTest {
 
 	@Test
 	public void saveAccount_usernameBusy() {
-		when(accountRepository.findByUsername(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
+		when(accountRepository.findByName(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
-		verify(account, never()).setUsername(anyString());
+		verify(account, never()).setName(anyString());
 		verify(account, never()).setPassword(anyString());
 	}
 
@@ -164,13 +164,13 @@ public class EditAccountPersisterUnitTest {
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
-		verify(account, never()).setUsername(anyString());
+		verify(account, never()).setName(anyString());
 		verify(account, never()).setPassword(anyString());
 	}
 
 	@Test
 	public void saveAccount_manyErrors() {
-		when(accountRepository.findByUsername(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
+		when(accountRepository.findByName(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
 		when(editAccountForm.getPasswordRepeat()).thenReturn("Doesn't match");
 		when(accessControlService.isPasswordTooWeak(FORM_PASSWORD)).thenReturn(true);
 		when(account.getVersion()).thenReturn(VERSION+1);
@@ -181,7 +181,7 @@ public class EditAccountPersisterUnitTest {
 		verify(editAccountForm).addErrorPasswordMismatch(bindingResult);
 		verify(editAccountForm).addErrorPasswordTooWeak(bindingResult);
 		verify(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
-		verify(account, never()).setUsername(anyString());
+		verify(account, never()).setName(anyString());
 		verify(account, never()).setPassword(anyString());
 		verify(account, never()).setAccountType(any(AccountType.class));
 		/* Not trying to edit account type, since it can never be edited at the same time as username
@@ -199,7 +199,7 @@ public class EditAccountPersisterUnitTest {
 	public void setupAccount() {
 		when(account.getId()).thenReturn(ACCOUNT_ID);
 		when(account.getVersion()).thenReturn(VERSION);
-		when(account.getUsername()).thenReturn(ENTITY_USERNAME);
+		when(account.getName()).thenReturn(ENTITY_USERNAME);
 		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ACCOUNT_ID);

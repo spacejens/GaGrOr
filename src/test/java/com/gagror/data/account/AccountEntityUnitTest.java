@@ -22,7 +22,7 @@ public class AccountEntityUnitTest {
 
 	@Test
 	public void username() {
-		assertEquals("Wrong username", USERNAME, instance.getUsername());
+		assertEquals("Wrong username", USERNAME, instance.getName());
 	}
 
 	@Test

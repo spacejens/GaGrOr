@@ -19,7 +19,7 @@ public class SecurityUser implements UserDetails {
 	private final Collection<GrantedAuthority> authorities;
 
 	public SecurityUser(final AccountEntity account) {
-		username = account.getUsername();
+		username = account.getName();
 		password = account.getPassword();
 		accountNonExpired = true;
 		accountNonLocked = ! account.isLocked();

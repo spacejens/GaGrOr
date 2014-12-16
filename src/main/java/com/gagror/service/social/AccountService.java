@@ -39,7 +39,7 @@ public class AccountService {
 	public void loginAsUser(final Long accountId) {
 		final AccountEntity entity = accountRepository.findById(accountId);
 		if(null != entity) {
-			log.debug(String.format("Loaded account ID %d (%s) for logging in", accountId, entity.getUsername()));
+			log.debug(String.format("Loaded account ID %d (%s) for logging in", accountId, entity.getName()));
 			accessControlService.logInAs(entity);
 		} else {
 			log.error(String.format("Failed to load account ID %d for editing", accountId));
@@ -49,7 +49,7 @@ public class AccountService {
 	public AccountEditOutput loadAccountForEditing(final Long accountId) {
 		final AccountEntity entity = accountRepository.findById(accountId);
 		if(null != entity) {
-			log.debug(String.format("Loaded account ID %d (%s) for editing", accountId, entity.getUsername()));
+			log.debug(String.format("Loaded account ID %d (%s) for editing", accountId, entity.getName()));
 			return new AccountEditOutput(entity);
 		} else {
 			log.warn(String.format("Failed to load account ID %d for editing", accountId));
@@ -109,24 +109,24 @@ public class AccountService {
 		// Filter out contacts
 		for(final ContactEntity contact : requestAccount.getContacts()) {
 			if(contact.getContact().equals(account)) {
-				log.trace(String.format("Account %d (%s) is contact account", account.getId(), account.getUsername()));
+				log.trace(String.format("Account %d (%s) is contact account", account.getId(), account.getName()));
 				return false;
 			}
 		}
 		// Filter out incoming contact requests
 		for(final ContactEntity incoming : requestAccount.getIncomingContacts()) {
 			if(incoming.getOwner().equals(account)) {
-				log.trace(String.format("Account %d (%s) is incoming contact account", account.getId(), account.getUsername()));
+				log.trace(String.format("Account %d (%s) is incoming contact account", account.getId(), account.getName()));
 				return false;
 			}
 		}
 		// Filter out the user's own account
 		if(requestAccount.equals(account)) {
-			log.trace(String.format("Account %d (%s) is own account", account.getId(), account.getUsername()));
+			log.trace(String.format("Account %d (%s) is own account", account.getId(), account.getName()));
 			return false;
 		}
 		// Account was not filtered out
-		log.trace(String.format("Account %d (%s) is non contact account", account.getId(), account.getUsername()));
+		log.trace(String.format("Account %d (%s) is non contact account", account.getId(), account.getName()));
 		return true;
 	}
 

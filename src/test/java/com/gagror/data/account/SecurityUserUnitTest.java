@@ -54,7 +54,7 @@ public class SecurityUserUnitTest {
 
 	@Before
 	public void setupAccount() {
-		when(account.getUsername()).thenReturn(USERNAME);
+		when(account.getName()).thenReturn(USERNAME);
 		when(account.getPassword()).thenReturn(PASSWORD);
 		when(account.isActive()).thenReturn(true);
 		when(account.isLocked()).thenReturn(false);
