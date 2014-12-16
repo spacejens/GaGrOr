@@ -3,9 +3,7 @@ package com.gagror.data;
 import java.util.Date;
 
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString(of="id")
 public abstract class AbstractEntityOutput
 extends AbstractIdentifiable {
 
@@ -15,10 +13,15 @@ extends AbstractIdentifiable {
 	@Getter
 	private final Date created;
 
-	// TODO Create AbstractEditableEntityOutput and AbstractEditableNamedEntityOutput
+	// TODO Make subclasses extend AbstractEditableEntityOutput and AbstractEditableNamedEntityOutput
 
 	protected AbstractEntityOutput(final AbstractEntity entity) {
 		id = entity.getId();
 		created = entity.getCreated();
+	}
+
+	@Override
+	public String toString() {
+		return String.format("id=%d", getId());
 	}
 }
