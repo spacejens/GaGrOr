@@ -1,17 +1,11 @@
 package com.gagror.data.group;
 
 import lombok.Getter;
-import lombok.ToString;
 
-import com.gagror.data.AbstractEntityOutput;
+import com.gagror.data.AbstractEditableNamedEntityOutput;
 
-@ToString(of="name", callSuper=true)
 public class GroupReferenceOutput
-extends AbstractEntityOutput
-implements Comparable<GroupReferenceOutput> {
-
-	@Getter
-	private final String name;
+extends AbstractEditableNamedEntityOutput {
 
 	@Getter
 	private final GroupType groupType;
@@ -24,7 +18,6 @@ implements Comparable<GroupReferenceOutput> {
 
 	public GroupReferenceOutput(final GroupEntity group) {
 		super(group);
-		name = group.getName();
 		groupType = group.getGroupType();
 		memberType = null;
 		viewableByAnyone = group.isViewableByAnyone();
@@ -33,14 +26,8 @@ implements Comparable<GroupReferenceOutput> {
 	public GroupReferenceOutput(final GroupMemberEntity membership) {
 		super(membership.getGroup());
 		final GroupEntity group = membership.getGroup();
-		name = group.getName();
 		groupType = group.getGroupType();
 		memberType = membership.getMemberType();
 		viewableByAnyone = group.isViewableByAnyone();
-	}
-
-	@Override
-	public int compareTo(final GroupReferenceOutput other) {
-		return getName().compareTo(other.getName());
 	}
 }
