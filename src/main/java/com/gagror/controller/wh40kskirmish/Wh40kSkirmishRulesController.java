@@ -25,6 +25,8 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	@Autowired
 	Wh40kSkirmishRulesService rulesService;
 
+	// TODO Add sidebar (Foundation off-canvas) with a tree view of the entire rules, for easier navigation
+
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/view/{" + ATTR_GROUP_ID + "}")
 	public String viewRules(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
