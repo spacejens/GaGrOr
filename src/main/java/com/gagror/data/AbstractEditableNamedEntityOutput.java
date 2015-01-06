@@ -3,7 +3,8 @@ package com.gagror.data;
 import lombok.Getter;
 
 public abstract class AbstractEditableNamedEntityOutput
-extends AbstractEditableEntityOutput {
+extends AbstractEditableEntityOutput
+implements Comparable<AbstractEditableNamedEntityOutput> {
 
 	@Getter
 	private String name;
@@ -16,5 +17,10 @@ extends AbstractEditableEntityOutput {
 	@Override
 	public String toString() {
 		return String.format("%s, name='%s'", super.toString(), getName());
+	}
+
+	@Override
+	public int compareTo(final AbstractEditableNamedEntityOutput o) {
+		return name.compareTo(o.getName());
 	}
 }
