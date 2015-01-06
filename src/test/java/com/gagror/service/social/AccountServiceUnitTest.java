@@ -199,8 +199,8 @@ public class AccountServiceUnitTest {
 		verify(accountRepository).findAll(sort.capture());
 		final Iterator<Order> orderIterator = sort.getValue().iterator();
 		assertTrue("Missing sort order", orderIterator.hasNext());
-		assertEquals("Unexpected sort order", "username", orderIterator.next().getProperty());
-		assertFalse("Should only sort on username", orderIterator.hasNext());
+		assertEquals("Unexpected sort order", "name", orderIterator.next().getProperty());
+		assertFalse("Should only sort on name", orderIterator.hasNext());
 	}
 
 	@Test

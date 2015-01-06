@@ -96,7 +96,7 @@ public class AccountService {
 	public List<ContactReferenceOutput> loadAccountsNotContacts() {
 		log.debug("Loading non-contact accounts as contacts");
 		final List<ContactReferenceOutput> output = new ArrayList<>();
-		for(final AccountEntity account : accountRepository.findAll(new Sort("username"))) {
+		for(final AccountEntity account : accountRepository.findAll(new Sort("name"))) {
 			if(isNonContactAccount(account)) {
 				output.add(new ContactReferenceOutput(account));
 			}
