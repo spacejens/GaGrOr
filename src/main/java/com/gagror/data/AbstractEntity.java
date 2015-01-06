@@ -25,6 +25,8 @@ extends AbstractIdentifiable {
 	@Getter
 	private Date created;
 
+	// TODO Forbid deletion of entities, instead using an active flag to track if they have been deleted (soft delete)
+
 	@Override
 	public String toString() {
 		return String.format("id=%d", getId());

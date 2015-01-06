@@ -23,6 +23,8 @@ public abstract class AbstractEditableEntity extends AbstractEntity {
 	@Getter
 	private Date modified;
 
+	// TODO Implement automatic change history tracking for all editable entities
+
 	@Override
 	public String toString() {
 		return String.format("%s, version=%d", super.toString(), getVersion());
