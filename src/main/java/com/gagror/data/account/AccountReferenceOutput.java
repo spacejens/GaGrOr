@@ -1,17 +1,11 @@
 package com.gagror.data.account;
 
 import lombok.Getter;
-import lombok.ToString;
 
-import com.gagror.data.AbstractEntityOutput;
+import com.gagror.data.AbstractEditableNamedEntityOutput;
 
-@ToString(of="username", callSuper=true)
 public class AccountReferenceOutput
-extends AbstractEntityOutput
-implements Comparable<AccountReferenceOutput>{
-
-	@Getter
-	private final String username;
+extends AbstractEditableNamedEntityOutput {
 
 	@Getter
 	private final AccountType accountType;
@@ -21,7 +15,6 @@ implements Comparable<AccountReferenceOutput>{
 
 	public AccountReferenceOutput(final AccountEntity entity) {
 		super(entity);
-		username = entity.getName();
 		accountType = entity.getAccountType();
 		if(! entity.isActive()) {
 			cssClass = "account.icon.inactive";
@@ -30,10 +23,5 @@ implements Comparable<AccountReferenceOutput>{
 		} else {
 			cssClass = getAccountType().getCssClass();
 		}
-	}
-
-	@Override
-	public int compareTo(final AccountReferenceOutput other) {
-		return getUsername().compareTo(other.getUsername());
 	}
 }

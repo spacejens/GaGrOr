@@ -5,7 +5,7 @@
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
 		<a class="unavailable" th:text="#{menu.profile}"></a>
-		<a class="current" th:text="${currentState.username}"></a>
+		<a class="current" th:text="${currentState.name}"></a>
 	</nav>
 	<form action="#" th:action="@{/account/edit/{accountId}(accountId=${currentState.id})}" th:object="${editAccountForm}" method="post">
 		<p>Registered: <span th:replace="/fragments/formatting :: datetime (date=${currentState.created})"></span></p>

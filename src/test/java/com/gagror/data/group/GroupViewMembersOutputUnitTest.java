@@ -86,7 +86,7 @@ public class GroupViewMembersOutputUnitTest {
 		final List<String> expected = Arrays.asList(expectedUsernames);
 		final List<String> actual = new ArrayList<>(accounts.size());
 		for(final GroupMemberOutput account : accounts) {
-			actual.add(account.getUsername());
+			actual.add(account.getName());
 		}
 		assertEquals("Wrong usernames returned", expected, actual);
 	}

@@ -114,7 +114,7 @@ public class AccessControlServiceUnitTest {
 		whenLoggedIn();
 		final AccountReferenceOutput result = instance.getRequestAccount();
 		assertEquals("Wrong ID", account.getId(), result.getId());
-		assertEquals("Wrong username", account.getName(), result.getUsername());
+		assertEquals("Wrong username", account.getName(), result.getName());
 		assertEquals("Wrong account type", account.getAccountType(), result.getAccountType());
 		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
 		assertSame("Should have cached request account", account, requestAccount.getAccount());
