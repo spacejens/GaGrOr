@@ -7,10 +7,11 @@ import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.AbstractEntity;
+import com.gagror.data.AbstractInput;
 
 @Transactional
 @CommonsLog
-public abstract class AbstractPersister<I, E extends AbstractEntity> {
+public abstract class AbstractPersister<I extends AbstractInput, E extends AbstractEntity> {
 
 	public boolean save(final I form, final BindingResult bindingResult) {
 		E entity = null;

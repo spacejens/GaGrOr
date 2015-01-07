@@ -2,13 +2,21 @@ package com.gagror.data.group;
 
 import javax.validation.constraints.Size;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
-public class GroupCreateInput {
+import com.gagror.data.AbstractInput;
 
+@ToString(callSuper=true)
+public class GroupCreateInput extends AbstractInput {
+
+	@Getter
+	@Setter
 	@Size(min=3, max=64)
 	private String name;
 
+	@Getter
+	@Setter
 	private GroupType groupType;
 }

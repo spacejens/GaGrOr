@@ -2,12 +2,18 @@ package com.gagror.data.group;
 
 import java.util.Set;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class GroupInviteInput {
+import com.gagror.data.AbstractInput;
 
+public class GroupInviteInput extends AbstractInput {
+
+	@Getter
+	@Setter
 	private Long id;
 
+	@Getter
+	@Setter
 	private Set<Long> selected;
 }

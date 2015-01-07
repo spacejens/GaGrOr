@@ -1,23 +1,27 @@
 package com.gagror.data.group;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
-@Data
-@EqualsAndHashCode(callSuper=true)
 @ToString(callSuper=true)
 @NoArgsConstructor
 public class GroupEditInput extends GroupCreateInput {
 
+	@Getter
+	@Setter
 	private Long id;
 
+	@Getter
+	@Setter
 	private Long version;
 
+	@Getter
+	@Setter
 	private boolean viewableByAnyone;
 
 	public GroupEditInput(final GroupEditOutput currentState) {
