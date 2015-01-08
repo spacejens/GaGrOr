@@ -5,7 +5,8 @@ import java.util.Date;
 import lombok.Getter;
 
 public abstract class AbstractEditableEntityOutput
-extends AbstractEntityOutput {
+extends AbstractEntityOutput
+implements Versioned {
 
 	@Getter
 	private final Long version;

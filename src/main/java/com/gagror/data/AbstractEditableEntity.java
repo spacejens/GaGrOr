@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class AbstractEditableEntity extends AbstractEntity {
+public abstract class AbstractEditableEntity extends AbstractEntity implements Versioned {
 
 	@Version
 	@Getter

@@ -7,17 +7,12 @@ import lombok.ToString;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @ToString(callSuper=true)
 @NoArgsConstructor
-public class AccountEditInput extends AbstractIdentifiableNamedInput<Long> {
-
-	@Getter
-	@Setter
-	private Long version;
+public class AccountEditInput extends AbstractIdentifiableNamedInput<Long, AccountEditOutput> {
 
 	@Getter
 	@Setter
@@ -41,7 +36,6 @@ public class AccountEditInput extends AbstractIdentifiableNamedInput<Long> {
 
 	public AccountEditInput(final AccountEditOutput currentState) {
 		super(currentState);
-		setVersion(currentState.getVersion());
 		setName(currentState.getName());
 		setActive(currentState.isActive());
 		setLocked(currentState.isLocked());
@@ -67,10 +61,6 @@ public class AccountEditInput extends AbstractIdentifiableNamedInput<Long> {
 	}
 	static void createErrorPasswordMismatch(final BindingResult bindingResult) {
 		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "passwordRepeat", "must match"));
-	}
-
-	public void addErrorSimultaneuosEdit(final BindingResult bindingResult) {
-		bindingResult.addError(new ObjectError(bindingResult.getObjectName(), "Simultaneous edit of this user detected, cannot proceed"));
 	}
 
 	public void addErrorDisallowedAccountType(final BindingResult bindingResult) {

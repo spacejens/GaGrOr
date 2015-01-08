@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public abstract class AbstractIdentifiableNamedInput<I extends Serializable> extends AbstractIdentifiableInput<I> {
+public abstract class AbstractIdentifiableNamedInput<I extends Serializable, C extends Identifiable<I> & Versioned>
+extends AbstractIdentifiableInput<I, C> {
 
 	@Getter
 	@Setter
 	@Size(min=3, max=64)
 	private String name;
 
-	protected AbstractIdentifiableNamedInput(final Identifiable<I> currentState) {
+	protected AbstractIdentifiableNamedInput(final C currentState) {
 		super(currentState);
 	}
 

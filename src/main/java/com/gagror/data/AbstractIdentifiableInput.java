@@ -6,18 +6,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+
 @NoArgsConstructor
-public abstract class AbstractIdentifiableInput<I extends Serializable> extends AbstractInput {
+public abstract class AbstractIdentifiableInput<I extends Serializable, C extends Identifiable<I> & Versioned>
+extends AbstractInput
+implements Versioned {
 
 	@Getter
 	@Setter
 	private I id;
 
-	protected AbstractIdentifiableInput(final Identifiable<I> currentState) {
+	@Getter
+	@Setter
+	private Long version;
+
+	protected AbstractIdentifiableInput(final C currentState) {
 		setId(currentState.getId());
+		setVersion(currentState.getVersion());
 	}
 
-	// TODO Create abstract class for versioned input, or include version in this class (editable implies versioned)
+	public void addErrorSimultaneuosEdit(final BindingResult bindingResult) {
+		bindingResult.addError(new ObjectError(bindingResult.getObjectName(), "Simultaneous edit detected, cannot proceed"));
+	}
 
 	@Override
 	public String toString() {
