@@ -23,16 +23,16 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 
 	@Override
 	protected void validateForm(final RegisterInput form, final BindingResult bindingResult) {
-		if(null != accountRepository.findByName(form.getUsername())) {
-			log.warn(String.format("Attempt to create user '%s' failed, username busy", form.getUsername()));
+		if(null != accountRepository.findByName(form.getName())) {
+			log.warn(String.format("Attempt to create user '%s' failed, username busy", form.getName()));
 			form.addErrorUsernameBusy(bindingResult);
 		}
 		if(accessControlService.isPasswordTooWeak(form.getPassword())) {
-			log.warn(String.format("Attempt to create user '%s' failed, password too weak", form.getUsername()));
+			log.warn(String.format("Attempt to create user '%s' failed, password too weak", form.getName()));
 			form.addErrorPasswordTooWeak(bindingResult);
 		}
 		if(! form.getPassword().equals(form.getPasswordRepeat())) {
-			log.warn(String.format("Attempt to create user '%s' failed, password repeat mismatch", form.getUsername()));
+			log.warn(String.format("Attempt to create user '%s' failed, password repeat mismatch", form.getName()));
 			form.addErrorPasswordMismatch(bindingResult);
 		}
 	}
@@ -45,7 +45,7 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 	@Override
 	protected AccountEntity createNew(final RegisterInput form) {
 		return new AccountEntity(
-				form.getUsername(),
+				form.getName(),
 				accessControlService.encodePassword(form.getPassword()));
 	}
 

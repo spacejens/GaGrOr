@@ -36,7 +36,7 @@ public class AccountEditInput extends RegisterInput {
 	public AccountEditInput(final AccountEditOutput currentState) {
 		setId(currentState.getId());
 		setVersion(currentState.getVersion());
-		setUsername(currentState.getName());
+		setName(currentState.getName());
 		setActive(currentState.isActive());
 		setLocked(currentState.isLocked());
 		setAccountType(currentState.getAccountType());

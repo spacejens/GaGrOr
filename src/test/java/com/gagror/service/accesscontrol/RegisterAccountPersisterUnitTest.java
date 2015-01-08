@@ -126,7 +126,7 @@ public class RegisterAccountPersisterUnitTest {
 
 	@Before
 	public void setupRegisterForm() {
-		when(registerForm.getUsername()).thenReturn(USERNAME);
+		when(registerForm.getName()).thenReturn(USERNAME);
 		when(registerForm.getPassword()).thenReturn(PASSWORD);
 		when(registerForm.getPasswordRepeat()).thenReturn(PASSWORD);
 	}

@@ -44,7 +44,7 @@ public class AccessController extends AbstractController {
 			@Valid @ModelAttribute("registerForm") final RegisterInput registerForm,
 			final BindingResult bindingResult) {
 		if(registerAccountPersister.save(registerForm, bindingResult)) {
-			log.info(String.format("Successfully registered user '%s'", registerForm.getUsername()));
+			log.info(String.format("Successfully registered user: %s", registerForm));
 			return redirect("/");
 		} else {
 			log.warn(String.format("Failed to register user: %s", registerForm));

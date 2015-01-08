@@ -15,7 +15,7 @@ public class RegisterInput extends AbstractInput {
 	@Getter
 	@Setter
 	@Size(min=3, max=64)
-	private String username;
+	private String name;
 
 	@Getter
 	@Setter
@@ -26,7 +26,7 @@ public class RegisterInput extends AbstractInput {
 	private String passwordRepeat;
 
 	public void addErrorUsernameBusy(final BindingResult bindingResult) {
-		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "username", "must be unique"));
+		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "name", "must be unique"));
 	}
 
 	public void addErrorPasswordTooWeak(final BindingResult bindingResult) {
@@ -39,6 +39,6 @@ public class RegisterInput extends AbstractInput {
 
 	@Override
 	public String toString() {
-		return String.format("%s, username=%s", super.toString(), username);
+		return String.format("%s, name=%s", super.toString(), name);
 	}
 }

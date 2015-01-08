@@ -28,7 +28,7 @@ public class RegisterInputUnitTest {
 	@Before
 	public void setupInstance() {
 		instance = new RegisterInput();
-		instance.setUsername(USERNAME);
+		instance.setName(USERNAME);
 		instance.setPassword(PASSWORD);
 		instance.setPasswordRepeat(REPEAT);
 	}

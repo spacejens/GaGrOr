@@ -125,7 +125,7 @@ public class AccountController extends AbstractController {
 			throw new IllegalArgumentException(String.format("Unexpected account ID in user form"));
 		}
 		if(editAccountPersister.save(editAccountForm, bindingResult)) {
-			log.info(String.format("Saving edited account %s (ID %d)", editAccountForm.getUsername(), accountId));
+			log.info(String.format("Saving edited account ID %d: %s", accountId, editAccountForm));
 			return redirect("/");
 		} else {
 			log.warn(String.format("Failed to edit account ID %d", accountId));

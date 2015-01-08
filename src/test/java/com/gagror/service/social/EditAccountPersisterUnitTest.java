@@ -210,7 +210,7 @@ public class EditAccountPersisterUnitTest {
 	public void setupEditAccountForm() {
 		when(editAccountForm.getId()).thenReturn(ACCOUNT_ID);
 		when(editAccountForm.getVersion()).thenReturn(VERSION);
-		when(editAccountForm.getUsername()).thenReturn(FORM_USERNAME);
+		when(editAccountForm.getName()).thenReturn(FORM_USERNAME);
 		when(editAccountForm.getPassword()).thenReturn(FORM_PASSWORD);
 		when(editAccountForm.getPasswordRepeat()).thenReturn(FORM_PASSWORD);
 		when(editAccountForm.getAccountType()).thenReturn(FORM_ACCOUNT_TYPE);
