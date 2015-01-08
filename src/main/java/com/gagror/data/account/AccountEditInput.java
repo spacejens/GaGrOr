@@ -13,7 +13,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @ToString(callSuper=true)
 @NoArgsConstructor
-public class AccountEditInput extends AbstractIdentifiableNamedInput {
+public class AccountEditInput extends AbstractIdentifiableNamedInput<Long> {
 
 	@Getter
 	@Setter
@@ -40,7 +40,7 @@ public class AccountEditInput extends AbstractIdentifiableNamedInput {
 	private AccountType accountType;
 
 	public AccountEditInput(final AccountEditOutput currentState) {
-		setId(currentState.getId());
+		super(currentState);
 		setVersion(currentState.getVersion());
 		setName(currentState.getName());
 		setActive(currentState.isActive());

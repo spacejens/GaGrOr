@@ -1,16 +1,24 @@
 package com.gagror.data;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public abstract class AbstractIdentifiableNamedInput extends AbstractIdentifiableInput {
+@NoArgsConstructor
+public abstract class AbstractIdentifiableNamedInput<I extends Serializable> extends AbstractIdentifiableInput<I> {
 
 	@Getter
 	@Setter
 	@Size(min=3, max=64)
 	private String name;
+
+	protected AbstractIdentifiableNamedInput(final Identifiable<I> currentState) {
+		super(currentState);
+	}
 
 	// TODO Add constructor getting name from Named (new interface)
 

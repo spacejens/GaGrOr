@@ -139,11 +139,12 @@ public class GroupsController extends AbstractController {
 	@PreAuthorize(MAY_ADMIN_GROUP)
 	@RequestMapping(value="/invite/{" + ATTR_GROUP_ID + "}", method=RequestMethod.GET)
 	public String inviteForm(
-			@Valid @ModelAttribute("groupInviteForm") final GroupInviteInput groupInviteForm,
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
 		log.info(String.format("Showing member invite form for group %d", groupId));
-		groupInviteForm.setId(groupId);
+		final GroupEditOutput currentState = groupService.editGroup(groupId);
+		final GroupInviteInput groupInviteForm = new GroupInviteInput(currentState);
+		model.addAttribute("groupInviteForm", groupInviteForm);
 		return showInviteForm(groupId, model);
 	}
 

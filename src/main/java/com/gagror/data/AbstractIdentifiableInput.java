@@ -1,15 +1,21 @@
 package com.gagror.data;
 
+import java.io.Serializable;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public abstract class AbstractIdentifiableInput extends AbstractInput {
+@NoArgsConstructor
+public abstract class AbstractIdentifiableInput<I extends Serializable> extends AbstractInput {
 
 	@Getter
 	@Setter
-	private Long id;
+	private I id;
 
-	// TODO Add constructor getting ID from Identifiable
+	protected AbstractIdentifiableInput(final Identifiable<I> currentState) {
+		setId(currentState.getId());
+	}
 
 	// TODO Create abstract class for versioned input, or include version in this class (editable implies versioned)
 
