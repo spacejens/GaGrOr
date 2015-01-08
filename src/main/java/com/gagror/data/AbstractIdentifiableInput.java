@@ -9,6 +9,8 @@ public abstract class AbstractIdentifiableInput extends AbstractInput {
 	@Setter
 	private Long id;
 
+	// TODO Add constructor getting ID from Identifiable
+
 	// TODO Create abstract class for versioned input, or include version in this class (editable implies versioned)
 
 	@Override
