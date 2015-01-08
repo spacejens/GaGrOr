@@ -1,21 +1,13 @@
 package com.gagror.data.account;
 
-import javax.validation.constraints.Size;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
-import com.gagror.data.AbstractInput;
+import com.gagror.data.AbstractNonIdentifiableNamedInput;
 
-public class RegisterInput extends AbstractInput {
-
-	@Getter
-	@Setter
-	@Size(min=3, max=64)
-	private String name;
+public class RegisterInput extends AbstractNonIdentifiableNamedInput {
 
 	@Getter
 	@Setter
@@ -26,19 +18,14 @@ public class RegisterInput extends AbstractInput {
 	private String passwordRepeat;
 
 	public void addErrorUsernameBusy(final BindingResult bindingResult) {
-		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "name", "must be unique"));
+		AccountEditInput.createErrorUsernameBusy(bindingResult);
 	}
 
 	public void addErrorPasswordTooWeak(final BindingResult bindingResult) {
-		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "password", "too weak"));
+		AccountEditInput.createErrorPasswordTooWeak(bindingResult);
 	}
 
 	public void addErrorPasswordMismatch(final BindingResult bindingResult) {
-		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "passwordRepeat", "must match"));
-	}
-
-	@Override
-	public String toString() {
-		return String.format("%s, name=%s", super.toString(), name);
+		AccountEditInput.createErrorPasswordMismatch(bindingResult);
 	}
 }

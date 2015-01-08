@@ -6,6 +6,4 @@ public abstract class AbstractInput {
 	public String toString() {
 		return this.getClass().getSimpleName();
 	}
-
-	// TODO Refactor existing subclasses to use the appropriate abstract subclasses
 }
