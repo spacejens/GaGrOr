@@ -6,14 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.gagror.data.AbstractInput;
+import com.gagror.data.AbstractIdentifiableInput;
 
 @ToString(callSuper=true)
-public class GroupInviteInput extends AbstractInput {
-
-	@Getter
-	@Setter
-	private Long id;
+public class GroupInviteInput extends AbstractIdentifiableInput {
 
 	@Getter
 	@Setter

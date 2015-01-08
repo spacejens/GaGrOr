@@ -8,13 +8,11 @@ import lombok.ToString;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+import com.gagror.data.AbstractIdentifiableNamedInput;
+
 @ToString(callSuper=true)
 @NoArgsConstructor
-public class GroupEditInput extends GroupCreateInput {
-
-	@Getter
-	@Setter
-	private Long id;
+public class GroupEditInput extends AbstractIdentifiableNamedInput {
 
 	@Getter
 	@Setter
