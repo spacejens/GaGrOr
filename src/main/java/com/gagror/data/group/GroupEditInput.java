@@ -17,7 +17,6 @@ public class GroupEditInput extends AbstractIdentifiableNamedInput<Long, GroupEd
 
 	public GroupEditInput(final GroupEditOutput currentState) {
 		super(currentState);
-		setName(currentState.getName());
 		setViewableByAnyone(currentState.isViewableByAnyone());
 	}
 }

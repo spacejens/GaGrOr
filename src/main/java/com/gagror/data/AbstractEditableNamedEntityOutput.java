@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public abstract class AbstractEditableNamedEntityOutput
 extends AbstractEditableEntityOutput
-implements Comparable<AbstractEditableNamedEntityOutput> {
+implements Comparable<AbstractEditableNamedEntityOutput>, Named {
 
 	@Getter
 	private String name;

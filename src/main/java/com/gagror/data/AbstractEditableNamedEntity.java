@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @MappedSuperclass
-public class AbstractEditableNamedEntity extends AbstractEditableEntity {
+public class AbstractEditableNamedEntity extends AbstractEditableEntity implements Named {
 
 	@Column(nullable = false)
 	@Getter

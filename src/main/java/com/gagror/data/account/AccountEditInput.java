@@ -36,7 +36,6 @@ public class AccountEditInput extends AbstractIdentifiableNamedInput<Long, Accou
 
 	public AccountEditInput(final AccountEditOutput currentState) {
 		super(currentState);
-		setName(currentState.getName());
 		setActive(currentState.isActive());
 		setLocked(currentState.isLocked());
 		setAccountType(currentState.getAccountType());

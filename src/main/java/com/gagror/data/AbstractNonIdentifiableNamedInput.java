@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public abstract class AbstractNonIdentifiableNamedInput extends AbstractInput {
+public abstract class AbstractNonIdentifiableNamedInput
+extends AbstractInput
+implements Named {
 
 	@Getter
 	@Setter
 	@Size(min=3, max=64)
 	private String name;
-
-	// TODO Add constructor getting name from Named (new interface)
 
 	@Override
 	public String toString() {

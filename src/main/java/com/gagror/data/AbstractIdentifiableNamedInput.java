@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public abstract class AbstractIdentifiableNamedInput<I extends Serializable, C extends Identifiable<I> & Versioned>
-extends AbstractIdentifiableInput<I, C> {
+public abstract class AbstractIdentifiableNamedInput<I extends Serializable, C extends Identifiable<I> & Versioned & Named>
+extends AbstractIdentifiableInput<I, C>
+implements Named {
 
 	@Getter
 	@Setter
@@ -19,9 +20,8 @@ extends AbstractIdentifiableInput<I, C> {
 
 	protected AbstractIdentifiableNamedInput(final C currentState) {
 		super(currentState);
+		setName(currentState.getName());
 	}
-
-	// TODO Add constructor getting name from Named (new interface)
 
 	@Override
 	public String toString() {
