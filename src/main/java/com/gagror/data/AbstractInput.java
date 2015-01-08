@@ -7,5 +7,5 @@ public abstract class AbstractInput {
 		return this.getClass().getSimpleName();
 	}
 
-	// TODO Define abstract input subclasses for shared code, and refactor existing subclasses to use them
+	// TODO Refactor existing subclasses to use the appropriate abstract subclasses
 }
