@@ -38,6 +38,7 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 		if(! form.getVersion().equals(entity.getVersion())) {
 			log.warn(String.format("Attempt to edit group %d failed, simultaneous edit detected", form.getId()));
 			form.addErrorSimultaneuosEdit(bindingResult);
+			// TODO Move simultaneous edit detection to the superclass, since all editable entities are versioned
 		}
 	}
 
