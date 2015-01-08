@@ -43,6 +43,8 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 		return true;
 	}
 
+	// TODO Create abstract subclasses for create-only, edit-only, and create-edit persisters, use them for subclasses
+
 	protected abstract void validateForm(final I form, final BindingResult bindingResult);
 
 	protected abstract boolean isCreateNew(final I form);

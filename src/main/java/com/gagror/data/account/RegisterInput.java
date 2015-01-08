@@ -39,6 +39,6 @@ public class RegisterInput extends AbstractInput {
 
 	@Override
 	public String toString() {
-		return String.format("username=%s", username);
+		return String.format("%s, username=%s", super.toString(), username);
 	}
 }
