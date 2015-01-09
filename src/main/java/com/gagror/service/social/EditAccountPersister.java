@@ -68,7 +68,6 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 			log.warn(String.format("Attempt to edit account %d failed, simultaneous edit detected", form.getId()));
 			form.addErrorSimultaneuosEdit(bindingResult);
 		}
-		// TODO Move simultaneous edit detection to the superclass, since all editable entities are versioned
 	}
 
 	@Override
