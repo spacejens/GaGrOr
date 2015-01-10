@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.AbstractEntity;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -13,7 +14,7 @@ import com.gagror.service.AbstractPersister;
 
 @Service
 @CommonsLog
-public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupEntity> {
+public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupEntity, AbstractEntity> {
 
 	@Autowired
 	GroupRepository groupRepository;
@@ -29,7 +30,7 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 	}
 
 	@Override
-	protected GroupEntity loadExisting(final GroupEditInput form) {
+	protected GroupEntity loadExisting(final GroupEditInput form, final AbstractEntity context) {
 		return groupRepository.findOne(form.getId());
 	}
 

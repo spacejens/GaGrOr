@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.AbstractEntity;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupMemberEntity;
@@ -14,7 +15,7 @@ import com.gagror.service.AbstractPersister;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
-public class CreateGroupPersister extends AbstractPersister<GroupCreateInput, GroupEntity> {
+public class CreateGroupPersister extends AbstractPersister<GroupCreateInput, GroupEntity, AbstractEntity> {
 
 	@Autowired
 	AccessControlService accessControlService;
@@ -36,7 +37,7 @@ public class CreateGroupPersister extends AbstractPersister<GroupCreateInput, Gr
 	}
 
 	@Override
-	protected GroupEntity createNew(final GroupCreateInput form) {
+	protected GroupEntity createNew(final GroupCreateInput form, final AbstractEntity context) {
 		return new GroupEntity(form.getName(), form.getGroupType());
 	}
 

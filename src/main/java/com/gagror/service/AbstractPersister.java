@@ -11,14 +11,15 @@ import com.gagror.data.AbstractInput;
 
 @Transactional
 @CommonsLog
-public abstract class AbstractPersister<I extends AbstractInput, E extends AbstractEntity> {
+public abstract class AbstractPersister<I extends AbstractInput, E extends AbstractEntity, C extends AbstractEntity> {
 
 	public boolean save(final I form, final BindingResult bindingResult) {
 		E entity = null;
 		// Check for input errors
 		validateForm(form, bindingResult);
+		final C context = loadContext(form);
 		if(! isCreateNew(form)) {
-			entity = loadExisting(form);
+			entity = loadExisting(form, context);
 			if(null == entity) {
 				throw new IllegalStateException(String.format("Failed to load existing entity when saving: %s", form));
 			}
@@ -30,7 +31,7 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 		}
 		// Update and persist the entity
 		if(isCreateNew(form)) {
-			entity = createNew(form);
+			entity = createNew(form, context);
 			if(null == entity) {
 				throw new IllegalStateException(String.format("Failed to create new entity when saving: %s", form));
 			}
@@ -45,9 +46,14 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 
 	protected abstract void validateForm(final I form, final BindingResult bindingResult);
 
+	protected C loadContext(final I form) {
+		// Override this method to load context for the persisted entity
+		return null;
+	}
+
 	protected abstract boolean isCreateNew(final I form);
 
-	protected E loadExisting(final I form) {
+	protected E loadExisting(final I form, final C context) {
 		throw new UnsupportedOperationException("This persister cannot load existing entities");
 	}
 
@@ -55,7 +61,7 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 		// Override this method to add form verifications depending on the existing entity state
 	}
 
-	protected E createNew(final I form) {
+	protected E createNew(final I form, final C context) {
 		throw new UnsupportedOperationException("This persister cannot create new entities");
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.AbstractEntity;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.RegisterInput;
@@ -13,7 +14,7 @@ import com.gagror.service.AbstractPersister;
 
 @Service
 @CommonsLog
-public class RegisterAccountPersister extends AbstractPersister<RegisterInput, AccountEntity> {
+public class RegisterAccountPersister extends AbstractPersister<RegisterInput, AccountEntity, AbstractEntity> {
 
 	@Autowired
 	AccessControlService accessControlService;
@@ -43,7 +44,7 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 	}
 
 	@Override
-	protected AccountEntity createNew(final RegisterInput form) {
+	protected AccountEntity createNew(final RegisterInput form, final AbstractEntity context) {
 		return new AccountEntity(
 				form.getName(),
 				accessControlService.encodePassword(form.getPassword()));

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.thymeleaf.util.StringUtils;
 
+import com.gagror.data.AbstractEntity;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
@@ -15,7 +16,7 @@ import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
 @CommonsLog
-public class EditAccountPersister extends AbstractPersister<AccountEditInput, AccountEntity> {
+public class EditAccountPersister extends AbstractPersister<AccountEditInput, AccountEntity, AbstractEntity> {
 
 	@Autowired
 	AccountRepository accountRepository;
@@ -51,7 +52,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 	}
 
 	@Override
-	protected AccountEntity loadExisting(final AccountEditInput form) {
+	protected AccountEntity loadExisting(final AccountEditInput form, final AbstractEntity context) {
 		return accountRepository.findById(form.getId());
 	}
 

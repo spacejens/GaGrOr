@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.AbstractEntity;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
@@ -20,7 +21,7 @@ import com.gagror.service.AbstractPersister;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
-public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, GroupEntity> {
+public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, GroupEntity, AbstractEntity> {
 
 	@Autowired
 	AccessControlService accessControlService;
@@ -55,7 +56,7 @@ public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, Gr
 	}
 
 	@Override
-	protected GroupEntity loadExisting(final GroupInviteInput form) {
+	protected GroupEntity loadExisting(final GroupInviteInput form, final AbstractEntity context) {
 		return groupRepository.findOne(form.getId());
 	}
 
