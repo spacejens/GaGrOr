@@ -95,6 +95,12 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	// TODO Add page to edit gang types
 
+	// TODO Add pages for creating, viewing, and editing factions of gang types
+
+	// TODO Add pages for creating, viewing, and editing races of gang types
+
+	// TODO Add pages for creating, viewing, and editing fighter types of races
+
 	// TODO Add page to view skills
 
 	// TODO Add page to edit skills
