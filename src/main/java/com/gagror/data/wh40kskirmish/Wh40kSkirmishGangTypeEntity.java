@@ -21,4 +21,10 @@ public class Wh40kSkirmishGangTypeEntity extends AbstractEditableNamedEntity {
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
 	@Getter
 	private Wh40kSkirmishRulesEntity rules;
+
+	public Wh40kSkirmishGangTypeEntity(final Wh40kSkirmishRulesEntity rules) {
+		this.rules = rules;
+		// Add the new entity to the referencing collection
+		rules.getGangTypes().add(this);
+	}
 }

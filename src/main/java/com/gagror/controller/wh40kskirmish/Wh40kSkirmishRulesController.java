@@ -1,17 +1,23 @@
 package com.gagror.controller.wh40kskirmish;
 
+import javax.validation.Valid;
+
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeInput;
 import com.gagror.service.social.GroupService;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 
 @Controller
@@ -24,6 +30,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	@Autowired
 	Wh40kSkirmishRulesService rulesService;
+
+	@Autowired
+	Wh40kSkirmishGangTypePersister gangTypePersister;
 
 	// TODO Add sidebar (Foundation off-canvas) with a tree view of the entire rules, for easier navigation
 
@@ -56,11 +65,31 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		log.info(String.format("Viewing create gang type form for group %d", groupId));
 		model.addAttribute("group", groupService.viewGroup(groupId));
 		model.addAttribute("rules", rulesService.viewRules(groupId));
-		// TODO Add HTML form to create (or edit) gang types
+		model.addAttribute("gangTypeForm", new Wh40kSkirmishGangTypeInput(groupId));
 		return "wh40kskirmish/gangtypes_edit";
 	}
 
-	// TODO Add logic to handle posting of create gang type form
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/gangtypes/save/{" + ATTR_GROUP_ID + "}", method=RequestMethod.POST)
+	public Object saveGangTypeForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model,
+			@Valid @ModelAttribute("gangTypeForm") final Wh40kSkirmishGangTypeInput gangTypeForm,
+			final BindingResult bindingResult) {
+		if(! groupId.equals(gangTypeForm.getGroupId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save gang type form", groupId, gangTypeForm.getGroupId()));
+			throw new IllegalArgumentException(String.format("Unexpected group ID in gang type form"));
+		}
+		if(gangTypePersister.save(gangTypeForm, bindingResult)) {
+			log.info(String.format("Saved gang type: %s", gangTypeForm));
+			return redirect(String.format("/wh40kskirmish/rules//gangtypes/list/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to save: %s", gangTypeForm));
+			model.addAttribute("group", groupService.viewGroup(groupId));
+			model.addAttribute("rules", rulesService.viewRules(groupId));
+			return "wh40kskirmish/gangtypes_edit";
+		}
+	}
 
 	// TODO Add page to view single gang type
 

@@ -22,6 +22,7 @@ import com.gagror.data.group.GroupEntity;
 public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 
 	@OneToOne(optional=false)
+	@Getter
 	GroupEntity group;
 
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
