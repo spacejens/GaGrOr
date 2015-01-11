@@ -102,7 +102,17 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/gangtypes_view";
 	}
 
-	// TODO Add page to edit gang types
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtypes/{" + ATTR_GANGTYPE_ID + "}/edit", method=RequestMethod.GET)
+	public String editGangTypeForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			final Model model) {
+		log.info(String.format("Viewing edit gang type form for gang type %d in group %d", gangTypeId, groupId));
+		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("gangTypeForm", new Wh40kSkirmishGangTypeInput(rulesService.viewGangType(groupId, gangTypeId)));
+		return "wh40kskirmish/gangtypes_edit";
+	}
 
 	// TODO Add pages for creating, viewing, and editing factions of gang types
 

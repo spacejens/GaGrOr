@@ -51,7 +51,7 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 				return gangType;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find gang type %d when editing", form.getId()));
+		throw new IllegalStateException(String.format("Failed to find gang type %d when editing", form.getId()));
 	}
 
 	@Override
