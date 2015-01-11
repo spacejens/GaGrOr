@@ -65,4 +65,36 @@
 			baseTableName="wh40ksk_gangtype"
 			baseColumnNames="rules_id"/>
 	</changeSet>
+
+	<changeSet id="faction-table" author="spacejens">
+		<createTable tableName="wh40ksk_faction">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="gangtype_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="faction-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="gangtype_faction_gangtype_fk"
+			referencedTableName="wh40ksk_gangtype"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_faction"
+			baseColumnNames="gangtype_id"/>
+	</changeSet>
 </databaseChangeLog>
