@@ -11,7 +11,7 @@ import com.gagror.data.PropertyNameDisplayable;
 public enum GroupType implements Identifiable<Integer>, PropertyNameDisplayable {
 
 	SOCIAL(0, null),
-	WH40K_SKIRMISH(1, "/wh40kskirmish/rules/view");
+	WH40K_SKIRMISH(1, "/wh40kskirmish/rules");
 
 	private static final EnumIdMapping<Integer, GroupType> IDMAP = new EnumIdMapping<>(GroupType.class);
 
