@@ -59,7 +59,7 @@
 
 	<changeSet id="gang-type-foreign-keys" author="spacejens">
 		<addForeignKeyConstraint
-			constraintName="rules_gangtype_group_fk"
+			constraintName="rules_gangtype_rules_fk"
 			referencedTableName="wh40ksk_rules"
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_gangtype"
