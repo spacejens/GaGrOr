@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesGangTypesOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesOutput;
@@ -36,5 +38,15 @@ public class Wh40kSkirmishRulesService {
 			throw new IllegalArgumentException(String.format("Group %s does not have WH40K skirmish rules", group));
 		}
 		return group.getWh40kSkirmishRules();
+	}
+
+	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
+		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		for(final Wh40kSkirmishGangTypeEntity gangType : rules.getGangTypes()) {
+			if(gangType.getId().equals(gangTypeId)) {
+				return new Wh40kSkirmishGangTypeOutput(gangType);
+			}
+		}
+		throw new IllegalArgumentException(String.format("Failed to find gang type %d in group %d", gangTypeId, groupId));
 	}
 }
