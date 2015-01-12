@@ -75,6 +75,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		instance.viewGangType(GROUP_ID, WRONG_GANG_TYPE_ID);
 	}
 
+	@Test
+	public void viewGangTypeListChildren_ok() {
+		final Wh40kSkirmishGangTypeOutput result = instance.viewGangTypeListChildren(GROUP_ID, GANG_TYPE_ID);
+		assertEquals("Wrong gang type returned", GANG_TYPE_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewGangTypeListChildren_notFound() {
+		instance.viewGangTypeListChildren(GROUP_ID, WRONG_GANG_TYPE_ID);
+	}
+
 	@Before
 	public void setupRules() {
 		// Set up the rules entity

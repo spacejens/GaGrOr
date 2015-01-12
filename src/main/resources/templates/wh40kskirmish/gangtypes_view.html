@@ -16,6 +16,22 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtypes/{gangTypeId}/edit(groupId=${group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes.edit}"></a></dd>
 	</dl>
+	<table>
+		<thead>
+			<tr>
+				<td>Faction</td>
+				<td>Action</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:if="${#lists.isEmpty(gangType.factions)}">
+				<td colspan="2">No factions defined yet</td>
+			</tr>
+			<tr th:each="faction : ${gangType.factions}">
+				<td th:text="${faction.name}"></td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
