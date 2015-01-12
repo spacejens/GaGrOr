@@ -40,13 +40,17 @@ public class Wh40kSkirmishRulesService {
 		return group.getWh40kSkirmishRules();
 	}
 
-	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
+	private Wh40kSkirmishGangTypeEntity loadGangType(final Long groupId, final Long gangTypeId) {
 		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
 		for(final Wh40kSkirmishGangTypeEntity gangType : rules.getGangTypes()) {
 			if(gangType.getId().equals(gangTypeId)) {
-				return new Wh40kSkirmishGangTypeOutput(gangType);
+				return gangType;
 			}
 		}
 		throw new IllegalArgumentException(String.format("Failed to find gang type %d in group %d", gangTypeId, groupId));
+	}
+
+	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
+		return new Wh40kSkirmishGangTypeOutput(loadGangType(groupId, gangTypeId));
 	}
 }
