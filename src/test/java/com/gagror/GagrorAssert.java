@@ -9,7 +9,11 @@ import java.util.List;
 import com.gagror.data.Identifiable;
 import com.gagror.data.Named;
 
-public class GagrorAssert {
+public final class GagrorAssert {
+
+	private GagrorAssert() {
+		throw new UnsupportedOperationException("All methods are static, instances should not be created");
+	}
 
 	public static <T extends Identifiable<Long>> void assertIds(
 			final List<T> identifiable,
