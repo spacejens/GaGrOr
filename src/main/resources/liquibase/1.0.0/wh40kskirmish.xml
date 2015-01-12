@@ -80,7 +80,7 @@
 			<column name="modified" type="datetime">
 				<constraints nullable="false" />
 			</column>
-			<column name="gangtype_id" type="bigint">
+			<column name="gang_type_id" type="bigint">
 				<constraints nullable="false" />
 			</column>
 			<column name="name" type="varchar(64)">
@@ -91,10 +91,10 @@
 
 	<changeSet id="faction-foreign-keys" author="spacejens">
 		<addForeignKeyConstraint
-			constraintName="gangtype_faction_gangtype_fk"
+			constraintName="gangtype_faction_gang_type_fk"
 			referencedTableName="wh40ksk_gangtype"
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_faction"
-			baseColumnNames="gangtype_id"/>
+			baseColumnNames="gang_type_id"/>
 	</changeSet>
 </databaseChangeLog>

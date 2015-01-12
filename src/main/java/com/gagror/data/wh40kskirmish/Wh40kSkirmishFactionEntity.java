@@ -1,12 +1,8 @@
 package com.gagror.data.wh40kskirmish;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,21 +14,17 @@ import com.gagror.data.AbstractEditableNamedEntity;
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
 @Entity
-@Table(name="wh40ksk_gangtype")
-public class Wh40kSkirmishGangTypeEntity extends AbstractEditableNamedEntity {
+@Table(name="wh40ksk_faction")
+public class Wh40kSkirmishFactionEntity extends AbstractEditableNamedEntity {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
 	@Getter
-	private Wh40kSkirmishRulesEntity rules;
+	private Wh40kSkirmishGangTypeEntity gangType;
 
-	@OneToMany(mappedBy="gangType", fetch=FetchType.LAZY)
-	@Getter
-	private Set<Wh40kSkirmishFactionEntity> factions;
-
-	public Wh40kSkirmishGangTypeEntity(final Wh40kSkirmishRulesEntity rules) {
-		this.rules = rules;
+	public Wh40kSkirmishFactionEntity(final Wh40kSkirmishGangTypeEntity gangType) {
+		this.gangType = gangType;
 		// Add the new entity to the referencing collection
-		rules.getGangTypes().add(this);
+		gangType.getFactions().add(this);
 	}
 }
