@@ -1,5 +1,6 @@
 package com.gagror.service.social;
 
+import static com.gagror.GagrorAssert.assertIds;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -13,7 +14,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -128,7 +128,8 @@ public class AccountServiceUnitTest {
 		account.getContacts().add(secondContact);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadContacts();
-		assertContactAccountIDs(contacts, secondContactId, CONTACT_ACCOUNT_ID);
+		Long[] accountIDs = { secondContactId, CONTACT_ACCOUNT_ID };
+		assertIds(contacts, accountIDs);
 	}
 
 	@Test
@@ -146,7 +147,8 @@ public class AccountServiceUnitTest {
 		account.getContacts().add(secondContact);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadSentContactRequests();
-		assertContactAccountIDs(contacts, secondContactId, ANOTHER_ACCOUNT_ID);
+		Long[] accountIDs = { secondContactId, ANOTHER_ACCOUNT_ID };
+		assertIds(contacts, accountIDs);
 	}
 
 	@Test
@@ -168,7 +170,8 @@ public class AccountServiceUnitTest {
 		account.getIncomingContacts().add(secondIncomingRequest);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadReceivedContactRequests();
-		assertContactAccountIDs(contacts, secondIncomingRequestAccountId, ANOTHER_ACCOUNT_ID);
+		Long[] accountIDs = { secondIncomingRequestAccountId, ANOTHER_ACCOUNT_ID };
+		assertIds(contacts, accountIDs);
 	}
 
 	@Test
@@ -193,7 +196,8 @@ public class AccountServiceUnitTest {
 		allAccounts.add(secondNonContact);
 		// Call the method and verify the results
 		final List<ContactReferenceOutput> contacts = instance.loadAccountsNotContacts();
-		assertContactAccountIDs(contacts, firstId, secondId);
+		Long[] accountIDs = { firstId, secondId };
+		assertIds(contacts, accountIDs);
 		// Verify that sorting occurred on the database level (since that is what test data setup is based on)
 		final ArgumentCaptor<Sort> sort = ArgumentCaptor.forClass(Sort.class);
 		verify(accountRepository).findAll(sort.capture());
@@ -401,15 +405,6 @@ public class AccountServiceUnitTest {
 		assertSame("Wrong contact owner", contact.getContact(), result.getOwner());
 		assertEquals("Wrong contact type", contact.getContactType(), result.getContactType());
 		assertSame("Wrong contact account", contact.getOwner(), result.getContact());
-	}
-
-	private void assertContactAccountIDs(final List<ContactReferenceOutput> contacts, final Long... accountIDs) {
-		final List<Long> expected = Arrays.asList(accountIDs);
-		final List<Long> actual = new ArrayList<>();
-		for(final ContactReferenceOutput contact : contacts) {
-			actual.add(contact.getId());
-		}
-		assertEquals("Unexpected account IDs in contacts", expected, actual);
 	}
 
 	@Before

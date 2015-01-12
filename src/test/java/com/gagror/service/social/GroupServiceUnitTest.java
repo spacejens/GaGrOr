@@ -1,5 +1,6 @@
 package com.gagror.service.social;
 
+import static com.gagror.GagrorAssert.assertIds;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
@@ -32,7 +33,6 @@ import com.gagror.data.account.ContactEntity;
 import com.gagror.data.account.ContactType;
 import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
 import com.gagror.data.group.GroupReferenceOutput;
@@ -117,36 +117,42 @@ public class GroupServiceUnitTest {
 
 	@Test
 	public void loadGroupList_ok() {
-		assertGroups(instance.loadGroupList(), FIRST_GROUP_ID, SECOND_GROUP_ID);
+		Long[] expectedGroupIds = { FIRST_GROUP_ID, SECOND_GROUP_ID };
+		assertIds(instance.loadGroupList(), expectedGroupIds);
 	}
 
 	@Test
 	public void loadGroupList_noMemberships() {
 		requestAccount.getGroupMemberships().clear();
-		assertGroups(instance.loadGroupList());
+		Long[] expectedGroupIds = {};
+		assertIds(instance.loadGroupList(), expectedGroupIds);
 	}
 
 	@Test
 	public void loadInvitationsList_ok() {
-		assertGroups(instance.loadInvitationsList(), FOURTH_GROUP_ID, THIRD_GROUP_ID);
+		Long[] expectedGroupIds = { FOURTH_GROUP_ID, THIRD_GROUP_ID };
+		assertIds(instance.loadInvitationsList(), expectedGroupIds);
 	}
 
 	@Test
 	public void loadInvitationsList_noInvitations() {
 		requestAccount.getGroupMemberships().clear();
-		assertGroups(instance.loadInvitationsList());
+		Long[] expectedGroupIds = {};
+		assertIds(instance.loadInvitationsList(), expectedGroupIds);
 	}
 
 	@Test
 	public void loadPublicGroupList_ok() {
-		assertGroups(instance.loadPublicGroupList(), FIRST_GROUP_ID, FOURTH_GROUP_ID, SECOND_GROUP_ID, THIRD_GROUP_ID);
+		Long[] expectedGroupIds = { FIRST_GROUP_ID, FOURTH_GROUP_ID, SECOND_GROUP_ID, THIRD_GROUP_ID };
+		assertIds(instance.loadPublicGroupList(), expectedGroupIds);
 	}
 
 	@Test
 	public void loadPublicGroupList_noPublicGroups() {
 		final List<GroupEntity> noGroups = new ArrayList<>();
 		when(groupRepository.findByViewableByAnyone(true)).thenReturn(noGroups);
-		assertGroups(instance.loadPublicGroupList());
+		Long[] expectedGroupIds = {};
+		assertIds(instance.loadPublicGroupList(), expectedGroupIds);
 	}
 
 	@Test
@@ -502,15 +508,6 @@ public class GroupServiceUnitTest {
 		instance.remove(FIRST_GROUP_ID, 4563458L);
 		verify(groupMemberRepository, never()).delete(any(GroupMemberEntity.class));
 		// Silently ignored, which seems good because we don't want the user to be a member
-	}
-
-	private void assertGroups(final List<GroupListOutput> result, final Long... expectedGroupIds) {
-		final List<Long> expected = Arrays.asList(expectedGroupIds);
-		final List<Long> actual = new ArrayList<>();
-		for(final GroupListOutput output : result) {
-			actual.add(output.getId());
-		}
-		assertEquals("Unexpected groups returned", expected, actual);
 	}
 
 	@Before

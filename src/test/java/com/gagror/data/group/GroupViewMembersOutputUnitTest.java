@@ -1,13 +1,11 @@
 package com.gagror.data.group;
 
+import static com.gagror.GagrorAssert.assertNames;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -79,16 +77,7 @@ public class GroupViewMembersOutputUnitTest {
 	@Test
 	public void getMembers() {
 		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
-		assertUsers(instance.getMembers(), USERNAME_FIRST_INVITED, USERNAME_FIRST_MEMBER, USERNAME_FIRST_OWNER, USERNAME_SECOND_INVITED, USERNAME_SECOND_MEMBER, USERNAME_SECOND_OWNER);
-	}
-
-	private void assertUsers(final List<GroupMemberOutput> accounts, final String... expectedUsernames) {
-		final List<String> expected = Arrays.asList(expectedUsernames);
-		final List<String> actual = new ArrayList<>(accounts.size());
-		for(final GroupMemberOutput account : accounts) {
-			actual.add(account.getName());
-		}
-		assertEquals("Wrong usernames returned", expected, actual);
+		assertNames(instance.getMembers(), USERNAME_FIRST_INVITED, USERNAME_FIRST_MEMBER, USERNAME_FIRST_OWNER, USERNAME_SECOND_INVITED, USERNAME_SECOND_MEMBER, USERNAME_SECOND_OWNER);
 	}
 
 	@Before

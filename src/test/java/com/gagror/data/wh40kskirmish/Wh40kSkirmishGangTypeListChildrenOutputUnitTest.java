@@ -1,12 +1,9 @@
 package com.gagror.data.wh40kskirmish;
 
-import static org.junit.Assert.assertEquals;
+import static com.gagror.GagrorAssert.assertNames;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,19 +50,8 @@ public class Wh40kSkirmishGangTypeListChildrenOutputUnitTest {
 	@Test
 	public void getFactions() {
 		final Wh40kSkirmishGangTypeListChildrenOutput instance = new Wh40kSkirmishGangTypeListChildrenOutput(gangType);
-		assertFactions(instance.getFactions(), FACTION_NAME_1, FACTION_NAME_2, FACTION_NAME_3, FACTION_NAME_4);
-	}
-
-	private void assertFactions(
-			final List<Wh40kSkirmishFactionReferenceOutput> factions,
-			final String... expectedFactions) {
-		// TODO Extract this method (and others like it) as a shared test utility method (for any List of Named)
-		final List<String> expected = Arrays.asList(expectedFactions);
-		final List<String> actual = new ArrayList<>(factions.size());
-		for(final Wh40kSkirmishFactionReferenceOutput faction : factions) {
-			actual.add(faction.getName());
-		}
-		assertEquals("Wrong factions returned", expected, actual);
+		String[] expectedFactions = { FACTION_NAME_1, FACTION_NAME_2, FACTION_NAME_3, FACTION_NAME_4 };
+		assertNames(instance.getFactions(), expectedFactions);
 	}
 
 	@Before
