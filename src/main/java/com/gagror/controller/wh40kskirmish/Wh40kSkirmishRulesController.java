@@ -26,6 +26,7 @@ import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 public class Wh40kSkirmishRulesController extends AbstractController {
 
 	protected static final String ATTR_GANGTYPE_ID = "gangTypeId";
+	protected static final String ATTR_FACTION_ID = "factionId";
 
 	@Autowired
 	GroupService groupService;
@@ -114,7 +115,22 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/gangtypes_edit";
 	}
 
-	// TODO Add pages for creating, viewing, and editing factions of gang types
+	// TODO Add page for creating faction of gang type
+
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/gangtypes/{" + ATTR_GANGTYPE_ID + "}/factions/{" + ATTR_FACTION_ID + "}")
+	public String viewFaction(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			@PathVariable(ATTR_FACTION_ID) final Long factionId,
+			final Model model) {
+		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("gangType", rulesService.viewGangType(groupId, gangTypeId));
+		model.addAttribute("faction", rulesService.viewFaction(groupId, gangTypeId, factionId));
+		return "wh40kskirmish/factions_view";
+	}
+
+	// TODO Add page for editing faction of gang type
 
 	// TODO Add pages for creating, viewing, and editing races of gang types
 

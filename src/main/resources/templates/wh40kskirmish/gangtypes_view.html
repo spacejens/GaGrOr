@@ -29,6 +29,9 @@
 			</tr>
 			<tr th:each="faction : ${gangType.factions}">
 				<td th:text="${faction.name}"></td>
+				<td>
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtypes/{gangTypeId}/factions/{factionId}(groupId=${group.id},gangTypeId=${gangType.id},factionId=${faction.id})}" th:text="#{menu.groups.rules.wh40kskirmish.factions.view}"></a>
+				</td>
 			</tr>
 		</tbody>
 	</table>
