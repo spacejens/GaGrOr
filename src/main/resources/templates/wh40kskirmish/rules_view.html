@@ -25,10 +25,18 @@
 							<a th:href="@{/wh40kskirmish/rules/{groupId}/faction/{gangTypeId}/{factionId}(groupId=${rules.group.id},gangTypeId=${gangType.id},factionId=${faction.id})}"
 								th:text="${faction.name}"></a>
 						</li>
+						<li th:if="${#lists.isEmpty(gangType.factions)}" class="fi-alert">
+							No factions have been created yet
+						</li>
 						<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
 							<a class="fi-plus" href="#">TODO Link to create faction</a>
 						</li>
 					</ul>
+				</td>
+			</tr>
+			<tr th:if="${#lists.isEmpty(rules.gangTypes)}">
+				<td class="fi-alert">
+					No gang types have been created yet
 				</td>
 			</tr>
 			<tr th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
