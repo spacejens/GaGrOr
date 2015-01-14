@@ -9,11 +9,11 @@
 		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.rules}"></a>
-		<a class="current" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes}"></a>
+		<a class="current" th:text="#{menu.groups.rules.wh40kskirmish.gangtype}"></a>
 	</nav>
 	<dl  th:if="${group.memberType != null and group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/create(groupId=${group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes.create}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/create(groupId=${group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.create}"></a></dd>
 	</dl>
 	<p th:if="${#lists.isEmpty(rules.gangTypes)}">No gang types have been created</p>
 	<table th:unless="${#lists.isEmpty(rules.gangTypes)}">
@@ -26,7 +26,7 @@
 		<tbody>
 			<tr th:each="gangType : ${rules.gangTypes}">
 				<td th:text="${gangType.name}"></td>
-				<td><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes.view}"></a></td>
+				<td><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.view}"></a></td>
 			</tr>
 		</tbody>
 	</table>

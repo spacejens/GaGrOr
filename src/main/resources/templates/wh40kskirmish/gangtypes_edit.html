@@ -9,10 +9,10 @@
 		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.rules}"></a>
-		<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtypes/list(groupId=${group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes}"></a>
-		<a th:unless="${gangTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes.create}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtypes/list(groupId=${group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype}"></a>
+		<a th:unless="${gangTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.create}"></a>
 		<a th:if="${gangTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${group.id},gangTypeId=${gangTypeForm.id})}" th:text="${gangTypeForm.name}"></a>
-		<a th:if="${gangTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.gangtypes.edit}"></a>
+		<a th:if="${gangTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/gangtype/save(groupId=${group.id})}" th:object="${gangTypeForm}" method="post">
 		<input type="hidden" th:field="*{id}" />
