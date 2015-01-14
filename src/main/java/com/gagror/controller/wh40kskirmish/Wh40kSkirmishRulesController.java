@@ -86,6 +86,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			final Model model) {
+		// TODO Only use one service call to get all data needed for view gang type page
 		model.addAttribute("group", groupService.viewGroup(groupId));
 		model.addAttribute("gangType", rulesService.viewGangTypeListChildren(groupId, gangTypeId));
 		return "wh40kskirmish/gangtypes_view";
@@ -98,6 +99,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			final Model model) {
 		log.info(String.format("Viewing edit gang type form for gang type %d in group %d", gangTypeId, groupId));
+		// TODO Only use one service call to get all data needed for edit gang type page
 		model.addAttribute("group", groupService.viewGroup(groupId));
 		model.addAttribute("gangTypeForm", new Wh40kSkirmishGangTypeInput(rulesService.viewGangType(groupId, gangTypeId)));
 		return "wh40kskirmish/gangtypes_edit";
@@ -112,6 +114,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			@PathVariable(ATTR_FACTION_ID) final Long factionId,
 			final Model model) {
+		// TODO Only use one service call to get all data needed for view faction page
 		model.addAttribute("group", groupService.viewGroup(groupId));
 		model.addAttribute("faction", rulesService.viewFaction(groupId, gangTypeId, factionId));
 		return "wh40kskirmish/factions_view";
