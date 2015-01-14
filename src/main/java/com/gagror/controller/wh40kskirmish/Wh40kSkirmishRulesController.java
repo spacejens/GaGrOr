@@ -65,7 +65,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtypes/create", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtype/create", method=RequestMethod.GET)
 	public String createGangTypeForm(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing create gang type form for group %d", groupId));
 		model.addAttribute("group", groupService.viewGroup(groupId));
@@ -74,7 +74,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtypes/save", method=RequestMethod.POST)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtype/save", method=RequestMethod.POST)
 	public Object saveGangTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model,
@@ -95,7 +95,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/gangtypes/{" + ATTR_GANGTYPE_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/gangtype/{" + ATTR_GANGTYPE_ID + "}")
 	public String viewGangType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
@@ -106,7 +106,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtypes/{" + ATTR_GANGTYPE_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtype/{" + ATTR_GANGTYPE_ID + "}/edit", method=RequestMethod.GET)
 	public String editGangTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
