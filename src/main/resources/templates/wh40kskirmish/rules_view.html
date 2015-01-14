@@ -20,6 +20,15 @@
 			<tr th:each="gangType : ${rules.gangTypes}">
 				<td>
 					<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${rules.group.id},gangTypeId=${gangType.id})}" th:text="${gangType.name}"></a>
+					<ul>
+						<li th:each="faction : ${gangType.factions}">
+							<a th:href="@{/wh40kskirmish/rules/{groupId}/faction/{gangTypeId}/{factionId}(groupId=${rules.group.id},gangTypeId=${gangType.id},factionId=${faction.id})}"
+								th:text="${faction.name}"></a>
+						</li>
+						<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+							TODO Link to create faction
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr th:if="${rules.group.memberType != null and rules.group.memberType.owner}">

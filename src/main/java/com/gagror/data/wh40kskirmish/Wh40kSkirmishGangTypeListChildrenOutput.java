@@ -6,7 +6,7 @@ import java.util.List;
 
 import lombok.Getter;
 
-public class Wh40kSkirmishGangTypeListChildrenOutput extends Wh40kSkirmishGangTypeOutput {
+public class Wh40kSkirmishGangTypeListChildrenOutput extends Wh40kSkirmishGangTypeReferenceOutput {
 
 	@Getter
 	private final List<Wh40kSkirmishFactionReferenceOutput> factions;
