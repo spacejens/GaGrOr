@@ -26,14 +26,14 @@
 								th:text="${faction.name}"></a>
 						</li>
 						<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
-							TODO Link to create faction
+							<a class="fi-plus" href="#">TODO Link to create faction</a>
 						</li>
 					</ul>
 				</td>
 			</tr>
 			<tr th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
 				<td>
-					<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.create}"></a>
+					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.create}"></a>
 				</td>
 			</tr>
 		</tbody>
