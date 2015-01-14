@@ -9,7 +9,7 @@
 		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.rules}"></a>
-		<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtypes/list(groupId=${group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.gangtype}"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${group.id},gangTypeId=${gangType.id})}" th:text="${gangType.name}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.faction}"></a>
 		<a class="current" th:text="${faction.name}"></a>

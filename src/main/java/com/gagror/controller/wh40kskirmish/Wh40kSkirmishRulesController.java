@@ -53,15 +53,6 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	// TODO Add page to edit basic rules
 
-	@PreAuthorize(MAY_VIEW_GROUP)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/gangtypes/list")
-	public String listGangTypes(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
-		log.info(String.format("Viewing gang types for group %d", groupId));
-		model.addAttribute("group", groupService.viewGroup(groupId));
-		model.addAttribute("rules", rulesService.viewRulesWithGangTypes(groupId));
-		return "wh40kskirmish/gangtypes_list";
-	}
-
 	@PreAuthorize(MAY_ADMIN_GROUP)
 	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtype/create", method=RequestMethod.GET)
 	public String createGangTypeForm(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
@@ -84,7 +75,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		}
 		if(gangTypePersister.save(gangTypeForm, bindingResult)) {
 			log.info(String.format("Saved gang type: %s", gangTypeForm));
-			return redirect(String.format("/wh40kskirmish/rules/%d/gangtypes/list", groupId));
+			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
 		} else {
 			log.warn(String.format("Failed to save: %s", gangTypeForm));
 			model.addAttribute("group", groupService.viewGroup(groupId));

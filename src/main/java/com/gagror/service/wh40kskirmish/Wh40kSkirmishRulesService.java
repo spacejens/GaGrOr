@@ -13,7 +13,6 @@ import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeListChildrenOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesGangTypesOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesOutput;
 import com.gagror.service.social.GroupService;
 
@@ -27,12 +26,7 @@ public class Wh40kSkirmishRulesService {
 
 	public Wh40kSkirmishRulesOutput viewRules(final Long groupId) {
 		log.debug(String.format("Viewing rules for group %d", groupId));
-		return new Wh40kSkirmishRulesOutput(loadRules(groupId));
-	}
-
-	public Wh40kSkirmishRulesGangTypesOutput viewRulesWithGangTypes(final Long groupId) {
-		log.debug(String.format("Listing gang types for group %d", groupId));
-		return new Wh40kSkirmishRulesGangTypesOutput(loadRules(groupId));
+		return new Wh40kSkirmishRulesOutput(loadRules(groupId), groupService.viewGroup(groupId));
 	}
 
 	private Wh40kSkirmishRulesEntity loadRules(final Long groupId) {

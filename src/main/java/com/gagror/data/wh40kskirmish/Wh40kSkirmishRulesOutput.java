@@ -1,5 +1,9 @@
 package com.gagror.data.wh40kskirmish;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import lombok.Getter;
 
 import com.gagror.data.AbstractEditableEntityOutput;
@@ -11,8 +15,18 @@ extends AbstractEditableEntityOutput {
 	@Getter
 	private final GroupReferenceOutput group;
 
-	public Wh40kSkirmishRulesOutput(final Wh40kSkirmishRulesEntity entity) {
+	@Getter
+	private final List<Wh40kSkirmishGangTypeReferenceOutput> gangTypes;
+
+	public Wh40kSkirmishRulesOutput(final Wh40kSkirmishRulesEntity entity, final GroupReferenceOutput group) {
 		super(entity);
-		group = new GroupReferenceOutput(entity.getGroup());
+		this.group = group;
+		// Sorted list of gang types
+		final List<Wh40kSkirmishGangTypeReferenceOutput> tempGangTypes = new ArrayList<>();
+		for(final Wh40kSkirmishGangTypeEntity gangType : entity.getGangTypes()) {
+			tempGangTypes.add(new Wh40kSkirmishGangTypeReferenceOutput(gangType));
+		}
+		Collections.sort(tempGangTypes);
+		gangTypes = Collections.unmodifiableList(tempGangTypes);
 	}
 }

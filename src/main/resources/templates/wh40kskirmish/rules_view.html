@@ -10,11 +10,25 @@
 		<a th:href="@{/groups/view/{groupId}(groupId=${rules.group.id})}" th:text="${rules.group.name}"></a>
 		<a class="current" th:text="#{menu.groups.rules}"></a>
 	</nav>
-	<dl class="sub-nav" id="pageactions">
-		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtypes/list(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype}"></a></dd>
-	</dl>
-	<p>View rules here</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Gang type / faction</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="gangType : ${rules.gangTypes}">
+				<td>
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${rules.group.id},gangTypeId=${gangType.id})}" th:text="${gangType.name}"></a>
+				</td>
+			</tr>
+			<tr th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+				<td>
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.create}"></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
