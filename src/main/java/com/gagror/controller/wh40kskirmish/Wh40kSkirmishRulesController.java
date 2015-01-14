@@ -120,7 +120,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	// TODO Add page for creating faction of gang type
 
 	@PreAuthorize(MAY_VIEW_GROUP)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/gangtypes/{" + ATTR_GANGTYPE_ID + "}/factions/{" + ATTR_FACTION_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}")
 	public String viewFaction(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
