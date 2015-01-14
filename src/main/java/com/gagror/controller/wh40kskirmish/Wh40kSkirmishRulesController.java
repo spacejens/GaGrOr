@@ -37,13 +37,10 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	@Autowired
 	Wh40kSkirmishGangTypePersister gangTypePersister;
 
-	// TODO Add sidebar (Foundation off-canvas) with a tree view of the entire rules, for easier navigation
-
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
 	public String viewRules(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing rules for group %d", groupId));
-		// TODO Rules overview page should include table of gang types, factions, races, fighter types. This flattens out page hierarchy, dropping some pages
 		model.addAttribute("rules", rulesService.viewRules(groupId));
 		// TODO Make initial territory allocation for gangs configurable
 		// TODO Make initial money per gang configurable
