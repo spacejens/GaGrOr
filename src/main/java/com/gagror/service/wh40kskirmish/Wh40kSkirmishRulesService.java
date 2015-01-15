@@ -52,7 +52,7 @@ public class Wh40kSkirmishRulesService {
 	}
 
 	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
-		return new Wh40kSkirmishGangTypeOutput(loadGangType(groupId, gangTypeId));
+		return new Wh40kSkirmishGangTypeOutput(loadGangType(groupId, gangTypeId), groupService.viewGroup(groupId));
 	}
 
 	private Wh40kSkirmishFactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {

@@ -4,17 +4,17 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
-		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.rules}"></a>
+		<a th:unless="${gangType.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${gangType.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${gangType.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${gangType.group.id})}" th:text="${gangType.group.name}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${gangType.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.gangtype}"></a>
 		<a class="current" th:text="${gangType.name}"></a>
 	</nav>
-	<dl  th:if="${group.memberType != null and group.memberType.owner}" class="sub-nav" id="pageactions">
+	<dl  th:if="${gangType.group.memberType != null and gangType.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}/edit(groupId=${group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}/edit(groupId=${gangType.group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit}"></a></dd>
 	</dl>
 	<p>View gang type here</p>
 	<script th:replace="/fragments/framework :: init"></script>

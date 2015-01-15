@@ -86,8 +86,6 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			final Model model) {
-		// TODO Only use one service call to get all data needed for view gang type page
-		model.addAttribute("group", groupService.viewGroup(groupId));
 		model.addAttribute("gangType", rulesService.viewGangType(groupId, gangTypeId));
 		return "wh40kskirmish/gangtypes_view";
 	}

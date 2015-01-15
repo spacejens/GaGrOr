@@ -15,7 +15,7 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 
 	public Wh40kSkirmishGangTypeInput(final Wh40kSkirmishGangTypeOutput currentState) {
 		super(currentState);
-		setGroupId(currentState.getGroupId());
+		setGroupId(currentState.getGroup().getId());
 	}
 
 	public Wh40kSkirmishGangTypeInput(final Long groupId) {
