@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionInput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.service.social.GroupService;
@@ -153,7 +154,19 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/factions_view";
 	}
 
-	// TODO Add page for editing faction of gang type
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}/edit", method=RequestMethod.GET)
+	public String editFactionForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			@PathVariable(ATTR_FACTION_ID) final Long factionId,
+			final Model model) {
+		log.info(String.format("Viewing edit faction form for faction %d of gang type %d in group %d", factionId, gangTypeId, groupId));
+		final Wh40kSkirmishFactionOutput faction = rulesService.viewFaction(groupId, gangTypeId, factionId);
+		model.addAttribute("gangType", faction.getGangType());
+		model.addAttribute("factionForm", new Wh40kSkirmishFactionInput(faction));
+		return "wh40kskirmish/factions_edit";
+	}
 
 	// TODO Add pages for creating, viewing, and editing races of gang types
 
