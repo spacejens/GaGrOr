@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeEntity;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
@@ -84,5 +86,31 @@ public class Wh40kSkirmishRulesService {
 		return new Wh40kSkirmishRaceOutput(
 				loadRace(groupId, gangTypeId, raceId),
 				viewGangType(groupId, gangTypeId));
+	}
+
+	private Wh40kSkirmishFighterTypeEntity loadFighterType(
+			final Long groupId,
+			final Long gangTypeId,
+			final Long raceId,
+			final Long fighterTypeId) {
+		final Wh40kSkirmishRaceEntity race = loadRace(groupId, gangTypeId, raceId);
+		for(final Wh40kSkirmishFighterTypeEntity fighterType : race.getFighterTypes()) {
+			if(fighterType.getId().equals(fighterTypeId)){
+				return fighterType;
+			}
+		}
+		throw new IllegalArgumentException(String.format(
+				"Failed to find fighter type %d of race %d in gang type %d of group %d",
+				fighterTypeId, raceId, gangTypeId, groupId));
+	}
+
+	public Wh40kSkirmishFighterTypeOutput viewFighterType(
+			final Long groupId,
+			final Long gangTypeId,
+			final Long raceId,
+			final Long fighterTypeId) {
+		return new Wh40kSkirmishFighterTypeOutput(
+				loadFighterType(groupId, gangTypeId, raceId, fighterTypeId),
+				viewRace(groupId, gangTypeId, raceId));
 	}
 }

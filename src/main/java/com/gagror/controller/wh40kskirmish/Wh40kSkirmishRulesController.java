@@ -35,6 +35,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	protected static final String ATTR_GANGTYPE_ID = "gangTypeId";
 	protected static final String ATTR_FACTION_ID = "factionId";
 	protected static final String ATTR_RACE_ID = "raceId";
+	protected static final String ATTR_FIGHTERTYPE_ID = "fighterTypeId";
 
 	@Autowired
 	GroupService groupService;
@@ -233,7 +234,21 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/races_edit";
 	}
 
-	// TODO Add pages for creating, viewing, and editing fighter types of races
+	// TODO Add page to create fighter type
+
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/{" + ATTR_FIGHTERTYPE_ID + "}")
+	public String viewFighterType(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			@PathVariable(ATTR_RACE_ID) final Long raceId,
+			@PathVariable(ATTR_FIGHTERTYPE_ID) final Long fighterTypeId,
+			final Model model) {
+		model.addAttribute("fighterType", rulesService.viewFighterType(groupId, gangTypeId, raceId, fighterTypeId));
+		return "wh40kskirmish/fightertypes_view";
+	}
+
+	// TODO Add page to edit fighter type
 
 	// TODO Add page to view skills
 

@@ -14,6 +14,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeEntity;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
@@ -36,6 +38,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	private static final Long RACE_ID = 113L;
 	private static final Long WRONG_RACE_ID = 1543L;
 	private static final String RACE_NAME = "Race";
+	private static final Long FIGHTER_TYPE_ID = 457L;
+	private static final Long WRONG_FIGHTER_TYPE_ID = 46378L;
+	private static final String FIGHTER_TYPE_NAME = "Fighter type";
 
 	Wh40kSkirmishRulesService instance;
 
@@ -56,6 +61,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 
 	@Mock
 	Wh40kSkirmishRaceEntity raceEntity;
+
+	@Mock
+	Wh40kSkirmishFighterTypeEntity fighterTypeEntity;
 
 	@Mock
 	GroupEntity wrongTypeGroupEntity;
@@ -103,6 +111,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		instance.viewRace(GROUP_ID, GANG_TYPE_ID, WRONG_RACE_ID);
 	}
 
+	@Test
+	public void viewFighterType_ok() {
+		final Wh40kSkirmishFighterTypeOutput result = instance.viewFighterType(GROUP_ID, GANG_TYPE_ID, RACE_ID, FIGHTER_TYPE_ID);
+		assertEquals("Wrong fighter type returned", FIGHTER_TYPE_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewFighterType_notFound() {
+		instance.viewFighterType(GROUP_ID, GANG_TYPE_ID, RACE_ID, WRONG_FIGHTER_TYPE_ID);
+	}
+
 	@Before
 	public void setupRules() {
 		// Set up the rules entity
@@ -126,6 +145,12 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(raceEntity.getName()).thenReturn(RACE_NAME);
 		when(raceEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getRaces().add(raceEntity);
+		// Set up the fighter type entity
+		when(raceEntity.getFighterTypes()).thenReturn(new HashSet<Wh40kSkirmishFighterTypeEntity>());
+		when(fighterTypeEntity.getId()).thenReturn(FIGHTER_TYPE_ID);
+		when(fighterTypeEntity.getName()).thenReturn(FIGHTER_TYPE_NAME);
+		when(fighterTypeEntity.getRace()).thenReturn(raceEntity);
+		raceEntity.getFighterTypes().add(fighterTypeEntity);
 	}
 
 	@Before
