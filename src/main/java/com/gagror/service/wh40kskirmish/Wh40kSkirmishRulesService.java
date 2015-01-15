@@ -11,6 +11,8 @@ import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesOutput;
 import com.gagror.service.social.GroupService;
@@ -64,6 +66,23 @@ public class Wh40kSkirmishRulesService {
 	public Wh40kSkirmishFactionOutput viewFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
 		return new Wh40kSkirmishFactionOutput(
 				loadFaction(groupId, gangTypeId, factionId),
+				viewGangType(groupId, gangTypeId));
+	}
+
+	private Wh40kSkirmishRaceEntity loadRace(final Long groupId, final Long gangTypeId, final Long raceId) {
+		final Wh40kSkirmishGangTypeEntity gangType = loadGangType(groupId, gangTypeId);
+		for(final Wh40kSkirmishRaceEntity race : gangType.getRaces()) {
+			if(race.getId().equals(raceId)) {
+				return race;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Failed to find race %d in gang type %d of group %d",
+				raceId, gangTypeId, groupId));
+	}
+
+	public Wh40kSkirmishRaceOutput viewRace(final Long groupId, final Long gangTypeId, final Long raceId) {
+		return new Wh40kSkirmishRaceOutput(
+				loadRace(groupId, gangTypeId, raceId),
 				viewGangType(groupId, gangTypeId));
 	}
 }

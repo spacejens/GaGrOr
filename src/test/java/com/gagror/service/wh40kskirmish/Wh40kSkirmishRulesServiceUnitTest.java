@@ -16,6 +16,8 @@ import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
 import com.gagror.service.social.GroupService;
 
@@ -31,6 +33,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	private static final Long FACTION_ID = 9L;
 	private static final Long WRONG_FACTION_ID = 75783L;
 	private static final String FACTION_NAME = "Faction";
+	private static final Long RACE_ID = 113L;
+	private static final Long WRONG_RACE_ID = 1543L;
+	private static final String RACE_NAME = "Race";
 
 	Wh40kSkirmishRulesService instance;
 
@@ -48,6 +53,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 
 	@Mock
 	Wh40kSkirmishFactionEntity factionEntity;
+
+	@Mock
+	Wh40kSkirmishRaceEntity raceEntity;
 
 	@Mock
 	GroupEntity wrongTypeGroupEntity;
@@ -84,6 +92,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		instance.viewFaction(GROUP_ID, GANG_TYPE_ID, WRONG_FACTION_ID);
 	}
 
+	@Test
+	public void viewRace_ok() {
+		final Wh40kSkirmishRaceOutput result = instance.viewRace(GROUP_ID, GANG_TYPE_ID, RACE_ID);
+		assertEquals("Wrong race returned", RACE_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewRace_notFound() {
+		instance.viewRace(GROUP_ID, GANG_TYPE_ID, WRONG_RACE_ID);
+	}
+
 	@Before
 	public void setupRules() {
 		// Set up the rules entity
@@ -101,6 +120,12 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(factionEntity.getName()).thenReturn(FACTION_NAME);
 		when(factionEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getFactions().add(factionEntity);
+		// Set up the race entity
+		when(gangTypeEntity.getRaces()).thenReturn(new HashSet<Wh40kSkirmishRaceEntity>());
+		when(raceEntity.getId()).thenReturn(RACE_ID);
+		when(raceEntity.getName()).thenReturn(RACE_NAME);
+		when(raceEntity.getGangType()).thenReturn(gangTypeEntity);
+		gangTypeEntity.getRaces().add(raceEntity);
 	}
 
 	@Before
