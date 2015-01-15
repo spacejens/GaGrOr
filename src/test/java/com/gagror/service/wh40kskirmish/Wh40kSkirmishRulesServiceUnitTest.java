@@ -15,7 +15,6 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeListChildrenOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
 import com.gagror.service.social.GroupService;
@@ -72,17 +71,6 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void viewGangType_notFound() {
 		instance.viewGangType(GROUP_ID, WRONG_GANG_TYPE_ID);
-	}
-
-	@Test
-	public void viewGangTypeListChildren_ok() {
-		final Wh40kSkirmishGangTypeListChildrenOutput result = instance.viewGangTypeListChildren(GROUP_ID, GANG_TYPE_ID);
-		assertEquals("Wrong gang type returned", GANG_TYPE_NAME, result.getName());
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void viewGangTypeListChildren_notFound() {
-		instance.viewGangTypeListChildren(GROUP_ID, WRONG_GANG_TYPE_ID);
 	}
 
 	@Test

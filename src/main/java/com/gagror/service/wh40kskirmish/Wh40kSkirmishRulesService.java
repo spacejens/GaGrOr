@@ -10,7 +10,6 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeListChildrenOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeReferenceOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
@@ -54,10 +53,6 @@ public class Wh40kSkirmishRulesService {
 
 	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
 		return new Wh40kSkirmishGangTypeOutput(loadGangType(groupId, gangTypeId));
-	}
-
-	public Wh40kSkirmishGangTypeListChildrenOutput viewGangTypeListChildren(final Long groupId, final Long gangTypeId) {
-		return new Wh40kSkirmishGangTypeListChildrenOutput(loadGangType(groupId, gangTypeId));
 	}
 
 	private Wh40kSkirmishFactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {

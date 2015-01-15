@@ -88,7 +88,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			final Model model) {
 		// TODO Only use one service call to get all data needed for view gang type page
 		model.addAttribute("group", groupService.viewGroup(groupId));
-		model.addAttribute("gangType", rulesService.viewGangTypeListChildren(groupId, gangTypeId));
+		model.addAttribute("gangType", rulesService.viewGangType(groupId, gangTypeId));
 		return "wh40kskirmish/gangtypes_view";
 	}
 
