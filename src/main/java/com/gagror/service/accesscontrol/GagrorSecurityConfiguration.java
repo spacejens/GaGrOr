@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 /**
  * @see http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/
@@ -24,11 +25,17 @@ public class GagrorSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/webjars/**").permitAll();
+		// After logging in, return to the page we logged in from
+		final SavedRequestAwareAuthenticationSuccessHandler successHandler =
+				new SavedRequestAwareAuthenticationSuccessHandler();
+		successHandler.setUseReferer(true);
+		// TODO When logging out and then in again, go to the groups list page
 		// Configuration for login process pages
 		http
 			.formLogin()
 				.loginPage("/access/login")
 				.permitAll()
+				.successHandler(successHandler)
 				.and()
 			.logout()
 				.logoutUrl("/access/logout")
