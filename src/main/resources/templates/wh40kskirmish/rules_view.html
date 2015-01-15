@@ -37,13 +37,14 @@
 				<td>
 					<ul>
 						<li th:each="race : ${gangType.races}">
-							<a href="#" th:text="${race.name}"></a>
+							<a th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/{raceId}(groupId=${rules.group.id},gangTypeId=${gangType.id},raceId=${race.id})}"
+								th:text="${race.name}"></a>
 						</li>
 						<li th:if="${#lists.isEmpty(gangType.races)}" class="fi-alert">
 							No races have been created yet
 						</li>
 						<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
-							<a class="fi-plus" href="#">TODO Create race</a>
+							<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/create(groupId=${rules.group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.race.create}"></a>
 						</li>
 					</ul>
 				</td>
