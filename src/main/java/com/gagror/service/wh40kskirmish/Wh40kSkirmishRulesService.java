@@ -12,6 +12,7 @@ import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeListChildrenOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeReferenceOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesOutput;
 import com.gagror.service.social.GroupService;
@@ -47,6 +48,10 @@ public class Wh40kSkirmishRulesService {
 		throw new IllegalArgumentException(String.format("Failed to find gang type %d in group %d", gangTypeId, groupId));
 	}
 
+	private Wh40kSkirmishGangTypeReferenceOutput referenceGangType(final Long groupId, final Long gangTypeId) {
+		return new Wh40kSkirmishGangTypeReferenceOutput(loadGangType(groupId, gangTypeId));
+	}
+
 	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
 		return new Wh40kSkirmishGangTypeOutput(loadGangType(groupId, gangTypeId));
 	}
@@ -67,6 +72,9 @@ public class Wh40kSkirmishRulesService {
 	}
 
 	public Wh40kSkirmishFactionOutput viewFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
-		return new Wh40kSkirmishFactionOutput(loadFaction(groupId, gangTypeId, factionId));
+		return new Wh40kSkirmishFactionOutput(
+				loadFaction(groupId, gangTypeId, factionId),
+				groupService.viewGroup(groupId),
+				referenceGangType(groupId, gangTypeId));
 	}
 }

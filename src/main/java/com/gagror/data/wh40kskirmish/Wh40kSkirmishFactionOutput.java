@@ -2,17 +2,22 @@ package com.gagror.data.wh40kskirmish;
 
 import lombok.Getter;
 
+import com.gagror.data.group.GroupReferenceOutput;
+
 public class Wh40kSkirmishFactionOutput extends Wh40kSkirmishFactionReferenceOutput {
 
 	@Getter
-	private Long groupId;
+	private GroupReferenceOutput group;
 
 	@Getter
-	private Long gangTypeId;
+	private Wh40kSkirmishGangTypeReferenceOutput gangType;
 
-	public Wh40kSkirmishFactionOutput(final Wh40kSkirmishFactionEntity entity) {
+	public Wh40kSkirmishFactionOutput(
+			final Wh40kSkirmishFactionEntity entity,
+			final GroupReferenceOutput group,
+			final Wh40kSkirmishGangTypeReferenceOutput gangType) {
 		super(entity);
-		groupId = entity.getGangType().getRules().getGroup().getId();
-		gangTypeId = entity.getGangType().getId();
+		this.group = group;
+		this.gangType = gangType;
 	}
 }
