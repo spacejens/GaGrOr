@@ -21,7 +21,7 @@ extends AbstractEditableEntityOutput {
 	public Wh40kSkirmishRulesOutput(final Wh40kSkirmishRulesEntity entity, final GroupReferenceOutput group) {
 		super(entity);
 		this.group = group;
-		// Sorted list of gang types and their factions
+		// Sorted list of gang types and their factions, races, and fighter types
 		final List<Wh40kSkirmishGangTypeListChildrenOutput> tempGangTypes = new ArrayList<>();
 		for(final Wh40kSkirmishGangTypeEntity gangType : entity.getGangTypes()) {
 			tempGangTypes.add(new Wh40kSkirmishGangTypeListChildrenOutput(gangType));

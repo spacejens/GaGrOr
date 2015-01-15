@@ -11,6 +11,9 @@ public class Wh40kSkirmishGangTypeListChildrenOutput extends Wh40kSkirmishGangTy
 	@Getter
 	private final List<Wh40kSkirmishFactionReferenceOutput> factions;
 
+	@Getter
+	private final List<Wh40kSkirmishRaceListChildrenOutput> races;
+
 	public Wh40kSkirmishGangTypeListChildrenOutput(final Wh40kSkirmishGangTypeEntity entity) {
 		super(entity);
 		// Extract a sorted list of factions
@@ -20,5 +23,12 @@ public class Wh40kSkirmishGangTypeListChildrenOutput extends Wh40kSkirmishGangTy
 		}
 		Collections.sort(factions);
 		this.factions = factions;
+		// Extract a sorted list of races
+		final List<Wh40kSkirmishRaceListChildrenOutput> races = new ArrayList<>();
+		for(final Wh40kSkirmishRaceEntity race : entity.getRaces()) {
+			races.add(new Wh40kSkirmishRaceListChildrenOutput(race));
+		}
+		Collections.sort(races);
+		this.races = races;
 	}
 }
