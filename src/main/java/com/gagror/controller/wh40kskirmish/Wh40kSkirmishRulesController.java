@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeInput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
@@ -97,9 +98,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			final Model model) {
 		log.info(String.format("Viewing edit gang type form for gang type %d in group %d", gangTypeId, groupId));
-		// TODO Only use one service call to get all data needed for edit gang type page
-		model.addAttribute("group", groupService.viewGroup(groupId));
-		model.addAttribute("gangTypeForm", new Wh40kSkirmishGangTypeInput(rulesService.viewGangType(groupId, gangTypeId)));
+		final Wh40kSkirmishGangTypeOutput gangType = rulesService.viewGangType(groupId, gangTypeId);
+		model.addAttribute("group", gangType.getGroup());
+		model.addAttribute("gangTypeForm", new Wh40kSkirmishGangTypeInput(gangType));
 		return "wh40kskirmish/gangtypes_edit";
 	}
 
