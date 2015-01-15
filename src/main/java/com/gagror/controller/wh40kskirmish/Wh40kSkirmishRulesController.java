@@ -19,9 +19,12 @@ import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionInput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceInput;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceOutput;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishFactionPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishRacePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 
 @Controller
@@ -44,6 +47,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	@Autowired
 	Wh40kSkirmishFactionPersister factionPersister;
+
+	@Autowired
+	Wh40kSkirmishRacePersister racePersister;
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
@@ -169,7 +175,38 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/factions_edit";
 	}
 
-	// TODO Add page to create race of gang type
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_GANGTYPE_ID + "}/create", method=RequestMethod.GET)
+	public String createRaceForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			final Model model) {
+		log.info(String.format("Viewing create race form for gang type %d of group %d", gangTypeId, groupId));
+		model.addAttribute("gangType", rulesService.viewGangType(groupId, gangTypeId));
+		model.addAttribute("raceForm", new Wh40kSkirmishRaceInput(groupId, gangTypeId));
+		return "wh40kskirmish/races_edit";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/race/save", method=RequestMethod.POST)
+	public Object saveRaceForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model,
+			@Valid @ModelAttribute("raceForm") final Wh40kSkirmishRaceInput raceForm,
+			final BindingResult bindingResult) {
+		if(! groupId.equals(raceForm.getGroupId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save race form", groupId, raceForm.getGroupId()));
+			throw new IllegalArgumentException(String.format("Unexpected group ID in race form"));
+		}
+		if(racePersister.save(raceForm, bindingResult)) {
+			log.info(String.format("Saved race: %s", raceForm));
+			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to save: %s", raceForm));
+			model.addAttribute("gangType", rulesService.viewGangType(groupId, raceForm.getGangTypeId()));
+			return "wh40kskirmish/races_edit";
+		}
+	}
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}")
@@ -182,7 +219,19 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/races_view";
 	}
 
-	// TODO Add page to edit race of gang type
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/edit", method=RequestMethod.GET)
+	public String editRaceForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			@PathVariable(ATTR_RACE_ID) final Long raceId,
+			final Model model) {
+		log.info(String.format("Viewing edit race form for race %d of gang type %d in group %d", raceId, gangTypeId, groupId));
+		final Wh40kSkirmishRaceOutput race = rulesService.viewRace(groupId, gangTypeId, raceId);
+		model.addAttribute("gangType", race.getGangType());
+		model.addAttribute("raceForm", new Wh40kSkirmishRaceInput(race));
+		return "wh40kskirmish/races_edit";
+	}
 
 	// TODO Add pages for creating, viewing, and editing fighter types of races
 

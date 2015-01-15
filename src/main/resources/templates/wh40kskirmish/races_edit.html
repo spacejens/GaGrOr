@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${gangType.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${gangType.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${gangType.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${gangType.group.id})}" th:text="${gangType.group.name}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${gangType.group.id})}" th:text="#{menu.groups.rules}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.race}"></a>
+		<a th:unless="${raceForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.race.create}"></a>
+		<a th:if="${raceForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/{raceId}(groupId=${gangType.group.id},gangTypeId=${gangType.id},raceId=${raceForm.id})}" th:text="${raceForm.name}"></a>
+		<a th:if="${raceForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.race.edit}"></a>
+	</nav>
+	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/race/save(groupId=${gangType.group.id})}" th:object="${raceForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		<input type="hidden" th:field="*{groupId}" />
+		<input type="hidden" th:field="*{gangTypeId}" />
+		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+		<input type="text" th:field="*{name}" />
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>
