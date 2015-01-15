@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
+import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionInput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
 import com.gagror.service.social.GroupService;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishFactionPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 
@@ -37,6 +39,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	@Autowired
 	Wh40kSkirmishGangTypePersister gangTypePersister;
+
+	@Autowired
+	Wh40kSkirmishFactionPersister factionPersister;
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
@@ -104,7 +109,38 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/gangtypes_edit";
 	}
 
-	// TODO Add page for creating faction of gang type
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/create", method=RequestMethod.GET)
+	public String createFactionForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			final Model model) {
+		log.info(String.format("Viewing create faction form for gang type %d of group %d", gangTypeId, groupId));
+		model.addAttribute("gangType", rulesService.viewGangType(groupId, gangTypeId));
+		model.addAttribute("factionForm", new Wh40kSkirmishFactionInput(groupId, gangTypeId));
+		return "wh40kskirmish/factions_edit";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/faction/save", method=RequestMethod.POST)
+	public Object saveFactionForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model,
+			@Valid @ModelAttribute("factionForm") final Wh40kSkirmishFactionInput factionForm,
+			final BindingResult bindingResult) {
+		if(! groupId.equals(factionForm.getGroupId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save faction form", groupId, factionForm.getGroupId()));
+			throw new IllegalArgumentException(String.format("Unexpected group ID in faction form"));
+		}
+		if(factionPersister.save(factionForm, bindingResult)) {
+			log.info(String.format("Saved faction: %s", factionForm));
+			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to save: %s", factionForm));
+			model.addAttribute("gangType", rulesService.viewGangType(groupId, factionForm.getGangTypeId()));
+			return "wh40kskirmish/factions_edit";
+		}
+	}
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}")
