@@ -30,6 +30,10 @@ public class Wh40kSkirmishGangTypeEntity extends AbstractEditableNamedEntity {
 	@Getter
 	private Set<Wh40kSkirmishFactionEntity> factions;
 
+	@OneToMany(mappedBy="gangType", fetch=FetchType.LAZY)
+	@Getter
+	private Set<Wh40kSkirmishRaceEntity> races;
+
 	public Wh40kSkirmishGangTypeEntity(final Wh40kSkirmishRulesEntity rules) {
 		this.rules = rules;
 		// Add the new entity to the referencing collection
