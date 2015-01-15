@@ -129,4 +129,36 @@
 			baseTableName="wh40ksk_race"
 			baseColumnNames="gang_type_id"/>
 	</changeSet>
+
+	<changeSet id="fighter-type-table" author="spacejens">
+		<createTable tableName="wh40ksk_fightertype">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="race_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="fighter-type-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="race_fightertype_race_fk"
+			referencedTableName="wh40ksk_race"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_fightertype"
+			baseColumnNames="race_id"/>
+	</changeSet>
 </databaseChangeLog>
