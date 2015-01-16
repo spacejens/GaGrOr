@@ -1,5 +1,6 @@
 package com.gagror.data;
 
+import static com.gagror.GagrorAssert.assertFieldHasGetter;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
@@ -26,6 +27,13 @@ public class OutputDesignRulesTest extends DesignRulesTestSupport {
 	public void allFieldsAreFinal() {
 		for(final Field field : output.getDeclaredFields()) {
 			assertTrue(String.format("Field %s in class %s should be final", field.getName(), name), Modifier.isFinal(field.getModifiers()));
+		}
+	}
+
+	@Test
+	public void allFieldsHaveGetters() {
+		for(final Field field : output.getDeclaredFields()) {
+			assertFieldHasGetter(field, output);
 		}
 	}
 

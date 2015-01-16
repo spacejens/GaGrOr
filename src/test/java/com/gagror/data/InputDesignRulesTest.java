@@ -1,8 +1,11 @@
 package com.gagror.data;
 
+import static com.gagror.GagrorAssert.assertFieldHasGetter;
+import static com.gagror.GagrorAssert.assertFieldHasSetter;
 import static org.junit.Assert.assertFalse;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +21,6 @@ import com.gagror.DesignRulesTestSupport;
 @RunWith(Parameterized.class)
 public class InputDesignRulesTest extends DesignRulesTestSupport {
 
-	@SuppressWarnings("unused")
 	private final String name;
 
 	private final Class<?> input;
@@ -30,8 +32,30 @@ public class InputDesignRulesTest extends DesignRulesTestSupport {
 				Modifier.isPrivate(noArgsConstructor.getModifiers()));
 	}
 
+	@Test
+	public void noFieldsAreFinal() {
+		for(final Field field : input.getDeclaredFields()) {
+			assertFalse(String.format("Field %s in class %s should not be final", field.getName(), name),
+					Modifier.isFinal(field.getModifiers()));
+		}
+	}
+
+	@Test
+	public void allFieldsHaveGetters() {
+		for(final Field field : input.getDeclaredFields()) {
+			assertFieldHasGetter(field, input);
+		}
+	}
+
+	@Test
+	public void allFieldsHaveSetters() {
+		for(final Field field : input.getDeclaredFields()) {
+			assertFieldHasSetter(field, input);
+		}
+	}
+
 	@Parameters(name="{0}")
 	public static Iterable<Object[]> findInputs() {
-		return parameterizeForConcreteSubclasses(AbstractInput.class);
+		return parameterizeForAllSubclasses(AbstractInput.class);
 	}
 }
