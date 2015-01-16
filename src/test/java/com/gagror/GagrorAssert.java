@@ -57,7 +57,7 @@ public final class GagrorAssert {
 			final Method setter = clazz.getMethod(getterName, field.getType());
 			assertEquals("Wrong return type of setter", void.class, setter.getReturnType());
 		} catch (Exception e) {
-			fail(String.format("Failed to find getter for field %s in class %s", field.getName(), clazz.getSimpleName()));
+			fail(String.format("Failed to find setter for field %s in class %s", field.getName(), clazz.getSimpleName()));
 		}
 	}
 
