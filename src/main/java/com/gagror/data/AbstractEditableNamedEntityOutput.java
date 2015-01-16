@@ -7,7 +7,7 @@ extends AbstractEditableEntityOutput
 implements Comparable<AbstractEditableNamedEntityOutput>, Named {
 
 	@Getter
-	private String name;
+	private final String name;
 
 	protected AbstractEditableNamedEntityOutput(final AbstractEditableNamedEntity entity) {
 		super(entity);

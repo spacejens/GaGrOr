@@ -5,7 +5,7 @@ import lombok.Getter;
 public class Wh40kSkirmishRaceOutput extends Wh40kSkirmishRaceReferenceOutput {
 
 	@Getter
-	private Wh40kSkirmishGangTypeOutput gangType;
+	private final Wh40kSkirmishGangTypeOutput gangType;
 
 	public Wh40kSkirmishRaceOutput(
 			final Wh40kSkirmishRaceEntity entity,
