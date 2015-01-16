@@ -1,10 +1,9 @@
 package com.gagror.data;
 
+import static com.gagror.GagrorAssert.assertFieldFinal;
 import static com.gagror.GagrorAssert.assertFieldHasGetter;
-import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +18,7 @@ import com.gagror.DesignRulesTestSupport;
 @RunWith(Parameterized.class)
 public class OutputDesignRulesTest extends DesignRulesTestSupport {
 
+	@SuppressWarnings("unused")
 	private final String name;
 
 	private final Class<?> output;
@@ -26,7 +26,7 @@ public class OutputDesignRulesTest extends DesignRulesTestSupport {
 	@Test
 	public void allFieldsAreFinal() {
 		for(final Field field : output.getDeclaredFields()) {
-			assertTrue(String.format("Field %s in class %s should be final", field.getName(), name), Modifier.isFinal(field.getModifiers()));
+			assertFieldFinal(field, output, true);
 		}
 	}
 

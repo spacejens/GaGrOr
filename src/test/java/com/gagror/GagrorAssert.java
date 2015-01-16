@@ -1,10 +1,13 @@
 package com.gagror;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +44,27 @@ public final class GagrorAssert {
 		assertEquals("Wrong names", expected, actual);
 	}
 
+	public static void assertFieldFinal(final Field field, final Class<?> clazz, final boolean expected) {
+		if(! isFieldAssertable(field)) {
+			return;
+		}
+		if(expected) {
+			assertTrue(String.format("Field %s in class %s should be final", field.getName(), clazz.getName()),
+					Modifier.isFinal(field.getModifiers()));
+		} else {
+			assertFalse(String.format("Field %s in class %s should not be final", field.getName(), clazz.getName()),
+					Modifier.isFinal(field.getModifiers()));
+		}
+	}
+
+	private static boolean isFieldAssertable(final Field field) {
+		return ! field.getName().startsWith("$");
+	}
+
 	public static void assertFieldHasGetter(final Field field, final Class<?> clazz) {
+		if(! isFieldAssertable(field)) {
+			return;
+		}
 		final String getterName = calculateGetterSetterName(field, false);
 		try {
 			final Method getter = clazz.getMethod(getterName);
@@ -52,6 +75,9 @@ public final class GagrorAssert {
 	}
 
 	public static void assertFieldHasSetter(final Field field, final Class<?> clazz) {
+		if(! isFieldAssertable(field)) {
+			return;
+		}
 		final String getterName = calculateGetterSetterName(field, true);
 		try {
 			final Method setter = clazz.getMethod(getterName, field.getType());

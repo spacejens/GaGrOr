@@ -1,5 +1,6 @@
 package com.gagror.data;
 
+import static com.gagror.GagrorAssert.assertFieldFinal;
 import static com.gagror.GagrorAssert.assertFieldHasGetter;
 import static com.gagror.GagrorAssert.assertFieldHasSetter;
 import static org.junit.Assert.assertFalse;
@@ -21,6 +22,7 @@ import com.gagror.DesignRulesTestSupport;
 @RunWith(Parameterized.class)
 public class InputDesignRulesTest extends DesignRulesTestSupport {
 
+	@SuppressWarnings("unused")
 	private final String name;
 
 	private final Class<?> input;
@@ -35,8 +37,7 @@ public class InputDesignRulesTest extends DesignRulesTestSupport {
 	@Test
 	public void noFieldsAreFinal() {
 		for(final Field field : input.getDeclaredFields()) {
-			assertFalse(String.format("Field %s in class %s should not be final", field.getName(), name),
-					Modifier.isFinal(field.getModifiers()));
+			assertFieldFinal(field, input, false);
 		}
 	}
 
