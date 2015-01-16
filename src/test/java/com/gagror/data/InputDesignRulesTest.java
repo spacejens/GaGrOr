@@ -32,6 +32,10 @@ public class InputDesignRulesTest extends DesignRulesTestSupport {
 		final Constructor<?> noArgsConstructor = input.getConstructor();
 		assertFalse("No args constructor should not be private (needed to create input from HTTP POST)",
 				Modifier.isPrivate(noArgsConstructor.getModifiers()));
+		// Invoke the constructor to verify that it works
+		if(! Modifier.isAbstract(input.getModifiers())) {
+			noArgsConstructor.newInstance();
+		}
 	}
 
 	@Test
