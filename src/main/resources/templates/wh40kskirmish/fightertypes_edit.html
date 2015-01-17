@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${race.gangType.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${race.gangType.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${race.gangType.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${race.gangType.group.id})}" th:text="${race.gangType.group.name}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${race.gangType.group.id})}" th:text="#{menu.groups.rules}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.fightertype}"></a>
+		<a th:unless="${fighterTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.create}"></a>
+		<a th:if="${fighterTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{gangTypeId}/{raceId}/{fighterTypeId}(groupId=${race.gangType.group.id},gangTypeId=${race.gangType.id},raceId=${race.id},fighterTypeId=${fighterTypeForm.id})}" th:text="${fighterTypeForm.name}"></a>
+		<a th:if="${fighterTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.edit}"></a>
+	</nav>
+	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/fightertype/save(groupId=${race.gangType.group.id})}" th:object="${fighterTypeForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		<input type="hidden" th:field="*{groupId}" />
+		<input type="hidden" th:field="*{gangTypeId}" />
+		<input type="hidden" th:field="*{raceId}" />
+		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+		<input type="text" th:field="*{name}" />
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>
