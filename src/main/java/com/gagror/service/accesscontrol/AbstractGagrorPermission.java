@@ -2,18 +2,19 @@ package com.gagror.service.accesscontrol;
 
 import java.io.Serializable;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEntity;
 
-@Data
 @RequiredArgsConstructor
 public abstract class AbstractGagrorPermission<I extends Serializable, E extends Identifiable<I>> implements GagrorPermission {
 
+	@Getter
 	private final String name;
 
+	@Getter
 	private final String targetType;
 
 	protected AbstractGagrorPermission(final String name, final Class<E> targetClass) {
