@@ -9,6 +9,8 @@ import lombok.Getter;
 import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeListChildrenOutput;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
@@ -25,6 +27,9 @@ extends Wh40kSkirmishRulesOutput {
 
 	@Getter
 	private final List<Wh40kSkirmishSkillCategoryListChildrenOutput> skillCategories;
+
+	@Getter
+	private final List<Wh40kSkirmishItemCategoryListChildrenOutput> itemCategories;
 
 	public Wh40kSkirmishRulesListChildrenOutput(final Wh40kSkirmishRulesEntity entity, final GroupReferenceOutput group) {
 		super(entity, group);
@@ -49,5 +54,12 @@ extends Wh40kSkirmishRulesOutput {
 		}
 		Collections.sort(tempSkillCategories);
 		skillCategories = Collections.unmodifiableList(tempSkillCategories);
+		// Sorted list of item categories and their item types
+		final List<Wh40kSkirmishItemCategoryListChildrenOutput> tempItemCategories = new ArrayList<>();
+		for(final Wh40kSkirmishItemCategoryEntity itemCategory : entity.getItemCategories()) {
+			tempItemCategories.add(new Wh40kSkirmishItemCategoryListChildrenOutput(itemCategory));
+		}
+		Collections.sort(tempItemCategories);
+		itemCategories = Collections.unmodifiableList(tempItemCategories);
 	}
 }

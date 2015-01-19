@@ -34,6 +34,29 @@
 			<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/skillcategory/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.skillcategory.create}"></a>
 		</li>
 	</ul>
+	<h2>Items</h2>
+	<ul class="small-block-grid-4">
+		<li th:each="itemCategory : ${rules.itemCategories}" class="panel">
+			<a th:href="@{/wh40kskirmish/rules/{groupId}/itemcategory/{itemCategoryId}(groupId=${rules.group.id},itemCategoryId=${itemCategory.id})}" th:text="${itemCategory.name}"></a>
+			<ul>
+				<li th:each="itemType : ${itemCategory.itemTypes}">
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemCategoryId}/{itemTypeId}(groupId=${rules.group.id},itemCategoryId=${itemCategory.id},itemTypeId=${itemType.id})}" th:text="${itemType.name}"></a>
+				</li>
+				<li th:if="${#lists.isEmpty(itemCategory.itemTypes)}" class="fi-alert">
+					No item types have been created yet
+				</li>
+				<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemCategoryId}/create(groupId=${rules.group.id},itemCategoryId=${itemCategory.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.create}"></a>
+				</li>
+			</ul>
+		</li>
+		<li th:if="${#lists.isEmpty(rules.itemCategories)}" class="fi-alert panel">
+			No item categories have been created yet
+		</li>
+		<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="panel">
+			<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/itemcategory/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemcategory.create}"></a>
+		</li>
+	</ul>
 	<h2>Territories</h2>
 	<ul class="small-block-grid-4">
 		<li th:each="territoryCategory : ${rules.territoryCategories}" class="panel">
