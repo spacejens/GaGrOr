@@ -225,4 +225,68 @@
 			baseTableName="wh40ksk_territorytype"
 			baseColumnNames="territory_category_id"/>
 	</changeSet>
+
+	<changeSet id="skill-category-table" author="spacejens">
+		<createTable tableName="wh40ksk_skillcategory">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="rules_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="skill-category-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="rules_skillcategory_rules_fk"
+			referencedTableName="wh40ksk_rules"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_skillcategory"
+			baseColumnNames="rules_id"/>
+	</changeSet>
+
+	<changeSet id="skill-table" author="spacejens">
+		<createTable tableName="wh40ksk_skill">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="skill_category_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="skill-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="skillcategory_skill_skill_category_fk"
+			referencedTableName="wh40ksk_skillcategory"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_skill"
+			baseColumnNames="skill_category_id"/>
+	</changeSet>
 </databaseChangeLog>
