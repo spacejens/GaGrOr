@@ -23,6 +23,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
+import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryInput;
+import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryInput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeInput;
@@ -33,6 +35,7 @@ import com.gagror.service.wh40kskirmish.Wh40kSkirmishFighterTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRacePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishSkillCategoryPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishTerritoryCategoryPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishTerritoryTypePersister;
 
@@ -47,6 +50,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	protected static final String ATTR_FIGHTERTYPE_ID = "fighterTypeId";
 	protected static final String ATTR_TERRITORYCATEGORY_ID = "territoryCategoryId";
 	protected static final String ATTR_TERRITORYTYPE_ID = "territoryTypeId";
+	protected static final String ATTR_SKILLCATEGORY_ID = "skillCategoryId";
 
 	@Autowired
 	GroupService groupService;
@@ -71,6 +75,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	@Autowired
 	Wh40kSkirmishTerritoryTypePersister territoryTypePersister;
+
+	@Autowired
+	Wh40kSkirmishSkillCategoryPersister skillCategoryPersister;
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
@@ -423,7 +430,58 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/territorytypes_edit";
 	}
 
-	// TODO Add skill categories
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/skillcategory/create", method=RequestMethod.GET)
+	public String createSkillCategoryForm(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
+		log.info(String.format("Viewing create skill category form for group %d", groupId));
+		model.addAttribute("group", groupService.viewGroup(groupId));
+		model.addAttribute("skillCategoryForm", new Wh40kSkirmishSkillCategoryInput(groupId));
+		return "wh40kskirmish/skillcategories_edit";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/skillcategory/save", method=RequestMethod.POST)
+	public Object saveSkillCategoryForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model,
+			@Valid @ModelAttribute("skillCategoryForm") final Wh40kSkirmishSkillCategoryInput skillCategoryForm,
+			final BindingResult bindingResult) {
+		if(! groupId.equals(skillCategoryForm.getGroupId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save skill category form", groupId, skillCategoryForm.getGroupId()));
+			throw new IllegalArgumentException(String.format("Unexpected group ID in skill category form"));
+		}
+		if(skillCategoryPersister.save(skillCategoryForm, bindingResult)) {
+			log.info(String.format("Saved skill category: %s", skillCategoryForm));
+			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to save: %s", skillCategoryForm));
+			model.addAttribute("group", groupService.viewGroup(groupId));
+			return "wh40kskirmish/skillcategories_edit";
+		}
+	}
+
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/skillcategory/{" + ATTR_SKILLCATEGORY_ID + "}")
+	public String viewSkillCategory(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_SKILLCATEGORY_ID) final Long skillCategoryId,
+			final Model model) {
+		model.addAttribute("skillCategory", rulesService.viewSkillCategory(groupId, skillCategoryId));
+		return "wh40kskirmish/skillcategories_view";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/skillcategory/{" + ATTR_SKILLCATEGORY_ID + "}/edit", method=RequestMethod.GET)
+	public String editSkillCategoryForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_SKILLCATEGORY_ID) final Long skillCategoryId,
+			final Model model) {
+		log.info(String.format("Viewing edit skill category form for skill category %d in group %d", skillCategoryId, groupId));
+		final Wh40kSkirmishSkillCategoryOutput skillCategory = rulesService.viewSkillCategory(groupId, skillCategoryId);
+		model.addAttribute("group", skillCategory.getGroup());
+		model.addAttribute("skillCategoryForm", new Wh40kSkirmishSkillCategoryInput(skillCategory));
+		return "wh40kskirmish/skillcategories_edit";
+	}
 
 	// TODO Add skills
 

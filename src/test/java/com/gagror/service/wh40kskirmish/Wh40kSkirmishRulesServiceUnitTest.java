@@ -21,6 +21,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
+import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeEntity;
@@ -51,6 +53,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	private static final Long TERRITORY_TYPE_ID = 983L;
 	private static final Long WRONG_TERRITORY_TYPE_ID = 21711L;
 	private static final String TERRITORY_TYPE_NAME = "Territory type";
+	private static final Long SKILL_CATEGORY_ID = 74154L;
+	private static final Long WRONG_SKILL_CATEGORY_ID = 4664L;
+	private static final String SKILL_CATEGORY_NAME = "Skill category";
 
 	Wh40kSkirmishRulesService instance;
 
@@ -80,6 +85,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 
 	@Mock
 	Wh40kSkirmishTerritoryTypeEntity territoryTypeEntity;
+
+	@Mock
+	Wh40kSkirmishSkillCategoryEntity skillCategoryEntity;
 
 	@Mock
 	GroupEntity wrongTypeGroupEntity;
@@ -160,6 +168,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		instance.viewTerritoryType(GROUP_ID, TERRITORY_CATEGORY_ID, WRONG_TERRITORY_TYPE_ID);
 	}
 
+	@Test
+	public void viewSkillCategory_ok() {
+		final Wh40kSkirmishSkillCategoryOutput result = instance.viewSkillCategory(GROUP_ID, SKILL_CATEGORY_ID);
+		assertEquals("Wrong skill category returned", SKILL_CATEGORY_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewSkillCategory_notFound() {
+		instance.viewSkillCategory(GROUP_ID, WRONG_SKILL_CATEGORY_ID);
+	}
+
 	@Before
 	public void setupRules() {
 		// Set up the rules entity
@@ -201,6 +220,12 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(territoryTypeEntity.getName()).thenReturn(TERRITORY_TYPE_NAME);
 		when(territoryTypeEntity.getTerritoryCategory()).thenReturn(territoryCategoryEntity);
 		territoryCategoryEntity.getTerritoryTypes().add(territoryTypeEntity);
+		// Set up the skill category entity
+		when(rulesEntity.getSkillCategories()).thenReturn(new HashSet<Wh40kSkirmishSkillCategoryEntity>());
+		when(skillCategoryEntity.getId()).thenReturn(SKILL_CATEGORY_ID);
+		when(skillCategoryEntity.getName()).thenReturn(SKILL_CATEGORY_NAME);
+		when(skillCategoryEntity.getRules()).thenReturn(rulesEntity);
+		rulesEntity.getSkillCategories().add(skillCategoryEntity);
 	}
 
 	@Before
