@@ -10,6 +10,8 @@ import com.gagror.data.AbstractEditableEntityOutput;
 import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeListChildrenOutput;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryListChildrenOutput;
 
 public class Wh40kSkirmishRulesOutput
 extends AbstractEditableEntityOutput {
@@ -19,6 +21,9 @@ extends AbstractEditableEntityOutput {
 
 	@Getter
 	private final List<Wh40kSkirmishGangTypeListChildrenOutput> gangTypes;
+
+	@Getter
+	private final List<Wh40kSkirmishTerritoryCategoryListChildrenOutput> territoryCategories;
 
 	public Wh40kSkirmishRulesOutput(final Wh40kSkirmishRulesEntity entity, final GroupReferenceOutput group) {
 		super(entity);
@@ -30,5 +35,12 @@ extends AbstractEditableEntityOutput {
 		}
 		Collections.sort(tempGangTypes);
 		gangTypes = Collections.unmodifiableList(tempGangTypes);
+		// Sorted list of territory categories and their territory types
+		final List<Wh40kSkirmishTerritoryCategoryListChildrenOutput> tempTerritoryCategories = new ArrayList<>();
+		for(final Wh40kSkirmishTerritoryCategoryEntity territoryCategory : entity.getTerritoryCategories()) {
+			tempTerritoryCategories.add(new Wh40kSkirmishTerritoryCategoryListChildrenOutput(territoryCategory));
+		}
+		Collections.sort(tempTerritoryCategories);
+		territoryCategories = Collections.unmodifiableList(tempTerritoryCategories);
 	}
 }
