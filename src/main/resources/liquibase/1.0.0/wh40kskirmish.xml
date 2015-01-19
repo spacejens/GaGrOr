@@ -193,4 +193,36 @@
 			baseTableName="wh40ksk_territorycategory"
 			baseColumnNames="rules_id"/>
 	</changeSet>
+
+	<changeSet id="territory-type-table" author="spacejens">
+		<createTable tableName="wh40ksk_territorytype">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="territory_category_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="territory-type-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="territorycategory_territorytype_territory_category_fk"
+			referencedTableName="wh40ksk_territorycategory"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_territorytype"
+			baseColumnNames="territory_category_id"/>
+	</changeSet>
 </databaseChangeLog>

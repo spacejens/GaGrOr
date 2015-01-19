@@ -1,8 +1,12 @@
 package com.gagror.data.wh40kskirmish.rules.territory;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -22,6 +26,10 @@ public class Wh40kSkirmishTerritoryCategoryEntity extends AbstractEditableNamedE
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
 	@Getter
 	private Wh40kSkirmishRulesEntity rules;
+
+	@OneToMany(mappedBy="territoryCategory", fetch=FetchType.LAZY)
+	@Getter
+	private Set<Wh40kSkirmishTerritoryTypeEntity> territoryTypes;
 
 	public Wh40kSkirmishTerritoryCategoryEntity(final Wh40kSkirmishRulesEntity rules) {
 		this.rules = rules;
