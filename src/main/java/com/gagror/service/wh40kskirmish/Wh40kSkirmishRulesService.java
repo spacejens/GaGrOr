@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesOutput;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeEntity;
@@ -27,9 +27,9 @@ public class Wh40kSkirmishRulesService {
 	@Autowired
 	GroupService groupService;
 
-	public Wh40kSkirmishRulesOutput viewRules(final Long groupId) {
+	public Wh40kSkirmishRulesListChildrenOutput viewRules(final Long groupId) {
 		log.debug(String.format("Viewing rules for group %d", groupId));
-		return new Wh40kSkirmishRulesOutput(loadRules(groupId), groupService.viewGroup(groupId));
+		return new Wh40kSkirmishRulesListChildrenOutput(loadRules(groupId), groupService.viewGroup(groupId));
 	}
 
 	private Wh40kSkirmishRulesEntity loadRules(final Long groupId) {
