@@ -17,6 +17,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
@@ -163,5 +165,19 @@ public class Wh40kSkirmishRulesService {
 
 	public Wh40kSkirmishSkillCategoryOutput viewSkillCategory(final Long groupId, final Long skillCategoryId) {
 		return new Wh40kSkirmishSkillCategoryOutput(loadSkillCategory(groupId, skillCategoryId), groupService.viewGroup(groupId));
+	}
+
+	private Wh40kSkirmishItemCategoryEntity loadItemCategory(final Long groupId, final Long itemCategoryId) {
+		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		for(final Wh40kSkirmishItemCategoryEntity itemCategory : rules.getItemCategories()) {
+			if(itemCategory.getId().equals(itemCategoryId)) {
+				return itemCategory;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Failed to find item category %d in group %d", itemCategoryId, groupId));
+	}
+
+	public Wh40kSkirmishItemCategoryOutput viewItemCategory(final Long groupId, final Long itemCategoryId) {
+		return new Wh40kSkirmishItemCategoryOutput(loadItemCategory(groupId, itemCategoryId), groupService.viewGroup(groupId));
 	}
 }

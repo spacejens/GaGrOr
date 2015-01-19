@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.rules}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.itemcategory}"></a>
+		<a th:unless="${itemCategoryForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.itemcategory.create}"></a>
+		<a th:if="${itemCategoryForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/itemcategory/{itemCategoryId}(groupId=${group.id},itemCategoryId=${itemCategoryForm.id})}" th:text="${itemCategoryForm.name}"></a>
+		<a th:if="${itemCategoryForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.itemcategory.edit}"></a>
+	</nav>
+	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/itemcategory/save(groupId=${group.id})}" th:object="${itemCategoryForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		<input type="hidden" th:field="*{groupId}" />
+		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+		<input type="text" th:field="*{name}" />
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>
