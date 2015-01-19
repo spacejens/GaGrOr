@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${territoryCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${territoryCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${territoryCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${territoryCategory.group.id})}" th:text="${territoryCategory.group.name}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${territoryCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.territorytype}"></a>
+		<a th:unless="${territoryTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.create}"></a>
+		<a th:if="${territoryTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/{territoryTypeId}(groupId=${territoryCategory.group.id},territoryCategoryId=${territoryCategory.id},territoryTypeId=${territoryTypeForm.id})}" th:text="${territoryTypeForm.name}"></a>
+		<a th:if="${territoryTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.edit}"></a>
+	</nav>
+	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/territorytype/save(groupId=${territoryCategory.group.id})}" th:object="${territoryTypeForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		<input type="hidden" th:field="*{groupId}" />
+		<input type="hidden" th:field="*{territoryCategoryId}" />
+		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+		<input type="text" th:field="*{name}" />
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

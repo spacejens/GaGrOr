@@ -25,6 +25,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryInput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeInput;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeOutput;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishFactionPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishFighterTypePersister;
@@ -32,6 +34,7 @@ import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRacePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishTerritoryCategoryPersister;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishTerritoryTypePersister;
 
 @Controller
 @RequestMapping("/wh40kskirmish/rules")
@@ -43,6 +46,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	protected static final String ATTR_RACE_ID = "raceId";
 	protected static final String ATTR_FIGHTERTYPE_ID = "fighterTypeId";
 	protected static final String ATTR_TERRITORYCATEGORY_ID = "territoryCategoryId";
+	protected static final String ATTR_TERRITORYTYPE_ID = "territoryTypeId";
 
 	@Autowired
 	GroupService groupService;
@@ -64,6 +68,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	@Autowired
 	Wh40kSkirmishTerritoryCategoryPersister territoryCategoryPersister;
+
+	@Autowired
+	Wh40kSkirmishTerritoryTypePersister territoryTypePersister;
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
@@ -358,7 +365,63 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/territorycategories_edit";
 	}
 
-	// TODO Add territory types
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYCATEGORY_ID + "}/create", method=RequestMethod.GET)
+	public String createTerritoryTypeForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_TERRITORYCATEGORY_ID) final Long territoryCategoryId,
+			final Model model) {
+		log.info(String.format("Viewing create territory type form for territory category %d of group %d", territoryCategoryId, groupId));
+		model.addAttribute("territoryCategory", rulesService.viewTerritoryCategory(groupId, territoryCategoryId));
+		model.addAttribute("territoryTypeForm", new Wh40kSkirmishTerritoryTypeInput(groupId, territoryCategoryId));
+		return "wh40kskirmish/territorytypes_edit";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/territorytype/save", method=RequestMethod.POST)
+	public Object saveTerritoryTypeForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model,
+			@Valid @ModelAttribute("territoryTypeForm") final Wh40kSkirmishTerritoryTypeInput territoryTypeForm,
+			final BindingResult bindingResult) {
+		if(! groupId.equals(territoryTypeForm.getGroupId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save territory type form", groupId, territoryTypeForm.getGroupId()));
+			throw new IllegalArgumentException(String.format("Unexpected group ID in territory type form"));
+		}
+		if(territoryTypePersister.save(territoryTypeForm, bindingResult)) {
+			log.info(String.format("Saved territory type: %s", territoryTypeForm));
+			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to save: %s", territoryTypeForm));
+			model.addAttribute("territoryCategory", rulesService.viewTerritoryCategory(groupId, territoryTypeForm.getTerritoryCategoryId()));
+			return "wh40kskirmish/territorytypes_edit";
+		}
+	}
+
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYCATEGORY_ID + "}/{" + ATTR_TERRITORYTYPE_ID + "}")
+	public String viewTerritoryType(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_TERRITORYCATEGORY_ID) final Long territoryCategoryId,
+			@PathVariable(ATTR_TERRITORYTYPE_ID) final Long territoryTypeId,
+			final Model model) {
+		model.addAttribute("territoryType", rulesService.viewTerritoryType(groupId, territoryCategoryId, territoryTypeId));
+		return "wh40kskirmish/territorytypes_view";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYCATEGORY_ID + "}/{" + ATTR_TERRITORYTYPE_ID + "}/edit", method=RequestMethod.GET)
+	public String editTerritoryTypeForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_TERRITORYCATEGORY_ID) final Long territoryCategoryId,
+			@PathVariable(ATTR_TERRITORYTYPE_ID) final Long territoryTypeId,
+			final Model model) {
+		log.info(String.format("Viewing edit territory type form for territory type %d of territory category %d in group %d", territoryTypeId, territoryCategoryId, groupId));
+		final Wh40kSkirmishTerritoryTypeOutput territoryType = rulesService.viewTerritoryType(groupId, territoryCategoryId, territoryTypeId);
+		model.addAttribute("territoryCategory", territoryType.getTerritoryCategory());
+		model.addAttribute("territoryTypeForm", new Wh40kSkirmishTerritoryTypeInput(territoryType));
+		return "wh40kskirmish/territorytypes_edit";
+	}
 
 	// TODO Add skill categories
 

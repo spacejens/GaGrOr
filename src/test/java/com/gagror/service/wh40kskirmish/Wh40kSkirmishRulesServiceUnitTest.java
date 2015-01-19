@@ -23,6 +23,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeOutput;
 import com.gagror.service.social.GroupService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -46,6 +48,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	private static final Long TERRITORY_CATEGORY_ID = 67L;
 	private static final Long WRONG_TERRITORY_CATEGORY_ID = 7348L;
 	private static final String TERRITORY_CATEGORY_NAME = "Territory category";
+	private static final Long TERRITORY_TYPE_ID = 983L;
+	private static final Long WRONG_TERRITORY_TYPE_ID = 21711L;
+	private static final String TERRITORY_TYPE_NAME = "Territory type";
 
 	Wh40kSkirmishRulesService instance;
 
@@ -72,6 +77,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 
 	@Mock
 	Wh40kSkirmishTerritoryCategoryEntity territoryCategoryEntity;
+
+	@Mock
+	Wh40kSkirmishTerritoryTypeEntity territoryTypeEntity;
 
 	@Mock
 	GroupEntity wrongTypeGroupEntity;
@@ -141,6 +149,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		instance.viewTerritoryCategory(GROUP_ID, WRONG_TERRITORY_CATEGORY_ID);
 	}
 
+	@Test
+	public void viewTerritoryType_ok() {
+		final Wh40kSkirmishTerritoryTypeOutput result = instance.viewTerritoryType(GROUP_ID, TERRITORY_CATEGORY_ID, TERRITORY_TYPE_ID);
+		assertEquals("Wrong territory type returned", TERRITORY_TYPE_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewTerritoryType_notFound() {
+		instance.viewTerritoryType(GROUP_ID, TERRITORY_CATEGORY_ID, WRONG_TERRITORY_TYPE_ID);
+	}
+
 	@Before
 	public void setupRules() {
 		// Set up the rules entity
@@ -176,6 +195,12 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(territoryCategoryEntity.getName()).thenReturn(TERRITORY_CATEGORY_NAME);
 		when(territoryCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getTerritoryCategories().add(territoryCategoryEntity);
+		// Set up the territory type entity
+		when(territoryCategoryEntity.getTerritoryTypes()).thenReturn(new HashSet<Wh40kSkirmishTerritoryTypeEntity>());
+		when(territoryTypeEntity.getId()).thenReturn(TERRITORY_TYPE_ID);
+		when(territoryTypeEntity.getName()).thenReturn(TERRITORY_TYPE_NAME);
+		when(territoryTypeEntity.getTerritoryCategory()).thenReturn(territoryCategoryEntity);
+		territoryCategoryEntity.getTerritoryTypes().add(territoryTypeEntity);
 	}
 
 	@Before
