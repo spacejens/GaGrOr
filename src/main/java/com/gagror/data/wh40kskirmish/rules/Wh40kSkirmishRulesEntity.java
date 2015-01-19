@@ -15,6 +15,7 @@ import lombok.ToString;
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
@@ -29,6 +30,10 @@ public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
 	@Getter
 	private Set<Wh40kSkirmishGangTypeEntity> gangTypes;
+
+	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
+	@Getter
+	private Set<Wh40kSkirmishTerritoryCategoryEntity> territoryCategories;
 
 	public Wh40kSkirmishRulesEntity(final GroupEntity group) {
 		this.group = group;
