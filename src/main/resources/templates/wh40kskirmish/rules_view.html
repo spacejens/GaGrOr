@@ -16,8 +16,15 @@
 		<li th:each="territoryCategory : ${rules.territoryCategories}" class="panel">
 			<a th:href="@{/wh40kskirmish/rules/{groupId}/territorycategory/{territoryCategoryId}(groupId=${rules.group.id},territoryCategoryId=${territoryCategory.id})}" th:text="${territoryCategory.name}"></a>
 			<ul>
-				<li>And a list</li>
-				<li>With territory types</li>
+				<li th:each="territoryType : ${territoryCategory.territoryTypes}">
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/{territoryTypeId}(groupId=${rules.group.id},territoryCategoryId=${territoryCategory.id},territoryTypeId=${territoryType.id})}" th:text="${territoryType.name}"></a>
+				</li>
+				<li th:if="${#lists.isEmpty(territoryCategory.territoryTypes)}" class="fi-alert">
+					No territory types have been created yet
+				</li>
+				<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/create(groupId=${rules.group.id},territoryCategoryId=${territoryCategory.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.create}"></a>
+				</li>
 			</ul>
 		</li>
 		<li th:if="${#lists.isEmpty(rules.territoryCategories)}" class="fi-alert panel">
