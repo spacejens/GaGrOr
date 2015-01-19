@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableNamedEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)

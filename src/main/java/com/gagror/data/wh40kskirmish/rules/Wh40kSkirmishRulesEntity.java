@@ -1,4 +1,4 @@
-package com.gagror.data.wh40kskirmish;
+package com.gagror.data.wh40kskirmish.rules;
 
 import java.util.Set;
 
@@ -14,6 +14,7 @@ import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)

@@ -1,4 +1,4 @@
-package com.gagror.data.wh40kskirmish;
+package com.gagror.data.wh40kskirmish.rules.gangs;
 
 import lombok.Getter;
 

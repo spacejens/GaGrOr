@@ -1,4 +1,4 @@
-package com.gagror.data.wh40kskirmish;
+package com.gagror.data.wh40kskirmish.rules.gangs;
 
 import static com.gagror.GagrorAssert.assertNames;
 import static org.mockito.Mockito.when;
@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Wh40kSkirmishGangTypeListChildrenOutputUnitTest {

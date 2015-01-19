@@ -8,10 +8,10 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceInput;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceInput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceRepository;
 import com.gagror.service.AbstractPersister;
 
 @Service

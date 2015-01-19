@@ -1,4 +1,4 @@
-package com.gagror.data.wh40kskirmish;
+package com.gagror.data.wh40kskirmish.rules;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +8,8 @@ import lombok.Getter;
 
 import com.gagror.data.AbstractEditableEntityOutput;
 import com.gagror.data.group.GroupReferenceOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeListChildrenOutput;
 
 public class Wh40kSkirmishRulesOutput
 extends AbstractEditableEntityOutput {

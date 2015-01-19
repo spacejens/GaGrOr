@@ -22,12 +22,12 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeInput;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeRepository;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeInput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Wh40kSkirmishFighterTypePersisterUnitTest {

@@ -1,4 +1,4 @@
-package com.gagror.data.wh40kskirmish;
+package com.gagror.data.wh40kskirmish.rules.gangs;
 
 import java.util.ArrayList;
 import java.util.Collections;

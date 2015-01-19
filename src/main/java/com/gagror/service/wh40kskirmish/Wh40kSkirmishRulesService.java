@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFactionOutput;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishFighterTypeOutput;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishGangTypeOutput;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRaceOutput;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.Wh40kSkirmishRulesOutput;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
 import com.gagror.service.social.GroupService;
 
 @Service
