@@ -63,9 +63,6 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	public String viewRules(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing rules for group %d", groupId));
 		model.addAttribute("rules", rulesService.viewRules(groupId));
-		// TODO Make initial territory allocation for gangs configurable
-		// TODO Make initial money per gang configurable
-		// TODO Make name of currency in game configurable
 		return "wh40kskirmish/rules_view";
 	}
 
@@ -301,15 +298,19 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/fightertypes_edit";
 	}
 
-	// TODO Add page to view skills
+	// TODO Add page to create territory category
 
-	// TODO Add page to edit skills
+	// TODO Add page to view territory category
 
-	// TODO Add page to view equipment
+	// TODO Add page to edit territory category
 
-	// TODO Add page to edit equipment
+	// TODO Add territory types
 
-	// TODO Add page to view territories
+	// TODO Add skill categories
 
-	// TODO Add page to edit territories
+	// TODO Add skills
+
+	// TODO Add item categories
+
+	// TODO Add item types
 }

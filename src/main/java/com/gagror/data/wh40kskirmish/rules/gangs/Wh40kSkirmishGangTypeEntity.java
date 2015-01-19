@@ -35,6 +35,8 @@ public class Wh40kSkirmishGangTypeEntity extends AbstractEditableNamedEntity {
 	@Getter
 	private Set<Wh40kSkirmishRaceEntity> races;
 
+	// TODO Make initial territory allocation configurable (set of territory categories with duplicates, one random from each)
+
 	public Wh40kSkirmishGangTypeEntity(final Wh40kSkirmishRulesEntity rules) {
 		this.rules = rules;
 		// Add the new entity to the referencing collection

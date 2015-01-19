@@ -35,6 +35,10 @@ public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 	@Getter
 	private Set<Wh40kSkirmishTerritoryCategoryEntity> territoryCategories;
 
+	// TODO Make initial money per gang configurable
+
+	// TODO Make name of currency in game configurable
+
 	public Wh40kSkirmishRulesEntity(final GroupEntity group) {
 		this.group = group;
 	}
