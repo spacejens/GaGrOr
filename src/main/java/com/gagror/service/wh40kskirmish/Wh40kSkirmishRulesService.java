@@ -17,6 +17,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryOutput;
 import com.gagror.service.social.GroupService;
 
 @Service
@@ -112,5 +114,19 @@ public class Wh40kSkirmishRulesService {
 		return new Wh40kSkirmishFighterTypeOutput(
 				loadFighterType(groupId, gangTypeId, raceId, fighterTypeId),
 				viewRace(groupId, gangTypeId, raceId));
+	}
+
+	private Wh40kSkirmishTerritoryCategoryEntity loadTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
+		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		for(final Wh40kSkirmishTerritoryCategoryEntity territoryCategory : rules.getTerritoryCategories()) {
+			if(territoryCategory.getId().equals(territoryCategoryId)) {
+				return territoryCategory;
+			}
+		}
+		throw new IllegalArgumentException(String.format("Failed to find territory category %d in group %d", territoryCategoryId, groupId));
+	}
+
+	public Wh40kSkirmishTerritoryCategoryOutput viewTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
+		return new Wh40kSkirmishTerritoryCategoryOutput(loadTerritoryCategory(groupId, territoryCategoryId), groupService.viewGroup(groupId));
 	}
 }
