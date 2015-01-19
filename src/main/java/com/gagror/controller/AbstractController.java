@@ -34,6 +34,8 @@ public abstract class AbstractController {
 		return accessControl.getRequestAccount();
 	}
 
+	// TODO Use custom exceptions with @ResponseStatus and useful error pages to provide better error handling
+
 	protected RedirectView redirect(final String url) {
 		log.info(String.format("Redirecting to URL: %s", url));
 		final RedirectView output = new RedirectView(url, true);
