@@ -289,4 +289,68 @@
 			baseTableName="wh40ksk_skill"
 			baseColumnNames="skill_category_id"/>
 	</changeSet>
+
+	<changeSet id="item-category-table" author="spacejens">
+		<createTable tableName="wh40ksk_itemcategory">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="rules_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="item-category-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="rules_itemcategory_rules_fk"
+			referencedTableName="wh40ksk_rules"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_itemcategory"
+			baseColumnNames="rules_id"/>
+	</changeSet>
+
+	<changeSet id="item-type-table" author="spacejens">
+		<createTable tableName="wh40ksk_itemtype">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="item_category_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="item-type-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="itemcategory_itemtype_item_category_fk"
+			referencedTableName="wh40ksk_itemcategory"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_itemtype"
+			baseColumnNames="item_category_id"/>
+	</changeSet>
 </databaseChangeLog>

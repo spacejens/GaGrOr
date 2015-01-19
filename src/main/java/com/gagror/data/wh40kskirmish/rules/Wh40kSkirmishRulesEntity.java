@@ -15,6 +15,7 @@ import lombok.ToString;
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
 
@@ -39,6 +40,10 @@ public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
 	@Getter
 	private Set<Wh40kSkirmishSkillCategoryEntity> skillCategories;
+
+	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
+	@Getter
+	private Set<Wh40kSkirmishItemCategoryEntity> itemCategories;
 
 	// TODO Make initial money per gang configurable
 
