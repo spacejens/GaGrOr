@@ -20,6 +20,9 @@
 				<li>With territory types</li>
 			</ul>
 		</li>
+		<li th:if="${#lists.isEmpty(rules.territoryCategories)}" class="fi-alert panel">
+			No territory categories have been created yet
+		</li>
 		<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="panel">
 			<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/territorycategory/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorycategory.create}"></a>
 		</li>
