@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${skill.skillCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${skill.skillCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${skill.skillCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/view/{groupId}(groupId=${skill.skillCategory.group.id})}" th:text="${skill.skillCategory.group.name}"></a>
+		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${skill.skillCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.skill}"></a>
+		<a class="current" th:text="${skill.name}"></a>
+	</nav>
+	<dl  th:if="${skill.skillCategory.group.memberType != null and skill.skillCategory.group.memberType.owner}" class="sub-nav" id="pageactions">
+		<dt th:text="#{menu.subpages}"></dt>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/skill/{skillCategoryId}/{skillId}/edit(groupId=${skill.skillCategory.group.id},skillCategoryId=${skill.skillCategory.id},skillId=${skill.id})}" th:text="#{menu.groups.rules.wh40kskirmish.skill.edit}"></a></dd>
+	</dl>
+	<p>View skill here</p>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

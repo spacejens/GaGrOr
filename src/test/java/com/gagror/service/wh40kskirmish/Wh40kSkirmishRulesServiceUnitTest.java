@@ -25,6 +25,8 @@ import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity
 import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillEntity;
+import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeEntity;
@@ -58,6 +60,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	private static final Long SKILL_CATEGORY_ID = 74154L;
 	private static final Long WRONG_SKILL_CATEGORY_ID = 4664L;
 	private static final String SKILL_CATEGORY_NAME = "Skill category";
+	private static final Long SKILL_ID = 9998L;
+	private static final Long WRONG_SKILL_ID = 13213L;
+	private static final String SKILL_NAME = "Skill";
 	private static final Long ITEM_CATEGORY_ID = 8986L;
 	private static final Long WRONG_ITEM_CATEGORY_ID = 1231658L;
 	private static final String ITEM_CATEGORY_NAME = "Item category";
@@ -93,6 +98,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 
 	@Mock
 	Wh40kSkirmishSkillCategoryEntity skillCategoryEntity;
+
+	@Mock
+	Wh40kSkirmishSkillEntity skillEntity;
 
 	@Mock
 	Wh40kSkirmishItemCategoryEntity itemCategoryEntity;
@@ -188,6 +196,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	}
 
 	@Test
+	public void viewSkill_ok() {
+		final Wh40kSkirmishSkillOutput result = instance.viewSkill(GROUP_ID, SKILL_CATEGORY_ID, SKILL_ID);
+		assertEquals("Wrong skill returned", SKILL_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewSkill_notFound() {
+		instance.viewSkill(GROUP_ID, SKILL_CATEGORY_ID, WRONG_SKILL_ID);
+	}
+
+	@Test
 	public void viewItemCategory_ok() {
 		final Wh40kSkirmishItemCategoryOutput result = instance.viewItemCategory(GROUP_ID, ITEM_CATEGORY_ID);
 		assertEquals("Wrong item category returned", ITEM_CATEGORY_NAME, result.getName());
@@ -245,6 +264,12 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(skillCategoryEntity.getName()).thenReturn(SKILL_CATEGORY_NAME);
 		when(skillCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getSkillCategories().add(skillCategoryEntity);
+		// Set up the skill type entity
+		when(skillCategoryEntity.getSkills()).thenReturn(new HashSet<Wh40kSkirmishSkillEntity>());
+		when(skillEntity.getId()).thenReturn(SKILL_ID);
+		when(skillEntity.getName()).thenReturn(SKILL_NAME);
+		when(skillEntity.getSkillCategory()).thenReturn(skillCategoryEntity);
+		skillCategoryEntity.getSkills().add(skillEntity);
 		// Set up the item category entity
 		when(rulesEntity.getItemCategories()).thenReturn(new HashSet<Wh40kSkirmishItemCategoryEntity>());
 		when(itemCategoryEntity.getId()).thenReturn(ITEM_CATEGORY_ID);
