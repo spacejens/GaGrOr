@@ -10,6 +10,10 @@
 		<a th:href="@{/groups/view/{groupId}(groupId=${rules.group.id})}" th:text="${rules.group.name}"></a>
 		<a class="current" th:text="#{menu.groups.rules}"></a>
 	</nav>
+	<dl  th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="sub-nav" id="pageactions">
+		<dt th:text="#{menu.subpages}"></dt>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/edit(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.edit}"></a></dd>
+	</dl>
 	<h1>Rules overview</h1>
 	<h2>Skills</h2>
 	<ul class="small-block-grid-4">

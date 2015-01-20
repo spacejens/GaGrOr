@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesInput;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeInput;
@@ -42,6 +44,7 @@ import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishItemCategoryPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishItemTypePersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRacePersister;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishSkillCategoryPersister;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishSkillPersister;
@@ -69,6 +72,9 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 
 	@Autowired
 	Wh40kSkirmishRulesService rulesService;
+
+	@Autowired
+	Wh40kSkirmishRulesPersister rulesPersister;
 
 	@Autowired
 	Wh40kSkirmishGangTypePersister gangTypePersister;
@@ -108,7 +114,38 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 		return "wh40kskirmish/rules_view";
 	}
 
-	// TODO Add page to edit basic rules
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/edit", method=RequestMethod.GET)
+	public String editRulesForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model) {
+		log.info(String.format("Viewing edit rules form for group %d", groupId));
+		final Wh40kSkirmishRulesOutput rules = rulesService.editRules(groupId);
+		model.addAttribute("group", rules.getGroup());
+		model.addAttribute("rulesForm", new Wh40kSkirmishRulesInput(rules));
+		return "wh40kskirmish/rules_edit";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/save", method=RequestMethod.POST)
+	public Object saveRulesForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			final Model model,
+			@Valid @ModelAttribute("rulesForm") final Wh40kSkirmishRulesInput rulesForm,
+			final BindingResult bindingResult) {
+		if(! groupId.equals(rulesForm.getGroupId())) {
+			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save rules form", groupId, rulesForm.getGroupId()));
+			throw new IllegalArgumentException(String.format("Unexpected group ID in rules form"));
+		}
+		if(rulesPersister.save(rulesForm, bindingResult)) {
+			log.info(String.format("Saved rules: %s", rulesForm));
+			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
+		} else {
+			log.warn(String.format("Failed to save: %s", rulesForm));
+			model.addAttribute("group", groupService.viewGroup(groupId));
+			return "wh40kskirmish/rules_edit";
+		}
+	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
 	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/gangtype/create", method=RequestMethod.GET)

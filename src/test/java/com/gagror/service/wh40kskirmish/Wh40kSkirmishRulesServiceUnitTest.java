@@ -127,6 +127,16 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	}
 
 	@Test
+	public void editRules_ok() {
+		assertEquals("Wrong rules returned", RULES_ID, instance.editRules(GROUP_ID).getId());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void editRules_wrongType() {
+		instance.editRules(WRONG_TYPE_GROUP_ID);
+	}
+
+	@Test
 	public void viewGangType_ok() {
 		final Wh40kSkirmishGangTypeOutput result = instance.viewGangType(GROUP_ID, GANG_TYPE_ID);
 		assertEquals("Wrong gang type returned", GANG_TYPE_NAME, result.getName());
