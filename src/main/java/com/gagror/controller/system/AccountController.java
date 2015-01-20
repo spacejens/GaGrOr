@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.controller.AbstractController;
+import com.gagror.controller.FormAndURLMismatchException;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.service.social.AccountService;
@@ -121,8 +122,7 @@ public class AccountController extends AbstractController {
 			@Valid @ModelAttribute("editAccountForm") final AccountEditInput editAccountForm,
 			final BindingResult bindingResult) {
 		if(! accountId.equals(editAccountForm.getId())) {
-			log.error(String.format("Account ID URL (%d) and form (%d) mismatch when attempting to save user form", accountId, editAccountForm.getId()));
-			throw new IllegalArgumentException(String.format("Unexpected account ID in user form"));
+			throw new FormAndURLMismatchException("Account ID", accountId, editAccountForm.getId());
 		}
 		if(editAccountPersister.save(editAccountForm, bindingResult)) {
 			log.info(String.format("Saving edited account ID %d: %s", accountId, editAccountForm));

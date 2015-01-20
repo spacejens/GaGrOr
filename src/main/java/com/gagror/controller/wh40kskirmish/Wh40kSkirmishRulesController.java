@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
+import com.gagror.controller.FormAndURLMismatchException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesInput;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionInput;
@@ -134,8 +135,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("rulesForm") final Wh40kSkirmishRulesInput rulesForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(rulesForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save rules form", groupId, rulesForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in rules form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, rulesForm.getGroupId());
 		}
 		if(rulesPersister.save(rulesForm, bindingResult)) {
 			log.info(String.format("Saved rules: %s", rulesForm));
@@ -164,8 +164,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("gangTypeForm") final Wh40kSkirmishGangTypeInput gangTypeForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(gangTypeForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save gang type form", groupId, gangTypeForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in gang type form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, gangTypeForm.getGroupId());
 		}
 		if(gangTypePersister.save(gangTypeForm, bindingResult)) {
 			log.info(String.format("Saved gang type: %s", gangTypeForm));
@@ -220,8 +219,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("factionForm") final Wh40kSkirmishFactionInput factionForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(factionForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save faction form", groupId, factionForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in faction form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, factionForm.getGroupId());
 		}
 		if(factionPersister.save(factionForm, bindingResult)) {
 			log.info(String.format("Saved faction: %s", factionForm));
@@ -278,8 +276,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("raceForm") final Wh40kSkirmishRaceInput raceForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(raceForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save race form", groupId, raceForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in race form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, raceForm.getGroupId());
 		}
 		if(racePersister.save(raceForm, bindingResult)) {
 			log.info(String.format("Saved race: %s", raceForm));
@@ -337,8 +334,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("fighterTypeForm") final Wh40kSkirmishFighterTypeInput fighterTypeForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(fighterTypeForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save fighter type form", groupId, fighterTypeForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in fighter type form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, fighterTypeForm.getGroupId());
 		}
 		if(fighterTypePersister.save(fighterTypeForm, bindingResult)) {
 			log.info(String.format("Saved fighter type: %s", fighterTypeForm));
@@ -394,8 +390,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("territoryCategoryForm") final Wh40kSkirmishTerritoryCategoryInput territoryCategoryForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(territoryCategoryForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save territory category form", groupId, territoryCategoryForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in territory category form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, territoryCategoryForm.getGroupId());
 		}
 		if(territoryCategoryPersister.save(territoryCategoryForm, bindingResult)) {
 			log.info(String.format("Saved territory category: %s", territoryCategoryForm));
@@ -450,8 +445,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("territoryTypeForm") final Wh40kSkirmishTerritoryTypeInput territoryTypeForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(territoryTypeForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save territory type form", groupId, territoryTypeForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in territory type form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, territoryTypeForm.getGroupId());
 		}
 		if(territoryTypePersister.save(territoryTypeForm, bindingResult)) {
 			log.info(String.format("Saved territory type: %s", territoryTypeForm));
@@ -505,8 +499,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("skillCategoryForm") final Wh40kSkirmishSkillCategoryInput skillCategoryForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(skillCategoryForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save skill category form", groupId, skillCategoryForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in skill category form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, skillCategoryForm.getGroupId());
 		}
 		if(skillCategoryPersister.save(skillCategoryForm, bindingResult)) {
 			log.info(String.format("Saved skill category: %s", skillCategoryForm));
@@ -561,8 +554,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("skillForm") final Wh40kSkirmishSkillInput skillForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(skillForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save skill form", groupId, skillForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in skill form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, skillForm.getGroupId());
 		}
 		if(skillPersister.save(skillForm, bindingResult)) {
 			log.info(String.format("Saved skill: %s", skillForm));
@@ -616,8 +608,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("itemCategoryForm") final Wh40kSkirmishItemCategoryInput itemCategoryForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(itemCategoryForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save item category form", groupId, itemCategoryForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in item category form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, itemCategoryForm.getGroupId());
 		}
 		if(itemCategoryPersister.save(itemCategoryForm, bindingResult)) {
 			log.info(String.format("Saved item category: %s", itemCategoryForm));
@@ -672,8 +663,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@Valid @ModelAttribute("itemTypeForm") final Wh40kSkirmishItemTypeInput itemTypeForm,
 			final BindingResult bindingResult) {
 		if(! groupId.equals(itemTypeForm.getGroupId())) {
-			log.error(String.format("Group ID URL (%d) and form (%d) mismatch when attempting to save item type form", groupId, itemTypeForm.getGroupId()));
-			throw new IllegalArgumentException(String.format("Unexpected group ID in item type form"));
+			throw new FormAndURLMismatchException("Group ID", groupId, itemTypeForm.getGroupId());
 		}
 		if(itemTypePersister.save(itemTypeForm, bindingResult)) {
 			log.info(String.format("Saved item type: %s", itemTypeForm));
