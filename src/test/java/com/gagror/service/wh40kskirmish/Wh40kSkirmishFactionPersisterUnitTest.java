@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
+import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionInput;
@@ -84,7 +85,7 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=WrongGroupTypeException.class)
 	public void save_new_wrongGroupType() {
 		when(group.getWh40kSkirmishRules()).thenReturn(null);
 		instance.save(form, bindingResult);
@@ -117,7 +118,7 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=WrongGroupTypeException.class)
 	public void save_existing_wrongGroupType() {
 		whenFactionExists();
 		when(group.getWh40kSkirmishRules()).thenReturn(null);

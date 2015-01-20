@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesOutput;
@@ -53,7 +54,7 @@ public class Wh40kSkirmishRulesService {
 	private Wh40kSkirmishRulesEntity loadRules(final Long groupId) {
 		final GroupEntity group = groupService.loadGroup(groupId);
 		if(null == group.getWh40kSkirmishRules()) {
-			throw new IllegalArgumentException(String.format("Group %s does not have WH40K skirmish rules", group));
+			throw new WrongGroupTypeException(group);
 		}
 		return group.getWh40kSkirmishRules();
 	}

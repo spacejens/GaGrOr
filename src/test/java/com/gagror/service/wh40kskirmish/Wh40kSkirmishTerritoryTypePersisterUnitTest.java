@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
+import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeEntity;
@@ -84,7 +85,7 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 		verify(territoryTypeRepository, never()).save(any(Wh40kSkirmishTerritoryTypeEntity.class));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=WrongGroupTypeException.class)
 	public void save_new_wrongGroupType() {
 		when(group.getWh40kSkirmishRules()).thenReturn(null);
 		instance.save(form, bindingResult);
@@ -117,7 +118,7 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 		verify(territoryTypeRepository, never()).save(any(Wh40kSkirmishTerritoryTypeEntity.class));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=WrongGroupTypeException.class)
 	public void save_existing_wrongGroupType() {
 		whenTerritoryTypeExists();
 		when(group.getWh40kSkirmishRules()).thenReturn(null);

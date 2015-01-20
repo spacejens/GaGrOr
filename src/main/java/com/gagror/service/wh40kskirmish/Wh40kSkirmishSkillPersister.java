@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
+import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillInput;
@@ -34,7 +35,7 @@ extends AbstractPersister<Wh40kSkirmishSkillInput, Wh40kSkirmishSkillEntity, Wh4
 	protected Wh40kSkirmishSkillCategoryEntity loadContext(final Wh40kSkirmishSkillInput form) {
 		final GroupEntity group = groupRepository.findOne(form.getGroupId());
 		if(null == group.getWh40kSkirmishRules()) {
-			throw new IllegalStateException(String.format("Group %s lacks WH40K skirmish rules", group));
+			throw new WrongGroupTypeException(group);
 		}
 		for(final Wh40kSkirmishSkillCategoryEntity skillCategory : group.getWh40kSkirmishRules().getSkillCategories()) {
 			if(skillCategory.getId().equals(form.getSkillCategoryId())) {

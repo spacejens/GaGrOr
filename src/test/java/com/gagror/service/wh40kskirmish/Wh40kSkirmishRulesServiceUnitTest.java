@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionOutput;
@@ -121,7 +122,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong rules returned", RULES_ID, instance.viewRules(GROUP_ID).getId());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=WrongGroupTypeException.class)
 	public void viewRules_wrongType() {
 		instance.viewRules(WRONG_TYPE_GROUP_ID);
 	}
@@ -131,7 +132,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong rules returned", RULES_ID, instance.editRules(GROUP_ID).getId());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=WrongGroupTypeException.class)
 	public void editRules_wrongType() {
 		instance.editRules(WRONG_TYPE_GROUP_ID);
 	}
