@@ -9,6 +9,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.gagror.EnumUnitTestSupport;
+import com.gagror.TestSetupException;
 
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)
