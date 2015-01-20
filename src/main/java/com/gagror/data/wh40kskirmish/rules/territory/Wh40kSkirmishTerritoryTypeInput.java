@@ -23,8 +23,8 @@ public class Wh40kSkirmishTerritoryTypeInput extends AbstractIdentifiableNamedIn
 		setTerritoryCategoryId(currentState.getTerritoryCategory().getId());
 	}
 
-	public Wh40kSkirmishTerritoryTypeInput(final Long groupId, final Long gangTypeId) {
+	public Wh40kSkirmishTerritoryTypeInput(final Long groupId, final Long territoryCategoryId) {
 		setGroupId(groupId);
-		setTerritoryCategoryId(gangTypeId);
+		setTerritoryCategoryId(territoryCategoryId);
 	}
 }
