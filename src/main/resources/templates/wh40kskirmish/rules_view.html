@@ -15,6 +15,7 @@
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/edit(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.edit}"></a></dd>
 	</dl>
 	<h1>Rules overview</h1>
+	<p>Starting money: <span th:text="${rules.startingMoney}"></span> <span th:text="${rules.currencyName}"></span></p>
 	<h2>Skills</h2>
 	<ul class="small-block-grid-4">
 		<li th:each="skillCategory : ${rules.skillCategories}" class="panel">

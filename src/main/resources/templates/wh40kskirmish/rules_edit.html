@@ -15,6 +15,10 @@
 		<input type="hidden" th:field="*{id}" />
 		<input type="hidden" th:field="*{version}" />
 		<input type="hidden" th:field="*{groupId}" />
+		Starting money <span class="error" th:if="${#fields.hasErrors('startingMoney')}" th:errors="*{startingMoney}">Starting money error</span>
+		<input type="number" min="1" max="10000" th:field="*{startingMoney}" />
+		Currency name <span class="error" th:if="${#fields.hasErrors('currencyName')}" th:errors="*{currencyName}">Currency name error</span>
+		<input type="text" th:field="*{currencyName}" />
 		<button type="submit">Save</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>

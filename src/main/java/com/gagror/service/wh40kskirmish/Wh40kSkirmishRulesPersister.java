@@ -57,5 +57,7 @@ extends AbstractPersister<Wh40kSkirmishRulesInput, Wh40kSkirmishRulesEntity, Gro
 
 	@Override
 	protected void updateValues(final Wh40kSkirmishRulesInput form, final Wh40kSkirmishRulesEntity entity) {
+		entity.setStartingMoney(form.getStartingMoney());
+		entity.setCurrencyName(form.getCurrencyName());
 	}
 }

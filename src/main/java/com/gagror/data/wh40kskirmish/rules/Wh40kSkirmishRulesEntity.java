@@ -2,6 +2,7 @@ package com.gagror.data.wh40kskirmish.rules;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -10,6 +11,7 @@ import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
@@ -45,11 +47,20 @@ public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 	@Getter
 	private Set<Wh40kSkirmishItemCategoryEntity> itemCategories;
 
-	// TODO Make initial money per gang configurable
+	@Column(nullable = false, insertable = true, updatable = true)
+	@Getter
+	@Setter
+	private int startingMoney;
 
-	// TODO Make name of currency in game configurable
+	@Column(nullable = false, insertable = true, updatable = true)
+	@Getter
+	@Setter
+	private String currencyName;
 
 	public Wh40kSkirmishRulesEntity(final GroupEntity group) {
 		this.group = group;
+		// Set defaults for mandatory fields
+		startingMoney = 0;
+		currencyName = "$";
 	}
 }
