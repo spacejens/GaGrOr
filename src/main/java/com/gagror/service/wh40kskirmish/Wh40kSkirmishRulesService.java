@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
@@ -66,7 +67,7 @@ public class Wh40kSkirmishRulesService {
 				return gangType;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find gang type %d in group %d", gangTypeId, groupId));
+		throw new DataNotFoundException(String.format("Gang type %d (group %d)", gangTypeId, groupId));
 	}
 
 	public Wh40kSkirmishGangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
@@ -80,7 +81,7 @@ public class Wh40kSkirmishRulesService {
 				return faction;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find faction %d in gang type %d of group %d",
+		throw new DataNotFoundException(String.format("Faction %d (gang type %d, group %d)",
 				factionId, gangTypeId, groupId));
 	}
 
@@ -97,7 +98,7 @@ public class Wh40kSkirmishRulesService {
 				return race;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find race %d in gang type %d of group %d",
+		throw new DataNotFoundException(String.format("Race %d (gang type %d, group %d)",
 				raceId, gangTypeId, groupId));
 	}
 
@@ -118,8 +119,8 @@ public class Wh40kSkirmishRulesService {
 				return fighterType;
 			}
 		}
-		throw new IllegalArgumentException(String.format(
-				"Failed to find fighter type %d of race %d in gang type %d of group %d",
+		throw new DataNotFoundException(String.format(
+				"Fighter type %d (race %d, gang type %d, group %d)",
 				fighterTypeId, raceId, gangTypeId, groupId));
 	}
 
@@ -140,7 +141,7 @@ public class Wh40kSkirmishRulesService {
 				return territoryCategory;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find territory category %d in group %d", territoryCategoryId, groupId));
+		throw new DataNotFoundException(String.format("Territory category %d (group %d)", territoryCategoryId, groupId));
 	}
 
 	public Wh40kSkirmishTerritoryCategoryOutput viewTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
@@ -154,7 +155,7 @@ public class Wh40kSkirmishRulesService {
 				return territoryType;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find territory type %d in territory category %d of group %d",
+		throw new DataNotFoundException(String.format("Territory type %d (territory category %d, group %d)",
 				territoryTypeId, territoryCategoryId, groupId));
 	}
 
@@ -171,7 +172,7 @@ public class Wh40kSkirmishRulesService {
 				return skillCategory;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find skill category %d in group %d", skillCategoryId, groupId));
+		throw new DataNotFoundException(String.format("Skill category %d (group %d)", skillCategoryId, groupId));
 	}
 
 	public Wh40kSkirmishSkillCategoryOutput viewSkillCategory(final Long groupId, final Long skillCategoryId) {
@@ -185,7 +186,7 @@ public class Wh40kSkirmishRulesService {
 				return skill;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find skill %d in skill category %d of group %d",
+		throw new DataNotFoundException(String.format("Skill %d (skill category %d, group %d)",
 				skillId, skillCategoryId, groupId));
 	}
 
@@ -202,7 +203,7 @@ public class Wh40kSkirmishRulesService {
 				return itemCategory;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find item category %d in group %d", itemCategoryId, groupId));
+		throw new DataNotFoundException(String.format("Item category %d (group %d)", itemCategoryId, groupId));
 	}
 
 	public Wh40kSkirmishItemCategoryOutput viewItemCategory(final Long groupId, final Long itemCategoryId) {
@@ -216,7 +217,7 @@ public class Wh40kSkirmishRulesService {
 				return itemType;
 			}
 		}
-		throw new IllegalArgumentException(String.format("Failed to find item type %d in item category %d of group %d",
+		throw new DataNotFoundException(String.format("Item type %d (item category %d, group %d)",
 				itemTypeId, itemCategoryId, groupId));
 	}
 

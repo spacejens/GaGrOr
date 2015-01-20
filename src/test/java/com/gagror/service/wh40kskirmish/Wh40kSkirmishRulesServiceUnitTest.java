@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
@@ -143,7 +144,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong gang type returned", GANG_TYPE_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewGangType_notFound() {
 		instance.viewGangType(GROUP_ID, WRONG_GANG_TYPE_ID);
 	}
@@ -154,7 +155,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong faction returned", FACTION_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewFaction_notFound() {
 		instance.viewFaction(GROUP_ID, GANG_TYPE_ID, WRONG_FACTION_ID);
 	}
@@ -165,7 +166,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong race returned", RACE_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewRace_notFound() {
 		instance.viewRace(GROUP_ID, GANG_TYPE_ID, WRONG_RACE_ID);
 	}
@@ -176,7 +177,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong fighter type returned", FIGHTER_TYPE_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewFighterType_notFound() {
 		instance.viewFighterType(GROUP_ID, GANG_TYPE_ID, RACE_ID, WRONG_FIGHTER_TYPE_ID);
 	}
@@ -187,7 +188,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong territory category returned", TERRITORY_CATEGORY_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewTerritoryCategory_notFound() {
 		instance.viewTerritoryCategory(GROUP_ID, WRONG_TERRITORY_CATEGORY_ID);
 	}
@@ -198,7 +199,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong territory type returned", TERRITORY_TYPE_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewTerritoryType_notFound() {
 		instance.viewTerritoryType(GROUP_ID, TERRITORY_CATEGORY_ID, WRONG_TERRITORY_TYPE_ID);
 	}
@@ -209,7 +210,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong skill category returned", SKILL_CATEGORY_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewSkillCategory_notFound() {
 		instance.viewSkillCategory(GROUP_ID, WRONG_SKILL_CATEGORY_ID);
 	}
@@ -220,7 +221,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong skill returned", SKILL_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewSkill_notFound() {
 		instance.viewSkill(GROUP_ID, SKILL_CATEGORY_ID, WRONG_SKILL_ID);
 	}
@@ -231,7 +232,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong item category returned", ITEM_CATEGORY_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewItemCategory_notFound() {
 		instance.viewItemCategory(GROUP_ID, WRONG_ITEM_CATEGORY_ID);
 	}
@@ -242,7 +243,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		assertEquals("Wrong item type returned", ITEM_TYPE_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewItemType_notFound() {
 		instance.viewItemType(GROUP_ID, ITEM_CATEGORY_ID, WRONG_ITEM_TYPE_ID);
 	}
