@@ -30,7 +30,7 @@ public class ContactTypeUnitTest extends EnumUnitTestSupport<ContactType> {
 					return exp;
 				}
 			}
-			throw new IllegalArgumentException(String.format("Test has no expected results for %s", type));
+			throw new TestSetupException(String.format("Test has no expected results for %s", type));
 		}
 	}
 

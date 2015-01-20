@@ -16,6 +16,7 @@ import org.junit.runners.Parameterized.Parameters;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.gagror.EnumUnitTestSupport;
+import com.gagror.TestSetupException;
 
 @RequiredArgsConstructor
 @RunWith(Parameterized.class)
@@ -44,7 +45,7 @@ public class AccountTypeUnitTest extends EnumUnitTestSupport<AccountType> {
 					return exp;
 				}
 			}
-			throw new IllegalArgumentException(String.format("Test has no expected results for %s", type));
+			throw new TestSetupException(String.format("Test has no expected results for %s", type));
 		}
 	}
 
