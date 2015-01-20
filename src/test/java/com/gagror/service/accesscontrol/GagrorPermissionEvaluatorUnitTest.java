@@ -7,7 +7,6 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
@@ -51,7 +50,7 @@ public class GagrorPermissionEvaluatorUnitTest {
 	AccountEntity accountEntity;
 
 	@Test
-	public void allPermissionsAddedByDefault() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void allPermissionsAddedByDefault() throws Exception {
 		final Reflections reflections = new Reflections("com.gagror");
 		int count = 0;
 		for(final Class<? extends GagrorPermission> clazz : reflections.getSubTypesOf(GagrorPermission.class)) {
