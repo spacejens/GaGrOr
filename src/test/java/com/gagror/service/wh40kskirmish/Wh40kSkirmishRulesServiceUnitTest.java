@@ -23,6 +23,8 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceOutput;
 import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillEntity;
@@ -66,6 +68,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	private static final Long ITEM_CATEGORY_ID = 8986L;
 	private static final Long WRONG_ITEM_CATEGORY_ID = 1231658L;
 	private static final String ITEM_CATEGORY_NAME = "Item category";
+	private static final Long ITEM_TYPE_ID = 165L;
+	private static final Long WRONG_ITEM_TYPE_ID = 16514L;
+	private static final String ITEM_TYPE_NAME = "Item type";
 
 	Wh40kSkirmishRulesService instance;
 
@@ -104,6 +109,9 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 
 	@Mock
 	Wh40kSkirmishItemCategoryEntity itemCategoryEntity;
+
+	@Mock
+	Wh40kSkirmishItemTypeEntity itemTypeEntity;
 
 	@Mock
 	GroupEntity wrongTypeGroupEntity;
@@ -217,6 +225,17 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		instance.viewItemCategory(GROUP_ID, WRONG_ITEM_CATEGORY_ID);
 	}
 
+	@Test
+	public void viewItemType_ok() {
+		final Wh40kSkirmishItemTypeOutput result = instance.viewItemType(GROUP_ID, ITEM_CATEGORY_ID, ITEM_TYPE_ID);
+		assertEquals("Wrong item type returned", ITEM_TYPE_NAME, result.getName());
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void viewItemType_notFound() {
+		instance.viewItemType(GROUP_ID, ITEM_CATEGORY_ID, WRONG_ITEM_TYPE_ID);
+	}
+
 	@Before
 	public void setupRules() {
 		// Set up the rules entity
@@ -264,7 +283,7 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(skillCategoryEntity.getName()).thenReturn(SKILL_CATEGORY_NAME);
 		when(skillCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getSkillCategories().add(skillCategoryEntity);
-		// Set up the skill type entity
+		// Set up the skill entity
 		when(skillCategoryEntity.getSkills()).thenReturn(new HashSet<Wh40kSkirmishSkillEntity>());
 		when(skillEntity.getId()).thenReturn(SKILL_ID);
 		when(skillEntity.getName()).thenReturn(SKILL_NAME);
@@ -276,6 +295,12 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 		when(itemCategoryEntity.getName()).thenReturn(ITEM_CATEGORY_NAME);
 		when(itemCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getItemCategories().add(itemCategoryEntity);
+		// Set up the item type entity
+		when(itemCategoryEntity.getItemTypes()).thenReturn(new HashSet<Wh40kSkirmishItemTypeEntity>());
+		when(itemTypeEntity.getId()).thenReturn(ITEM_TYPE_ID);
+		when(itemTypeEntity.getName()).thenReturn(ITEM_TYPE_NAME);
+		when(itemTypeEntity.getItemCategory()).thenReturn(itemCategoryEntity);
+		itemCategoryEntity.getItemTypes().add(itemTypeEntity);
 	}
 
 	@Before
