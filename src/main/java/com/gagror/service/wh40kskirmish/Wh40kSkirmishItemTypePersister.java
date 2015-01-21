@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
@@ -42,7 +43,7 @@ extends AbstractPersister<Wh40kSkirmishItemTypeInput, Wh40kSkirmishItemTypeEntit
 				return itemCategory;
 			}
 		}
-		throw new IllegalStateException(String.format("Group %s does not have item category %d", group, form.getItemCategoryId()));
+		throw new DataNotFoundException(String.format("Item category %d (group %d)", form.getItemCategoryId(), form.getGroupId()));
 	}
 
 	@Override
@@ -57,7 +58,7 @@ extends AbstractPersister<Wh40kSkirmishItemTypeInput, Wh40kSkirmishItemTypeEntit
 				return itemType;
 			}
 		}
-		throw new IllegalStateException(String.format("Failed to find item type %d when editing", form.getId()));
+		throw new DataNotFoundException(String.format("Item type %d (item category %d, group %d)", form.getId(), form.getItemCategoryId(), form.getGroupId()));
 	}
 
 	@Override

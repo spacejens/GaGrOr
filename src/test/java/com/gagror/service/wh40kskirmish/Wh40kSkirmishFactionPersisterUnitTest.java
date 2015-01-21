@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
@@ -91,7 +92,7 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_new_gangTypeNotFound() {
 		rules.getGangTypes().remove(gangType);
 		instance.save(form, bindingResult);
@@ -125,14 +126,14 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_existing_gangTypeNotFound() {
 		whenFactionExists();
 		rules.getGangTypes().remove(gangType);
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_existing_notFoundInGangType() {
 		whenFactionExists();
 		gangType.getFactions().remove(faction);
@@ -172,6 +173,7 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		when(group.getId()).thenReturn(GROUP_ID);
 		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
+		when(rules.getGroup()).thenReturn(group);
 		when(rules.getGangTypes()).thenReturn(new HashSet<Wh40kSkirmishGangTypeEntity>());
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
 		when(gangType.getFactions()).thenReturn(new HashSet<Wh40kSkirmishFactionEntity>());

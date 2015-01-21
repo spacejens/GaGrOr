@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
@@ -42,7 +43,7 @@ extends AbstractPersister<Wh40kSkirmishRaceInput, Wh40kSkirmishRaceEntity, Wh40k
 				return gangType;
 			}
 		}
-		throw new IllegalStateException(String.format("Group %s does not have gang type %d", group, form.getGangTypeId()));
+		throw new DataNotFoundException(String.format("Gang type %d (group %d)", form.getGangTypeId(), form.getGroupId()));
 	}
 
 	@Override
@@ -57,7 +58,7 @@ extends AbstractPersister<Wh40kSkirmishRaceInput, Wh40kSkirmishRaceEntity, Wh40k
 				return race;
 			}
 		}
-		throw new IllegalStateException(String.format("Failed to find race %d when editing", form.getId()));
+		throw new DataNotFoundException(String.format("Race %d (gang type %d, group %d)", form.getId(), form.getGangTypeId(), form.getGroupId()));
 	}
 
 	@Override

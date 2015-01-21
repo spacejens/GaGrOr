@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
@@ -91,7 +92,7 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_new_territoryCategoryNotFound() {
 		rules.getTerritoryCategories().remove(territoryCategory);
 		instance.save(form, bindingResult);
@@ -125,14 +126,14 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_existing_territoryCategoryNotFound() {
 		whenTerritoryTypeExists();
 		rules.getTerritoryCategories().remove(territoryCategory);
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_existing_notFoundInTerritoryCategory() {
 		whenTerritoryTypeExists();
 		territoryCategory.getTerritoryTypes().remove(territoryType);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
@@ -42,7 +43,7 @@ extends AbstractPersister<Wh40kSkirmishSkillInput, Wh40kSkirmishSkillEntity, Wh4
 				return skillCategory;
 			}
 		}
-		throw new IllegalStateException(String.format("Group %s does not have skill category %d", group, form.getSkillCategoryId()));
+		throw new DataNotFoundException(String.format("Skill category %d (group %d)", form.getSkillCategoryId(), form.getGroupId()));
 	}
 
 	@Override
@@ -57,7 +58,7 @@ extends AbstractPersister<Wh40kSkirmishSkillInput, Wh40kSkirmishSkillEntity, Wh4
 				return skill;
 			}
 		}
-		throw new IllegalStateException(String.format("Failed to find skill %d when editing", form.getId()));
+		throw new DataNotFoundException(String.format("Skill %d (skill category %d, group %d)", form.getId(), form.getSkillCategoryId(), form.getGroupId()));
 	}
 
 	@Override

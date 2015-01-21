@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
@@ -91,7 +92,7 @@ public class Wh40kSkirmishItemTypePersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_new_itemCategoryNotFound() {
 		rules.getItemCategories().remove(itemCategory);
 		instance.save(form, bindingResult);
@@ -125,14 +126,14 @@ public class Wh40kSkirmishItemTypePersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_existing_itemCategoryNotFound() {
 		whenItemTypeExists();
 		rules.getItemCategories().remove(itemCategory);
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_existing_notFoundInItemCategory() {
 		whenItemTypeExists();
 		itemCategory.getItemTypes().remove(itemType);
