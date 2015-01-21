@@ -12,7 +12,7 @@ import org.springframework.validation.ObjectError;
 @NoArgsConstructor
 public abstract class AbstractIdentifiableInput<I extends Serializable, C extends Identifiable<I> & Versioned>
 extends AbstractInput
-implements Versioned {
+implements Identifiable<I>, Versioned {
 
 	@Getter
 	@Setter
