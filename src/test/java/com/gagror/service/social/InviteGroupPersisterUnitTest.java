@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
@@ -90,7 +91,7 @@ public class InviteGroupPersisterUnitTest {
 		assertTrue("Account should have member", contactAccount.getGroupMemberships().contains(member.getValue()));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void sendInvitations_groupNotFound() {
 		when(groupInviteForm.getId()).thenReturn(7964336L);
 		instance.save(groupInviteForm, bindingResult);

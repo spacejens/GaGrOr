@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
@@ -189,7 +190,7 @@ public class EditAccountPersisterUnitTest {
 		 */
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void saveAccount_accountNotFound() {
 		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(null);
 		instance.save(editAccountForm, bindingResult);

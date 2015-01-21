@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.AbstractEntity;
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.ContactEntity;
@@ -57,7 +58,11 @@ public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, Gr
 
 	@Override
 	protected GroupEntity loadExisting(final GroupInviteInput form, final AbstractEntity context) {
-		return groupRepository.findOne(form.getId());
+		final GroupEntity group = groupRepository.findOne(form.getId());
+		if(null == group) {
+			throw new DataNotFoundException(String.format("Group %d", form.getId()));
+		}
+		return group;
 	}
 
 	@Override

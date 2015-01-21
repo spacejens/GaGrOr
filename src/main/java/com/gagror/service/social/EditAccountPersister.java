@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.thymeleaf.util.StringUtils;
 
 import com.gagror.data.AbstractEntity;
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
@@ -53,7 +54,11 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 
 	@Override
 	protected AccountEntity loadExisting(final AccountEditInput form, final AbstractEntity context) {
-		return accountRepository.findById(form.getId());
+		final AccountEntity account = accountRepository.findById(form.getId());
+		if(null == account) {
+			throw new DataNotFoundException(String.format("Account %d", form.getId()));
+		}
+		return account;
 	}
 
 	@Override

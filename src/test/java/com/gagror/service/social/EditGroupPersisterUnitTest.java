@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -47,7 +48,7 @@ public class EditGroupPersisterUnitTest {
 		verify(group).setViewableByAnyone(FORM_VIEWABLE);
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void save_groupNotFound() {
 		when(form.getId()).thenReturn(UNKNOWN_GROUP_ID);
 		instance.save(form, bindingResult);

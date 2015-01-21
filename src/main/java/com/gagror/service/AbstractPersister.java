@@ -6,6 +6,7 @@ import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.validation.BindingResult;
 
+import com.gagror.CodingErrorException;
 import com.gagror.data.AbstractEntity;
 import com.gagror.data.AbstractInput;
 
@@ -21,7 +22,7 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 		if(! isCreateNew(form)) {
 			entity = loadExisting(form, context);
 			if(null == entity) {
-				throw new IllegalStateException(String.format("Failed to load existing entity when saving: %s", form));
+				throw new CodingErrorException(String.format("Failed to load existing entity when saving: %s", form));
 			}
 			validateFormVsExistingState(form, bindingResult, entity);
 		}
@@ -33,7 +34,7 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 		if(isCreateNew(form)) {
 			entity = createNew(form, context);
 			if(null == entity) {
-				throw new IllegalStateException(String.format("Failed to create new entity when saving: %s", form));
+				throw new CodingErrorException(String.format("Failed to create new entity when saving: %s", form));
 			}
 		}
 		updateValues(form, entity);
