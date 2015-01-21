@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 
+import com.gagror.CodingErrorException;
+
 @RequiredArgsConstructor
 @CommonsLog
 @Transactional
@@ -88,7 +90,7 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 
 	protected void addPermission(final GagrorPermission permission) {
 		if(null == permission) {
-			throw new IllegalArgumentException("Cannot add null permission");
+			throw new CodingErrorException("Cannot add null permission");
 		}
 		if(permissions.containsKey(permission.getName())) {
 			throw new IllegalStateException(String.format("Cannot add duplicate permission definitions: %s", permission.getName()));

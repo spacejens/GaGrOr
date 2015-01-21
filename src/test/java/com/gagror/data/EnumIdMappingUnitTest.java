@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.gagror.CodingErrorException;
+
 public class EnumIdMappingUnitTest {
 
 	EnumIdMapping<Integer, TestEnum> instance;
@@ -18,12 +20,12 @@ public class EnumIdMappingUnitTest {
 		}
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=CodingErrorException.class)
 	public void fromId_unused() {
 		instance.fromId(99);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=CodingErrorException.class)
 	public void constructor_disallowDuplicateIDs() {
 		new EnumIdMapping<>(TestEnumWithDuplicateId.class);
 	}

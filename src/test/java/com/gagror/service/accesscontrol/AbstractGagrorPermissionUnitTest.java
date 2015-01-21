@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.gagror.CodingErrorException;
 import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEntity;
 
@@ -45,7 +46,7 @@ public class AbstractGagrorPermissionUnitTest {
 		assertFalse("Permission should not have been granted", instance.hasPermission(accountEntity, ANOTHER_NAME, Target.class.getCanonicalName()));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=CodingErrorException.class)
 	public void hasPermission_idType_wrongTargetType() {
 		instance.hasPermission(accountEntity, PERMISSION_NAME, "Wrong target type");
 	}

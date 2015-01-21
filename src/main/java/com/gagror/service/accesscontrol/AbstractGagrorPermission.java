@@ -5,6 +5,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.gagror.CodingErrorException;
 import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEntity;
 
@@ -31,7 +32,7 @@ public abstract class AbstractGagrorPermission<I extends Serializable, E extends
 	@Override
 	public final boolean hasPermission(final AccountEntity account, final Serializable targetId, final String targetType) {
 		if(! this.targetType.equals(targetType)) {
-			throw new IllegalArgumentException(String.format("Permission %s does not support target type %s", name, targetType));
+			throw new CodingErrorException(String.format("Permission %s does not support target type %s", name, targetType));
 		}
 		return hasPermission(
 				parseId(targetId.toString()),

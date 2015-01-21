@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import com.gagror.CodingErrorException;
 import com.gagror.data.AbstractEditableNamedEntity;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
@@ -53,7 +54,7 @@ public class GroupEntity extends AbstractEditableNamedEntity {
 			wh40kSkirmishRules = new Wh40kSkirmishRulesEntity(this);
 			break;
 		default:
-			throw new IllegalArgumentException(String.format("Unsupported group type %s for group creation", groupType));
+			throw new CodingErrorException(String.format("Unsupported group type %s for group creation", groupType));
 		}
 		groupMemberships = new HashSet<>();
 	}

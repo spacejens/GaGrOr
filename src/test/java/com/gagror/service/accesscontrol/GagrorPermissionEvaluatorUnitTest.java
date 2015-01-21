@@ -20,6 +20,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.reflections.Reflections;
 import org.springframework.security.core.Authentication;
 
+import com.gagror.CodingErrorException;
 import com.gagror.data.account.AccountEntity;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -66,7 +67,7 @@ public class GagrorPermissionEvaluatorUnitTest {
 		assertNotEquals("At least one permission should have been added", 0, count);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=CodingErrorException.class)
 	public void permissionsAddedByDefaultPreventsNull() {
 		instanceDefault.editAccount = null;
 		instanceDefault.getPermission("any");
