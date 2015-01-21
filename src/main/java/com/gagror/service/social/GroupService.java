@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
@@ -125,7 +126,7 @@ public class GroupService {
 	public GroupEntity loadGroup(final Long groupId) {
 		final GroupEntity group = groupRepository.findOne(groupId);
 		if(null == group) {
-			throw new IllegalArgumentException(String.format("Failed to load group %d", groupId));
+			throw new DataNotFoundException(String.format("Group %d", groupId));
 		}
 		return group;
 	}

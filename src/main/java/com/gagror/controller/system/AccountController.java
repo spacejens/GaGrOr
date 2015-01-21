@@ -17,6 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.controller.FormAndURLMismatchException;
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.service.social.AccountService;
@@ -138,7 +139,7 @@ public class AccountController extends AbstractController {
 	protected AccountEditOutput loadCurrentState(final Long accountId) {
 		final AccountEditOutput currentState = accountService.loadAccountForEditing(accountId);
 		if(null == currentState) {
-			throw new IllegalArgumentException(String.format("Failed to find account ID %d for editing", accountId));
+			throw new DataNotFoundException(String.format("Account %d", accountId));
 		}
 		return currentState;
 	}

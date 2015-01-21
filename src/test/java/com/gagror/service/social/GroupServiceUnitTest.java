@@ -26,6 +26,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
@@ -181,7 +182,7 @@ public class GroupServiceUnitTest {
 		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewGroup_notFound() {
 		instance.viewGroup(34578095L);
 	}
@@ -223,7 +224,7 @@ public class GroupServiceUnitTest {
 		viewGroupMembers_ok(ANOTHER_GROUP_ID, ANOTHER_GROUP_NAME, null);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void viewGroupMembers_notFound() {
 		instance.viewGroupMembers(34578095L);
 	}
@@ -233,7 +234,7 @@ public class GroupServiceUnitTest {
 		assertSame("Wrong group loaded", firstGroup, instance.loadGroup(FIRST_GROUP_ID));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=DataNotFoundException.class)
 	public void loadGroup_notFound() {
 		instance.loadGroup(789347L);
 	}
