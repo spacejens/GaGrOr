@@ -22,6 +22,63 @@
 		<input type="hidden" th:field="*{raceId}" />
 		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
 		<input type="text" th:field="*{name}" />
+		<table>
+			<thead>
+				<tr>
+					<td>Starting characteristics</td>
+					<td>M</td>
+					<td>WS</td>
+					<td>BS</td>
+					<td>S</td>
+					<td>T</td>
+					<td>W</td>
+					<td>I</td>
+					<td>A</td>
+					<td>Ld</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingMovement')}" th:errors="*{startingMovement}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingMovement}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingWeaponSkill')}" th:errors="*{startingWeaponSkill}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingWeaponSkill}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingBallisticSkill')}" th:errors="*{startingBallisticSkill}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingBallisticSkill}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingStrength')}" th:errors="*{startingStrength}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingStrength}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingToughness')}" th:errors="*{startingToughness}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingToughness}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingWounds')}" th:errors="*{startingWounds}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingWounds}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingInitiative')}" th:errors="*{startingInitiative}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingInitiative}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingAttacks')}" th:errors="*{startingAttacks}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingAttacks}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('startingLeadership')}" th:errors="*{startingLeadership}"></span>
+						<input type="number" min="1" max="10" th:field="*{startingLeadership}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		<button type="submit">Save</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>

@@ -16,7 +16,36 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/{raceId}/edit(groupId=${race.gangType.group.id},gangTypeId=${race.gangType.id},raceId=${race.id})}" th:text="#{menu.groups.rules.wh40kskirmish.race.edit}"></a></dd>
 	</dl>
-	<p>View race here</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Maximum characteristics</td>
+				<td>M</td>
+				<td>WS</td>
+				<td>BS</td>
+				<td>S</td>
+				<td>T</td>
+				<td>W</td>
+				<td>I</td>
+				<td>A</td>
+				<td>Ld</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:text="${race.name}"></td>
+				<td th:text="${race.maxMovement}"></td>
+				<td th:text="${race.maxWeaponSkill}"></td>
+				<td th:text="${race.maxBallisticSkill}"></td>
+				<td th:text="${race.maxStrength}"></td>
+				<td th:text="${race.maxToughness}"></td>
+				<td th:text="${race.maxWounds}"></td>
+				<td th:text="${race.maxInitiative}"></td>
+				<td th:text="${race.maxAttacks}"></td>
+				<td th:text="${race.maxLeadership}"></td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

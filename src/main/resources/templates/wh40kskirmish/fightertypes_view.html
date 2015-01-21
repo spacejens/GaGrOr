@@ -16,7 +16,36 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{gangTypeId}/{raceId}/{fighterTypeId}/edit(groupId=${fighterType.race.gangType.group.id},gangTypeId=${fighterType.race.gangType.id},raceId=${fighterType.race.id},fighterTypeId=${fighterType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.edit}"></a></dd>
 	</dl>
-	<p>View fighter type here</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Starting characteristics</td>
+				<td>M</td>
+				<td>WS</td>
+				<td>BS</td>
+				<td>S</td>
+				<td>T</td>
+				<td>W</td>
+				<td>I</td>
+				<td>A</td>
+				<td>Ld</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:text="${fighterType.name}"></td>
+				<td th:text="${fighterType.startingMovement}"></td>
+				<td th:text="${fighterType.startingWeaponSkill}"></td>
+				<td th:text="${fighterType.startingBallisticSkill}"></td>
+				<td th:text="${fighterType.startingStrength}"></td>
+				<td th:text="${fighterType.startingToughness}"></td>
+				<td th:text="${fighterType.startingWounds}"></td>
+				<td th:text="${fighterType.startingInitiative}"></td>
+				<td th:text="${fighterType.startingAttacks}"></td>
+				<td th:text="${fighterType.startingLeadership}"></td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

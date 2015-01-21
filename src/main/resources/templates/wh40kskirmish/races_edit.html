@@ -21,6 +21,63 @@
 		<input type="hidden" th:field="*{gangTypeId}" />
 		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
 		<input type="text" th:field="*{name}" />
+		<table>
+			<thead>
+				<tr>
+					<td>Maximum characteristics</td>
+					<td>M</td>
+					<td>WS</td>
+					<td>BS</td>
+					<td>S</td>
+					<td>T</td>
+					<td>W</td>
+					<td>I</td>
+					<td>A</td>
+					<td>Ld</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxMovement')}" th:errors="*{maxMovement}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxMovement}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxWeaponSkill')}" th:errors="*{maxWeaponSkill}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxWeaponSkill}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxBallisticSkill')}" th:errors="*{maxBallisticSkill}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxBallisticSkill}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxStrength')}" th:errors="*{maxStrength}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxStrength}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxToughness')}" th:errors="*{maxToughness}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxToughness}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxWounds')}" th:errors="*{maxWounds}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxWounds}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxInitiative')}" th:errors="*{maxInitiative}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxInitiative}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxAttacks')}" th:errors="*{maxAttacks}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxAttacks}" />
+					</td>
+					<td>
+						<span class="error" th:if="${#fields.hasErrors('maxLeadership')}" th:errors="*{maxLeadership}"></span>
+						<input type="number" min="1" max="10" th:field="*{maxLeadership}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		<button type="submit">Save</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>

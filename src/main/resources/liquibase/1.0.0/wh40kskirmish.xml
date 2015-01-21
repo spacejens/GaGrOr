@@ -124,6 +124,33 @@
 			<column name="name" type="varchar(64)">
 				<constraints nullable="false" />
 			</column>
+			<column name="max_movement" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_weapon_skill" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_ballistic_skill" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_strength" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_toughness" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_wounds" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_initiative" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_attacks" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="max_leadership" type="int">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 
@@ -154,6 +181,33 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_movement" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_weapon_skill" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_ballistic_skill" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_strength" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_toughness" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_wounds" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_initiative" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_attacks" type="int">
+				<constraints nullable="false" />
+			</column>
+			<column name="starting_leadership" type="int">
 				<constraints nullable="false" />
 			</column>
 		</createTable>

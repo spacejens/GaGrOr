@@ -38,6 +38,15 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 	private static final Long GANG_TYPE_ID = 5789L;
 	private static final Long RACE_ID = 6724L;
 	private static final String FORM_FIGHTERTYPE_NAME = "Fighter type form";
+	private static final int FORM_FIGHTERTYPE_MOVEMENT = 1;
+	private static final int FORM_FIGHTERTYPE_WEAPON_SKILL = 2;
+	private static final int FORM_FIGHTERTYPE_BALLISTIC_SKILL = 3;
+	private static final int FORM_FIGHTERTYPE_STRENGTH = 4;
+	private static final int FORM_FIGHTERTYPE_TOUGHNESS = 5;
+	private static final int FORM_FIGHTERTYPE_WOUNDS = 6;
+	private static final int FORM_FIGHTERTYPE_INITIATIVE = 7;
+	private static final int FORM_FIGHTERTYPE_ATTACKS = 8;
+	private static final int FORM_FIGHTERTYPE_LEADERSHIP = 9;
 	private static final Long DB_FIGHTERTYPE_ID = 11L;
 	private static final String DB_FIGHTERTYPE_NAME = "Fighter type DB";
 	private static final Long DB_FIGHTERTYPE_VERSION = 5L;
@@ -80,6 +89,15 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		final ArgumentCaptor<Wh40kSkirmishFighterTypeEntity> savedFighterType = ArgumentCaptor.forClass(Wh40kSkirmishFighterTypeEntity.class);
 		verify(fighterTypeRepository).save(savedFighterType.capture());
 		assertEquals("Wrong name", FORM_FIGHTERTYPE_NAME, savedFighterType.getValue().getName());
+		assertEquals("Wrong movement", FORM_FIGHTERTYPE_MOVEMENT, savedFighterType.getValue().getStartingMovement());
+		assertEquals("Wrong weapon skill", FORM_FIGHTERTYPE_WEAPON_SKILL, savedFighterType.getValue().getStartingWeaponSkill());
+		assertEquals("Wrong ballistic skill", FORM_FIGHTERTYPE_BALLISTIC_SKILL, savedFighterType.getValue().getStartingBallisticSkill());
+		assertEquals("Wrong strength", FORM_FIGHTERTYPE_STRENGTH, savedFighterType.getValue().getStartingStrength());
+		assertEquals("Wrong toughness", FORM_FIGHTERTYPE_TOUGHNESS, savedFighterType.getValue().getStartingToughness());
+		assertEquals("Wrong wounds", FORM_FIGHTERTYPE_WOUNDS, savedFighterType.getValue().getStartingWounds());
+		assertEquals("Wrong initiative", FORM_FIGHTERTYPE_INITIATIVE, savedFighterType.getValue().getStartingInitiative());
+		assertEquals("Wrong attacks", FORM_FIGHTERTYPE_ATTACKS, savedFighterType.getValue().getStartingAttacks());
+		assertEquals("Wrong leadership", FORM_FIGHTERTYPE_LEADERSHIP, savedFighterType.getValue().getStartingLeadership());
 		assertTrue("Not added to gang type", race.getFighterTypes().contains(savedFighterType.getValue()));
 	}
 
@@ -118,6 +136,15 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		verifyNoMoreInteractions(bindingResult);
 		verify(fighterTypeRepository, never()).save(any(Wh40kSkirmishFighterTypeEntity.class));
 		verify(fighterType).setName(FORM_FIGHTERTYPE_NAME);
+		verify(fighterType).setStartingMovement(FORM_FIGHTERTYPE_MOVEMENT);
+		verify(fighterType).setStartingWeaponSkill(FORM_FIGHTERTYPE_WEAPON_SKILL);
+		verify(fighterType).setStartingBallisticSkill(FORM_FIGHTERTYPE_BALLISTIC_SKILL);
+		verify(fighterType).setStartingStrength(FORM_FIGHTERTYPE_STRENGTH);
+		verify(fighterType).setStartingToughness(FORM_FIGHTERTYPE_TOUGHNESS);
+		verify(fighterType).setStartingWounds(FORM_FIGHTERTYPE_WOUNDS);
+		verify(fighterType).setStartingInitiative(FORM_FIGHTERTYPE_INITIATIVE);
+		verify(fighterType).setStartingAttacks(FORM_FIGHTERTYPE_ATTACKS);
+		verify(fighterType).setStartingLeadership(FORM_FIGHTERTYPE_LEADERSHIP);
 	}
 
 	@Test
@@ -185,6 +212,15 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		when(form.getGangTypeId()).thenReturn(GANG_TYPE_ID);
 		when(form.getRaceId()).thenReturn(RACE_ID);
 		when(form.getName()).thenReturn(FORM_FIGHTERTYPE_NAME);
+		when(form.getStartingMovement()).thenReturn(FORM_FIGHTERTYPE_MOVEMENT);
+		when(form.getStartingWeaponSkill()).thenReturn(FORM_FIGHTERTYPE_WEAPON_SKILL);
+		when(form.getStartingBallisticSkill()).thenReturn(FORM_FIGHTERTYPE_BALLISTIC_SKILL);
+		when(form.getStartingStrength()).thenReturn(FORM_FIGHTERTYPE_STRENGTH);
+		when(form.getStartingToughness()).thenReturn(FORM_FIGHTERTYPE_TOUGHNESS);
+		when(form.getStartingWounds()).thenReturn(FORM_FIGHTERTYPE_WOUNDS);
+		when(form.getStartingInitiative()).thenReturn(FORM_FIGHTERTYPE_INITIATIVE);
+		when(form.getStartingAttacks()).thenReturn(FORM_FIGHTERTYPE_ATTACKS);
+		when(form.getStartingLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP);
 	}
 
 	@Before

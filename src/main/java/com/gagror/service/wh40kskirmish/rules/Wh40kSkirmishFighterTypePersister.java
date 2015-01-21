@@ -66,6 +66,8 @@ extends AbstractPersister<Wh40kSkirmishFighterTypeInput, Wh40kSkirmishFighterTyp
 		throw new DataNotFoundException(String.format("Fighter type (race %d, gang type %d, group %d)", form.getId(), form.getRaceId(), form.getGangTypeId(), form.getGroupId()));
 	}
 
+	// TODO Validate that starting stats are not set above race maximum stats
+
 	@Override
 	protected void validateFormVsExistingState(
 			final Wh40kSkirmishFighterTypeInput form,
@@ -85,6 +87,15 @@ extends AbstractPersister<Wh40kSkirmishFighterTypeInput, Wh40kSkirmishFighterTyp
 	@Override
 	protected void updateValues(final Wh40kSkirmishFighterTypeInput form, final Wh40kSkirmishFighterTypeEntity entity) {
 		entity.setName(form.getName());
+		entity.setStartingMovement(form.getStartingMovement());
+		entity.setStartingWeaponSkill(form.getStartingWeaponSkill());
+		entity.setStartingBallisticSkill(form.getStartingBallisticSkill());
+		entity.setStartingStrength(form.getStartingStrength());
+		entity.setStartingToughness(form.getStartingToughness());
+		entity.setStartingWounds(form.getStartingWounds());
+		entity.setStartingInitiative(form.getStartingInitiative());
+		entity.setStartingAttacks(form.getStartingAttacks());
+		entity.setStartingLeadership(form.getStartingLeadership());
 	}
 
 	@Override
