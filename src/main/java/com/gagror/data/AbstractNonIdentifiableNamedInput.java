@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-public abstract class AbstractNonIdentifiableNamedInput
+public abstract class AbstractNonIdentifiableNamedInput<C extends Named>
 extends AbstractInput
 implements Named {
 
@@ -15,6 +15,10 @@ implements Named {
 	@Setter
 	@Size(min=3, max=64)
 	private String name;
+
+	protected AbstractNonIdentifiableNamedInput(final C currentState) {
+		setName(currentState.getName());
+	}
 
 	@Override
 	public String toString() {

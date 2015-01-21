@@ -7,7 +7,7 @@ import lombok.ToString;
 import com.gagror.data.AbstractNonIdentifiableNamedInput;
 
 @ToString(callSuper=true)
-public class GroupCreateInput extends AbstractNonIdentifiableNamedInput {
+public class GroupCreateInput extends AbstractNonIdentifiableNamedInput<GroupReferenceOutput> {
 
 	@Getter
 	@Setter

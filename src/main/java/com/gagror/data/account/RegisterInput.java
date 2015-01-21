@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.data.AbstractNonIdentifiableNamedInput;
 
-public class RegisterInput extends AbstractNonIdentifiableNamedInput {
+public class RegisterInput extends AbstractNonIdentifiableNamedInput<AccountReferenceOutput> {
 
 	@Getter
 	@Setter
