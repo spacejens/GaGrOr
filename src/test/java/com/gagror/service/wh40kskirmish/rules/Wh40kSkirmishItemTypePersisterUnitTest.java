@@ -1,4 +1,4 @@
-package com.gagror.service.wh40kskirmish;
+package com.gagror.service.wh40kskirmish.rules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,25 +25,25 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
-import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillEntity;
-import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillInput;
-import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillRepository;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemTypeInput;
+import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemTypeRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Wh40kSkirmishSkillPersisterUnitTest {
+public class Wh40kSkirmishItemTypePersisterUnitTest {
 
 	private static final Long GROUP_ID = 2135L;
-	private static final Long SKILL_CATEGORY_ID = 5789L;
-	private static final String FORM_SKILL_NAME = "Skill form";
-	private static final Long DB_SKILL_ID = 11L;
-	private static final String DB_SKILL_NAME = "Skill DB";
-	private static final Long DB_SKILL_VERSION = 5L;
+	private static final Long ITEM_CATEGORY_ID = 5789L;
+	private static final String FORM_ITEM_TYPE_NAME = "Item type form";
+	private static final Long DB_ITEM_TYPE_ID = 11L;
+	private static final String DB_ITEM_TYPE_NAME = "Item type DB";
+	private static final Long DB_ITEM_TYPE_VERSION = 5L;
 
-	Wh40kSkirmishSkillPersister instance;
+	Wh40kSkirmishItemTypePersister instance;
 
 	@Mock
-	Wh40kSkirmishSkillInput form;
+	Wh40kSkirmishItemTypeInput form;
 
 	@Mock
 	BindingResult bindingResult;
@@ -52,7 +52,7 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 	GroupRepository groupRepository;
 
 	@Mock
-	Wh40kSkirmishSkillRepository skillRepository;
+	Wh40kSkirmishItemTypeRepository itemTypeRepository;
 
 	@Mock
 	GroupEntity group;
@@ -61,10 +61,10 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 	Wh40kSkirmishRulesEntity rules;
 
 	@Mock
-	Wh40kSkirmishSkillCategoryEntity skillCategory;
+	Wh40kSkirmishItemCategoryEntity itemCategory;
 
 	@Mock
-	Wh40kSkirmishSkillEntity skill;
+	Wh40kSkirmishItemTypeEntity itemType;
 
 	@Test
 	public void save_new_ok() {
@@ -72,10 +72,10 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		final ArgumentCaptor<Wh40kSkirmishSkillEntity> savedSkill = ArgumentCaptor.forClass(Wh40kSkirmishSkillEntity.class);
-		verify(skillRepository).save(savedSkill.capture());
-		assertEquals("Wrong name", FORM_SKILL_NAME, savedSkill.getValue().getName());
-		assertTrue("Not added to skill category", skillCategory.getSkills().contains(savedSkill.getValue()));
+		final ArgumentCaptor<Wh40kSkirmishItemTypeEntity> savedItemType = ArgumentCaptor.forClass(Wh40kSkirmishItemTypeEntity.class);
+		verify(itemTypeRepository).save(savedItemType.capture());
+		assertEquals("Wrong name", FORM_ITEM_TYPE_NAME, savedItemType.getValue().getName());
+		assertTrue("Not added to item category", itemCategory.getItemTypes().contains(savedItemType.getValue()));
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(skillRepository, never()).save(any(Wh40kSkirmishSkillEntity.class));
+		verify(itemTypeRepository, never()).save(any(Wh40kSkirmishItemTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -93,79 +93,79 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 	}
 
 	@Test(expected=DataNotFoundException.class)
-	public void save_new_skillCategoryNotFound() {
-		rules.getSkillCategories().remove(skillCategory);
+	public void save_new_itemCategoryNotFound() {
+		rules.getItemCategories().remove(itemCategory);
 		instance.save(form, bindingResult);
 	}
 
 	@Test
 	public void save_existing_ok() {
-		whenSkillExists();
+		whenItemTypeExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		verify(skillRepository, never()).save(any(Wh40kSkirmishSkillEntity.class));
-		verify(skill).setName(FORM_SKILL_NAME);
+		verify(itemTypeRepository, never()).save(any(Wh40kSkirmishItemTypeEntity.class));
+		verify(itemType).setName(FORM_ITEM_TYPE_NAME);
 	}
 
 	@Test
 	public void save_existing_bindingError() {
-		whenSkillExists();
+		whenItemTypeExists();
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(skill, never()).setName(anyString());
-		verify(skillRepository, never()).save(any(Wh40kSkirmishSkillEntity.class));
+		verify(itemType, never()).setName(anyString());
+		verify(itemTypeRepository, never()).save(any(Wh40kSkirmishItemTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
 	public void save_existing_wrongGroupType() {
-		whenSkillExists();
+		whenItemTypeExists();
 		when(group.getWh40kSkirmishRules()).thenReturn(null);
 		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
-	public void save_existing_skillCategoryNotFound() {
-		whenSkillExists();
-		rules.getSkillCategories().remove(skillCategory);
+	public void save_existing_itemCategoryNotFound() {
+		whenItemTypeExists();
+		rules.getItemCategories().remove(itemCategory);
 		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
-	public void save_existing_notFoundInSkillCategory() {
-		whenSkillExists();
-		skillCategory.getSkills().remove(skill);
+	public void save_existing_notFoundInItemCategory() {
+		whenItemTypeExists();
+		itemCategory.getItemTypes().remove(itemType);
 		instance.save(form, bindingResult);
 	}
 
 	@Test
 	public void save_existing_simultaneousEdit() {
-		whenSkillExists();
-		when(form.getVersion()).thenReturn(DB_SKILL_VERSION - 1);
+		whenItemTypeExists();
+		when(form.getVersion()).thenReturn(DB_ITEM_TYPE_VERSION - 1);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
-		verify(skill, never()).setName(anyString());
+		verify(itemType, never()).setName(anyString());
 	}
 
-	protected void whenSkillExists() {
-		when(form.getId()).thenReturn(DB_SKILL_ID);
-		when(form.getVersion()).thenReturn(DB_SKILL_VERSION);
-		when(skill.getId()).thenReturn(DB_SKILL_ID);
-		when(skill.getVersion()).thenReturn(DB_SKILL_VERSION);
-		when(skill.getName()).thenReturn(DB_SKILL_NAME);
-		when(skill.getSkillCategory()).thenReturn(skillCategory);
-		skillCategory.getSkills().add(skill);
+	protected void whenItemTypeExists() {
+		when(form.getId()).thenReturn(DB_ITEM_TYPE_ID);
+		when(form.getVersion()).thenReturn(DB_ITEM_TYPE_VERSION);
+		when(itemType.getId()).thenReturn(DB_ITEM_TYPE_ID);
+		when(itemType.getVersion()).thenReturn(DB_ITEM_TYPE_VERSION);
+		when(itemType.getName()).thenReturn(DB_ITEM_TYPE_NAME);
+		when(itemType.getItemCategory()).thenReturn(itemCategory);
+		itemCategory.getItemTypes().add(itemType);
 	}
 
 	@Before
 	public void setupForm() {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
-		when(form.getSkillCategoryId()).thenReturn(SKILL_CATEGORY_ID);
-		when(form.getName()).thenReturn(FORM_SKILL_NAME);
+		when(form.getItemCategoryId()).thenReturn(ITEM_CATEGORY_ID);
+		when(form.getName()).thenReturn(FORM_ITEM_TYPE_NAME);
 	}
 
 	@Before
@@ -173,17 +173,17 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 		when(group.getId()).thenReturn(GROUP_ID);
 		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
-		when(rules.getSkillCategories()).thenReturn(new HashSet<Wh40kSkirmishSkillCategoryEntity>());
-		when(skillCategory.getId()).thenReturn(SKILL_CATEGORY_ID);
-		when(skillCategory.getSkills()).thenReturn(new HashSet<Wh40kSkirmishSkillEntity>());
-		when(skillCategory.getRules()).thenReturn(rules);
-		rules.getSkillCategories().add(skillCategory);
+		when(rules.getItemCategories()).thenReturn(new HashSet<Wh40kSkirmishItemCategoryEntity>());
+		when(itemCategory.getId()).thenReturn(ITEM_CATEGORY_ID);
+		when(itemCategory.getItemTypes()).thenReturn(new HashSet<Wh40kSkirmishItemTypeEntity>());
+		when(itemCategory.getRules()).thenReturn(rules);
+		rules.getItemCategories().add(itemCategory);
 	}
 
 	@Before
 	public void setupInstance() {
-		instance = new Wh40kSkirmishSkillPersister();
+		instance = new Wh40kSkirmishItemTypePersister();
 		instance.groupRepository = groupRepository;
-		instance.skillRepository = skillRepository;
+		instance.itemTypeRepository = itemTypeRepository;
 	}
 }

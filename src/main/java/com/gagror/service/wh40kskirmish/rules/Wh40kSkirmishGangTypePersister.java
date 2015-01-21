@@ -1,4 +1,4 @@
-package com.gagror.service.wh40kskirmish;
+package com.gagror.service.wh40kskirmish.rules;
 
 import lombok.extern.apachecommons.CommonsLog;
 

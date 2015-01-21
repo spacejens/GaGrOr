@@ -1,4 +1,4 @@
-package com.gagror.service.wh40kskirmish;
+package com.gagror.service.wh40kskirmish.rules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,27 +25,25 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeEntity;
-import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeInput;
-import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFighterTypeRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionInput;
+import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishFactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishRaceEntity;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Wh40kSkirmishFighterTypePersisterUnitTest {
+public class Wh40kSkirmishFactionPersisterUnitTest {
 
 	private static final Long GROUP_ID = 2135L;
 	private static final Long GANG_TYPE_ID = 5789L;
-	private static final Long RACE_ID = 6724L;
-	private static final String FORM_FIGHTERTYPE_NAME = "Fighter type form";
-	private static final Long DB_FIGHTERTYPE_ID = 11L;
-	private static final String DB_FIGHTERTYPE_NAME = "Fighter type DB";
-	private static final Long DB_FIGHTERTYPE_VERSION = 5L;
+	private static final String FORM_FACTION_NAME = "Faction form";
+	private static final Long DB_FACTION_ID = 11L;
+	private static final String DB_FACTION_NAME = "Faction DB";
+	private static final Long DB_FACTION_VERSION = 5L;
 
-	Wh40kSkirmishFighterTypePersister instance;
+	Wh40kSkirmishFactionPersister instance;
 
 	@Mock
-	Wh40kSkirmishFighterTypeInput form;
+	Wh40kSkirmishFactionInput form;
 
 	@Mock
 	BindingResult bindingResult;
@@ -54,7 +52,7 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 	GroupRepository groupRepository;
 
 	@Mock
-	Wh40kSkirmishFighterTypeRepository fighterTypeRepository;
+	Wh40kSkirmishFactionRepository factionRepository;
 
 	@Mock
 	GroupEntity group;
@@ -66,10 +64,7 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 	Wh40kSkirmishGangTypeEntity gangType;
 
 	@Mock
-	Wh40kSkirmishRaceEntity race;
-
-	@Mock
-	Wh40kSkirmishFighterTypeEntity fighterType;
+	Wh40kSkirmishFactionEntity faction;
 
 	@Test
 	public void save_new_ok() {
@@ -77,10 +72,10 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		final ArgumentCaptor<Wh40kSkirmishFighterTypeEntity> savedFighterType = ArgumentCaptor.forClass(Wh40kSkirmishFighterTypeEntity.class);
-		verify(fighterTypeRepository).save(savedFighterType.capture());
-		assertEquals("Wrong name", FORM_FIGHTERTYPE_NAME, savedFighterType.getValue().getName());
-		assertTrue("Not added to gang type", race.getFighterTypes().contains(savedFighterType.getValue()));
+		final ArgumentCaptor<Wh40kSkirmishFactionEntity> savedFaction = ArgumentCaptor.forClass(Wh40kSkirmishFactionEntity.class);
+		verify(factionRepository).save(savedFaction.capture());
+		assertEquals("Wrong name", FORM_FACTION_NAME, savedFaction.getValue().getName());
+		assertTrue("Not added to gang type", gangType.getFactions().contains(savedFaction.getValue()));
 	}
 
 	@Test
@@ -88,7 +83,7 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(Wh40kSkirmishFighterTypeEntity.class));
+		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -103,88 +98,74 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void save_new_raceNotFound() {
-		gangType.getRaces().remove(race);
-		instance.save(form, bindingResult);
-	}
-
 	@Test
 	public void save_existing_ok() {
-		whenFighterTypeExists();
+		whenFactionExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		verify(fighterTypeRepository, never()).save(any(Wh40kSkirmishFighterTypeEntity.class));
-		verify(fighterType).setName(FORM_FIGHTERTYPE_NAME);
+		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
+		verify(faction).setName(FORM_FACTION_NAME);
 	}
 
 	@Test
 	public void save_existing_bindingError() {
-		whenFighterTypeExists();
+		whenFactionExists();
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(race, never()).setName(anyString());
-		verify(fighterTypeRepository, never()).save(any(Wh40kSkirmishFighterTypeEntity.class));
+		verify(faction, never()).setName(anyString());
+		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
 	public void save_existing_wrongGroupType() {
-		whenFighterTypeExists();
+		whenFactionExists();
 		when(group.getWh40kSkirmishRules()).thenReturn(null);
 		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_gangTypeNotFound() {
-		whenFighterTypeExists();
+		whenFactionExists();
 		rules.getGangTypes().remove(gangType);
 		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
-	public void save_existing_raceNotFound() {
-		whenFighterTypeExists();
-		gangType.getRaces().remove(race);
-		instance.save(form, bindingResult);
-	}
-
-	@Test(expected=DataNotFoundException.class)
-	public void save_existing_notFoundInRace() {
-		whenFighterTypeExists();
-		race.getFighterTypes().remove(fighterType);
+	public void save_existing_notFoundInGangType() {
+		whenFactionExists();
+		gangType.getFactions().remove(faction);
 		instance.save(form, bindingResult);
 	}
 
 	@Test
 	public void save_existing_simultaneousEdit() {
-		whenFighterTypeExists();
-		when(form.getVersion()).thenReturn(DB_FIGHTERTYPE_VERSION - 1);
+		whenFactionExists();
+		when(form.getVersion()).thenReturn(DB_FACTION_VERSION - 1);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
-		verify(race, never()).setName(anyString());
+		verify(faction, never()).setName(anyString());
 	}
 
-	protected void whenFighterTypeExists() {
-		when(form.getId()).thenReturn(DB_FIGHTERTYPE_ID);
-		when(form.getVersion()).thenReturn(DB_FIGHTERTYPE_VERSION);
-		when(fighterType.getId()).thenReturn(DB_FIGHTERTYPE_ID);
-		when(fighterType.getVersion()).thenReturn(DB_FIGHTERTYPE_VERSION);
-		when(fighterType.getName()).thenReturn(DB_FIGHTERTYPE_NAME);
-		when(fighterType.getRace()).thenReturn(race);
-		race.getFighterTypes().add(fighterType);
+	protected void whenFactionExists() {
+		when(form.getId()).thenReturn(DB_FACTION_ID);
+		when(form.getVersion()).thenReturn(DB_FACTION_VERSION);
+		when(faction.getId()).thenReturn(DB_FACTION_ID);
+		when(faction.getVersion()).thenReturn(DB_FACTION_VERSION);
+		when(faction.getName()).thenReturn(DB_FACTION_NAME);
+		when(faction.getGangType()).thenReturn(gangType);
+		gangType.getFactions().add(faction);
 	}
 
 	@Before
 	public void setupForm() {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getGangTypeId()).thenReturn(GANG_TYPE_ID);
-		when(form.getRaceId()).thenReturn(RACE_ID);
-		when(form.getName()).thenReturn(FORM_FIGHTERTYPE_NAME);
+		when(form.getName()).thenReturn(FORM_FACTION_NAME);
 	}
 
 	@Before
@@ -192,21 +173,18 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		when(group.getId()).thenReturn(GROUP_ID);
 		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
+		when(rules.getGroup()).thenReturn(group);
 		when(rules.getGangTypes()).thenReturn(new HashSet<Wh40kSkirmishGangTypeEntity>());
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
-		when(gangType.getRaces()).thenReturn(new HashSet<Wh40kSkirmishRaceEntity>());
+		when(gangType.getFactions()).thenReturn(new HashSet<Wh40kSkirmishFactionEntity>());
 		when(gangType.getRules()).thenReturn(rules);
 		rules.getGangTypes().add(gangType);
-		when(race.getId()).thenReturn(RACE_ID);
-		when(race.getFighterTypes()).thenReturn(new HashSet<Wh40kSkirmishFighterTypeEntity>());
-		when(race.getGangType()).thenReturn(gangType);
-		gangType.getRaces().add(race);
 	}
 
 	@Before
 	public void setupInstance() {
-		instance = new Wh40kSkirmishFighterTypePersister();
+		instance = new Wh40kSkirmishFactionPersister();
 		instance.groupRepository = groupRepository;
-		instance.fighterTypeRepository = fighterTypeRepository;
+		instance.factionRepository = factionRepository;
 	}
 }

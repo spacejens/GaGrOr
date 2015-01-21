@@ -1,4 +1,4 @@
-package com.gagror.service.wh40kskirmish;
+package com.gagror.service.wh40kskirmish.rules;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -39,18 +39,18 @@ import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCateg
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeInput;
 import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryTypeOutput;
 import com.gagror.service.social.GroupService;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishFactionPersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishFighterTypePersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishGangTypePersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishItemCategoryPersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishItemTypePersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishRacePersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesPersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishRulesService;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishSkillCategoryPersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishSkillPersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishTerritoryCategoryPersister;
-import com.gagror.service.wh40kskirmish.Wh40kSkirmishTerritoryTypePersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishFactionPersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishFighterTypePersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishGangTypePersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishItemCategoryPersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishItemTypePersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishRacePersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishRulesPersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishRulesService;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishSkillCategoryPersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishSkillPersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishTerritoryCategoryPersister;
+import com.gagror.service.wh40kskirmish.rules.Wh40kSkirmishTerritoryTypePersister;
 
 @Controller
 @RequestMapping("/wh40kskirmish/rules")

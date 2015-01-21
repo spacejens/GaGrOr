@@ -1,4 +1,4 @@
-package com.gagror.service.wh40kskirmish;
+package com.gagror.service.wh40kskirmish.rules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,23 +25,23 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
-import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryInput;
-import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryRepository;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryInput;
+import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Wh40kSkirmishItemCategoryPersisterUnitTest {
+public class Wh40kSkirmishTerritoryCategoryPersisterUnitTest {
 
 	private static final Long GROUP_ID = 2135L;
-	private static final String FORM_ITEM_CATEGORY_NAME = "Item category form";
-	private static final Long DB_ITEM_CATEGORY_ID = 5678L;
-	private static final String DB_ITEM_CATEGORY_NAME = "Item category DB";
-	private static final Long DB_ITEM_CATEGORY_VERSION = 5L;
+	private static final String FORM_TERRITORY_CATEGORY_NAME = "Territory category form";
+	private static final Long DB_TERRITORY_CATEGORY_ID = 5678L;
+	private static final String DB_TERRITORY_CATEGORY_NAME = "Territory category DB";
+	private static final Long DB_TERRITORY_CATEGORY_VERSION = 5L;
 
-	Wh40kSkirmishItemCategoryPersister instance;
+	Wh40kSkirmishTerritoryCategoryPersister instance;
 
 	@Mock
-	Wh40kSkirmishItemCategoryInput form;
+	Wh40kSkirmishTerritoryCategoryInput form;
 
 	@Mock
 	BindingResult bindingResult;
@@ -50,13 +50,13 @@ public class Wh40kSkirmishItemCategoryPersisterUnitTest {
 	GroupRepository groupRepository;
 
 	@Mock
-	Wh40kSkirmishItemCategoryRepository itemCategoryRepository;
+	Wh40kSkirmishTerritoryCategoryRepository territoryCategoryRepository;
 
 	@Mock
 	GroupEntity group;
 
 	@Mock
-	Wh40kSkirmishItemCategoryEntity itemCategory;
+	Wh40kSkirmishTerritoryCategoryEntity territoryCategory;
 
 	@Mock
 	Wh40kSkirmishRulesEntity rules;
@@ -67,10 +67,10 @@ public class Wh40kSkirmishItemCategoryPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		final ArgumentCaptor<Wh40kSkirmishItemCategoryEntity> savedItemCategory = ArgumentCaptor.forClass(Wh40kSkirmishItemCategoryEntity.class);
-		verify(itemCategoryRepository).save(savedItemCategory.capture());
-		assertEquals("Wrong name", FORM_ITEM_CATEGORY_NAME, savedItemCategory.getValue().getName());
-		assertTrue("Not added to rules", rules.getItemCategories().contains(savedItemCategory.getValue()));
+		final ArgumentCaptor<Wh40kSkirmishTerritoryCategoryEntity> savedTerritoryCategory = ArgumentCaptor.forClass(Wh40kSkirmishTerritoryCategoryEntity.class);
+		verify(territoryCategoryRepository).save(savedTerritoryCategory.capture());
+		assertEquals("Wrong name", FORM_TERRITORY_CATEGORY_NAME, savedTerritoryCategory.getValue().getName());
+		assertTrue("Not added to rules", rules.getTerritoryCategories().contains(savedTerritoryCategory.getValue()));
 	}
 
 	@Test
@@ -78,7 +78,7 @@ public class Wh40kSkirmishItemCategoryPersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(itemCategoryRepository, never()).save(any(Wh40kSkirmishItemCategoryEntity.class));
+		verify(territoryCategoryRepository, never()).save(any(Wh40kSkirmishTerritoryCategoryEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -89,64 +89,64 @@ public class Wh40kSkirmishItemCategoryPersisterUnitTest {
 
 	@Test
 	public void save_existing_ok() {
-		whenItemCategoryExists();
+		whenTerritoryCategoryExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		verify(itemCategoryRepository, never()).save(any(Wh40kSkirmishItemCategoryEntity.class));
-		verify(itemCategory).setName(FORM_ITEM_CATEGORY_NAME);
+		verify(territoryCategoryRepository, never()).save(any(Wh40kSkirmishTerritoryCategoryEntity.class));
+		verify(territoryCategory).setName(FORM_TERRITORY_CATEGORY_NAME);
 	}
 
 	@Test
 	public void save_existing_bindingError() {
-		whenItemCategoryExists();
+		whenTerritoryCategoryExists();
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(itemCategory, never()).setName(anyString());
-		verify(itemCategoryRepository, never()).save(any(Wh40kSkirmishItemCategoryEntity.class));
+		verify(territoryCategory, never()).setName(anyString());
+		verify(territoryCategoryRepository, never()).save(any(Wh40kSkirmishTerritoryCategoryEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
 	public void save_existing_wrongGroupType() {
-		whenItemCategoryExists();
+		whenTerritoryCategoryExists();
 		when(group.getWh40kSkirmishRules()).thenReturn(null);
 		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_notFoundInGroup() {
-		whenItemCategoryExists();
-		rules.getItemCategories().remove(itemCategory);
+		whenTerritoryCategoryExists();
+		rules.getTerritoryCategories().remove(territoryCategory);
 		instance.save(form, bindingResult);
 	}
 
 	@Test
 	public void save_existing_simultaneousEdit() {
-		whenItemCategoryExists();
-		when(form.getVersion()).thenReturn(DB_ITEM_CATEGORY_VERSION - 1);
+		whenTerritoryCategoryExists();
+		when(form.getVersion()).thenReturn(DB_TERRITORY_CATEGORY_VERSION - 1);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
-		verify(itemCategory, never()).setName(anyString());
+		verify(territoryCategory, never()).setName(anyString());
 	}
 
-	protected void whenItemCategoryExists() {
-		when(form.getId()).thenReturn(DB_ITEM_CATEGORY_ID);
-		when(form.getVersion()).thenReturn(DB_ITEM_CATEGORY_VERSION);
-		when(itemCategory.getId()).thenReturn(DB_ITEM_CATEGORY_ID);
-		when(itemCategory.getVersion()).thenReturn(DB_ITEM_CATEGORY_VERSION);
-		when(itemCategory.getName()).thenReturn(DB_ITEM_CATEGORY_NAME);
-		when(itemCategory.getRules()).thenReturn(rules);
-		rules.getItemCategories().add(itemCategory);
+	protected void whenTerritoryCategoryExists() {
+		when(form.getId()).thenReturn(DB_TERRITORY_CATEGORY_ID);
+		when(form.getVersion()).thenReturn(DB_TERRITORY_CATEGORY_VERSION);
+		when(territoryCategory.getId()).thenReturn(DB_TERRITORY_CATEGORY_ID);
+		when(territoryCategory.getVersion()).thenReturn(DB_TERRITORY_CATEGORY_VERSION);
+		when(territoryCategory.getName()).thenReturn(DB_TERRITORY_CATEGORY_NAME);
+		when(territoryCategory.getRules()).thenReturn(rules);
+		rules.getTerritoryCategories().add(territoryCategory);
 	}
 
 	@Before
 	public void setupForm() {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
-		when(form.getName()).thenReturn(FORM_ITEM_CATEGORY_NAME);
+		when(form.getName()).thenReturn(FORM_TERRITORY_CATEGORY_NAME);
 	}
 
 	@Before
@@ -154,13 +154,13 @@ public class Wh40kSkirmishItemCategoryPersisterUnitTest {
 		when(group.getId()).thenReturn(GROUP_ID);
 		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
-		when(rules.getItemCategories()).thenReturn(new HashSet<Wh40kSkirmishItemCategoryEntity>());
+		when(rules.getTerritoryCategories()).thenReturn(new HashSet<Wh40kSkirmishTerritoryCategoryEntity>());
 	}
 
 	@Before
 	public void setupInstance() {
-		instance = new Wh40kSkirmishItemCategoryPersister();
+		instance = new Wh40kSkirmishTerritoryCategoryPersister();
 		instance.groupRepository = groupRepository;
-		instance.itemCategoryRepository = itemCategoryRepository;
+		instance.territoryCategoryRepository = territoryCategoryRepository;
 	}
 }
