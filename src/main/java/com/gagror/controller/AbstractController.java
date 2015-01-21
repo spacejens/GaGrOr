@@ -34,7 +34,9 @@ public abstract class AbstractController {
 		return accessControl.getRequestAccount();
 	}
 
-	// TODO Use custom exceptions with @ResponseStatus and useful error pages to provide better error handling
+	// TODO Replace whitelabel error page with custom error page
+	// http://stackoverflow.com/questions/25356781/spring-boot-remove-whitelabel-error-page
+	// http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-error-handling
 
 	protected RedirectView redirect(final String url) {
 		log.info(String.format("Redirecting to URL: %s", url));
