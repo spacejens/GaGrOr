@@ -36,6 +36,7 @@ import com.gagror.data.group.GroupEditOutput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupMembershipChangeException;
 import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
@@ -365,7 +366,7 @@ public class GroupServiceUnitTest {
 		assertFalse("Group should no longer have member", secondGroup.getGroupMemberships().contains(secondGroupMember));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void leave_onlyOwner() {
 		instance.leave(FIRST_GROUP_ID);
 	}
@@ -403,25 +404,25 @@ public class GroupServiceUnitTest {
 		// Silently ignored, which seems good because we want the user to be an owner
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void promote_invited() {
 		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
 		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.INVITED, contactAccount);
 		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void promote_self() {
 		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void promote_groupNotFound() {
 		instance.promote(348967346L, ACCOUNT_ID_CONTACT);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void promote_accountNotFound() {
+	@Test(expected=GroupMembershipChangeException.class)
+	public void promote_accountNotMember() {
 		instance.promote(FIRST_GROUP_ID, 4563458L);
 	}
 
@@ -442,25 +443,25 @@ public class GroupServiceUnitTest {
 		verify(contactMember).setMemberType(MemberType.MEMBER);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void demote_invited() {
 		final GroupMemberEntity contactMember = mock(GroupMemberEntity.class);
 		mockGroupMember(contactMember, firstGroup, 5467936L, MemberType.INVITED, contactAccount);
 		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_CONTACT);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void demote_self() {
 		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void demote_groupNotFound() {
 		instance.demote(348967346L, ACCOUNT_ID_CONTACT);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void demote_accountNotFound() {
+	@Test(expected=GroupMembershipChangeException.class)
+	public void demote_accountNotMember() {
 		instance.demote(FIRST_GROUP_ID, 4563458L);
 	}
 
@@ -494,12 +495,12 @@ public class GroupServiceUnitTest {
 		assertFalse("Group should no longer have member", firstGroup.getGroupMemberships().contains(contactMember));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void remove_self() {
 		instance.remove(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void remove_groupNotFound() {
 		instance.remove(348967346L, ACCOUNT_ID_CONTACT);
 	}

@@ -16,6 +16,7 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupMembershipChangeException;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.AbstractPersister;
@@ -46,7 +47,7 @@ public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, Gr
 		}
 		for(final Long invited : form.getSelected()) {
 			if(! contactAccountIds.contains(invited)) {
-				throw new IllegalArgumentException(String.format("Invited account %d is not a contact, cannot invite", invited));
+				throw new GroupMembershipChangeException(String.format("Invited account %d is not a contact, cannot invite", invited));
 			}
 		}
 	}

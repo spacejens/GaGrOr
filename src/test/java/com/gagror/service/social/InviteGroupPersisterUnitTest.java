@@ -31,6 +31,7 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupInviteInput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupMembershipChangeException;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
 import com.gagror.service.accesscontrol.AccessControlService;
@@ -111,7 +112,7 @@ public class InviteGroupPersisterUnitTest {
 		verify(groupMemberRepository, times(2)).save(any(GroupMemberEntity.class));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void sendInvitations_userNotFound() {
 		groupInviteForm.getSelected().add(74697834L);
 		instance.save(groupInviteForm, bindingResult);
@@ -128,7 +129,7 @@ public class InviteGroupPersisterUnitTest {
 		verify(groupMemberRepository, never()).save(any(GroupMemberEntity.class));
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=GroupMembershipChangeException.class)
 	public void sendInvitations_notContact() {
 		final long anotherAccountID = 476593L;
 		final AccountEntity anotherAccount = mock(AccountEntity.class);

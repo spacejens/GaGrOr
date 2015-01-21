@@ -23,6 +23,7 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupListOutput;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupMemberRepository;
+import com.gagror.data.group.GroupMembershipChangeException;
 import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.GroupViewMembersOutput;
@@ -229,7 +230,7 @@ public class GroupService {
 						}
 					}
 					if(1 == countOwners) {
-						throw new IllegalArgumentException(String.format("Only owner, cannot leave group %s", membership.getGroup()));
+						throw new GroupMembershipChangeException(String.format("Only owner, cannot leave group %s", membership.getGroup()));
 					}
 				}
 				// Remove the membership
@@ -248,7 +249,7 @@ public class GroupService {
 	public void promote(final Long groupId, final Long accountId) {
 		final GroupMemberEntity member = findAnotherGroupMemberFromMemberships(groupId, accountId);
 		if(null == member || ! member.getMemberType().isMember()) {
-			throw new IllegalArgumentException(String.format("Cannot promote, account %d is not a member of group %d", accountId, groupId));
+			throw new GroupMembershipChangeException(String.format("Cannot promote, account %d is not a member of group %d", accountId, groupId));
 		}
 		member.setMemberType(MemberType.OWNER);
 	}
@@ -256,7 +257,7 @@ public class GroupService {
 	public void demote(final Long groupId, final Long accountId) {
 		final GroupMemberEntity member = findAnotherGroupMemberFromMemberships(groupId, accountId);
 		if(null == member || ! member.getMemberType().isMember()) {
-			throw new IllegalArgumentException(String.format("Cannot demote, account %d is not a member of group %d", accountId, groupId));
+			throw new GroupMembershipChangeException(String.format("Cannot demote, account %d is not a member of group %d", accountId, groupId));
 		}
 		member.setMemberType(MemberType.MEMBER);
 	}
@@ -273,7 +274,7 @@ public class GroupService {
 	private GroupMemberEntity findAnotherGroupMemberFromMemberships(final Long groupId, final Long accountId) {
 		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
 		if(accountId.equals(requestAccount.getId())) {
-			throw new IllegalArgumentException("This action can only be performed on other accounts");
+			throw new GroupMembershipChangeException("This action can only be performed on other accounts");
 		}
 		GroupEntity group = null;
 		for(final GroupMemberEntity membership : requestAccount.getGroupMemberships()) {
@@ -283,7 +284,7 @@ public class GroupService {
 			}
 		}
 		if(null == group) {
-			throw new IllegalArgumentException(String.format("Request account is not a member of group %d", groupId));
+			throw new GroupMembershipChangeException(String.format("Request account is not a member of group %d", groupId));
 		}
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
 			if(accountId.equals(membership.getAccount().getId())) {
