@@ -28,6 +28,7 @@ import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.group.MemberType;
+import com.gagror.data.group.NotGroupMemberException;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
@@ -101,7 +102,7 @@ public class GroupService {
 				return new GroupEditOutput(membership);
 			}
 		}
-		throw new IllegalArgumentException(String.format("User is not a member of group %d", groupId));
+		throw new NotGroupMemberException(String.format("User is not a member of group %d", groupId));
 	}
 
 	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {
@@ -284,7 +285,7 @@ public class GroupService {
 			}
 		}
 		if(null == group) {
-			throw new GroupMembershipChangeException(String.format("Request account is not a member of group %d", groupId));
+			throw new NotGroupMemberException(String.format("Request account is not a member of group %d", groupId));
 		}
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
 			if(accountId.equals(membership.getAccount().getId())) {

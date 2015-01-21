@@ -40,6 +40,7 @@ import com.gagror.data.group.GroupMembershipChangeException;
 import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
+import com.gagror.data.group.NotGroupMemberException;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -194,7 +195,7 @@ public class GroupServiceUnitTest {
 		assertEquals("Wrong group found", FIRST_GROUP_NAME, result.getName());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=NotGroupMemberException.class)
 	public void editGroup_notMember() {
 		instance.editGroup(37598345L);
 	}
@@ -416,7 +417,7 @@ public class GroupServiceUnitTest {
 		instance.promote(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
 	}
 
-	@Test(expected=GroupMembershipChangeException.class)
+	@Test(expected=NotGroupMemberException.class)
 	public void promote_groupNotFound() {
 		instance.promote(348967346L, ACCOUNT_ID_CONTACT);
 	}
@@ -455,7 +456,7 @@ public class GroupServiceUnitTest {
 		instance.demote(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
 	}
 
-	@Test(expected=GroupMembershipChangeException.class)
+	@Test(expected=NotGroupMemberException.class)
 	public void demote_groupNotFound() {
 		instance.demote(348967346L, ACCOUNT_ID_CONTACT);
 	}
@@ -500,7 +501,7 @@ public class GroupServiceUnitTest {
 		instance.remove(FIRST_GROUP_ID, ACCOUNT_ID_REQUEST);
 	}
 
-	@Test(expected=GroupMembershipChangeException.class)
+	@Test(expected=NotGroupMemberException.class)
 	public void remove_groupNotFound() {
 		instance.remove(348967346L, ACCOUNT_ID_CONTACT);
 	}
