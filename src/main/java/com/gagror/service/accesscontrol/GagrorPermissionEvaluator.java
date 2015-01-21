@@ -93,7 +93,7 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 			throw new CodingErrorException("Cannot add null permission");
 		}
 		if(permissions.containsKey(permission.getName())) {
-			throw new IllegalStateException(String.format("Cannot add duplicate permission definitions: %s", permission.getName()));
+			throw new CodingErrorException(String.format("Cannot add duplicate permission definitions: %s", permission.getName()));
 		}
 		log.debug(String.format("Adding evaluator for permission %s", permission.getName()));
 		permissions.put(permission.getName(), permission);

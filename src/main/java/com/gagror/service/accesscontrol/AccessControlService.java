@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gagror.CodingErrorException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
@@ -65,7 +66,7 @@ public class AccessControlService {
 
 	public String encodePassword(final String rawPassword) {
 		if(isPasswordTooWeak(rawPassword)) {
-			throw new IllegalArgumentException("Password was too weak, refusing to encode (it should have been verified)");
+			throw new CodingErrorException("Password was too weak, refusing to encode (it should have been verified)");
 		}
 		return passwordEncoder.encode(rawPassword);
 	}

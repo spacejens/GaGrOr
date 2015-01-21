@@ -116,7 +116,7 @@ public class GagrorPermissionEvaluatorUnitTest {
 		assertEquals("Unexpected permission check result", expectedResult, instance.hasPermission(authentication, targetId, targetType, permissionName));
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=CodingErrorException.class)
 	public void cannotAddDuplicatePermissions() {
 		GagrorPermission duplicate = mock(GagrorPermission.class);
 		when(duplicate.getName()).thenReturn(PERMISSION_NAME);
