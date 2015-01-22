@@ -20,6 +20,24 @@
 		<input type="hidden" th:field="*{groupId}" />
 		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
 		<input type="text" th:field="*{name}" />
+		<table>
+			<thead>
+				<tr>
+					<td>Experience</td>
+					<td>Title</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="experienceLevel, stat : ${gangTypeForm.experienceLevels}">
+					<td>
+						<input type="number" min="0" max="1000" th:field="*{experienceLevels[__${stat.index}__].experiencePoints}" />
+					</td>
+					<td>
+						<input type="text" th:field="*{experienceLevels[__${stat.index}__].name}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		<button type="submit">Save</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>

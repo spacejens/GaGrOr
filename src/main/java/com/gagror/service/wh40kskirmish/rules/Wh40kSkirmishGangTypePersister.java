@@ -1,5 +1,9 @@
 package com.gagror.service.wh40kskirmish.rules;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,9 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.experience.ExperiencePointsComparator;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeRepository;
@@ -29,7 +36,8 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 
 	@Override
 	protected void validateForm(final Wh40kSkirmishGangTypeInput form, final BindingResult bindingResult) {
-		// Nothing to do that isn't verified by annotations already
+		// TODO Validation error when no experience level starts at zero
+		// TODO Validation error when experience levels are not unique
 	}
 
 	@Override
@@ -75,6 +83,22 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 	@Override
 	protected void updateValues(final Wh40kSkirmishGangTypeInput form, final Wh40kSkirmishGangTypeEntity entity) {
 		entity.setName(form.getName());
+		// Experience levels
+		final List<Wh40kSkirmishExperienceLevelEntity> entityExperienceLevels = new ArrayList<>(entity.getExperienceLevels());
+		Collections.sort(entityExperienceLevels, ExperiencePointsComparator.getInstance());
+		for(int index=0 ; index < form.getExperienceLevels().size() ; index++) {
+			final Wh40kSkirmishExperienceLevelInput inputExperienceLevel = form.getExperienceLevels().get(index);
+			if(index < entityExperienceLevels.size()) {
+				// Update existing experience level
+				final Wh40kSkirmishExperienceLevelEntity entityExperienceLevel = entityExperienceLevels.get(index);
+				entityExperienceLevel.setName(inputExperienceLevel.getName());
+				entityExperienceLevel.setExperiencePoints(inputExperienceLevel.getExperiencePoints());
+			} else {
+				// Create new experience level
+				// TODO Create new experience level from input. Save using separate persister or cascade?
+			}
+		}
+		// TODO Remove excess experience levels from entity when input has removed some
 	}
 
 	@Override

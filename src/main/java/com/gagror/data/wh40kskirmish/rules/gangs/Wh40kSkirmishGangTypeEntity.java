@@ -1,5 +1,6 @@
 package com.gagror.data.wh40kskirmish.rules.gangs;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -46,5 +47,9 @@ public class Wh40kSkirmishGangTypeEntity extends AbstractEditableNamedEntity {
 		this.rules = rules;
 		// Add the new entity to the referencing collection
 		rules.getGangTypes().add(this);
+		// Initialize empty collections
+		factions = new HashSet<>();
+		races = new HashSet<>();
+		experienceLevels = new HashSet<>();
 	}
 }
