@@ -15,6 +15,7 @@ import lombok.ToString;
 
 import com.gagror.data.AbstractEditableNamedEntity;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
@@ -34,6 +35,10 @@ public class Wh40kSkirmishGangTypeEntity extends AbstractEditableNamedEntity {
 	@OneToMany(mappedBy="gangType", fetch=FetchType.LAZY)
 	@Getter
 	private Set<Wh40kSkirmishRaceEntity> races;
+
+	@OneToMany(mappedBy="gangType", fetch=FetchType.LAZY)
+	@Getter
+	private Set<Wh40kSkirmishExperienceLevelEntity> experienceLevels;
 
 	// TODO Make initial territory allocation configurable (set of territory categories with duplicates, one random from each)
 

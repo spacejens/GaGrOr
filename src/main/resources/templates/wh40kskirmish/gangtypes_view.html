@@ -16,7 +16,20 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}/edit(groupId=${gangType.group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit}"></a></dd>
 	</dl>
-	<p>View gang type here</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Experience</td>
+				<td>Title</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="experienceLevel : ${gangType.experienceLevels}">
+				<td th:text="${experienceLevel.experiencePoints}"></td>
+				<td th:text="${experienceLevel.name}"></td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
