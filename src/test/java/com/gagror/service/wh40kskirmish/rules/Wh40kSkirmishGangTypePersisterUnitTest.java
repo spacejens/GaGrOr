@@ -18,7 +18,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
@@ -28,6 +30,7 @@ import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeRepository;
@@ -42,6 +45,8 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 	private static final int FORM_XP_LEVEL_FIRST_XP = 0;
 	private static final String FORM_XP_LEVEL_SECOND_NAME = "Second level form";
 	private static final int FORM_XP_LEVEL_SECOND_XP = 6;
+	private static final String FORM_XP_LEVEL_NEW_NAME = "New level form";
+	private static final int FORM_XP_LEVEL_NEW_XP = 16;
 
 	private static final Long DB_GANG_TYPE_ID = 5678L;
 	private static final String DB_GANG_TYPE_NAME = "Gang type DB";
@@ -65,6 +70,9 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 	Wh40kSkirmishExperienceLevelInput formExperienceLevelSecond;
 
 	@Mock
+	Wh40kSkirmishExperienceLevelInput formExperienceLevelNew;
+
+	@Mock
 	BindingResult bindingResult;
 
 	@Mock
@@ -72,6 +80,9 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 
 	@Mock
 	Wh40kSkirmishGangTypeRepository gangTypeRepository;
+
+	@Mock
+	Wh40kSkirmishExperienceLevelRepository experienceLevelRepository;
 
 	@Mock
 	GroupEntity group;
@@ -90,6 +101,8 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 
 	@Test
 	public void save_new_ok() {
+		// Only create a single experience level to avoid random save order issues
+		form.getExperienceLevels().remove(formExperienceLevelSecond);
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
@@ -97,8 +110,12 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		final ArgumentCaptor<Wh40kSkirmishGangTypeEntity> savedGangType = ArgumentCaptor.forClass(Wh40kSkirmishGangTypeEntity.class);
 		verify(gangTypeRepository).save(savedGangType.capture());
 		assertEquals("Wrong name", FORM_GANG_TYPE_NAME, savedGangType.getValue().getName());
-		// TODO Verify creation of experience levels
 		assertTrue("Not added to rules", rules.getGangTypes().contains(savedGangType.getValue()));
+		final ArgumentCaptor<Wh40kSkirmishExperienceLevelEntity> savedExperienceLevel = ArgumentCaptor.forClass(Wh40kSkirmishExperienceLevelEntity.class);
+		verify(experienceLevelRepository).save(savedExperienceLevel.capture());
+		assertEquals("Wrong experience level name", FORM_XP_LEVEL_FIRST_NAME, savedExperienceLevel.getValue().getName());
+		assertEquals("Wrong experience level points", FORM_XP_LEVEL_FIRST_XP, savedExperienceLevel.getValue().getExperiencePoints());
+		assertTrue("Experience level not added to gang type", savedGangType.getValue().getExperienceLevels().contains(savedExperienceLevel.getValue()));
 	}
 
 	// TODO Test for failing to save new gang type because no experience level starts at zero
@@ -134,7 +151,20 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		verify(experienceLevelSecond).setExperiencePoints(FORM_XP_LEVEL_SECOND_XP);
 	}
 
-	// TODO Test for successfully saving existing gang type and adding experience level
+	@Test
+	public void save_existing_addExperienceLevel_ok() {
+		whenGangTypeExists();
+		whenNewExperienceLevelInForm();
+		final boolean result = instance.save(form, bindingResult);
+		assertTrue("Should have saved successfully", result);
+		verify(bindingResult).hasErrors(); // Should check for form validation errors
+		verifyNoMoreInteractions(bindingResult);
+		final ArgumentCaptor<Wh40kSkirmishExperienceLevelEntity> savedExperienceLevel = ArgumentCaptor.forClass(Wh40kSkirmishExperienceLevelEntity.class);
+		verify(experienceLevelRepository).save(savedExperienceLevel.capture());
+		assertEquals("Wrong experience level name", FORM_XP_LEVEL_NEW_NAME, savedExperienceLevel.getValue().getName());
+		assertEquals("Wrong experience level points", FORM_XP_LEVEL_NEW_XP, savedExperienceLevel.getValue().getExperiencePoints());
+		assertTrue("Experience level not added to gang type", gangType.getExperienceLevels().contains(savedExperienceLevel.getValue()));
+	}
 
 	// TODO Test for successfully saving existing gang type and removing experience level
 
@@ -198,6 +228,12 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		gangType.getExperienceLevels().add(experienceLevelSecond);
 	}
 
+	protected void whenNewExperienceLevelInForm() {
+		when(formExperienceLevelNew.getName()).thenReturn(FORM_XP_LEVEL_NEW_NAME);
+		when(formExperienceLevelNew.getExperiencePoints()).thenReturn(FORM_XP_LEVEL_NEW_XP);
+		form.getExperienceLevels().add(formExperienceLevelNew);
+	}
+
 	@Before
 	public void setupForm() {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
@@ -220,9 +256,20 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 	}
 
 	@Before
+	public void setupGangTypeRepository() {
+		when(gangTypeRepository.save(any(Wh40kSkirmishGangTypeEntity.class))).thenAnswer(new Answer<Wh40kSkirmishGangTypeEntity>() {
+			@Override
+			public Wh40kSkirmishGangTypeEntity answer(final InvocationOnMock invocation) throws Throwable {
+				return (Wh40kSkirmishGangTypeEntity)invocation.getArguments()[0];
+			}
+		});
+	}
+
+	@Before
 	public void setupInstance() {
 		instance = new Wh40kSkirmishGangTypePersister();
 		instance.groupRepository = groupRepository;
 		instance.gangTypeRepository = gangTypeRepository;
+		instance.experienceLevelRepository = experienceLevelRepository;
 	}
 }

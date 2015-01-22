@@ -20,13 +20,9 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 
 	@Getter
 	@Setter
-	// TODO Annotate with @NotEmpty to ensure that at least one experience level exists
+	// TODO Annotate with @NotEmpty to ensure that at least one experience level exists (possibly add default in constructor as well?)
 	private List<Wh40kSkirmishExperienceLevelInput> experienceLevels;
-	// TODO Add experience level input lines dynamically on the edit page
-	// http://outbottle.com/spring-3-mvc-adding-objects-to-a-list-element-on-the-fly-at-form-submit-generic-method/
-	// http://stackoverflow.com/questions/171027/add-table-row-in-jquery
-	// http://stackoverflow.com/questions/2160890/how-do-you-append-rows-to-a-table-using-jquery
-	// http://mrbool.com/how-to-add-edit-and-delete-rows-of-a-html-table-with-jquery/26721
+	// TODO Remove experience level input lines dynamically on the edit page
 
 	public Wh40kSkirmishGangTypeInput(final Wh40kSkirmishGangTypeOutput currentState) {
 		super(currentState);

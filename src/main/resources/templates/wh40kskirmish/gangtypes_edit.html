@@ -23,11 +23,19 @@
 		<table>
 			<thead>
 				<tr>
+					<td>
+						<a id="experience-level-add" href="javascript:void(0);" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit.addxplevel}"></a>
+					</td>
+					<td>
+						<a id="experience-level-remove" href="javascript:void(0);" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit.removexplevel}"></a>
+					</td>
+				</tr>
+				<tr>
 					<td>Experience</td>
 					<td>Title</td>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="experience-levels">
 				<tr th:each="experienceLevel, stat : ${gangTypeForm.experienceLevels}">
 					<td>
 						<input type="number" min="0" max="1000" th:field="*{experienceLevels[__${stat.index}__].experiencePoints}" />
@@ -40,6 +48,33 @@
 		</table>
 		<button type="submit">Save</button>
 	</form>
+	<script>
+		$(document).ready(function() {
+			$('#experience-level-add').click(function(){
+				var count = $('#experience-levels').children().length;
+				var $row = $('<tr/>');
+				var $cellXp = $('<td/>');
+				var $inputXp = $('<input/>', {
+					'type' : "number",
+					'value' : "0",
+					'name' : "experienceLevels["+count+"].experiencePoints",
+					'id' : "experienceLevels"+count+".experiencePoints",
+					'max' : "1000",
+					'min' : "0"});
+				var $cellName = $('<td/>');
+				var $inputName = $('<input/>', {
+					'type' : "text",
+					'value' : "",
+					'name' : "experienceLevels["+count+"].name",
+					'id' : "experienceLevels"+count+".name"});
+				$cellXp.append($inputXp);
+				$cellName.append($inputName);
+				$row.append($cellXp);
+				$row.append($cellName);
+				$('#experience-levels').append($row);
+			});
+		});
+	</script>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

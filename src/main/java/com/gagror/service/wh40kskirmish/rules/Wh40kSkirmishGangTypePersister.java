@@ -18,6 +18,7 @@ import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperiencePointsComparator;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeRepository;
@@ -33,6 +34,9 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 
 	@Autowired
 	Wh40kSkirmishGangTypeRepository gangTypeRepository;
+
+	@Autowired
+	Wh40kSkirmishExperienceLevelRepository experienceLevelRepository;
 
 	@Override
 	protected void validateForm(final Wh40kSkirmishGangTypeInput form, final BindingResult bindingResult) {
@@ -88,15 +92,16 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 		Collections.sort(entityExperienceLevels, ExperiencePointsComparator.getInstance());
 		for(int index=0 ; index < form.getExperienceLevels().size() ; index++) {
 			final Wh40kSkirmishExperienceLevelInput inputExperienceLevel = form.getExperienceLevels().get(index);
+			final Wh40kSkirmishExperienceLevelEntity entityExperienceLevel;
 			if(index < entityExperienceLevels.size()) {
 				// Update existing experience level
-				final Wh40kSkirmishExperienceLevelEntity entityExperienceLevel = entityExperienceLevels.get(index);
-				entityExperienceLevel.setName(inputExperienceLevel.getName());
-				entityExperienceLevel.setExperiencePoints(inputExperienceLevel.getExperiencePoints());
+				entityExperienceLevel = entityExperienceLevels.get(index);
 			} else {
 				// Create new experience level
-				// TODO Create new experience level from input. Save using separate persister or cascade?
+				entityExperienceLevel = new Wh40kSkirmishExperienceLevelEntity(entity);
 			}
+			entityExperienceLevel.setName(inputExperienceLevel.getName());
+			entityExperienceLevel.setExperiencePoints(inputExperienceLevel.getExperiencePoints());
 		}
 		// TODO Remove excess experience levels from entity when input has removed some
 	}
@@ -104,5 +109,14 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 	@Override
 	protected Wh40kSkirmishGangTypeEntity makePersistent(final Wh40kSkirmishGangTypeEntity entity) {
 		return gangTypeRepository.save(entity);
+	}
+
+	@Override
+	protected void postPersistenceUpdate(final Wh40kSkirmishGangTypeEntity entity) {
+		for(final Wh40kSkirmishExperienceLevelEntity experienceLevel : entity.getExperienceLevels()) {
+			if(! experienceLevel.isPersistent()) {
+				experienceLevelRepository.save(experienceLevel);
+			}
+		}
 	}
 }
