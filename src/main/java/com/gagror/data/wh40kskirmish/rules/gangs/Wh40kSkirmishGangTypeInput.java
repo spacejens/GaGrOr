@@ -22,7 +22,6 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 	@Setter
 	// TODO Annotate with @NotEmpty to ensure that at least one experience level exists (possibly add default in constructor as well?)
 	private List<Wh40kSkirmishExperienceLevelInput> experienceLevels;
-	// TODO Remove experience level input lines dynamically on the edit page
 
 	public Wh40kSkirmishGangTypeInput(final Wh40kSkirmishGangTypeOutput currentState) {
 		super(currentState);

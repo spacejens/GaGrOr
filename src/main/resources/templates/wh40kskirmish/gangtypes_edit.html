@@ -73,6 +73,9 @@
 				$row.append($cellName);
 				$('#experience-levels').append($row);
 			});
+			$('#experience-level-remove').click(function(){
+				$('#experience-levels').children().last().remove();
+			});
 		});
 	</script>
 	<script th:replace="/fragments/framework :: init"></script>

@@ -103,7 +103,14 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 			entityExperienceLevel.setName(inputExperienceLevel.getName());
 			entityExperienceLevel.setExperiencePoints(inputExperienceLevel.getExperiencePoints());
 		}
-		// TODO Remove excess experience levels from entity when input has removed some
+		// Remove experience levels
+		if(form.getExperienceLevels().size() < entityExperienceLevels.size()) {
+			for(int index = form.getExperienceLevels().size() ; index < entityExperienceLevels.size() ; index++) {
+				final Wh40kSkirmishExperienceLevelEntity entityExperienceLevel = entityExperienceLevels.get(index);
+				entity.getExperienceLevels().remove(entityExperienceLevel);
+				experienceLevelRepository.delete(entityExperienceLevel);
+			}
+		}
 	}
 
 	@Override

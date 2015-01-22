@@ -166,7 +166,17 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		assertTrue("Experience level not added to gang type", gangType.getExperienceLevels().contains(savedExperienceLevel.getValue()));
 	}
 
-	// TODO Test for successfully saving existing gang type and removing experience level
+	@Test
+	public void save_existing_removeExperienceLevel_ok() {
+		whenGangTypeExists();
+		form.getExperienceLevels().remove(formExperienceLevelSecond);
+		final boolean result = instance.save(form, bindingResult);
+		assertTrue("Should have saved successfully", result);
+		verify(bindingResult).hasErrors(); // Should check for form validation errors
+		verifyNoMoreInteractions(bindingResult);
+		verify(experienceLevelRepository).delete(experienceLevelSecond);
+		assertFalse("Failed to remove from gang type", gangType.getExperienceLevels().contains(experienceLevelSecond));
+	}
 
 	// TODO Test for failing to save existing gang type because no experience level starts at zero
 
