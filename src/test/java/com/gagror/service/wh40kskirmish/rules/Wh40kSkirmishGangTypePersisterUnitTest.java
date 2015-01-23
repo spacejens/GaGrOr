@@ -118,7 +118,15 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		assertTrue("Experience level not added to gang type", savedGangType.getValue().getExperienceLevels().contains(savedExperienceLevel.getValue()));
 	}
 
-	// TODO Test for failing to save new gang type because no experience level starts at zero
+	@Test
+	public void save_new_noExperienceLevelStartsAtZero() {
+		when(formExperienceLevelFirst.getExperiencePoints()).thenReturn(1);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorExperienceLevelsMustStartAtZero(bindingResult);
+		verify(gangTypeRepository, never()).save(any(Wh40kSkirmishGangTypeEntity.class));
+	}
 
 	// TODO Test for failing to save new gang type because there are duplicates in the experience levels
 
@@ -178,7 +186,16 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		assertFalse("Failed to remove from gang type", gangType.getExperienceLevels().contains(experienceLevelSecond));
 	}
 
-	// TODO Test for failing to save existing gang type because no experience level starts at zero
+	@Test
+	public void save_existing_noExperienceLevelStartsAtZero() {
+		whenGangTypeExists();
+		when(formExperienceLevelFirst.getExperiencePoints()).thenReturn(1);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorExperienceLevelsMustStartAtZero(bindingResult);
+		verify(gangType, never()).setName(anyString());
+	}
 
 	// TODO Test for failing to save existing gang type because there are duplicates in the experience levels
 

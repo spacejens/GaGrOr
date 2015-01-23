@@ -2,7 +2,9 @@ package com.gagror.service.wh40kskirmish.rules;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.extern.apachecommons.CommonsLog;
 
@@ -40,7 +42,16 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 
 	@Override
 	protected void validateForm(final Wh40kSkirmishGangTypeInput form, final BindingResult bindingResult) {
-		// TODO Validation error when no experience level starts at zero
+		/* It seems simple to sort the experience levels here, but it breaks error message binding.
+		 * Instead, extract the experience points values from all input.
+		 */
+		final Set<Integer> experiencePoints = new HashSet<>();
+		for(final Wh40kSkirmishExperienceLevelInput experienceLevel : form.getExperienceLevels()) {
+			experiencePoints.add(experienceLevel.getExperiencePoints());
+		}
+		if(! experiencePoints.contains(0)) {
+			form.addErrorExperienceLevelsMustStartAtZero(bindingResult);
+		}
 		// TODO Validation error when experience levels are not unique
 	}
 

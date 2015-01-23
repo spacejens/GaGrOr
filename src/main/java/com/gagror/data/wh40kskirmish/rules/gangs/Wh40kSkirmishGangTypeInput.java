@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
@@ -48,5 +50,15 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 		experienceLevelDefault.setExperiencePoints(0);
 		experienceLevelDefaults.add(experienceLevelDefault);
 		setExperienceLevels(experienceLevelDefaults);
+	}
+
+	public void addErrorExperienceLevelsMustStartAtZero(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(
+				bindingResult.getObjectName(), "experienceLevels", "one experience level must start at zero"));
+	}
+
+	public void addErrorExperienceLevelsMustBeUnique(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(
+				bindingResult.getObjectName(), "experienceLevels", "experience levels must be unique"));
 	}
 }
