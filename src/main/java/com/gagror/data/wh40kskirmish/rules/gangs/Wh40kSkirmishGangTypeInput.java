@@ -3,6 +3,8 @@ package com.gagror.data.wh40kskirmish.rules.gangs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +25,7 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 	@Getter
 	@Setter
 	@NotEmpty
+	@Valid
 	private List<Wh40kSkirmishExperienceLevelInput> experienceLevels;
 	// TODO When adding experience level on page, default experience points to one above the last line
 

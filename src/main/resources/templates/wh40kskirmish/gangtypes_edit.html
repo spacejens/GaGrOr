@@ -22,15 +22,17 @@
 		<input type="text" th:field="*{name}" />
 		<table>
 			<thead>
+				<tr th:if="${#fields.hasErrors('experienceLevels')}">
+					<td colspan="2">
+						<span class="error" th:errors="*{experienceLevels}"></span>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<a id="experience-level-add" href="javascript:void(0);" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit.addxplevel}"></a>
 					</td>
 					<td>
 						<a id="experience-level-remove" href="javascript:void(0);" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit.removexplevel}"></a>
-					</td>
-					<td th:if="${#fields.hasErrors('experienceLevels')}" rowspan="2">
-						<span class="error" th:errors="*{experienceLevels}"></span>
 					</td>
 				</tr>
 				<tr>
@@ -41,9 +43,11 @@
 			<tbody id="experience-levels">
 				<tr th:each="experienceLevel, stat : ${gangTypeForm.experienceLevels}">
 					<td>
+						<span th:if="${#fields.hasErrors('experienceLevels[__${stat.index}__].experiencePoints')}" class="error" th:errors="*{experienceLevels[__${stat.index}__].experiencePoints}"></span>
 						<input type="number" min="0" max="1000" th:field="*{experienceLevels[__${stat.index}__].experiencePoints}" />
 					</td>
 					<td>
+						<span th:if="${#fields.hasErrors('experienceLevels[__${stat.index}__].name')}" class="error" th:errors="*{experienceLevels[__${stat.index}__].name}"></span>
 						<input type="text" th:field="*{experienceLevels[__${stat.index}__].name}" />
 					</td>
 				</tr>
