@@ -31,6 +31,8 @@ public class Wh40kSkirmishItemCategoryEntity extends AbstractEditableNamedEntity
 	@Getter
 	private Set<Wh40kSkirmishItemTypeEntity> itemTypes;
 
+	// TODO An item category can be restricted, with skill or fighter type requirements for access (check through mappings)
+
 	public Wh40kSkirmishItemCategoryEntity(final Wh40kSkirmishRulesEntity rules) {
 		this.rules = rules;
 		// Add the new entity to the referencing collection

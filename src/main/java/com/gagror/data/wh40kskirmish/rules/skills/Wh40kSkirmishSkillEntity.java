@@ -22,6 +22,8 @@ public class Wh40kSkirmishSkillEntity extends AbstractEditableNamedEntity {
 	@Getter
 	private Wh40kSkirmishSkillCategoryEntity skillCategory;
 
+	// TODO Skills grant access to item categories (e.g. Specialist)
+
 	public Wh40kSkirmishSkillEntity(final Wh40kSkirmishSkillCategoryEntity skillCategory) {
 		this.skillCategory = skillCategory;
 		// Add the new entity to the referencing collection

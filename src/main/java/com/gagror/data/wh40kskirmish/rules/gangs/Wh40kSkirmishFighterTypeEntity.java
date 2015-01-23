@@ -69,6 +69,10 @@ public class Wh40kSkirmishFighterTypeEntity extends AbstractEditableNamedEntity 
 	@Setter
 	private int startingLeadership;
 
+	// TODO Fighter types grant or forbid skills (with optional criteria, such as max/min XP to have skill)
+
+	// TODO Fighter types get access to different item categories (optionally at XP level, e.g. juve becoming ganger)
+
 	public Wh40kSkirmishFighterTypeEntity(final Wh40kSkirmishRaceEntity race) {
 		this.race = race;;
 		// Add the new entity to the referencing collection

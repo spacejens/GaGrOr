@@ -77,6 +77,8 @@ public class Wh40kSkirmishRaceEntity extends AbstractEditableNamedEntity {
 	@Setter
 	private int maxLeadership;
 
+	// TODO Races grant or forbid skills (with optional criteria, such as max/min XP to have skill)
+
 	public Wh40kSkirmishRaceEntity(final Wh40kSkirmishGangTypeEntity gangType) {
 		this.gangType = gangType;
 		// Add the new entity to the referencing collection
