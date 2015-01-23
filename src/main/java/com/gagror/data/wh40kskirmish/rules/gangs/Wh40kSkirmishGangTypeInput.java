@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.gagror.data.AbstractIdentifiableNamedInput;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelOutput;
@@ -20,7 +22,7 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 
 	@Getter
 	@Setter
-	// TODO Annotate with @NotEmpty to ensure that at least one experience level exists (possibly add default in constructor as well?)
+	@NotEmpty
 	private List<Wh40kSkirmishExperienceLevelInput> experienceLevels;
 	// TODO When adding experience level on page, default experience points to one above the last line
 
@@ -37,6 +39,7 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 	public Wh40kSkirmishGangTypeInput(final Long groupId) {
 		setGroupId(groupId);
 		// Don't provide any default experience levels
+		// TODO Add default to indicate that the table needs to have content, and change javascript to prevent removal
 		setExperienceLevels(new ArrayList<Wh40kSkirmishExperienceLevelInput>());
 	}
 }

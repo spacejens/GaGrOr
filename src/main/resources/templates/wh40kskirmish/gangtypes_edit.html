@@ -29,6 +29,9 @@
 					<td>
 						<a id="experience-level-remove" href="javascript:void(0);" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit.removexplevel}"></a>
 					</td>
+					<td th:if="${#fields.hasErrors('experienceLevels')}" rowspan="2">
+						<span class="error" th:errors="*{experienceLevels}"></span>
+					</td>
 				</tr>
 				<tr>
 					<td>Experience</td>
