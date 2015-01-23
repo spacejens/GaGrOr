@@ -38,8 +38,12 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 
 	public Wh40kSkirmishGangTypeInput(final Long groupId) {
 		setGroupId(groupId);
-		// Don't provide any default experience levels
-		// TODO Add default to indicate that the table needs to have content, and change javascript to prevent removal
-		setExperienceLevels(new ArrayList<Wh40kSkirmishExperienceLevelInput>());
+		// Default experience level
+		final List<Wh40kSkirmishExperienceLevelInput> experienceLevelDefaults = new ArrayList<>();
+		final Wh40kSkirmishExperienceLevelInput experienceLevelDefault = new Wh40kSkirmishExperienceLevelInput();
+		experienceLevelDefault.setName("");
+		experienceLevelDefault.setExperiencePoints(0);
+		experienceLevelDefaults.add(experienceLevelDefault);
+		setExperienceLevels(experienceLevelDefaults);
 	}
 }

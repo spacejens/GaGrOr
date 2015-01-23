@@ -77,7 +77,12 @@
 				$('#experience-levels').append($row);
 			});
 			$('#experience-level-remove').click(function(){
-				$('#experience-levels').children().last().remove();
+				var count = $('#experience-levels').children().length;
+				if(count > 1) {
+					$('#experience-levels').children().last().remove();
+				} else {
+					alert('There must be at least one experience level, starting at zero');
+				}
 			});
 		});
 	</script>
