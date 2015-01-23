@@ -128,7 +128,15 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		verify(gangTypeRepository, never()).save(any(Wh40kSkirmishGangTypeEntity.class));
 	}
 
-	// TODO Test for failing to save new gang type because there are duplicates in the experience levels
+	@Test
+	public void save_new_experienceLevelsNotUnique() {
+		when(formExperienceLevelSecond.getExperiencePoints()).thenReturn(FORM_XP_LEVEL_FIRST_XP);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorExperienceLevelsMustBeUnique(bindingResult);
+		verify(gangTypeRepository, never()).save(any(Wh40kSkirmishGangTypeEntity.class));
+	}
 
 	@Test
 	public void save_new_bindingError() {
@@ -197,7 +205,16 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		verify(gangType, never()).setName(anyString());
 	}
 
-	// TODO Test for failing to save existing gang type because there are duplicates in the experience levels
+	@Test
+	public void save_existing_experienceLevelsNotUnique() {
+		whenGangTypeExists();
+		when(formExperienceLevelSecond.getExperiencePoints()).thenReturn(FORM_XP_LEVEL_FIRST_XP);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorExperienceLevelsMustBeUnique(bindingResult);
+		verify(gangType, never()).setName(anyString());
+	}
 
 	@Test
 	public void save_existing_bindingError() {

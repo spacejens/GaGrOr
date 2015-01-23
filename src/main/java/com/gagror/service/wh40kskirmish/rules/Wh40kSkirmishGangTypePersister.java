@@ -52,7 +52,9 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 		if(! experiencePoints.contains(0)) {
 			form.addErrorExperienceLevelsMustStartAtZero(bindingResult);
 		}
-		// TODO Validation error when experience levels are not unique
+		if(experiencePoints.size() < form.getExperienceLevels().size()) {
+			form.addErrorExperienceLevelsMustBeUnique(bindingResult);
+		}
 	}
 
 	@Override
