@@ -7,7 +7,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeOutput;
 
 public class Wh40kSkirmishExperienceLevelOutput
 extends AbstractEditableNamedEntityOutput
-implements ExperiencePoints {
+implements Wh40kSkirmishExperiencePoints {
 
 	@Getter
 	private final Wh40kSkirmishGangTypeOutput gangType;

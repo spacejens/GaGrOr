@@ -20,7 +20,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 @Table(name="wh40ksk_experiencelevel")
 public class Wh40kSkirmishExperienceLevelEntity
 extends AbstractEditableNamedEntity
-implements ExperiencePoints {
+implements Wh40kSkirmishExperiencePoints {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)

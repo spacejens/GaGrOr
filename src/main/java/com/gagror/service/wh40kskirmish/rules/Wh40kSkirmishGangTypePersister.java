@@ -17,7 +17,7 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.rules.experience.ExperiencePointsComparator;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperiencePointsComparator;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelRepository;
@@ -102,7 +102,7 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 		entity.setName(form.getName());
 		// Experience levels
 		final List<Wh40kSkirmishExperienceLevelEntity> entityExperienceLevels = new ArrayList<>(entity.getExperienceLevels());
-		Collections.sort(entityExperienceLevels, ExperiencePointsComparator.getInstance());
+		Collections.sort(entityExperienceLevels, Wh40kSkirmishExperiencePointsComparator.getInstance());
 		for(int index=0 ; index < form.getExperienceLevels().size() ; index++) {
 			final Wh40kSkirmishExperienceLevelInput inputExperienceLevel = form.getExperienceLevels().get(index);
 			final Wh40kSkirmishExperienceLevelEntity entityExperienceLevel;

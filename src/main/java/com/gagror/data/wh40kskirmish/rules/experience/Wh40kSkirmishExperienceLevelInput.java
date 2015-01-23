@@ -12,7 +12,7 @@ import com.gagror.data.AbstractNonIdentifiableNamedInput;
 @NoArgsConstructor
 public class Wh40kSkirmishExperienceLevelInput
 extends AbstractNonIdentifiableNamedInput<Wh40kSkirmishExperienceLevelOutput>
-implements ExperiencePoints {
+implements Wh40kSkirmishExperiencePoints {
 
 	@Getter
 	@Setter

@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.Getter;
 
 import com.gagror.data.group.GroupReferenceOutput;
-import com.gagror.data.wh40kskirmish.rules.experience.ExperiencePointsComparator;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperiencePointsComparator;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelOutput;
 
@@ -27,7 +27,7 @@ public class Wh40kSkirmishGangTypeOutput extends Wh40kSkirmishGangTypeReferenceO
 		for(final Wh40kSkirmishExperienceLevelEntity experienceLevel : entity.getExperienceLevels()) {
 			tempExperienceLevels.add(new Wh40kSkirmishExperienceLevelOutput(experienceLevel, this));
 		}
-		Collections.sort(tempExperienceLevels, ExperiencePointsComparator.getInstance());
+		Collections.sort(tempExperienceLevels, Wh40kSkirmishExperiencePointsComparator.getInstance());
 		experienceLevels = Collections.unmodifiableList(tempExperienceLevels);
 	}
 }
