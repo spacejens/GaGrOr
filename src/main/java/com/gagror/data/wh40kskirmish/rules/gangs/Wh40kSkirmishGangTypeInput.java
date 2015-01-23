@@ -29,7 +29,6 @@ public class Wh40kSkirmishGangTypeInput extends AbstractIdentifiableNamedInput<L
 	@NotEmpty
 	@Valid
 	private List<Wh40kSkirmishExperienceLevelInput> experienceLevels;
-	// TODO When adding experience level on page, default experience points to one above the last line
 
 	public Wh40kSkirmishGangTypeInput(final Wh40kSkirmishGangTypeOutput currentState) {
 		super(currentState);

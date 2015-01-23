@@ -58,12 +58,17 @@
 	<script>
 		$(document).ready(function() {
 			$('#experience-level-add').click(function(){
+				var maxXp = null;
+				$('#experience-levels input[type=number]').each(function() {
+					var xp = parseInt($(this).val());
+					maxXp = (xp > maxXp) ? xp : maxXp;
+				});
 				var count = $('#experience-levels').children().length;
 				var $row = $('<tr/>');
 				var $cellXp = $('<td/>');
 				var $inputXp = $('<input/>', {
 					'type' : "number",
-					'value' : "0",
+					'value' : maxXp + 1,
 					'name' : "experienceLevels["+count+"].experiencePoints",
 					'id' : "experienceLevels"+count+".experiencePoints",
 					'max' : "1000",
