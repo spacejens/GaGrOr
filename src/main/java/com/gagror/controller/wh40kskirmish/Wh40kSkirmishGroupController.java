@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gagror.controller.AbstractController;
-import com.gagror.service.social.GroupService;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishGroupService;
 
 @Controller
 @RequestMapping("/wh40kskirmish/group")
@@ -18,7 +18,7 @@ import com.gagror.service.social.GroupService;
 public class Wh40kSkirmishGroupController extends AbstractController {
 
 	@Autowired
-	GroupService groupService;
+	Wh40kSkirmishGroupService groupService;
 
 	@PreAuthorize(MAY_VIEW_GROUP)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")

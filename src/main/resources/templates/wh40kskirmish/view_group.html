@@ -16,6 +16,21 @@
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.rules}"></a></dd>
 	</dl>
 	<div th:replace="view_group :: groupheader"></div>
+	<table>
+		<thead>
+			<tr>
+				<td>Gang</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="gang : ${group.gangs}">
+				<td th:text="${gang.name}"></td>
+			</tr>
+			<tr th:if="${#lists.isEmpty(group.gangs)}">
+				<td class="fi-alert">No gangs have been created yet</td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

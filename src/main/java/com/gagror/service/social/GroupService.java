@@ -115,7 +115,7 @@ public class GroupService {
 		return new GroupViewMembersOutput(group);
 	}
 
-	private GroupMemberEntity findGroupMemberForRequestAccount(final GroupEntity group) {
+	public GroupMemberEntity findGroupMemberForRequestAccount(final GroupEntity group) {
 		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
 			if(membership.getAccount().equals(currentUser)) {

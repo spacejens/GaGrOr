@@ -448,4 +448,48 @@
 			baseTableName="wh40ksk_itemtype"
 			baseColumnNames="item_category_id"/>
 	</changeSet>
+
+	<changeSet id="gang-table" author="spacejens">
+		<createTable tableName="wh40ksk_gang">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="faction_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="player_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="money" type="int">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="gang-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="gangtype_gang_faction_fk"
+			referencedTableName="wh40ksk_faction"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_gang"
+			baseColumnNames="faction_id"/>
+		<addForeignKeyConstraint
+			constraintName="account_gang_player_fk"
+			referencedTableName="account"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_gang"
+			baseColumnNames="player_id"/>
+	</changeSet>
 </databaseChangeLog>

@@ -57,6 +57,8 @@ public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 	@Setter
 	private String currencyName;
 
+	// TODO Make it configurable who can create gangs (owner or anyone)
+
 	public Wh40kSkirmishRulesEntity(final GroupEntity group) {
 		this.group = group;
 		// Set defaults for mandatory fields
