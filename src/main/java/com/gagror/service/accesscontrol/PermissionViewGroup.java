@@ -28,6 +28,7 @@ public class PermissionViewGroup extends AbstractGagrorPermissionLongId<GroupEnt
 		if(null == group) {
 			return false;
 		}
+		// TODO Separate permission to view group rules, viewable by anyone does not apply there (to protect copyrighted data)
 		if(group.isViewableByAnyone()) {
 			return true;
 		}
