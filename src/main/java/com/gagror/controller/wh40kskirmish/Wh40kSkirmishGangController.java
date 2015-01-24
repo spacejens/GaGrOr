@@ -34,6 +34,15 @@ public class Wh40kSkirmishGangController extends AbstractController {
 			final Model model) {
 		log.info(String.format("Viewing gang %d of faction %d of gang type %d in group %d", gangId, factionId, gangTypeId, groupId));
 		model.addAttribute("gang", gangService.viewGang(groupId, gangTypeId, factionId, gangId));
+		// TODO Show fighters on view gang page
 		return "wh40kskirmish/gang_view";
 	}
+
+	// TODO Add page to create gang (who is allowed?)
+
+	// TODO Add page to edit gang (group owner unlocks additional capabilities? or can only group owner edit? separate pages?)
+
+	// TODO Add page to create (buy) or edit fighter (group owner unlocks additional capabilities?)
+
+	// TODO Add page to view fighter
 }
