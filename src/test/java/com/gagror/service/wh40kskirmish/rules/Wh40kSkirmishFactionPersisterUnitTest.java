@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -79,6 +80,16 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherFactionWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -107,6 +118,17 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		verifyNoMoreInteractions(bindingResult);
 		verify(factionRepository, never()).save(any(Wh40kSkirmishFactionEntity.class));
 		verify(faction).setName(FORM_FACTION_NAME);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenFactionExists();
+		whenAnotherFactionWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(faction, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -149,6 +171,17 @@ public class Wh40kSkirmishFactionPersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(faction, never()).setName(anyString());
+	}
+
+	protected void whenAnotherFactionWithSameNameExists() {
+		final Wh40kSkirmishGangTypeEntity anotherGangType = mock(Wh40kSkirmishGangTypeEntity.class);
+		when(anotherGangType.getId()).thenReturn(GANG_TYPE_ID + 1);
+		when(anotherGangType.getFactions()).thenReturn(new HashSet<Wh40kSkirmishFactionEntity>());
+		rules.getGangTypes().add(anotherGangType);
+		final Wh40kSkirmishFactionEntity anotherFaction = mock(Wh40kSkirmishFactionEntity.class);
+		when(anotherFaction.getId()).thenReturn(DB_FACTION_ID + 1);
+		when(anotherFaction.getName()).thenReturn(FORM_FACTION_NAME);
+		anotherGangType.getFactions().add(anotherFaction);
 	}
 
 	protected void whenFactionExists() {
