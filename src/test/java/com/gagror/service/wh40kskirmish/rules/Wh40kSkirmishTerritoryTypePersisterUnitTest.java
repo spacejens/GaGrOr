@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -79,6 +80,16 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherTerritoryTypeWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(territoryTypeRepository, never()).save(any(Wh40kSkirmishTerritoryTypeEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -107,6 +118,17 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 		verifyNoMoreInteractions(bindingResult);
 		verify(territoryTypeRepository, never()).save(any(Wh40kSkirmishTerritoryTypeEntity.class));
 		verify(territoryType).setName(FORM_TERRITORY_TYPE_NAME);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenTerritoryTypeExists();
+		whenAnotherTerritoryTypeWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(territoryType, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -149,6 +171,17 @@ public class Wh40kSkirmishTerritoryTypePersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(territoryType, never()).setName(anyString());
+	}
+
+	protected void whenAnotherTerritoryTypeWithSameNameExists() {
+		final Wh40kSkirmishTerritoryCategoryEntity anotherCategory = mock(Wh40kSkirmishTerritoryCategoryEntity.class);
+		when(anotherCategory.getId()).thenReturn(TERRITORY_CATEGORY_ID + 1);
+		when(anotherCategory.getTerritoryTypes()).thenReturn(new HashSet<Wh40kSkirmishTerritoryTypeEntity>());
+		rules.getTerritoryCategories().add(anotherCategory);
+		final Wh40kSkirmishTerritoryTypeEntity anotherTerritoryType = mock(Wh40kSkirmishTerritoryTypeEntity.class);
+		when(anotherTerritoryType.getId()).thenReturn(DB_TERRITORY_TYPE_ID + 1);
+		when(anotherTerritoryType.getName()).thenReturn(FORM_TERRITORY_TYPE_NAME);
+		anotherCategory.getTerritoryTypes().add(anotherTerritoryType);
 	}
 
 	protected void whenTerritoryTypeExists() {
