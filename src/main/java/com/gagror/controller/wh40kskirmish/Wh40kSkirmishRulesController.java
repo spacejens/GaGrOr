@@ -111,7 +111,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
 	public String viewRules(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing rules for group %d", groupId));
-		model.addAttribute("rules", rulesService.viewRules(groupId));
+		model.addAttribute("rules", rulesService.viewRulesListChildren(groupId));
 		return "wh40kskirmish/rules_view";
 	}
 
@@ -121,7 +121,7 @@ public class Wh40kSkirmishRulesController extends AbstractController {
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
 		log.info(String.format("Viewing edit rules form for group %d", groupId));
-		final Wh40kSkirmishRulesOutput rules = rulesService.editRules(groupId);
+		final Wh40kSkirmishRulesOutput rules = rulesService.viewRules(groupId);
 		model.addAttribute("group", rules.getGroup());
 		model.addAttribute("rulesForm", new Wh40kSkirmishRulesInput(rules));
 		return "wh40kskirmish/rules_edit";

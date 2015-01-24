@@ -42,13 +42,13 @@ public class Wh40kSkirmishRulesService {
 	@Autowired
 	GroupService groupService;
 
-	public Wh40kSkirmishRulesListChildrenOutput viewRules(final Long groupId) {
-		log.debug(String.format("Viewing rules for group %d", groupId));
+	public Wh40kSkirmishRulesListChildrenOutput viewRulesListChildren(final Long groupId) {
+		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
 		return new Wh40kSkirmishRulesListChildrenOutput(loadRules(groupId), groupService.viewGroup(groupId));
 	}
 
-	public Wh40kSkirmishRulesOutput editRules(final Long groupId) {
-		log.debug(String.format("Loading rules for edit for group %d", groupId));
+	public Wh40kSkirmishRulesOutput viewRules(final Long groupId) {
+		log.debug(String.format("Viewing rules for group %d", groupId));
 		return new Wh40kSkirmishRulesOutput(loadRules(groupId), groupService.viewGroup(groupId));
 	}
 
@@ -74,7 +74,7 @@ public class Wh40kSkirmishRulesService {
 		return new Wh40kSkirmishGangTypeOutput(loadGangType(groupId, gangTypeId), groupService.viewGroup(groupId));
 	}
 
-	private Wh40kSkirmishFactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
+	public Wh40kSkirmishFactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
 		final Wh40kSkirmishGangTypeEntity gangType = loadGangType(groupId, gangTypeId);
 		for(final Wh40kSkirmishFactionEntity faction : gangType.getFactions()) {
 			if(faction.getId().equals(factionId)) {

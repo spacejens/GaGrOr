@@ -119,6 +119,16 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	GroupEntity wrongTypeGroupEntity;
 
 	@Test
+	public void viewRulesListChildren_ok() {
+		assertEquals("Wrong rules returned", RULES_ID, instance.viewRulesListChildren(GROUP_ID).getId());
+	}
+
+	@Test(expected=WrongGroupTypeException.class)
+	public void viewRulesListChildren_wrongType() {
+		instance.viewRulesListChildren(WRONG_TYPE_GROUP_ID);
+	}
+
+	@Test
 	public void viewRules_ok() {
 		assertEquals("Wrong rules returned", RULES_ID, instance.viewRules(GROUP_ID).getId());
 	}
@@ -126,16 +136,6 @@ public class Wh40kSkirmishRulesServiceUnitTest {
 	@Test(expected=WrongGroupTypeException.class)
 	public void viewRules_wrongType() {
 		instance.viewRules(WRONG_TYPE_GROUP_ID);
-	}
-
-	@Test
-	public void editRules_ok() {
-		assertEquals("Wrong rules returned", RULES_ID, instance.editRules(GROUP_ID).getId());
-	}
-
-	@Test(expected=WrongGroupTypeException.class)
-	public void editRules_wrongType() {
-		instance.editRules(WRONG_TYPE_GROUP_ID);
 	}
 
 	@Test
