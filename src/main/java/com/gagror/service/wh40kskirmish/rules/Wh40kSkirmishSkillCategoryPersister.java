@@ -27,8 +27,6 @@ extends AbstractPersister<Wh40kSkirmishSkillCategoryInput, Wh40kSkirmishSkillCat
 	@Autowired
 	Wh40kSkirmishSkillCategoryRepository skillCategoryRepository;
 
-	// TODO Name of skill category must be unique within group
-
 	@Override
 	protected void validateForm(final Wh40kSkirmishSkillCategoryInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already
@@ -41,6 +39,19 @@ extends AbstractPersister<Wh40kSkirmishSkillCategoryInput, Wh40kSkirmishSkillCat
 			throw new WrongGroupTypeException(group);
 		}
 		return group.getWh40kSkirmishRules();
+	}
+
+	@Override
+	protected void validateFormVsContext(
+			final Wh40kSkirmishSkillCategoryInput form,
+			final BindingResult bindingResult,
+			final Wh40kSkirmishRulesEntity context) {
+		for(final Wh40kSkirmishSkillCategoryEntity skillCategory : context.getSkillCategories()) {
+			if(skillCategory.getName().equals(form.getName())
+					&& ! skillCategory.getId().equals(form.getId())) {
+				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
+			}
+		}
 	}
 
 	@Override

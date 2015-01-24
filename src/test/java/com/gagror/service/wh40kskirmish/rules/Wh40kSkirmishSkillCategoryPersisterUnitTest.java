@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -74,6 +75,16 @@ public class Wh40kSkirmishSkillCategoryPersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherCategoryWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(skillCategoryRepository, never()).save(any(Wh40kSkirmishSkillCategoryEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -96,6 +107,17 @@ public class Wh40kSkirmishSkillCategoryPersisterUnitTest {
 		verifyNoMoreInteractions(bindingResult);
 		verify(skillCategoryRepository, never()).save(any(Wh40kSkirmishSkillCategoryEntity.class));
 		verify(skillCategory).setName(FORM_SKILL_CATEGORY_NAME);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenSkillCategoryExists();
+		whenAnotherCategoryWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(skillCategory, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -131,6 +153,13 @@ public class Wh40kSkirmishSkillCategoryPersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(skillCategory, never()).setName(anyString());
+	}
+
+	protected void whenAnotherCategoryWithSameNameExists() {
+		final Wh40kSkirmishSkillCategoryEntity anotherCategory = mock(Wh40kSkirmishSkillCategoryEntity.class);
+		when(anotherCategory.getId()).thenReturn(DB_SKILL_CATEGORY_ID + 1);
+		when(anotherCategory.getName()).thenReturn(FORM_SKILL_CATEGORY_NAME);
+		rules.getSkillCategories().add(anotherCategory);
 	}
 
 	protected void whenSkillCategoryExists() {
