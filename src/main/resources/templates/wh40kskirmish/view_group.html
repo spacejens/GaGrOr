@@ -20,14 +20,16 @@
 		<thead>
 			<tr>
 				<td>Gang</td>
+				<td>Faction</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="gang : ${group.gangs}">
 				<td th:text="${gang.name}"></td>
+				<td th:text="${gang.faction.name}"></td>
 			</tr>
 			<tr th:if="${#lists.isEmpty(group.gangs)}">
-				<td class="fi-alert">No gangs have been created yet</td>
+				<td colspan="2" class="fi-alert">No gangs have been created yet</td>
 			</tr>
 		</tbody>
 	</table>
