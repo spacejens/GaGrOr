@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -79,6 +80,16 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherSkillWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(skillRepository, never()).save(any(Wh40kSkirmishSkillEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -107,6 +118,17 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 		verifyNoMoreInteractions(bindingResult);
 		verify(skillRepository, never()).save(any(Wh40kSkirmishSkillEntity.class));
 		verify(skill).setName(FORM_SKILL_NAME);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenSkillExists();
+		whenAnotherSkillWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(skill, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -149,6 +171,17 @@ public class Wh40kSkirmishSkillPersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(skill, never()).setName(anyString());
+	}
+
+	protected void whenAnotherSkillWithSameNameExists() {
+		final Wh40kSkirmishSkillCategoryEntity anotherCategory = mock(Wh40kSkirmishSkillCategoryEntity.class);
+		when(anotherCategory.getId()).thenReturn(SKILL_CATEGORY_ID + 1);
+		when(anotherCategory.getSkills()).thenReturn(new HashSet<Wh40kSkirmishSkillEntity>());
+		rules.getSkillCategories().add(anotherCategory);
+		final Wh40kSkirmishSkillEntity anotherSkill = mock(Wh40kSkirmishSkillEntity.class);
+		when(anotherSkill.getId()).thenReturn(DB_SKILL_ID + 1);
+		when(anotherSkill.getName()).thenReturn(FORM_SKILL_NAME);
+		anotherCategory.getSkills().add(anotherSkill);
 	}
 
 	protected void whenSkillExists() {
