@@ -27,8 +27,6 @@ extends AbstractPersister<Wh40kSkirmishRaceInput, Wh40kSkirmishRaceEntity, Wh40k
 	@Autowired
 	Wh40kSkirmishRaceRepository raceRepository;
 
-	// TODO Name of race must be unique within group
-
 	@Override
 	protected void validateForm(final Wh40kSkirmishRaceInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already
@@ -46,6 +44,21 @@ extends AbstractPersister<Wh40kSkirmishRaceInput, Wh40kSkirmishRaceEntity, Wh40k
 			}
 		}
 		throw new DataNotFoundException(String.format("Gang type %d (group %d)", form.getGangTypeId(), form.getGroupId()));
+	}
+
+	@Override
+	protected void validateFormVsContext(
+			final Wh40kSkirmishRaceInput form,
+			final BindingResult bindingResult,
+			final Wh40kSkirmishGangTypeEntity context) {
+		for(final Wh40kSkirmishGangTypeEntity gangType : context.getRules().getGangTypes()) {
+			for(final Wh40kSkirmishRaceEntity race : gangType.getRaces()) {
+				if(race.getName().equals(form.getName())
+						&& ! race.getId().equals(form.getId())) {
+					form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
+				}
+			}
+		}
 	}
 
 	@Override

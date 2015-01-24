@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -97,6 +98,16 @@ public class Wh40kSkirmishRacePersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherRaceWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(raceRepository, never()).save(any(Wh40kSkirmishRaceEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -134,6 +145,17 @@ public class Wh40kSkirmishRacePersisterUnitTest {
 		verify(race).setMaxInitiative(FORM_RACE_INITIATIVE);
 		verify(race).setMaxAttacks(FORM_RACE_ATTACKS);
 		verify(race).setMaxLeadership(FORM_RACE_LEADERSHIP);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenRaceExists();
+		whenAnotherRaceWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -176,6 +198,17 @@ public class Wh40kSkirmishRacePersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(race, never()).setName(anyString());
+	}
+
+	protected void whenAnotherRaceWithSameNameExists() {
+		final Wh40kSkirmishGangTypeEntity anotherGangType = mock(Wh40kSkirmishGangTypeEntity.class);
+		when(anotherGangType.getId()).thenReturn(GANG_TYPE_ID + 1);
+		when(anotherGangType.getRaces()).thenReturn(new HashSet<Wh40kSkirmishRaceEntity>());
+		rules.getGangTypes().add(anotherGangType);
+		final Wh40kSkirmishRaceEntity anotherRace = mock(Wh40kSkirmishRaceEntity.class);
+		when(anotherRace.getId()).thenReturn(DB_RACE_ID + 1);
+		when(anotherRace.getName()).thenReturn(FORM_RACE_NAME);
+		anotherGangType.getRaces().add(anotherRace);
 	}
 
 	protected void whenRaceExists() {
