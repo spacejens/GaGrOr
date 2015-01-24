@@ -10,9 +10,8 @@ import com.gagror.data.PropertyNameDisplayable;
 @RequiredArgsConstructor
 public enum GroupType implements Identifiable<Integer>, PropertyNameDisplayable {
 
-	SOCIAL(0, null),
-	WH40K_SKIRMISH(1, "/wh40kskirmish/rules");
-	// TODO Make group start page depend on group type, not just rules page (use existing page for social group)
+	SOCIAL(0, "/groups/view"),
+	WH40K_SKIRMISH(1, "/wh40kskirmish/group");
 
 	private static final EnumIdMapping<Integer, GroupType> IDMAP = new EnumIdMapping<>(GroupType.class);
 
@@ -20,7 +19,7 @@ public enum GroupType implements Identifiable<Integer>, PropertyNameDisplayable 
 	private final Integer id;
 
 	@Getter
-	private final String rulesUrl;
+	private final String groupUrl;
 
 	@Override
 	public String getDisplayNameProperty() {

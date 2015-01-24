@@ -7,7 +7,7 @@
 		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
 		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
 		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{/groups/view/{groupId}(groupId=${group.id})}" th:text="${group.name}"></a>
+		<a th:href="@{${group.groupType.groupUrl}+'/{groupId}'(groupId=${group.id})}" th:text="${group.name}"></a>
 		<a class="current" th:text="#{menu.groups.members}"></a>
 	</nav>
 	<dl class="sub-nav" id="pageactions" th:if="${group.memberType != null and group.memberType.owner}">
