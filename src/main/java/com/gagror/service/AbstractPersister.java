@@ -19,6 +19,7 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 		// Check for input errors
 		validateForm(form, bindingResult);
 		final C context = loadContext(form);
+		validateFormVsContext(form, bindingResult, context);
 		if(! isCreateNew(form)) {
 			entity = loadExisting(form, context);
 			if(null == entity) {
@@ -50,6 +51,10 @@ public abstract class AbstractPersister<I extends AbstractInput, E extends Abstr
 	protected C loadContext(final I form) {
 		// Override this method to load context for the persisted entity
 		return null;
+	}
+
+	protected void validateFormVsContext(final I form, final BindingResult bindingResult, final C context) {
+		// OVerride this method to add form validations depending on the context
 	}
 
 	protected abstract boolean isCreateNew(final I form);
