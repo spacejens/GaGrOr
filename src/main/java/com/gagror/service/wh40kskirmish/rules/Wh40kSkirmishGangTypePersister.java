@@ -40,8 +40,6 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 	@Autowired
 	Wh40kSkirmishExperienceLevelRepository experienceLevelRepository;
 
-	// TODO Name of gang type must be unique within group
-
 	@Override
 	protected void validateForm(final Wh40kSkirmishGangTypeInput form, final BindingResult bindingResult) {
 		/* It seems simple to sort the experience levels here, but it breaks error message binding.
@@ -66,6 +64,19 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 			throw new WrongGroupTypeException(group);
 		}
 		return group.getWh40kSkirmishRules();
+	}
+
+	@Override
+	protected void validateFormVsContext(
+			final Wh40kSkirmishGangTypeInput form,
+			final BindingResult bindingResult,
+			final Wh40kSkirmishRulesEntity context) {
+		for(final Wh40kSkirmishGangTypeEntity gangType : context.getGangTypes()) {
+			if(gangType.getName().equals(form.getName())
+					&& ! gangType.getId().equals(form.getId())) {
+				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
+			}
+		}
 	}
 
 	@Override

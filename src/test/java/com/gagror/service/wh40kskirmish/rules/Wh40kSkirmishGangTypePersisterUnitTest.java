@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -119,6 +120,16 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherGangTypeWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(gangTypeRepository, never()).save(any(Wh40kSkirmishGangTypeEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_noExperienceLevelStartsAtZero() {
 		when(formExperienceLevelFirst.getExperiencePoints()).thenReturn(1);
 		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
@@ -165,6 +176,17 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		verify(experienceLevelFirst).setExperiencePoints(FORM_XP_LEVEL_FIRST_XP);
 		verify(experienceLevelSecond).setName(FORM_XP_LEVEL_SECOND_NAME);
 		verify(experienceLevelSecond).setExperiencePoints(FORM_XP_LEVEL_SECOND_XP);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenGangTypeExists();
+		whenAnotherGangTypeWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(gangType, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -249,6 +271,13 @@ public class Wh40kSkirmishGangTypePersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(gangType, never()).setName(anyString());
+	}
+
+	protected void whenAnotherGangTypeWithSameNameExists() {
+		final Wh40kSkirmishGangTypeEntity anotherGangType = mock(Wh40kSkirmishGangTypeEntity.class);
+		when(anotherGangType.getId()).thenReturn(DB_GANG_TYPE_ID + 1);
+		when(anotherGangType.getName()).thenReturn(FORM_GANG_TYPE_NAME);
+		rules.getGangTypes().add(anotherGangType);
 	}
 
 	protected void whenGangTypeExists() {
