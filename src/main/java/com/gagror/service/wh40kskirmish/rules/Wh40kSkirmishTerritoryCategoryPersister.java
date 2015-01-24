@@ -27,8 +27,6 @@ extends AbstractPersister<Wh40kSkirmishTerritoryCategoryInput, Wh40kSkirmishTerr
 	@Autowired
 	Wh40kSkirmishTerritoryCategoryRepository territoryCategoryRepository;
 
-	// TODO Name of territory category must be unique within group
-
 	@Override
 	protected void validateForm(final Wh40kSkirmishTerritoryCategoryInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already
@@ -41,6 +39,19 @@ extends AbstractPersister<Wh40kSkirmishTerritoryCategoryInput, Wh40kSkirmishTerr
 			throw new WrongGroupTypeException(group);
 		}
 		return group.getWh40kSkirmishRules();
+	}
+
+	@Override
+	protected void validateFormVsContext(
+			final Wh40kSkirmishTerritoryCategoryInput form,
+			final BindingResult bindingResult,
+			final Wh40kSkirmishRulesEntity context) {
+		for(final Wh40kSkirmishTerritoryCategoryEntity territoryCategory : context.getTerritoryCategories()) {
+			if(territoryCategory.getName().equals(form.getName())
+					&& ! territoryCategory.getId().equals(form.getId())) {
+				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
+			}
+		}
 	}
 
 	@Override
