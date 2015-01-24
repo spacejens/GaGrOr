@@ -21,15 +21,17 @@
 			<tr>
 				<td>Gang</td>
 				<td>Faction</td>
+				<td>Player</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="gang : ${group.gangs}">
 				<td th:text="${gang.name}"></td>
 				<td th:text="${gang.faction.name}"></td>
+				<td><span th:replace="/fragments/formatting :: username (account=${gang.player})"></span></td>
 			</tr>
 			<tr th:if="${#lists.isEmpty(group.gangs)}">
-				<td colspan="2" class="fi-alert">No gangs have been created yet</td>
+				<td colspan="3" class="fi-alert">No gangs have been created yet</td>
 			</tr>
 		</tbody>
 	</table>
