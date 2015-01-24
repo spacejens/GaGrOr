@@ -27,8 +27,6 @@ extends AbstractPersister<Wh40kSkirmishItemCategoryInput, Wh40kSkirmishItemCateg
 	@Autowired
 	Wh40kSkirmishItemCategoryRepository itemCategoryRepository;
 
-	// TODO Name of item category must be unique within group
-
 	@Override
 	protected void validateForm(final Wh40kSkirmishItemCategoryInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already
@@ -41,6 +39,19 @@ extends AbstractPersister<Wh40kSkirmishItemCategoryInput, Wh40kSkirmishItemCateg
 			throw new WrongGroupTypeException(group);
 		}
 		return group.getWh40kSkirmishRules();
+	}
+
+	@Override
+	protected void validateFormVsContext(
+			final Wh40kSkirmishItemCategoryInput form,
+			final BindingResult bindingResult,
+			final Wh40kSkirmishRulesEntity context) {
+		for(final Wh40kSkirmishItemCategoryEntity itemCategory : context.getItemCategories()) {
+			if(itemCategory.getName().equals(form.getName())
+					&& ! itemCategory.getId().equals(form.getId())) {
+				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
+			}
+		}
 	}
 
 	@Override
