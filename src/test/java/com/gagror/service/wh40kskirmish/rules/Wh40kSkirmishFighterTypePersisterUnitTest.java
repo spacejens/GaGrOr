@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -102,6 +103,16 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_nameNotUnique() {
+		whenAnotherFighterTypeWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(Wh40kSkirmishFighterTypeEntity.class));
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -145,6 +156,17 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		verify(fighterType).setStartingInitiative(FORM_FIGHTERTYPE_INITIATIVE);
 		verify(fighterType).setStartingAttacks(FORM_FIGHTERTYPE_ATTACKS);
 		verify(fighterType).setStartingLeadership(FORM_FIGHTERTYPE_LEADERSHIP);
+	}
+
+	@Test
+	public void save_existing_nameNotUnique() {
+		whenFighterTypeExists();
+		whenAnotherFighterTypeWithSameNameExists();
+		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setName(anyString());
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
 	@Test
@@ -194,6 +216,21 @@ public class Wh40kSkirmishFighterTypePersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
 		verify(race, never()).setName(anyString());
+	}
+
+	protected void whenAnotherFighterTypeWithSameNameExists() {
+		final Wh40kSkirmishGangTypeEntity anotherGangType = mock(Wh40kSkirmishGangTypeEntity.class);
+		when(anotherGangType.getId()).thenReturn(GANG_TYPE_ID + 1);
+		when(anotherGangType.getRaces()).thenReturn(new HashSet<Wh40kSkirmishRaceEntity>());
+		rules.getGangTypes().add(anotherGangType);
+		final Wh40kSkirmishRaceEntity anotherRace = mock(Wh40kSkirmishRaceEntity.class);
+		when(anotherRace.getId()).thenReturn(RACE_ID + 1);
+		when(anotherRace.getFighterTypes()).thenReturn(new HashSet<Wh40kSkirmishFighterTypeEntity>());
+		anotherGangType.getRaces().add(anotherRace);
+		final Wh40kSkirmishFighterTypeEntity anotherFighterType = mock(Wh40kSkirmishFighterTypeEntity.class);
+		when(anotherFighterType.getId()).thenReturn(DB_FIGHTERTYPE_ID + 1);
+		when(anotherFighterType.getName()).thenReturn(FORM_FIGHTERTYPE_NAME);
+		anotherRace.getFighterTypes().add(anotherFighterType);
 	}
 
 	protected void whenFighterTypeExists() {
