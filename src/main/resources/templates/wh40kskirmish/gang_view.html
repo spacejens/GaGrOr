@@ -11,7 +11,18 @@
 		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
 		<a class="current" th:text="${gang.name}"></a>
 	</nav>
-	<p>View gang here</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Stash</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><span th:text="${gang.money}"></span> <span th:text="${gang.rules.currencyName}"></span></td>
+			</tr>
+		</tbody>
+	</table>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>
