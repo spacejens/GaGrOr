@@ -20,6 +20,8 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 	@Autowired
 	GroupRepository groupRepository;
 
+	// TODO Name of public group (viewable by anyone) must be unique
+
 	@Override
 	protected void validateForm(final GroupEditInput form, final BindingResult bindingResult) {
 		// Nothing to validate, everything is checked by annotations
