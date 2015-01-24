@@ -27,6 +27,8 @@ extends AbstractPersister<Wh40kSkirmishSkillCategoryInput, Wh40kSkirmishSkillCat
 	@Autowired
 	Wh40kSkirmishSkillCategoryRepository skillCategoryRepository;
 
+	// TODO Name of skill category must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishSkillCategoryInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

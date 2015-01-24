@@ -28,6 +28,8 @@ extends AbstractPersister<Wh40kSkirmishFighterTypeInput, Wh40kSkirmishFighterTyp
 	@Autowired
 	Wh40kSkirmishFighterTypeRepository fighterTypeRepository;
 
+	// TODO Name of fighter type must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishFighterTypeInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

@@ -27,6 +27,8 @@ extends AbstractPersister<Wh40kSkirmishFactionInput, Wh40kSkirmishFactionEntity,
 	@Autowired
 	Wh40kSkirmishFactionRepository factionRepository;
 
+	// TODO Name of faction must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishFactionInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

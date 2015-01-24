@@ -27,6 +27,8 @@ extends AbstractPersister<Wh40kSkirmishRaceInput, Wh40kSkirmishRaceEntity, Wh40k
 	@Autowired
 	Wh40kSkirmishRaceRepository raceRepository;
 
+	// TODO Name of race must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishRaceInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

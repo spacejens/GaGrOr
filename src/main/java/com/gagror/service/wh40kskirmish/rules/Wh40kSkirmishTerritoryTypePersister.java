@@ -27,6 +27,8 @@ extends AbstractPersister<Wh40kSkirmishTerritoryTypeInput, Wh40kSkirmishTerritor
 	@Autowired
 	Wh40kSkirmishTerritoryTypeRepository territoryTypeRepository;
 
+	// TODO Name of territory type must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishTerritoryTypeInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

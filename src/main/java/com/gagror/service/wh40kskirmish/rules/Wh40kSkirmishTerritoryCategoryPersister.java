@@ -27,6 +27,8 @@ extends AbstractPersister<Wh40kSkirmishTerritoryCategoryInput, Wh40kSkirmishTerr
 	@Autowired
 	Wh40kSkirmishTerritoryCategoryRepository territoryCategoryRepository;
 
+	// TODO Name of territory category must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishTerritoryCategoryInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

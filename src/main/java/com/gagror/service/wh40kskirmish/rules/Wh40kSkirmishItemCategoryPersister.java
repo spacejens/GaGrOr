@@ -27,6 +27,8 @@ extends AbstractPersister<Wh40kSkirmishItemCategoryInput, Wh40kSkirmishItemCateg
 	@Autowired
 	Wh40kSkirmishItemCategoryRepository itemCategoryRepository;
 
+	// TODO Name of item category must be unique within group
+
 	@Override
 	protected void validateForm(final Wh40kSkirmishItemCategoryInput form, final BindingResult bindingResult) {
 		// Nothing to do that isn't verified by annotations already

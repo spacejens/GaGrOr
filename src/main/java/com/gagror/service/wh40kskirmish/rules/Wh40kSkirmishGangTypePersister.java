@@ -17,10 +17,10 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperiencePointsComparator;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelInput;
 import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperienceLevelRepository;
+import com.gagror.data.wh40kskirmish.rules.experience.Wh40kSkirmishExperiencePointsComparator;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeRepository;
@@ -39,6 +39,8 @@ extends AbstractPersister<Wh40kSkirmishGangTypeInput, Wh40kSkirmishGangTypeEntit
 
 	@Autowired
 	Wh40kSkirmishExperienceLevelRepository experienceLevelRepository;
+
+	// TODO Name of gang type must be unique within group
 
 	@Override
 	protected void validateForm(final Wh40kSkirmishGangTypeInput form, final BindingResult bindingResult) {
