@@ -2,8 +2,11 @@ package com.gagror.service.social;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +49,32 @@ public class EditGroupPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		verify(group).setName(FORM_NAME);
 		verify(group).setViewableByAnyone(FORM_VIEWABLE);
+	}
+
+	@Test
+	public void save_nonUniqueName_notViewableByAnyone_ok() {
+		whenAnotherGroupWithSameNameIsViewableByAnyone();
+		when(form.isViewableByAnyone()).thenReturn(false);
+		final boolean result = instance.save(form, bindingResult);
+		assertTrue("Should have saved successfully", result);
+		verify(group).setName(FORM_NAME);
+	}
+
+	@Test
+	public void save_nonUniqueName_viewableByAnyone() {
+		whenAnotherGroupWithSameNameIsViewableByAnyone();
+		when(form.isViewableByAnyone()).thenReturn(true);
+		when(bindingResult.hasErrors()).thenReturn(true); // Will have errors when checked
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should not have saved successfully", result);
+		verify(form).addErrorNameMustBeUniqueWhenViewableByAnyone(bindingResult);
+	}
+
+	private void whenAnotherGroupWithSameNameIsViewableByAnyone() {
+		final GroupEntity anotherGroup = mock(GroupEntity.class);
+		when(anotherGroup.getId()).thenReturn(UNKNOWN_GROUP_ID);
+		when(anotherGroup.getName()).thenReturn(FORM_NAME);
+		when(groupRepository.findByViewableByAnyone(true)).thenReturn(Collections.singletonList(anotherGroup));
 	}
 
 	@Test(expected=DataNotFoundException.class)

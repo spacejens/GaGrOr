@@ -20,11 +20,16 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 	@Autowired
 	GroupRepository groupRepository;
 
-	// TODO Name of public group (viewable by anyone) must be unique
-
 	@Override
 	protected void validateForm(final GroupEditInput form, final BindingResult bindingResult) {
-		// Nothing to validate, everything is checked by annotations
+		if(form.isViewableByAnyone()) {
+			for(final GroupEntity groupViewableByAnyone : groupRepository.findByViewableByAnyone(true)) {
+				if(groupViewableByAnyone.getName().equals(form.getName())
+						&& ! groupViewableByAnyone.getId().equals(form.getId())) {
+					form.addErrorNameMustBeUniqueWhenViewableByAnyone(bindingResult);
+				}
+			}
+		}
 	}
 
 	@Override

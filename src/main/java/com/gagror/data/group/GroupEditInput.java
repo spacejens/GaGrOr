@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @ToString(callSuper=true)
@@ -18,5 +21,9 @@ public class GroupEditInput extends AbstractIdentifiableNamedInput<Long, GroupEd
 	public GroupEditInput(final GroupEditOutput currentState) {
 		super(currentState);
 		setViewableByAnyone(currentState.isViewableByAnyone());
+	}
+
+	public void addErrorNameMustBeUniqueWhenViewableByAnyone(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "name", "must be unique for public groups"));
 	}
 }
