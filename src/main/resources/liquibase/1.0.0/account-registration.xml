@@ -8,7 +8,7 @@
 	<property name="now" value="now()" dbms="mysql"/>
 
 	<changeSet id="account-table" author="spacejens">
-		<createTable tableName="account">
+		<createTable tableName="gagror_account">
 			<column name="id" type="bigint" autoIncrement="true">
 				<constraints primaryKey="true" />
 			</column>
@@ -40,17 +40,17 @@
 	</changeSet>
 
 	<changeSet id="name-unique" author="spacejens">
-		<addUniqueConstraint constraintName="account_name_u" tableName="account" columnNames="name"/>
+		<addUniqueConstraint constraintName="account_name_u" tableName="gagror_account" columnNames="name"/>
 	</changeSet>
 
 	<changeSet id="name-index" author="spacejens">
-		<createIndex indexName="account_name_ix" tableName="account">
+		<createIndex indexName="account_name_ix" tableName="gagror_account">
 			<column name="name" type="varchar(64)" />
 		</createIndex>
 	</changeSet>
 
 	<changeSet id="account-admin" author="spacejens">
-		<insert tableName="account">
+		<insert tableName="gagror_account">
 			<column name="name" value="admin"/>
 			<column name="password" value="$2a$10$LtpG/uRFVYW33i8kp5XW1ehLzJv.fFmuOy8jST65Hz6o4CD6N5cju"/> <!-- password -->
 			<column name="account_type" valueNumeric="1"/> <!-- System owner -->

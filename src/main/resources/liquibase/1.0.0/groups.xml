@@ -5,8 +5,8 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet id="gaminggroup-table" author="spacejens">
-		<createTable tableName="gaminggroup">
+	<changeSet id="group-table" author="spacejens">
+		<createTable tableName="gagror_group">
 			<column name="id" type="bigint" autoIncrement="true">
 				<constraints primaryKey="true" />
 			</column>
@@ -32,7 +32,7 @@
 	</changeSet>
 
 	<changeSet id="groupmember-table" author="spacejens">
-		<createTable tableName="groupmember">
+		<createTable tableName="gagror_groupmember">
 			<column name="id" type="bigint" autoIncrement="true">
 				<constraints primaryKey="true" />
 			</column>
@@ -59,29 +59,29 @@
 
 	<changeSet id="groupmember-foreign-keys" author="spacejens">
 		<addForeignKeyConstraint
-			constraintName="gaminggroup_groupmember_group_fk"
-			referencedTableName="gaminggroup"
+			constraintName="group_groupmember_group_fk"
+			referencedTableName="gagror_group"
 			referencedColumnNames="id"
-			baseTableName="groupmember"
+			baseTableName="gagror_groupmember"
 			baseColumnNames="group_id"/>
 		<addForeignKeyConstraint
 			constraintName="account_groupmember_account_fk"
-			referencedTableName="account"
+			referencedTableName="gagror_account"
 			referencedColumnNames="id"
-			baseTableName="groupmember"
+			baseTableName="gagror_groupmember"
 			baseColumnNames="account_id"/>
 	</changeSet>
 
 	<changeSet id="indices-for-groupmember" author="spacejens">
-		<createIndex indexName="groupmember_group_id_ix" tableName="groupmember">
+		<createIndex indexName="groupmember_group_id_ix" tableName="gagror_groupmember">
 			<column name="group_id" type="bigint" />
 		</createIndex>
-		<createIndex indexName="groupmember_account_id_ix" tableName="groupmember">
+		<createIndex indexName="groupmember_account_id_ix" tableName="gagror_groupmember">
 			<column name="account_id" type="bigint" />
 		</createIndex>
 	</changeSet>
 
 	<changeSet id="no-duplicate-memberships" author="spacejens">
-		<addUniqueConstraint constraintName="groupmember_group_id_account_id_u" tableName="groupmember" columnNames="group_id, account_id"/>
+		<addUniqueConstraint constraintName="groupmember_group_id_account_id_u" tableName="gagror_groupmember" columnNames="group_id, account_id"/>
 	</changeSet>
 </databaseChangeLog>

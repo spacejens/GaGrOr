@@ -17,7 +17,7 @@ import com.gagror.data.account.AccountEntity;
 @NoArgsConstructor
 @ToString(of={"group", "account", "memberType"}, callSuper=true)
 @Entity
-@Table(name="groupmember")
+@Table(name="gagror_groupmember")
 public class GroupMemberEntity extends AbstractEditableEntity {
 
 	@ManyToOne(optional=false)

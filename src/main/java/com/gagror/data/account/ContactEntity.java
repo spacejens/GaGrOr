@@ -16,7 +16,7 @@ import com.gagror.data.AbstractEditableEntity;
 @NoArgsConstructor
 @ToString(of={"owner", "contact", "contactType"}, callSuper=true)
 @Entity
-@Table(name="contact")
+@Table(name="gagror_contact")
 public class ContactEntity extends AbstractEditableEntity {
 
 	@ManyToOne(optional=false)

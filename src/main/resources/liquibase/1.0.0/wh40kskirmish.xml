@@ -33,8 +33,8 @@
 
 	<changeSet id="rules-foreign-keys" author="spacejens">
 		<addForeignKeyConstraint
-			constraintName="gaminggroup_rules_group_fk"
-			referencedTableName="gaminggroup"
+			constraintName="group_rules_group_fk"
+			referencedTableName="gagror_group"
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_rules"
 			baseColumnNames="group_id"/>
@@ -487,7 +487,7 @@
 			baseColumnNames="faction_id"/>
 		<addForeignKeyConstraint
 			constraintName="account_gang_player_fk"
-			referencedTableName="account"
+			referencedTableName="gagror_account"
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_gang"
 			baseColumnNames="player_id"/>

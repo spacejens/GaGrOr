@@ -23,7 +23,7 @@ import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
 @Entity
-@Table(name="gaminggroup") // Table name doesn't match since 'group' is a reserved word
+@Table(name="gagror_group")
 public class GroupEntity extends AbstractEditableNamedEntity {
 
 	@OneToMany(mappedBy="group", fetch=FetchType.LAZY)
