@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -20,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
@@ -53,8 +53,7 @@ public class RegisterAccountPersisterUnitTest {
 	public void register_ok() {
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertTrue("Saving should have been successful", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<AccountEntity> savedAccount = ArgumentCaptor.forClass(AccountEntity.class);
 		verify(accountRepository).save(savedAccount.capture());
 		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getName());
@@ -68,7 +67,6 @@ public class RegisterAccountPersisterUnitTest {
 	@Test
 	public void register_usernameBusy() {
 		when(accountRepository.findByName(USERNAME)).thenReturn(anAccount);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorUsernameBusy(bindingResult);
@@ -78,7 +76,6 @@ public class RegisterAccountPersisterUnitTest {
 	@Test
 	public void register_passwordsDontMatch() {
 		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorPasswordMismatch(bindingResult);
@@ -88,7 +85,6 @@ public class RegisterAccountPersisterUnitTest {
 	@Test
 	public void register_passwordTooWeak() {
 		when(accessControlService.isPasswordTooWeak(PASSWORD)).thenReturn(true);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
@@ -100,7 +96,6 @@ public class RegisterAccountPersisterUnitTest {
 		when(accountRepository.findByName(USERNAME)).thenReturn(anAccount);
 		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
 		when(accessControlService.isPasswordTooWeak(PASSWORD)).thenReturn(true);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorUsernameBusy(bindingResult);
@@ -129,6 +124,9 @@ public class RegisterAccountPersisterUnitTest {
 		when(registerForm.getName()).thenReturn(USERNAME);
 		when(registerForm.getPassword()).thenReturn(PASSWORD);
 		when(registerForm.getPasswordRepeat()).thenReturn(PASSWORD);
+		AddError.to(bindingResult).when(registerForm).addErrorPasswordMismatch(bindingResult);
+		AddError.to(bindingResult).when(registerForm).addErrorPasswordTooWeak(bindingResult);
+		AddError.to(bindingResult).when(registerForm).addErrorUsernameBusy(bindingResult);
 	}
 
 	@Before

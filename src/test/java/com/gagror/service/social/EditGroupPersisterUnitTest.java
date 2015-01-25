@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEntity;
@@ -64,7 +65,6 @@ public class EditGroupPersisterUnitTest {
 	public void save_nonUniqueName_viewableByAnyone() {
 		whenAnotherGroupWithSameNameIsViewableByAnyone();
 		when(form.isViewableByAnyone()).thenReturn(true);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will have errors when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should not have saved successfully", result);
 		verify(form).addErrorNameMustBeUniqueWhenViewableByAnyone(bindingResult);
@@ -93,7 +93,6 @@ public class EditGroupPersisterUnitTest {
 	@Test
 	public void save_simultaneousEdit() {
 		when(group.getVersion()).thenReturn(VERSION + 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will have errors when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should not have saved successfully", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -105,6 +104,8 @@ public class EditGroupPersisterUnitTest {
 		when(form.getVersion()).thenReturn(VERSION);
 		when(form.getName()).thenReturn(FORM_NAME);
 		when(form.isViewableByAnyone()).thenReturn(FORM_VIEWABLE);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWhenViewableByAnyone(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before

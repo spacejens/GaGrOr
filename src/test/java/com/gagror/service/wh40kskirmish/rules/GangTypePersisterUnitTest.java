@@ -24,6 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -106,8 +107,7 @@ public class GangTypePersisterUnitTest {
 		form.getExperienceLevels().remove(formExperienceLevelSecond);
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<GangTypeEntity> savedGangType = ArgumentCaptor.forClass(GangTypeEntity.class);
 		verify(gangTypeRepository).save(savedGangType.capture());
 		assertEquals("Wrong name", FORM_GANG_TYPE_NAME, savedGangType.getValue().getName());
@@ -122,7 +122,6 @@ public class GangTypePersisterUnitTest {
 	@Test
 	public void save_new_nameNotUnique() {
 		whenAnotherGangTypeWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
@@ -132,7 +131,6 @@ public class GangTypePersisterUnitTest {
 	@Test
 	public void save_new_noExperienceLevelStartsAtZero() {
 		when(formExperienceLevelFirst.getExperiencePoints()).thenReturn(1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorExperienceLevelsMustStartAtZero(bindingResult);
@@ -142,7 +140,6 @@ public class GangTypePersisterUnitTest {
 	@Test
 	public void save_new_experienceLevelsNotUnique() {
 		when(formExperienceLevelSecond.getExperiencePoints()).thenReturn(FORM_XP_LEVEL_FIRST_XP);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorExperienceLevelsMustBeUnique(bindingResult);
@@ -168,8 +165,7 @@ public class GangTypePersisterUnitTest {
 		whenGangTypeExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
 		verify(gangType).setName(FORM_GANG_TYPE_NAME);
 		verify(experienceLevelFirst).setName(FORM_XP_LEVEL_FIRST_NAME);
@@ -182,7 +178,6 @@ public class GangTypePersisterUnitTest {
 	public void save_existing_nameNotUnique() {
 		whenGangTypeExists();
 		whenAnotherGangTypeWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(gangType, never()).setName(anyString());
@@ -195,8 +190,7 @@ public class GangTypePersisterUnitTest {
 		whenNewExperienceLevelInForm();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<ExperienceLevelEntity> savedExperienceLevel = ArgumentCaptor.forClass(ExperienceLevelEntity.class);
 		verify(experienceLevelRepository).save(savedExperienceLevel.capture());
 		assertEquals("Wrong experience level name", FORM_XP_LEVEL_NEW_NAME, savedExperienceLevel.getValue().getName());
@@ -220,7 +214,6 @@ public class GangTypePersisterUnitTest {
 	public void save_existing_noExperienceLevelStartsAtZero() {
 		whenGangTypeExists();
 		when(formExperienceLevelFirst.getExperiencePoints()).thenReturn(1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorExperienceLevelsMustStartAtZero(bindingResult);
@@ -231,7 +224,6 @@ public class GangTypePersisterUnitTest {
 	public void save_existing_experienceLevelsNotUnique() {
 		whenGangTypeExists();
 		when(formExperienceLevelSecond.getExperiencePoints()).thenReturn(FORM_XP_LEVEL_FIRST_XP);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorExperienceLevelsMustBeUnique(bindingResult);
@@ -266,7 +258,6 @@ public class GangTypePersisterUnitTest {
 	public void save_existing_simultaneousEdit() {
 		whenGangTypeExists();
 		when(form.getVersion()).thenReturn(DB_GANG_TYPE_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -318,6 +309,10 @@ public class GangTypePersisterUnitTest {
 		when(formExperienceLevelSecond.getName()).thenReturn(FORM_XP_LEVEL_SECOND_NAME);
 		when(formExperienceLevelSecond.getExperiencePoints()).thenReturn(FORM_XP_LEVEL_SECOND_XP);
 		form.getExperienceLevels().add(formExperienceLevelSecond);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorExperienceLevelsMustBeUnique(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorExperienceLevelsMustStartAtZero(bindingResult);
 	}
 
 	@Before

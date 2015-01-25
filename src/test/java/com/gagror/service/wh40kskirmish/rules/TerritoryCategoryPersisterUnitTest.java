@@ -8,7 +8,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -21,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -66,8 +66,7 @@ public class TerritoryCategoryPersisterUnitTest {
 	public void save_new_ok() {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<TerritoryCategoryEntity> savedTerritoryCategory = ArgumentCaptor.forClass(TerritoryCategoryEntity.class);
 		verify(territoryCategoryRepository).save(savedTerritoryCategory.capture());
 		assertEquals("Wrong name", FORM_TERRITORY_CATEGORY_NAME, savedTerritoryCategory.getValue().getName());
@@ -77,7 +76,6 @@ public class TerritoryCategoryPersisterUnitTest {
 	@Test
 	public void save_new_nameNotUnique() {
 		whenAnotherCategoryWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(territoryCategoryRepository, never()).save(any(TerritoryCategoryEntity.class));
@@ -103,8 +101,7 @@ public class TerritoryCategoryPersisterUnitTest {
 		whenTerritoryCategoryExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		verify(territoryCategoryRepository, never()).save(any(TerritoryCategoryEntity.class));
 		verify(territoryCategory).setName(FORM_TERRITORY_CATEGORY_NAME);
 	}
@@ -113,7 +110,6 @@ public class TerritoryCategoryPersisterUnitTest {
 	public void save_existing_nameNotUnique() {
 		whenTerritoryCategoryExists();
 		whenAnotherCategoryWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(territoryCategory, never()).setName(anyString());
@@ -148,7 +144,6 @@ public class TerritoryCategoryPersisterUnitTest {
 	public void save_existing_simultaneousEdit() {
 		whenTerritoryCategoryExists();
 		when(form.getVersion()).thenReturn(DB_TERRITORY_CATEGORY_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -176,6 +171,8 @@ public class TerritoryCategoryPersisterUnitTest {
 	public void setupForm() {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getName()).thenReturn(FORM_TERRITORY_CATEGORY_NAME);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before

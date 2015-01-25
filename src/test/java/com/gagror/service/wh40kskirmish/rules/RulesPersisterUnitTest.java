@@ -6,7 +6,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -16,11 +15,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
-import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.RulesInput;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RulesPersisterUnitTest {
@@ -52,8 +52,7 @@ public class RulesPersisterUnitTest {
 	public void save_existing_ok() {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		// Verify that the entity is updated
 		verify(rules).setStartingMoney(FORM_STARTING_MONEY);
 		verify(rules).setCurrencyName(FORM_CURRENCY_NAME);
@@ -81,7 +80,6 @@ public class RulesPersisterUnitTest {
 	@Test
 	public void save_existing_simultaneousEdit() {
 		when(form.getVersion()).thenReturn(DB_RULES_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -95,6 +93,7 @@ public class RulesPersisterUnitTest {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getStartingMoney()).thenReturn(FORM_STARTING_MONEY);
 		when(form.getCurrencyName()).thenReturn(FORM_CURRENCY_NAME);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before

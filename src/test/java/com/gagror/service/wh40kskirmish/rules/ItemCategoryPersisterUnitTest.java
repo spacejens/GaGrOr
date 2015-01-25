@@ -8,7 +8,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -21,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -66,8 +66,7 @@ public class ItemCategoryPersisterUnitTest {
 	public void save_new_ok() {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<ItemCategoryEntity> savedItemCategory = ArgumentCaptor.forClass(ItemCategoryEntity.class);
 		verify(itemCategoryRepository).save(savedItemCategory.capture());
 		assertEquals("Wrong name", FORM_ITEM_CATEGORY_NAME, savedItemCategory.getValue().getName());
@@ -77,7 +76,6 @@ public class ItemCategoryPersisterUnitTest {
 	@Test
 	public void save_new_nameNotUnique() {
 		whenAnotherCategoryWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(itemCategoryRepository, never()).save(any(ItemCategoryEntity.class));
@@ -103,8 +101,7 @@ public class ItemCategoryPersisterUnitTest {
 		whenItemCategoryExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		verify(itemCategoryRepository, never()).save(any(ItemCategoryEntity.class));
 		verify(itemCategory).setName(FORM_ITEM_CATEGORY_NAME);
 	}
@@ -113,7 +110,6 @@ public class ItemCategoryPersisterUnitTest {
 	public void save_existing_nameNotUnique() {
 		whenItemCategoryExists();
 		whenAnotherCategoryWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(itemCategory, never()).setName(anyString());
@@ -148,7 +144,6 @@ public class ItemCategoryPersisterUnitTest {
 	public void save_existing_simultaneousEdit() {
 		whenItemCategoryExists();
 		when(form.getVersion()).thenReturn(DB_ITEM_CATEGORY_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -176,6 +171,8 @@ public class ItemCategoryPersisterUnitTest {
 	public void setupForm() {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getName()).thenReturn(FORM_ITEM_CATEGORY_NAME);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before

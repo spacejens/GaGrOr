@@ -8,7 +8,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -21,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -80,8 +80,7 @@ public class RacePersisterUnitTest {
 	public void save_new_ok() {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<RaceEntity> savedRace = ArgumentCaptor.forClass(RaceEntity.class);
 		verify(raceRepository).save(savedRace.capture());
 		assertEquals("Wrong name", FORM_RACE_NAME, savedRace.getValue().getName());
@@ -100,7 +99,6 @@ public class RacePersisterUnitTest {
 	@Test
 	public void save_new_nameNotUnique() {
 		whenAnotherRaceWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(raceRepository, never()).save(any(RaceEntity.class));
@@ -132,8 +130,7 @@ public class RacePersisterUnitTest {
 		whenRaceExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		verify(raceRepository, never()).save(any(RaceEntity.class));
 		verify(race).setName(FORM_RACE_NAME);
 		verify(race).setMaxMovement(FORM_RACE_MOVEMENT);
@@ -151,7 +148,6 @@ public class RacePersisterUnitTest {
 	public void save_existing_nameNotUnique() {
 		whenRaceExists();
 		whenAnotherRaceWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(race, never()).setName(anyString());
@@ -193,7 +189,6 @@ public class RacePersisterUnitTest {
 	public void save_existing_simultaneousEdit() {
 		whenRaceExists();
 		when(form.getVersion()).thenReturn(DB_RACE_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -235,6 +230,8 @@ public class RacePersisterUnitTest {
 		when(form.getMaxInitiative()).thenReturn(FORM_RACE_INITIATIVE);
 		when(form.getMaxAttacks()).thenReturn(FORM_RACE_ATTACKS);
 		when(form.getMaxLeadership()).thenReturn(FORM_RACE_LEADERSHIP);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before

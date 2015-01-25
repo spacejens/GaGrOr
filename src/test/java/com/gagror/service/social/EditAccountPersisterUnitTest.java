@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
@@ -118,7 +119,6 @@ public class EditAccountPersisterUnitTest {
 	@Test
 	public void saveAccount_usernameBusy() {
 		when(accountRepository.findByName(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
@@ -130,7 +130,6 @@ public class EditAccountPersisterUnitTest {
 	public void saveAccount_passwordMismatch() {
 		when(editAccountForm.getPassword()).thenReturn("Something");
 		when(editAccountForm.getPasswordRepeat()).thenReturn("Something Else");
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorPasswordMismatch(bindingResult);
@@ -140,7 +139,6 @@ public class EditAccountPersisterUnitTest {
 	@Test
 	public void saveAccount_passwordTooWeak() {
 		when(accessControlService.isPasswordTooWeak(FORM_PASSWORD)).thenReturn(true);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorPasswordTooWeak(bindingResult);
@@ -151,7 +149,6 @@ public class EditAccountPersisterUnitTest {
 	public void saveAccount_disallowedAccountType() {
 		when(accessControlService.getRequestAccountEntity()).thenReturn(anotherAccount); // Needed to be allowed to edit
 		when(editAccountForm.getAccountType()).thenReturn(AccountType.SYSTEM_OWNER);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorDisallowedAccountType(bindingResult);
@@ -161,7 +158,6 @@ public class EditAccountPersisterUnitTest {
 	@Test
 	public void saveAccount_simultaneousEdit() {
 		when(account.getVersion()).thenReturn(VERSION+1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
@@ -175,7 +171,6 @@ public class EditAccountPersisterUnitTest {
 		when(editAccountForm.getPasswordRepeat()).thenReturn("Doesn't match");
 		when(accessControlService.isPasswordTooWeak(FORM_PASSWORD)).thenReturn(true);
 		when(account.getVersion()).thenReturn(VERSION+1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
@@ -217,11 +212,11 @@ public class EditAccountPersisterUnitTest {
 		when(editAccountForm.getAccountType()).thenReturn(FORM_ACCOUNT_TYPE);
 		when(editAccountForm.isActive()).thenReturn(FORM_ACTIVE);
 		when(editAccountForm.isLocked()).thenReturn(FORM_LOCKED);
-	}
-
-	@Before
-	public void setupBindingResult() {
-		when(bindingResult.getObjectName()).thenReturn("");
+		AddError.to(bindingResult).when(editAccountForm).addErrorDisallowedAccountType(bindingResult);
+		AddError.to(bindingResult).when(editAccountForm).addErrorPasswordMismatch(bindingResult);
+		AddError.to(bindingResult).when(editAccountForm).addErrorPasswordTooWeak(bindingResult);
+		AddError.to(bindingResult).when(editAccountForm).addErrorSimultaneuosEdit(bindingResult);
+		AddError.to(bindingResult).when(editAccountForm).addErrorUsernameBusy(bindingResult);
 	}
 
 	@Before

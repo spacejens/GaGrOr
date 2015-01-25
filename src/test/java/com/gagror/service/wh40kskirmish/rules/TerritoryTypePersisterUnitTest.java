@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -71,8 +72,7 @@ public class TerritoryTypePersisterUnitTest {
 	public void save_new_ok() {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<TerritoryTypeEntity> savedTerritoryType = ArgumentCaptor.forClass(TerritoryTypeEntity.class);
 		verify(territoryTypeRepository).save(savedTerritoryType.capture());
 		assertEquals("Wrong name", FORM_TERRITORY_TYPE_NAME, savedTerritoryType.getValue().getName());
@@ -82,7 +82,6 @@ public class TerritoryTypePersisterUnitTest {
 	@Test
 	public void save_new_nameNotUnique() {
 		whenAnotherTerritoryTypeWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(territoryTypeRepository, never()).save(any(TerritoryTypeEntity.class));
@@ -124,7 +123,6 @@ public class TerritoryTypePersisterUnitTest {
 	public void save_existing_nameNotUnique() {
 		whenTerritoryTypeExists();
 		whenAnotherTerritoryTypeWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(territoryType, never()).setName(anyString());
@@ -166,7 +164,6 @@ public class TerritoryTypePersisterUnitTest {
 	public void save_existing_simultaneousEdit() {
 		whenTerritoryTypeExists();
 		when(form.getVersion()).thenReturn(DB_TERRITORY_TYPE_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -199,6 +196,8 @@ public class TerritoryTypePersisterUnitTest {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getTerritoryCategoryId()).thenReturn(TERRITORY_CATEGORY_ID);
 		when(form.getName()).thenReturn(FORM_TERRITORY_TYPE_NAME);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before

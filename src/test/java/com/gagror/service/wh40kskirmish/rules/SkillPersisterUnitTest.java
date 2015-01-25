@@ -8,7 +8,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -21,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -71,8 +71,7 @@ public class SkillPersisterUnitTest {
 	public void save_new_ok() {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<SkillEntity> savedSkill = ArgumentCaptor.forClass(SkillEntity.class);
 		verify(skillRepository).save(savedSkill.capture());
 		assertEquals("Wrong name", FORM_SKILL_NAME, savedSkill.getValue().getName());
@@ -82,7 +81,6 @@ public class SkillPersisterUnitTest {
 	@Test
 	public void save_new_nameNotUnique() {
 		whenAnotherSkillWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(skillRepository, never()).save(any(SkillEntity.class));
@@ -114,8 +112,7 @@ public class SkillPersisterUnitTest {
 		whenSkillExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
-		verify(bindingResult).hasErrors(); // Should check for form validation errors
-		verifyNoMoreInteractions(bindingResult);
+		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		verify(skillRepository, never()).save(any(SkillEntity.class));
 		verify(skill).setName(FORM_SKILL_NAME);
 	}
@@ -124,7 +121,6 @@ public class SkillPersisterUnitTest {
 	public void save_existing_nameNotUnique() {
 		whenSkillExists();
 		whenAnotherSkillWithSameNameExists();
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(skill, never()).setName(anyString());
@@ -166,7 +162,6 @@ public class SkillPersisterUnitTest {
 	public void save_existing_simultaneousEdit() {
 		whenSkillExists();
 		when(form.getVersion()).thenReturn(DB_SKILL_VERSION - 1);
-		when(bindingResult.hasErrors()).thenReturn(true); // Will be the case when checked
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorSimultaneuosEdit(bindingResult);
@@ -199,6 +194,8 @@ public class SkillPersisterUnitTest {
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getSkillCategoryId()).thenReturn(SKILL_CATEGORY_ID);
 		when(form.getName()).thenReturn(FORM_SKILL_NAME);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 	}
 
 	@Before
