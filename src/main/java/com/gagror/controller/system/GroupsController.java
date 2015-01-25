@@ -129,8 +129,8 @@ public class GroupsController extends AbstractController {
 			throw new FormAndURLMismatchException("Group ID", groupId, groupEditForm.getId());
 		}
 		if(editGroupPersister.save(groupEditForm, bindingResult)) {
-			// TODO Redirect to correct URL for group type after editing group settings
-			return redirect(String.format("/groups/view/%d", groupId));
+			final GroupType groupType = groupService.viewGroup(groupId).getGroupType();
+			return redirect(String.format("%s/%d", groupType.getGroupUrl(), groupId));
 		} else {
 			final GroupEditOutput currentState = groupService.editGroup(groupId);
 			model.addAttribute("group", currentState);
