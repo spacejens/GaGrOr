@@ -106,8 +106,20 @@ public class EntityDesignRulesTest extends DesignRulesTestSupport {
 	public void explicitTableAnnotation() {
 		assertTrue("All entities should have @Table", entity.isAnnotationPresent(Table.class));
 		final String tableName = entity.getAnnotation(Table.class).name();
+		// Verify that table name is unique
 		assertFalse(String.format("Table name \"%s\" also used by %s", tableName, tableToName.get(tableName)), tableToName.containsKey(tableName));
 		tableToName.put(tableName, name);
+		// Verify that table name has the correct prefix
+		final String expectedTablePrefix;
+		if(name.contains(".wh40kskirmish.")) {
+			expectedTablePrefix = "wh40ksk_";
+		} else {
+			// Gagror system table, used when table is not game specific
+			expectedTablePrefix = "gagror_";
+		}
+		assertTrue(
+				String.format("Table name prefix %s missing", expectedTablePrefix),
+				tableName.startsWith(expectedTablePrefix));
 	}
 
 	@Test
