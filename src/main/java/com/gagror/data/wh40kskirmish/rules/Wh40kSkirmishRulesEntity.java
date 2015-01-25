@@ -16,10 +16,10 @@ import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.wh40kskirmish.rules.gangs.Wh40kSkirmishGangTypeEntity;
-import com.gagror.data.wh40kskirmish.rules.items.Wh40kSkirmishItemCategoryEntity;
-import com.gagror.data.wh40kskirmish.rules.skills.Wh40kSkirmishSkillCategoryEntity;
-import com.gagror.data.wh40kskirmish.rules.territory.Wh40kSkirmishTerritoryCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
@@ -33,19 +33,19 @@ public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
 
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
 	@Getter
-	private Set<Wh40kSkirmishGangTypeEntity> gangTypes;
+	private Set<GangTypeEntity> gangTypes;
 
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
 	@Getter
-	private Set<Wh40kSkirmishTerritoryCategoryEntity> territoryCategories;
+	private Set<TerritoryCategoryEntity> territoryCategories;
 
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
 	@Getter
-	private Set<Wh40kSkirmishSkillCategoryEntity> skillCategories;
+	private Set<SkillCategoryEntity> skillCategories;
 
 	@OneToMany(mappedBy="rules", fetch=FetchType.LAZY)
 	@Getter
-	private Set<Wh40kSkirmishItemCategoryEntity> itemCategories;
+	private Set<ItemCategoryEntity> itemCategories;
 
 	@Column(nullable = false, insertable = true, updatable = true)
 	@Getter
