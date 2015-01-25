@@ -38,7 +38,7 @@ public class GangController extends AbstractController {
 		return "wh40kskirmish/gang_view";
 	}
 
-	// TODO Add page to create gang (who is allowed?)
+	// TODO Add page to create gang (group owner only)
 
 	// TODO Add page to edit gang (group owner unlocks additional capabilities? or can only group owner edit? separate pages?)
 
