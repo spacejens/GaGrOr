@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
@@ -136,6 +138,18 @@ public class RulesServiceUnitTest {
 	@Test(expected=WrongGroupTypeException.class)
 	public void viewRules_wrongType() {
 		instance.viewRules(WRONG_TYPE_GROUP_ID);
+	}
+
+	@Test
+	public void listAllFactions_ok() {
+		final List<FactionReferenceOutput> result = instance.listAllFactions(GROUP_ID);
+		assertEquals("Wrong number of factions", 1, result.size());
+		assertEquals("Wrong faction", FACTION_NAME, result.get(0).getName());
+	}
+
+	@Test(expected=WrongGroupTypeException.class)
+	public void listAllFactions_wrongType() {
+		instance.listAllFactions(WRONG_TYPE_GROUP_ID);
 	}
 
 	@Test

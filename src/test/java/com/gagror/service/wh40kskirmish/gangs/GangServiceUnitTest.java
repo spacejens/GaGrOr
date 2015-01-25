@@ -1,9 +1,11 @@
 package com.gagror.service.wh40kskirmish.gangs;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +15,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.group.GroupViewMembersOutput;
+import com.gagror.data.wh40kskirmish.gangs.CreateGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
+import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
+import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.rules.RulesService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,6 +36,9 @@ public class GangServiceUnitTest {
 	private static final String GANG_NAME = "Gang";
 
 	GangService instance;
+
+	@Mock
+	GroupService groupService;
 
 	@Mock
 	RulesService rulesService;
@@ -45,6 +55,23 @@ public class GangServiceUnitTest {
 	@Mock
 	GangEntity gang;
 
+	@Mock
+	RulesOutput rules;
+
+	@Mock
+	GroupViewMembersOutput groupMembers;
+
+	@Mock
+	List<FactionReferenceOutput> factions;
+
+	@Test
+	public void prepareToCreateGang_ok() {
+		final CreateGangOutput result = instance.prepareToCreateGang(GROUP_ID);
+		assertSame("Wrong group", groupMembers, result.getGroup());
+		assertSame("Wrong rules", rules, result.getRules());
+		assertSame("Wrong factions", factions, result.getFactions());
+	}
+
 	@Test
 	public void viewGang_ok() {
 		final GangOutput result = instance.viewGang(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID);
@@ -59,6 +86,9 @@ public class GangServiceUnitTest {
 
 	@Before
 	public void setup() {
+		when(groupService.viewGroupMembers(GROUP_ID)).thenReturn(groupMembers);
+		when(rulesService.viewRules(GROUP_ID)).thenReturn(rules);
+		when(rulesService.listAllFactions(GROUP_ID)).thenReturn(factions);
 		when(rulesService.loadFaction(GROUP_ID, GANG_TYPE_ID, FACTION_ID)).thenReturn(faction);
 		when(gang.getId()).thenReturn(GANG_ID);
 		when(gang.getName()).thenReturn(GANG_NAME);
@@ -74,6 +104,7 @@ public class GangServiceUnitTest {
 	@Before
 	public void setupInstance() {
 		instance = new GangService();
+		instance.groupService = groupService;
 		instance.rulesService = rulesService;
 	}
 }

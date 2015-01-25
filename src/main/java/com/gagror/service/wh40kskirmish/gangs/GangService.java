@@ -1,13 +1,20 @@
 package com.gagror.service.wh40kskirmish.gangs;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.DataNotFoundException;
+import com.gagror.data.group.GroupViewMembersOutput;
+import com.gagror.data.wh40kskirmish.gangs.CreateGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
+import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
+import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.rules.RulesService;
 
 @Service
@@ -15,7 +22,17 @@ import com.gagror.service.wh40kskirmish.rules.RulesService;
 public class GangService {
 
 	@Autowired
+	GroupService groupService;
+
+	@Autowired
 	RulesService rulesService;
+
+	public CreateGangOutput prepareToCreateGang(final Long groupId) {
+		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
+		final RulesOutput rules = rulesService.viewRules(groupId);
+		final List<FactionReferenceOutput> factions = rulesService.listAllFactions(groupId);
+		return new CreateGangOutput(group, rules, factions);
+	}
 
 	public GangOutput viewGang(
 			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {

@@ -1,5 +1,9 @@
 package com.gagror.service.wh40kskirmish.rules;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.WrongGroupTypeException;
-import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.RulesListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
@@ -58,6 +63,18 @@ public class RulesService {
 			throw new WrongGroupTypeException(group);
 		}
 		return group.getWh40kSkirmishRules();
+	}
+
+	public List<FactionReferenceOutput> listAllFactions(final Long groupId) {
+		final List<FactionReferenceOutput> factions = new ArrayList<>();
+		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		for(final GangTypeEntity gangType : rules.getGangTypes()) {
+			for(final FactionEntity faction : gangType.getFactions()) {
+				factions.add(new FactionReferenceOutput(faction));
+			}
+		}
+		Collections.sort(factions);
+		return factions;
 	}
 
 	private GangTypeEntity loadGangType(final Long groupId, final Long gangTypeId) {

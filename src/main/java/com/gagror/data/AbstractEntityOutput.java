@@ -5,7 +5,8 @@ import java.util.Date;
 import lombok.Getter;
 
 public abstract class AbstractEntityOutput
-extends AbstractIdentifiable {
+extends AbstractIdentifiable
+implements Output {
 
 	@Getter
 	private final Long id;
