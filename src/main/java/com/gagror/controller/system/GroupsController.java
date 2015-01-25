@@ -66,6 +66,7 @@ public class GroupsController extends AbstractController {
 	public String createGroupForm(
 			@Valid @ModelAttribute("groupCreateForm") final GroupCreateInput groupCreateForm,
 			final Model model) {
+		// TODO When creating a group, give the option to copy rules from another group of which you are a member
 		log.info("Viewing create group form");
 		groupCreateForm.setGroupType(GroupType.SOCIAL);
 		return showCreateGroupForm(model);
