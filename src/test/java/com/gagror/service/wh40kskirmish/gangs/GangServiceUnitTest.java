@@ -1,6 +1,7 @@
 package com.gagror.service.wh40kskirmish.gangs;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupViewMembersOutput;
-import com.gagror.data.wh40kskirmish.gangs.CreateGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
@@ -66,10 +67,19 @@ public class GangServiceUnitTest {
 
 	@Test
 	public void prepareToCreateGang_ok() {
-		final CreateGangOutput result = instance.prepareToCreateGang(GROUP_ID);
+		final EditGangOutput result = instance.prepareToCreateGang(GROUP_ID);
 		assertSame("Wrong group", groupMembers, result.getGroup());
 		assertSame("Wrong rules", rules, result.getRules());
 		assertSame("Wrong factions", factions, result.getFactions());
+	}
+
+	@Test
+	public void prepareToEditGang_ok() {
+		final EditGangOutput result = instance.prepareToEditGang(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID);
+		assertSame("Wrong group", groupMembers, result.getGroup());
+		assertSame("Wrong rules", rules, result.getRules());
+		assertNull("Doesn't need to get factions", result.getFactions());
+		assertEquals("Wrong gang", GANG_NAME, result.getCurrentState().getName());
 	}
 
 	@Test

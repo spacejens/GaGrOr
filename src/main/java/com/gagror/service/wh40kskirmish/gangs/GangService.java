@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupViewMembersOutput;
-import com.gagror.data.wh40kskirmish.gangs.CreateGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
@@ -27,11 +27,18 @@ public class GangService {
 	@Autowired
 	RulesService rulesService;
 
-	public CreateGangOutput prepareToCreateGang(final Long groupId) {
+	public EditGangOutput prepareToCreateGang(final Long groupId) {
 		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
 		final RulesOutput rules = rulesService.viewRules(groupId);
 		final List<FactionReferenceOutput> factions = rulesService.listAllFactions(groupId);
-		return new CreateGangOutput(group, rules, factions);
+		return EditGangOutput.createGang(group, rules, factions);
+	}
+
+	public EditGangOutput prepareToEditGang(
+			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {
+		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
+		final GangOutput gang = viewGang(groupId, gangTypeId, factionId, gangId);
+		return EditGangOutput.editGang(group, gang);
 	}
 
 	public GangOutput viewGang(

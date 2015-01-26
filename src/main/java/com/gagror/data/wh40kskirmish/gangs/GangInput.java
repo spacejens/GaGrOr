@@ -33,10 +33,16 @@ public class GangInput extends AbstractIdentifiableNamedInput<Long, GangOutput> 
 	@Min(0)
 	private int money;
 
-	// TODO Constructor to create edit gang form from current state
-
 	public GangInput(final RulesOutput rules) {
 		setGroupId(rules.getGroup().getId());
 		setMoney(rules.getStartingMoney());
+	}
+
+	public GangInput(final GangOutput currentState) {
+		super(currentState);
+		setGroupId(currentState.getRules().getGroup().getId());
+		setFactionId(currentState.getFaction().getId());
+		setPlayerId(currentState.getPlayer().getId());
+		setMoney(currentState.getMoney());
 	}
 }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.controller.FormAndURLMismatchException;
-import com.gagror.data.wh40kskirmish.gangs.CreateGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangInput;
 import com.gagror.service.wh40kskirmish.gangs.GangPersister;
 import com.gagror.service.wh40kskirmish.gangs.GangService;
@@ -40,7 +40,7 @@ public class GangController extends AbstractController {
 	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/create", method=RequestMethod.GET)
 	public String createGangForm(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing create gang form for group %d", groupId));
-		final CreateGangOutput data = gangService.prepareToCreateGang(groupId);
+		final EditGangOutput data = gangService.prepareToCreateGang(groupId);
 		model.addAttribute("group", data.getGroup());
 		model.addAttribute("factions", data.getFactions());
 		model.addAttribute("gangForm", new GangInput(data.getRules()));
@@ -62,7 +62,7 @@ public class GangController extends AbstractController {
 			return redirect(String.format("/wh40kskirmish/group/%d", groupId));
 		} else {
 			log.warn(String.format("Failed to save: %s", gangForm));
-			final CreateGangOutput data = gangService.prepareToCreateGang(groupId);
+			final EditGangOutput data = gangService.prepareToCreateGang(groupId);
 			model.addAttribute("group", data.getGroup());
 			model.addAttribute("factions", data.getFactions());
 			return "wh40kskirmish/gang_edit";
@@ -83,22 +83,22 @@ public class GangController extends AbstractController {
 		return "wh40kskirmish/gang_view";
 	}
 
-//	@PreAuthorize(MAY_ADMIN_GROUP)
-//	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}/{" + ATTR_GANG_ID + "}/edit", method=RequestMethod.GET)
-//	public String editGangForm(
-//			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-//			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
-//			@PathVariable(ATTR_FACTION_ID) final Long factionId,
-//			@PathVariable(ATTR_GANG_ID) final Long gangId,
-//			final Model model) {
-//		log.info(String.format("Viewing edit gang form for gang %d in group %d", gangTypeId, groupId));
-//		// TODO Faction and player cannot be changed for an existing gang
-//		// TODO Separate method to view gang without all the child data
-//		final GangTypeOutput gangType = rulesService.viewGangType(groupId, gangTypeId);
-//		model.addAttribute("group", gangType.getGroup());
-//		model.addAttribute("gangForm", new GangTypeInput(gangType));
-//		return "wh40kskirmish/gang_edit";
-//	}
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}/{" + ATTR_GANG_ID + "}/edit", method=RequestMethod.GET)
+	public String editGangForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			@PathVariable(ATTR_FACTION_ID) final Long factionId,
+			@PathVariable(ATTR_GANG_ID) final Long gangId,
+			final Model model) {
+		log.info(String.format("Viewing edit gang form for gang %d in group %d", gangTypeId, groupId));
+		final EditGangOutput data = gangService.prepareToEditGang(groupId, gangTypeId, factionId, gangId);
+		model.addAttribute("group", data.getGroup());
+		model.addAttribute("gangType", data.getCurrentState().getGangType());
+		model.addAttribute("faction", data.getCurrentState().getFaction());
+		model.addAttribute("gangForm", new GangInput(data.getCurrentState()));
+		return "wh40kskirmish/gang_edit";
+	}
 
 	// TODO Add page to create (buy) or edit fighter (group owner unlocks additional capabilities?)
 
