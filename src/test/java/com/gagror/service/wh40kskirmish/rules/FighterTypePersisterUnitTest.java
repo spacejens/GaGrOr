@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -111,6 +112,87 @@ public class FighterTypePersisterUnitTest {
 	}
 
 	@Test
+	public void save_new_maxMovement() {
+		when(form.getStartingMovement()).thenReturn(FORM_FIGHTERTYPE_MOVEMENT + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxMovement(bindingResult, FORM_FIGHTERTYPE_MOVEMENT);
+	}
+
+	@Test
+	public void save_new_maxWeaponSkill() {
+		when(form.getStartingWeaponSkill()).thenReturn(FORM_FIGHTERTYPE_WEAPON_SKILL + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxWeaponSkill(bindingResult, FORM_FIGHTERTYPE_WEAPON_SKILL);
+	}
+
+	@Test
+	public void save_new_maxBallisticSkill() {
+		when(form.getStartingBallisticSkill()).thenReturn(FORM_FIGHTERTYPE_BALLISTIC_SKILL + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxBallisticSkill(bindingResult, FORM_FIGHTERTYPE_BALLISTIC_SKILL);
+	}
+
+	@Test
+	public void save_new_maxStrength() {
+		when(form.getStartingStrength()).thenReturn(FORM_FIGHTERTYPE_STRENGTH + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxStrength(bindingResult, FORM_FIGHTERTYPE_STRENGTH);
+	}
+
+	@Test
+	public void save_new_maxToughness() {
+		when(form.getStartingToughness()).thenReturn(FORM_FIGHTERTYPE_TOUGHNESS + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxToughness(bindingResult, FORM_FIGHTERTYPE_TOUGHNESS);
+	}
+
+	@Test
+	public void save_new_maxWounds() {
+		when(form.getStartingWounds()).thenReturn(FORM_FIGHTERTYPE_WOUNDS + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxWounds(bindingResult, FORM_FIGHTERTYPE_WOUNDS);
+	}
+
+	@Test
+	public void save_new_maxInitiative() {
+		when(form.getStartingInitiative()).thenReturn(FORM_FIGHTERTYPE_INITIATIVE + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxInitiative(bindingResult, FORM_FIGHTERTYPE_INITIATIVE);
+	}
+
+	@Test
+	public void save_new_maxAttacks() {
+		when(form.getStartingAttacks()).thenReturn(FORM_FIGHTERTYPE_ATTACKS + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxAttacks(bindingResult, FORM_FIGHTERTYPE_ATTACKS);
+	}
+
+	@Test
+	public void save_new_maxLeadership() {
+		when(form.getStartingLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(form).addErrorStartingAboveMaxLeadership(bindingResult, FORM_FIGHTERTYPE_LEADERSHIP);
+	}
+
+	@Test
 	public void save_new_bindingError() {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
@@ -163,6 +245,96 @@ public class FighterTypePersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(fighterType, never()).setName(anyString());
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
+	@Test
+	public void save_existing_maxMovement() {
+		whenFighterTypeExists();
+		when(form.getStartingMovement()).thenReturn(FORM_FIGHTERTYPE_MOVEMENT + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingMovement(anyInt());
+		verify(form).addErrorStartingAboveMaxMovement(bindingResult, FORM_FIGHTERTYPE_MOVEMENT);
+	}
+
+	@Test
+	public void save_existing_maxWeaponSkill() {
+		whenFighterTypeExists();
+		when(form.getStartingWeaponSkill()).thenReturn(FORM_FIGHTERTYPE_WEAPON_SKILL + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingWeaponSkill(anyInt());
+		verify(form).addErrorStartingAboveMaxWeaponSkill(bindingResult, FORM_FIGHTERTYPE_WEAPON_SKILL);
+	}
+
+	@Test
+	public void save_existing_maxBallisticSkill() {
+		whenFighterTypeExists();
+		when(form.getStartingBallisticSkill()).thenReturn(FORM_FIGHTERTYPE_BALLISTIC_SKILL + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingBallisticSkill(anyInt());
+		verify(form).addErrorStartingAboveMaxBallisticSkill(bindingResult, FORM_FIGHTERTYPE_BALLISTIC_SKILL);
+	}
+
+	@Test
+	public void save_existing_maxStrength() {
+		whenFighterTypeExists();
+		when(form.getStartingStrength()).thenReturn(FORM_FIGHTERTYPE_STRENGTH + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingStrength(anyInt());
+		verify(form).addErrorStartingAboveMaxStrength(bindingResult, FORM_FIGHTERTYPE_STRENGTH);
+	}
+
+	@Test
+	public void save_existing_maxToughness() {
+		whenFighterTypeExists();
+		when(form.getStartingToughness()).thenReturn(FORM_FIGHTERTYPE_TOUGHNESS + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingToughness(anyInt());
+		verify(form).addErrorStartingAboveMaxToughness(bindingResult, FORM_FIGHTERTYPE_TOUGHNESS);
+	}
+
+	@Test
+	public void save_existing_maxWounds() {
+		whenFighterTypeExists();
+		when(form.getStartingWounds()).thenReturn(FORM_FIGHTERTYPE_WOUNDS + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingWounds(anyInt());
+		verify(form).addErrorStartingAboveMaxWounds(bindingResult, FORM_FIGHTERTYPE_WOUNDS);
+	}
+
+	@Test
+	public void save_existing_maxInitiative() {
+		whenFighterTypeExists();
+		when(form.getStartingInitiative()).thenReturn(FORM_FIGHTERTYPE_INITIATIVE + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingInitiative(anyInt());
+		verify(form).addErrorStartingAboveMaxInitiative(bindingResult, FORM_FIGHTERTYPE_INITIATIVE);
+	}
+
+	@Test
+	public void save_existing_maxAttacks() {
+		whenFighterTypeExists();
+		when(form.getStartingAttacks()).thenReturn(FORM_FIGHTERTYPE_ATTACKS + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingAttacks(anyInt());
+		verify(form).addErrorStartingAboveMaxAttacks(bindingResult, FORM_FIGHTERTYPE_ATTACKS);
+	}
+
+	@Test
+	public void save_existing_maxLeadership() {
+		whenFighterTypeExists();
+		when(form.getStartingLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP + 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(fighterType, never()).setStartingLeadership(anyInt());
+		verify(form).addErrorStartingAboveMaxLeadership(bindingResult, FORM_FIGHTERTYPE_LEADERSHIP);
 	}
 
 	@Test
@@ -255,6 +427,15 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP);
 		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxMovement(bindingResult, FORM_FIGHTERTYPE_MOVEMENT);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxWeaponSkill(bindingResult, FORM_FIGHTERTYPE_WEAPON_SKILL);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxBallisticSkill(bindingResult, FORM_FIGHTERTYPE_BALLISTIC_SKILL);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxStrength(bindingResult, FORM_FIGHTERTYPE_STRENGTH);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxToughness(bindingResult, FORM_FIGHTERTYPE_TOUGHNESS);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxWounds(bindingResult, FORM_FIGHTERTYPE_WOUNDS);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxInitiative(bindingResult, FORM_FIGHTERTYPE_INITIATIVE);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxAttacks(bindingResult, FORM_FIGHTERTYPE_ATTACKS);
+		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxLeadership(bindingResult, FORM_FIGHTERTYPE_LEADERSHIP);
 	}
 
 	@Before
@@ -270,6 +451,15 @@ public class FighterTypePersisterUnitTest {
 		when(race.getId()).thenReturn(RACE_ID);
 		when(race.getFighterTypes()).thenReturn(new HashSet<FighterTypeEntity>());
 		when(race.getGangType()).thenReturn(gangType);
+		when(race.getMaxMovement()).thenReturn(FORM_FIGHTERTYPE_MOVEMENT);
+		when(race.getMaxWeaponSkill()).thenReturn(FORM_FIGHTERTYPE_WEAPON_SKILL);
+		when(race.getMaxBallisticSkill()).thenReturn(FORM_FIGHTERTYPE_BALLISTIC_SKILL);
+		when(race.getMaxStrength()).thenReturn(FORM_FIGHTERTYPE_STRENGTH);
+		when(race.getMaxToughness()).thenReturn(FORM_FIGHTERTYPE_TOUGHNESS);
+		when(race.getMaxWounds()).thenReturn(FORM_FIGHTERTYPE_WOUNDS);
+		when(race.getMaxInitiative()).thenReturn(FORM_FIGHTERTYPE_INITIATIVE);
+		when(race.getMaxAttacks()).thenReturn(FORM_FIGHTERTYPE_ATTACKS);
+		when(race.getMaxLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP);
 		gangType.getRaces().add(race);
 	}
 

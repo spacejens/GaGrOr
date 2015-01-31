@@ -66,6 +66,34 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 				}
 			}
 		}
+		// Validate that starting characteristics are not above racial maximums
+		if(form.getStartingMovement() > context.getMaxMovement()) {
+			form.addErrorStartingAboveMaxMovement(bindingResult, context.getMaxMovement());
+		}
+		if(form.getStartingWeaponSkill() > context.getMaxWeaponSkill()) {
+			form.addErrorStartingAboveMaxWeaponSkill(bindingResult, context.getMaxWeaponSkill());
+		}
+		if(form.getStartingBallisticSkill() > context.getMaxBallisticSkill()) {
+			form.addErrorStartingAboveMaxBallisticSkill(bindingResult, context.getMaxBallisticSkill());
+		}
+		if(form.getStartingStrength() > context.getMaxStrength()) {
+			form.addErrorStartingAboveMaxStrength(bindingResult, context.getMaxStrength());
+		}
+		if(form.getStartingToughness() > context.getMaxToughness()) {
+			form.addErrorStartingAboveMaxToughness(bindingResult, context.getMaxToughness());
+		}
+		if(form.getStartingWounds() > context.getMaxWounds()) {
+			form.addErrorStartingAboveMaxWounds(bindingResult, context.getMaxWounds());
+		}
+		if(form.getStartingInitiative() > context.getMaxInitiative()) {
+			form.addErrorStartingAboveMaxInitiative(bindingResult, context.getMaxInitiative());
+		}
+		if(form.getStartingAttacks() > context.getMaxAttacks()) {
+			form.addErrorStartingAboveMaxAttacks(bindingResult, context.getMaxAttacks());
+		}
+		if(form.getStartingLeadership() > context.getMaxLeadership()) {
+			form.addErrorStartingAboveMaxLeadership(bindingResult, context.getMaxLeadership());
+		}
 	}
 
 	@Override
@@ -82,8 +110,6 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 		}
 		throw new DataNotFoundException(String.format("Fighter type (race %d, gang type %d, group %d)", form.getId(), form.getRaceId(), form.getGangTypeId(), form.getGroupId()));
 	}
-
-	// TODO Validate that starting stats are not set above race maximum stats
 
 	@Override
 	protected void validateFormVsExistingState(
