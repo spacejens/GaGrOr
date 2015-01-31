@@ -107,7 +107,7 @@ public class RulesController extends AbstractController {
 	@Autowired
 	ItemTypePersister itemTypePersister;
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}")
 	public String viewRules(@PathVariable(ATTR_GROUP_ID) final Long groupId, final Model model) {
 		log.info(String.format("Viewing rules for group %d", groupId));
@@ -176,7 +176,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/gangtype/{" + ATTR_GANGTYPE_ID + "}")
 	public String viewGangType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -231,7 +231,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}")
 	public String viewFaction(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -288,7 +288,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}")
 	public String viewRace(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -346,7 +346,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/{" + ATTR_FIGHTERTYPE_ID + "}")
 	public String viewFighterType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -402,7 +402,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/territorycategory/{" + ATTR_TERRITORYCATEGORY_ID + "}")
 	public String viewTerritoryCategory(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -457,7 +457,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYCATEGORY_ID + "}/{" + ATTR_TERRITORYTYPE_ID + "}")
 	public String viewTerritoryType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -511,7 +511,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/skillcategory/{" + ATTR_SKILLCATEGORY_ID + "}")
 	public String viewSkillCategory(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -566,7 +566,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/skill/{" + ATTR_SKILLCATEGORY_ID + "}/{" + ATTR_SKILL_ID + "}")
 	public String viewSkill(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -620,7 +620,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/itemcategory/{" + ATTR_ITEMCATEGORY_ID + "}")
 	public String viewItemCategory(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
@@ -675,7 +675,7 @@ public class RulesController extends AbstractController {
 		}
 	}
 
-	@PreAuthorize(MAY_VIEW_GROUP)
+	@PreAuthorize(MAY_VIEW_GROUP_RULES)
 	@RequestMapping("/{" + ATTR_GROUP_ID + "}/itemtype/{" + ATTR_ITEMCATEGORY_ID + "}/{" + ATTR_ITEMTYPE_ID + "}")
 	public String viewItemType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,

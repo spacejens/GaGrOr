@@ -38,6 +38,9 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 	PermissionViewGroup viewGroup;
 
 	@Autowired
+	PermissionViewGroupRules viewGroupRules;
+
+	@Autowired
 	PermissionAdminGroup adminGroup;
 
 	public GagrorPermissionEvaluator() {
@@ -49,6 +52,7 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 		addPermission(hasContact);
 		addPermission(hasContactRequest);
 		addPermission(viewGroup);
+		addPermission(viewGroupRules);
 		addPermission(adminGroup);
 	}
 

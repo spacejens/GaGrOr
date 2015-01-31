@@ -147,6 +147,7 @@ public class GagrorPermissionEvaluatorUnitTest {
 		instanceDefault.hasContact = new PermissionHasContact();
 		instanceDefault.hasContactRequest = new PermissionHasContactRequest();
 		instanceDefault.viewGroup = new PermissionViewGroup();
+		instanceDefault.viewGroupRules = new PermissionViewGroupRules();
 		instanceDefault.adminGroup = new PermissionAdminGroup();
 	}
 }
