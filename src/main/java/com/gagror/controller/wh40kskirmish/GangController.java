@@ -62,9 +62,18 @@ public class GangController extends AbstractController {
 			return redirect(String.format("/wh40kskirmish/group/%d", groupId));
 		} else {
 			log.warn(String.format("Failed to save: %s", gangForm));
-			final EditGangOutput data = gangService.prepareToCreateGang(groupId);
-			model.addAttribute("group", data.getGroup());
-			model.addAttribute("factions", data.getFactions());
+			if(null == gangForm.getId()) {
+				final EditGangOutput data = gangService.prepareToCreateGang(groupId);
+				model.addAttribute("group", data.getGroup());
+				model.addAttribute("factions", data.getFactions());
+			} else {
+				final EditGangOutput data = gangService.prepareToEditGang(
+						groupId,
+						gangForm.getGangTypeId(),
+						gangForm.getFactionId(),
+						gangForm.getId());
+				model.addAttribute("group", data.getGroup());
+			}
 			return "wh40kskirmish/gang_edit";
 		}
 	}
@@ -94,8 +103,6 @@ public class GangController extends AbstractController {
 		log.info(String.format("Viewing edit gang form for gang %d in group %d", gangTypeId, groupId));
 		final EditGangOutput data = gangService.prepareToEditGang(groupId, gangTypeId, factionId, gangId);
 		model.addAttribute("group", data.getGroup());
-		model.addAttribute("gangType", data.getCurrentState().getGangType());
-		model.addAttribute("faction", data.getCurrentState().getFaction());
 		model.addAttribute("gangForm", new GangInput(data.getCurrentState()));
 		return "wh40kskirmish/gang_edit";
 	}

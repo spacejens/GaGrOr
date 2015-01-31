@@ -20,6 +20,10 @@ public class GangInput extends AbstractIdentifiableNamedInput<Long, GangOutput> 
 
 	@Getter
 	@Setter
+	private Long gangTypeId;
+
+	@Getter
+	@Setter
 	@NotNull
 	private Long factionId;
 
@@ -41,6 +45,7 @@ public class GangInput extends AbstractIdentifiableNamedInput<Long, GangOutput> 
 	public GangInput(final GangOutput currentState) {
 		super(currentState);
 		setGroupId(currentState.getRules().getGroup().getId());
+		setGangTypeId(currentState.getGangType().getId());
 		setFactionId(currentState.getFaction().getId());
 		setPlayerId(currentState.getPlayer().getId());
 		setMoney(currentState.getMoney());
