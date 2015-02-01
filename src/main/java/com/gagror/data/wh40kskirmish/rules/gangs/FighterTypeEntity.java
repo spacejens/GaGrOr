@@ -71,7 +71,9 @@ public class FighterTypeEntity extends AbstractEditableNamedEntity {
 
 	// TODO Fighter types grant or forbid skills (with optional criteria, such as max/min XP to have skill)
 
-	// TODO Fighter types get access to different item categories (optionally at XP level, e.g. juve becoming ganger)
+	// TODO Fighter types get access to different item categories
+
+	// TODO Fighter types "change" (i.e. use item and skill access) of other fighter types at certain XP levels
 
 	public FighterTypeEntity(final RaceEntity race) {
 		this.race = race;;
