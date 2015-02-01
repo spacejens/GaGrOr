@@ -34,6 +34,9 @@ public class FighterTypeOutput extends FighterTypeReferenceOutput {
 	@Getter
 	private final int startingLeadership;
 
+	@Getter
+	private final int cost;
+
 	public FighterTypeOutput(
 			final FighterTypeEntity entity,
 			final RaceOutput race) {
@@ -48,5 +51,6 @@ public class FighterTypeOutput extends FighterTypeReferenceOutput {
 		startingInitiative = entity.getStartingInitiative();
 		startingAttacks = entity.getStartingAttacks();
 		startingLeadership = entity.getStartingLeadership();
+		cost = entity.getCost();
 	}
 }

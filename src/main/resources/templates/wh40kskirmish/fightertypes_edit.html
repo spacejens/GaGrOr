@@ -79,6 +79,10 @@
 				</tr>
 			</tbody>
 		</table>
+		<label>
+			Cost <span class="error" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}">Cost error</span>
+			<input type="number" min="1" th:field="*{cost}" />
+		</label>
 		<button type="submit">Save</button>
 	</form>
 	<script th:replace="/fragments/framework :: init"></script>

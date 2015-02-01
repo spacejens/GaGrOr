@@ -245,6 +245,9 @@
 			<column name="starting_leadership" type="int">
 				<constraints nullable="false" />
 			</column>
+			<column name="cost" type="int">
+				<constraints nullable="false" />
+			</column>
 		</createTable>
 	</changeSet>
 

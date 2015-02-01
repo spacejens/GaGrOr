@@ -69,6 +69,11 @@ public class FighterTypeEntity extends AbstractEditableNamedEntity {
 	@Setter
 	private int startingLeadership;
 
+	@Column(nullable = false, insertable = true, updatable = true)
+	@Getter
+	@Setter
+	private int cost;
+
 	// TODO Fighter types grant or forbid skills (with optional criteria, such as max/min XP to have skill)
 
 	// TODO Fighter types get access to different item categories

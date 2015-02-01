@@ -81,6 +81,11 @@ public class FighterTypeInput extends AbstractIdentifiableNamedInput<Long, Fight
 	@Max(10)
 	private int startingLeadership;
 
+	@Getter
+	@Setter
+	@Min(1)
+	private int cost;
+
 	public FighterTypeInput(final FighterTypeOutput currentState) {
 		super(currentState);
 		setGroupId(currentState.getRace().getGangType().getGroup().getId());
@@ -95,6 +100,7 @@ public class FighterTypeInput extends AbstractIdentifiableNamedInput<Long, Fight
 		setStartingInitiative(currentState.getStartingInitiative());
 		setStartingAttacks(currentState.getStartingAttacks());
 		setStartingLeadership(currentState.getStartingLeadership());
+		setCost(currentState.getCost());
 	}
 
 	public FighterTypeInput(final Long groupId, final Long gangTypeId, final Long raceId) {
@@ -111,6 +117,7 @@ public class FighterTypeInput extends AbstractIdentifiableNamedInput<Long, Fight
 		setStartingInitiative(3);
 		setStartingAttacks(1);
 		setStartingLeadership(7);
+		setCost(20);
 	}
 
 	public void addErrorStartingAboveMaxMovement(final BindingResult bindingResult, final int maxMovement) {

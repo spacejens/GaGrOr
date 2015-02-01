@@ -139,6 +139,7 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 		entity.setStartingInitiative(form.getStartingInitiative());
 		entity.setStartingAttacks(form.getStartingAttacks());
 		entity.setStartingLeadership(form.getStartingLeadership());
+		entity.setCost(form.getCost());
 	}
 
 	@Override

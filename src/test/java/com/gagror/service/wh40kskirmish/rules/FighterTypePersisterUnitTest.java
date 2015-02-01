@@ -49,6 +49,7 @@ public class FighterTypePersisterUnitTest {
 	private static final int FORM_FIGHTERTYPE_INITIATIVE = 7;
 	private static final int FORM_FIGHTERTYPE_ATTACKS = 8;
 	private static final int FORM_FIGHTERTYPE_LEADERSHIP = 9;
+	private static final int FORM_FIGHTERTYPE_COST = 20;
 	private static final Long DB_FIGHTERTYPE_ID = 11L;
 	private static final String DB_FIGHTERTYPE_NAME = "Fighter type DB";
 	private static final Long DB_FIGHTERTYPE_VERSION = 5L;
@@ -99,6 +100,7 @@ public class FighterTypePersisterUnitTest {
 		assertEquals("Wrong initiative", FORM_FIGHTERTYPE_INITIATIVE, savedFighterType.getValue().getStartingInitiative());
 		assertEquals("Wrong attacks", FORM_FIGHTERTYPE_ATTACKS, savedFighterType.getValue().getStartingAttacks());
 		assertEquals("Wrong leadership", FORM_FIGHTERTYPE_LEADERSHIP, savedFighterType.getValue().getStartingLeadership());
+		assertEquals("Wrong cost", FORM_FIGHTERTYPE_COST, savedFighterType.getValue().getCost());
 		assertTrue("Not added to gang type", race.getFighterTypes().contains(savedFighterType.getValue()));
 	}
 
@@ -235,6 +237,7 @@ public class FighterTypePersisterUnitTest {
 		verify(fighterType).setStartingInitiative(FORM_FIGHTERTYPE_INITIATIVE);
 		verify(fighterType).setStartingAttacks(FORM_FIGHTERTYPE_ATTACKS);
 		verify(fighterType).setStartingLeadership(FORM_FIGHTERTYPE_LEADERSHIP);
+		verify(fighterType).setCost(FORM_FIGHTERTYPE_COST);
 	}
 
 	@Test
@@ -425,6 +428,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingInitiative()).thenReturn(FORM_FIGHTERTYPE_INITIATIVE);
 		when(form.getStartingAttacks()).thenReturn(FORM_FIGHTERTYPE_ATTACKS);
 		when(form.getStartingLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP);
+		when(form.getCost()).thenReturn(FORM_FIGHTERTYPE_COST);
 		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
 		AddError.to(bindingResult).when(form).addErrorStartingAboveMaxMovement(bindingResult, FORM_FIGHTERTYPE_MOVEMENT);
