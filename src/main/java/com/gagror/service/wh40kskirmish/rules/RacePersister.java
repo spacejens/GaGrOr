@@ -10,6 +10,7 @@ import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
+import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceInput;
@@ -76,8 +77,6 @@ extends AbstractPersister<RaceInput, RaceEntity, GangTypeEntity> {
 		throw new DataNotFoundException(String.format("Race %d (gang type %d, group %d)", form.getId(), form.getGangTypeId(), form.getGroupId()));
 	}
 
-	// TODO Validate that maximum stats are not set below highest fighter type starting stats
-
 	@Override
 	protected void validateFormVsExistingState(
 			final RaceInput form,
@@ -86,6 +85,54 @@ extends AbstractPersister<RaceInput, RaceEntity, GangTypeEntity> {
 		if(! form.getVersion().equals(entity.getVersion())) {
 			log.warn(String.format("Attempt to edit race %d failed, simultaneous edit detected", form.getId()));
 			form.addErrorSimultaneuosEdit(bindingResult);
+		}
+		// Validate that maximum characteristics are not below fighter type maximums
+		int minMovement = 0;
+		int minWeaponSkill = 0;
+		int minBallisticSkill = 0;
+		int minStrength = 0;
+		int minToughness = 0;
+		int minWounds = 0;
+		int minInitiative = 0;
+		int minAttacks = 0;
+		int minLeadership = 0;
+		for(final FighterTypeEntity fighterType : entity.getFighterTypes()) {
+			minMovement = Math.max(minMovement, fighterType.getStartingMovement());
+			minWeaponSkill = Math.max(minWeaponSkill, fighterType.getStartingWeaponSkill());
+			minBallisticSkill = Math.max(minBallisticSkill, fighterType.getStartingBallisticSkill());
+			minStrength = Math.max(minStrength, fighterType.getStartingStrength());
+			minToughness = Math.max(minToughness, fighterType.getStartingToughness());
+			minWounds = Math.max(minWounds, fighterType.getStartingWounds());
+			minInitiative = Math.max(minInitiative, fighterType.getStartingInitiative());
+			minAttacks = Math.max(minAttacks, fighterType.getStartingAttacks());
+			minLeadership = Math.max(minLeadership, fighterType.getStartingLeadership());
+		}
+		if(form.getMaxMovement() < minMovement) {
+			form.addErrorMaxBelowStartingMovement(bindingResult, minMovement);
+		}
+		if(form.getMaxWeaponSkill() < minWeaponSkill) {
+			form.addErrorMaxBelowStartingWeaponSkill(bindingResult, minWeaponSkill);
+		}
+		if(form.getMaxBallisticSkill() < minBallisticSkill) {
+			form.addErrorMaxBelowStartingBallisticSkill(bindingResult, minBallisticSkill);
+		}
+		if(form.getMaxStrength() < minStrength) {
+			form.addErrorMaxBelowStartingStrength(bindingResult, minStrength);
+		}
+		if(form.getMaxToughness() < minToughness) {
+			form.addErrorMaxBelowStartingToughness(bindingResult, minToughness);
+		}
+		if(form.getMaxWounds() < minWounds) {
+			form.addErrorMaxBelowStartingWounds(bindingResult, minWounds);
+		}
+		if(form.getMaxInitiative() < minInitiative) {
+			form.addErrorMaxBelowStartingInitiative(bindingResult, minInitiative);
+		}
+		if(form.getMaxAttacks() < minAttacks) {
+			form.addErrorMaxBelowStartingAttacks(bindingResult, minAttacks);
+		}
+		if(form.getMaxLeadership() < minLeadership) {
+			form.addErrorMaxBelowStartingLeadership(bindingResult, minLeadership);
 		}
 	}
 

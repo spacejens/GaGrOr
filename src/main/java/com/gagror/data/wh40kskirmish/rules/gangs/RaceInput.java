@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
@@ -102,5 +105,48 @@ public class RaceInput extends AbstractIdentifiableNamedInput<Long, RaceOutput> 
 		setMaxInitiative(6);
 		setMaxAttacks(3);
 		setMaxLeadership(9);
+	}
+
+	public void addErrorMaxBelowStartingMovement(final BindingResult bindingResult, final int startingMovement) {
+		addErrorMaxBelowStarting(bindingResult, "maxMovement", startingMovement);
+	}
+
+	public void addErrorMaxBelowStartingWeaponSkill(final BindingResult bindingResult, final int startingWeaponSkill) {
+		addErrorMaxBelowStarting(bindingResult, "maxWeaponSkill", startingWeaponSkill);
+	}
+
+	public void addErrorMaxBelowStartingBallisticSkill(final BindingResult bindingResult, final int startingBallisticSkill) {
+		addErrorMaxBelowStarting(bindingResult, "maxBallisticSkill", startingBallisticSkill);
+	}
+
+	public void addErrorMaxBelowStartingStrength(final BindingResult bindingResult, final int startingStrength) {
+		addErrorMaxBelowStarting(bindingResult, "maxStrength", startingStrength);
+	}
+
+	public void addErrorMaxBelowStartingToughness(final BindingResult bindingResult, final int startingToughness) {
+		addErrorMaxBelowStarting(bindingResult, "maxToughness", startingToughness);
+	}
+
+	public void addErrorMaxBelowStartingWounds(final BindingResult bindingResult, final int startingWounds) {
+		addErrorMaxBelowStarting(bindingResult, "maxWounds", startingWounds);
+	}
+
+	public void addErrorMaxBelowStartingInitiative(final BindingResult bindingResult, final int startingInitiative) {
+		addErrorMaxBelowStarting(bindingResult, "maxInitiative", startingInitiative);
+	}
+
+	public void addErrorMaxBelowStartingAttacks(final BindingResult bindingResult, final int startingAttacks) {
+		addErrorMaxBelowStarting(bindingResult, "maxAttacks", startingAttacks);
+	}
+
+	public void addErrorMaxBelowStartingLeadership(final BindingResult bindingResult, final int startingLeadership) {
+		addErrorMaxBelowStarting(bindingResult, "maxLeadership", startingLeadership);
+	}
+
+	private void addErrorMaxBelowStarting(final BindingResult bindingResult, final String field, final int starting) {
+		bindingResult.addError(new FieldError(
+				bindingResult.getObjectName(),
+				field,
+				String.format("below fighter type maximum %d", starting)));
 	}
 }

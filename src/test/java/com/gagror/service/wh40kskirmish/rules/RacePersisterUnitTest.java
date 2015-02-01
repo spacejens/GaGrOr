@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -26,6 +27,7 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceInput;
@@ -49,6 +51,7 @@ public class RacePersisterUnitTest {
 	private static final Long DB_RACE_ID = 11L;
 	private static final String DB_RACE_NAME = "Race DB";
 	private static final Long DB_RACE_VERSION = 5L;
+	private static final Long DB_FIGHTERTYPE_ID = 6473L;
 
 	RacePersister instance;
 
@@ -75,6 +78,9 @@ public class RacePersisterUnitTest {
 
 	@Mock
 	RaceEntity race;
+
+	@Mock
+	FighterTypeEntity fighterType;
 
 	@Test
 	public void save_new_ok() {
@@ -155,6 +161,96 @@ public class RacePersisterUnitTest {
 	}
 
 	@Test
+	public void save_existing_minMovement() {
+		whenRaceExists();
+		when(form.getMaxMovement()).thenReturn(FORM_RACE_MOVEMENT - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxMovement(anyInt());
+		verify(form).addErrorMaxBelowStartingMovement(bindingResult, FORM_RACE_MOVEMENT);
+	}
+
+	@Test
+	public void save_existing_minWeaponSkill() {
+		whenRaceExists();
+		when(form.getMaxWeaponSkill()).thenReturn(FORM_RACE_WEAPON_SKILL - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxWeaponSkill(anyInt());
+		verify(form).addErrorMaxBelowStartingWeaponSkill(bindingResult, FORM_RACE_WEAPON_SKILL);
+	}
+
+	@Test
+	public void save_existing_minBallisticSkill() {
+		whenRaceExists();
+		when(form.getMaxBallisticSkill()).thenReturn(FORM_RACE_BALLISTIC_SKILL - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxBallisticSkill(anyInt());
+		verify(form).addErrorMaxBelowStartingBallisticSkill(bindingResult, FORM_RACE_BALLISTIC_SKILL);
+	}
+
+	@Test
+	public void save_existing_minStrength() {
+		whenRaceExists();
+		when(form.getMaxStrength()).thenReturn(FORM_RACE_STRENGTH - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxStrength(anyInt());
+		verify(form).addErrorMaxBelowStartingStrength(bindingResult, FORM_RACE_STRENGTH);
+	}
+
+	@Test
+	public void save_existing_minToughness() {
+		whenRaceExists();
+		when(form.getMaxToughness()).thenReturn(FORM_RACE_TOUGHNESS - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxToughness(anyInt());
+		verify(form).addErrorMaxBelowStartingToughness(bindingResult, FORM_RACE_TOUGHNESS);
+	}
+
+	@Test
+	public void save_existing_minWounds() {
+		whenRaceExists();
+		when(form.getMaxWounds()).thenReturn(FORM_RACE_WOUNDS - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxWounds(anyInt());
+		verify(form).addErrorMaxBelowStartingWounds(bindingResult, FORM_RACE_WOUNDS);
+	}
+
+	@Test
+	public void save_existing_minInitiative() {
+		whenRaceExists();
+		when(form.getMaxInitiative()).thenReturn(FORM_RACE_INITIATIVE - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxInitiative(anyInt());
+		verify(form).addErrorMaxBelowStartingInitiative(bindingResult, FORM_RACE_INITIATIVE);
+	}
+
+	@Test
+	public void save_existing_minAttacks() {
+		whenRaceExists();
+		when(form.getMaxAttacks()).thenReturn(FORM_RACE_ATTACKS - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxAttacks(anyInt());
+		verify(form).addErrorMaxBelowStartingAttacks(bindingResult, FORM_RACE_ATTACKS);
+	}
+
+	@Test
+	public void save_existing_minLeadership() {
+		whenRaceExists();
+		when(form.getMaxLeadership()).thenReturn(FORM_RACE_LEADERSHIP - 1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(race, never()).setMaxLeadership(anyInt());
+		verify(form).addErrorMaxBelowStartingLeadership(bindingResult, FORM_RACE_LEADERSHIP);
+	}
+
+	@Test
 	public void save_existing_bindingError() {
 		whenRaceExists();
 		when(bindingResult.hasErrors()).thenReturn(true);
@@ -214,6 +310,20 @@ public class RacePersisterUnitTest {
 		when(race.getName()).thenReturn(DB_RACE_NAME);
 		when(race.getGangType()).thenReturn(gangType);
 		gangType.getRaces().add(race);
+		// Create a fighter type
+		when(race.getFighterTypes()).thenReturn(new HashSet<FighterTypeEntity>());
+		when(fighterType.getId()).thenReturn(DB_FIGHTERTYPE_ID);
+		when(fighterType.getRace()).thenReturn(race);
+		when(fighterType.getStartingMovement()).thenReturn(FORM_RACE_MOVEMENT);
+		when(fighterType.getStartingWeaponSkill()).thenReturn(FORM_RACE_WEAPON_SKILL);
+		when(fighterType.getStartingBallisticSkill()).thenReturn(FORM_RACE_BALLISTIC_SKILL);
+		when(fighterType.getStartingStrength()).thenReturn(FORM_RACE_STRENGTH);
+		when(fighterType.getStartingToughness()).thenReturn(FORM_RACE_TOUGHNESS);
+		when(fighterType.getStartingWounds()).thenReturn(FORM_RACE_WOUNDS);
+		when(fighterType.getStartingInitiative()).thenReturn(FORM_RACE_INITIATIVE);
+		when(fighterType.getStartingAttacks()).thenReturn(FORM_RACE_ATTACKS);
+		when(fighterType.getStartingLeadership()).thenReturn(FORM_RACE_LEADERSHIP);
+		race.getFighterTypes().add(fighterType);
 	}
 
 	@Before
@@ -232,6 +342,15 @@ public class RacePersisterUnitTest {
 		when(form.getMaxLeadership()).thenReturn(FORM_RACE_LEADERSHIP);
 		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 		AddError.to(bindingResult).when(form).addErrorSimultaneuosEdit(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingMovement(bindingResult, FORM_RACE_MOVEMENT);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingWeaponSkill(bindingResult, FORM_RACE_WEAPON_SKILL);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingBallisticSkill(bindingResult, FORM_RACE_BALLISTIC_SKILL);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingStrength(bindingResult, FORM_RACE_STRENGTH);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingToughness(bindingResult, FORM_RACE_TOUGHNESS);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingWounds(bindingResult, FORM_RACE_WOUNDS);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingInitiative(bindingResult, FORM_RACE_INITIATIVE);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingAttacks(bindingResult, FORM_RACE_ATTACKS);
+		AddError.to(bindingResult).when(form).addErrorMaxBelowStartingLeadership(bindingResult, FORM_RACE_LEADERSHIP);
 	}
 
 	@Before
