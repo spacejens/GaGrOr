@@ -7,7 +7,7 @@ import lombok.Setter;
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
-public class TerritoryTypeInput extends AbstractIdentifiableNamedInput<Long, TerritoryTypeOutput> {
+public class TerritoryTypeInput extends AbstractIdentifiableNamedInput<TerritoryTypeOutput> {
 
 	@Getter
 	@Setter

@@ -300,6 +300,7 @@ public class GangTypePersisterUnitTest {
 
 	@Before
 	public void setupForm() {
+		when(form.getId()).thenReturn(null);
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getName()).thenReturn(FORM_GANG_TYPE_NAME);
 		when(form.getExperienceLevels()).thenReturn(new ArrayList<ExperienceLevelInput>());

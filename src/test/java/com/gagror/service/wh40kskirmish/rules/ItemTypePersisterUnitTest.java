@@ -191,6 +191,7 @@ public class ItemTypePersisterUnitTest {
 
 	@Before
 	public void setupForm() {
+		when(form.getId()).thenReturn(null);
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getItemCategoryId()).thenReturn(ITEM_CATEGORY_ID);
 		when(form.getName()).thenReturn(FORM_ITEM_TYPE_NAME);

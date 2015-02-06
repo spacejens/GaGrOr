@@ -169,6 +169,7 @@ public class TerritoryCategoryPersisterUnitTest {
 
 	@Before
 	public void setupForm() {
+		when(form.getId()).thenReturn(null);
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getName()).thenReturn(FORM_TERRITORY_CATEGORY_NAME);
 		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);

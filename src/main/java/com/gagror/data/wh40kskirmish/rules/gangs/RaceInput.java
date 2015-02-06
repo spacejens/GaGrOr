@@ -13,7 +13,7 @@ import org.springframework.validation.FieldError;
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
-public class RaceInput extends AbstractIdentifiableNamedInput<Long, RaceOutput> {
+public class RaceInput extends AbstractIdentifiableNamedInput<RaceOutput> {
 
 	@Getter
 	@Setter

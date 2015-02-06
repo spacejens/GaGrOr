@@ -12,7 +12,7 @@ import com.gagror.data.AbstractIdentifiableInput;
 
 @NoArgsConstructor
 public class RulesInput
-extends AbstractIdentifiableInput<Long, RulesOutput> {
+extends AbstractIdentifiableInput<RulesOutput> {
 
 	@Getter
 	@Setter

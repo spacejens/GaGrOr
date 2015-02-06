@@ -8,7 +8,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
 public class SkillCategoryInput
-extends AbstractIdentifiableNamedInput<Long, SkillCategoryOutput> {
+extends AbstractIdentifiableNamedInput<SkillCategoryOutput> {
 
 	@Getter
 	@Setter

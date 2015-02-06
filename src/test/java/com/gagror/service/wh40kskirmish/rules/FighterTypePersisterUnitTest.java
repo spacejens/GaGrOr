@@ -415,6 +415,7 @@ public class FighterTypePersisterUnitTest {
 
 	@Before
 	public void setupForm() {
+		when(form.getId()).thenReturn(null);
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getGangTypeId()).thenReturn(GANG_TYPE_ID);
 		when(form.getRaceId()).thenReturn(RACE_ID);

@@ -7,7 +7,7 @@ import lombok.Setter;
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
-public class FactionInput extends AbstractIdentifiableNamedInput<Long, FactionOutput> {
+public class FactionInput extends AbstractIdentifiableNamedInput<FactionOutput> {
 
 	@Getter
 	@Setter

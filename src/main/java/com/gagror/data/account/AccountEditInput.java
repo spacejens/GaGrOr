@@ -12,7 +12,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @ToString(callSuper=true)
 @NoArgsConstructor
-public class AccountEditInput extends AbstractIdentifiableNamedInput<Long, AccountEditOutput> {
+public class AccountEditInput extends AbstractIdentifiableNamedInput<AccountEditOutput> {
 
 	@Getter
 	@Setter

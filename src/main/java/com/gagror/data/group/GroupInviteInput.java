@@ -11,7 +11,7 @@ import com.gagror.data.AbstractIdentifiableInput;
 
 @NoArgsConstructor
 @ToString(callSuper=true)
-public class GroupInviteInput extends AbstractIdentifiableInput<Long, GroupEditOutput> {
+public class GroupInviteInput extends AbstractIdentifiableInput<GroupEditOutput> {
 
 	@Getter
 	@Setter

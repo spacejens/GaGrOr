@@ -1,7 +1,5 @@
 package com.gagror.data;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.Size;
 
 import lombok.Getter;
@@ -12,8 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 @NoArgsConstructor
-public abstract class AbstractIdentifiableNamedInput<I extends Serializable, C extends Identifiable<I> & Versioned & Named>
-extends AbstractIdentifiableInput<I, C>
+public abstract class AbstractIdentifiableNamedInput<C extends Identifiable<Long> & Versioned & Named>
+extends AbstractIdentifiableInput<C>
 implements Named {
 
 	@Getter

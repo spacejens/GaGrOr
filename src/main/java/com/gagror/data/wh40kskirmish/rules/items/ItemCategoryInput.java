@@ -8,7 +8,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
 public class ItemCategoryInput
-extends AbstractIdentifiableNamedInput<Long, ItemCategoryOutput> {
+extends AbstractIdentifiableNamedInput<ItemCategoryOutput> {
 
 	@Getter
 	@Setter

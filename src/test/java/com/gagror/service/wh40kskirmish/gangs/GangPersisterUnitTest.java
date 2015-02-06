@@ -238,6 +238,7 @@ public class GangPersisterUnitTest {
 
 	@Before
 	public void setupForm() {
+		when(form.getId()).thenReturn(null);
 		when(form.getGroupId()).thenReturn(GROUP_ID);
 		when(form.getFactionId()).thenReturn(FACTION_ID);
 		when(form.getPlayerId()).thenReturn(PLAYER_ID);

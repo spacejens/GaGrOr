@@ -7,7 +7,7 @@ import lombok.Setter;
 import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
-public class SkillInput extends AbstractIdentifiableNamedInput<Long, SkillOutput> {
+public class SkillInput extends AbstractIdentifiableNamedInput<SkillOutput> {
 
 	@Getter
 	@Setter

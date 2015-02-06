@@ -11,7 +11,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 
 @NoArgsConstructor
-public class GangInput extends AbstractIdentifiableNamedInput<Long, GangOutput> {
+public class GangInput extends AbstractIdentifiableNamedInput<GangOutput> {
 
 	@Getter
 	@Setter

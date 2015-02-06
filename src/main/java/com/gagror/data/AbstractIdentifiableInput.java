@@ -1,7 +1,5 @@
 package com.gagror.data;
 
-import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,13 +8,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
 @NoArgsConstructor
-public abstract class AbstractIdentifiableInput<I extends Serializable, C extends Identifiable<I> & Versioned>
+public abstract class AbstractIdentifiableInput<C extends Identifiable<Long> & Versioned>
 extends AbstractInput
-implements Identifiable<I>, Versioned {
+implements Identifiable<Long>, Versioned {
 
 	@Getter
 	@Setter
-	private I id;
+	private Long id;
 
 	@Getter
 	@Setter

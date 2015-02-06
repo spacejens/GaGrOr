@@ -18,7 +18,7 @@ import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelInput;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelOutput;
 
 @NoArgsConstructor
-public class GangTypeInput extends AbstractIdentifiableNamedInput<Long, GangTypeOutput> {
+public class GangTypeInput extends AbstractIdentifiableNamedInput<GangTypeOutput> {
 
 	@Getter
 	@Setter

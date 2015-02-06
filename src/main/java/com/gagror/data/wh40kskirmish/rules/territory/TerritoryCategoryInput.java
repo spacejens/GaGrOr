@@ -8,7 +8,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @NoArgsConstructor
 public class TerritoryCategoryInput
-extends AbstractIdentifiableNamedInput<Long, TerritoryCategoryOutput> {
+extends AbstractIdentifiableNamedInput<TerritoryCategoryOutput> {
 
 	@Getter
 	@Setter

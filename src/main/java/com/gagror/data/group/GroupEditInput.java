@@ -12,7 +12,7 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @ToString(callSuper=true)
 @NoArgsConstructor
-public class GroupEditInput extends AbstractIdentifiableNamedInput<Long, GroupEditOutput> {
+public class GroupEditInput extends AbstractIdentifiableNamedInput<GroupEditOutput> {
 
 	@Getter
 	@Setter
