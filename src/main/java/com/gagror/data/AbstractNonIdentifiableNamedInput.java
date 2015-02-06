@@ -8,8 +8,7 @@ import lombok.Setter;
 
 @NoArgsConstructor
 public abstract class AbstractNonIdentifiableNamedInput<C extends Named>
-extends AbstractInput
-implements Named {
+implements Named, Input {
 
 	@Getter
 	@Setter

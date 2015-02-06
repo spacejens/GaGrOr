@@ -8,11 +8,11 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.CodingErrorException;
 import com.gagror.data.AbstractEntity;
-import com.gagror.data.AbstractInput;
+import com.gagror.data.Input;
 
 @Transactional
 @CommonsLog
-public abstract class AbstractPersister<I extends AbstractInput, E extends AbstractEntity, C extends AbstractEntity> {
+public abstract class AbstractPersister<I extends Input, E extends AbstractEntity, C extends AbstractEntity> {
 
 	public boolean save(final I form, final BindingResult bindingResult) {
 		E entity = null;

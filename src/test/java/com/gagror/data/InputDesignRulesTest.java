@@ -61,6 +61,6 @@ public class InputDesignRulesTest extends DesignRulesTestSupport {
 
 	@Parameters(name="{0}")
 	public static Iterable<Object[]> findInputs() {
-		return parameterizeForAllSubclasses(AbstractInput.class);
+		return parameterizeForAllSubclasses(Input.class);
 	}
 }
