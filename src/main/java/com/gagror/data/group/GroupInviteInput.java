@@ -11,7 +11,9 @@ import com.gagror.data.AbstractIdentifiableInput;
 
 @NoArgsConstructor
 @ToString(callSuper=true)
-public class GroupInviteInput extends AbstractIdentifiableInput<GroupEditOutput> {
+public class GroupInviteInput
+extends AbstractIdentifiableInput<GroupEditOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter
@@ -19,5 +21,10 @@ public class GroupInviteInput extends AbstractIdentifiableInput<GroupEditOutput>
 
 	public GroupInviteInput(final GroupEditOutput currentState) {
 		super(currentState);
+	}
+
+	@Override
+	public Long getGroupId() {
+		return getId();
 	}
 }

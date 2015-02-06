@@ -5,9 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
+import com.gagror.data.group.GroupIdentifiable;
 
 @NoArgsConstructor
-public class TerritoryTypeInput extends AbstractIdentifiableNamedInput<TerritoryTypeOutput> {
+public class TerritoryTypeInput
+extends AbstractIdentifiableNamedInput<TerritoryTypeOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

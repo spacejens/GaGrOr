@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.controller.AbstractController;
-import com.gagror.controller.FormAndURLMismatchException;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEditOutput;
@@ -125,9 +124,7 @@ public class GroupsController extends AbstractController {
 			final BindingResult bindingResult,
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
-		if(! groupEditForm.hasId(groupId)) {
-			throw new FormAndURLMismatchException("Group ID", groupId, groupEditForm.getId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, groupEditForm);
 		if(editGroupPersister.save(groupEditForm, bindingResult)) {
 			final GroupType groupType = groupService.viewGroup(groupId).getGroupType();
 			return redirect(String.format("%s/%d", groupType.getGroupUrl(), groupId));
@@ -163,9 +160,7 @@ public class GroupsController extends AbstractController {
 			final BindingResult bindingResult,
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
-		if(! groupInviteForm.hasId(groupId)) {
-			throw new FormAndURLMismatchException("Group ID", groupId, groupInviteForm.getId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, groupInviteForm);
 		if(inviteGroupPersister.save(groupInviteForm, bindingResult)) {
 			log.info(String.format("Invited users %s to group %d", groupInviteForm.getSelected(), groupId));
 			return redirect(String.format("/groups/members/%d", groupId));

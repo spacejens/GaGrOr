@@ -11,9 +11,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
+import com.gagror.data.group.GroupIdentifiable;
 
 @NoArgsConstructor
-public class FighterTypeInput extends AbstractIdentifiableNamedInput<FighterTypeOutput> {
+public class FighterTypeInput
+extends AbstractIdentifiableNamedInput<FighterTypeOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

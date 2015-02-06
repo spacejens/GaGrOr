@@ -11,9 +11,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
+import com.gagror.data.group.GroupIdentifiable;
 
 @NoArgsConstructor
-public class RaceInput extends AbstractIdentifiableNamedInput<RaceOutput> {
+public class RaceInput
+extends AbstractIdentifiableNamedInput<RaceOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

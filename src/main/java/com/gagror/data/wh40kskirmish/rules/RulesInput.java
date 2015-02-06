@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.gagror.data.AbstractIdentifiableInput;
+import com.gagror.data.group.GroupIdentifiable;
 
 @NoArgsConstructor
 public class RulesInput
-extends AbstractIdentifiableInput<RulesOutput> {
+extends AbstractIdentifiableInput<RulesOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

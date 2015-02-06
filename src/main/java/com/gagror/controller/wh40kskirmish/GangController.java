@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
-import com.gagror.controller.FormAndURLMismatchException;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangInput;
 import com.gagror.service.wh40kskirmish.gangs.GangPersister;
@@ -54,9 +53,7 @@ public class GangController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("gangForm") final GangInput gangForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(gangForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, gangForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, gangForm);
 		if(gangPersister.save(gangForm, bindingResult)) {
 			log.info(String.format("Saved gang: %s", gangForm));
 			return redirect(String.format("/wh40kskirmish/group/%d", groupId));

@@ -14,11 +14,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
+import com.gagror.data.group.GroupIdentifiable;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelInput;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelOutput;
 
 @NoArgsConstructor
-public class GangTypeInput extends AbstractIdentifiableNamedInput<GangTypeOutput> {
+public class GangTypeInput
+extends AbstractIdentifiableNamedInput<GangTypeOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

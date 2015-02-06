@@ -8,10 +8,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
+import com.gagror.data.group.GroupIdentifiable;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 
 @NoArgsConstructor
-public class GangInput extends AbstractIdentifiableNamedInput<GangOutput> {
+public class GangInput
+extends AbstractIdentifiableNamedInput<GangOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

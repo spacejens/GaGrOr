@@ -12,7 +12,10 @@ import com.gagror.data.AbstractIdentifiableNamedInput;
 
 @ToString(callSuper=true)
 @NoArgsConstructor
-public class GroupEditInput extends AbstractIdentifiableNamedInput<GroupEditOutput> {
+public class GroupEditInput
+extends AbstractIdentifiableNamedInput<GroupEditOutput>
+implements GroupIdentifiable
+{
 
 	@Getter
 	@Setter
@@ -25,5 +28,10 @@ public class GroupEditInput extends AbstractIdentifiableNamedInput<GroupEditOutp
 
 	public void addErrorNameMustBeUniqueWhenViewableByAnyone(final BindingResult bindingResult) {
 		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "name", "must be unique for public groups"));
+	}
+
+	@Override
+	public Long getGroupId() {
+		return getId();
 	}
 }

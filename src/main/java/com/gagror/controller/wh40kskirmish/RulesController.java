@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.gagror.controller.AbstractController;
-import com.gagror.controller.FormAndURLMismatchException;
 import com.gagror.data.wh40kskirmish.rules.RulesInput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionInput;
@@ -134,9 +133,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("rulesForm") final RulesInput rulesForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(rulesForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, rulesForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, rulesForm);
 		if(rulesPersister.save(rulesForm, bindingResult)) {
 			log.info(String.format("Saved rules: %s", rulesForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -163,9 +160,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("gangTypeForm") final GangTypeInput gangTypeForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(gangTypeForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, gangTypeForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, gangTypeForm);
 		if(gangTypePersister.save(gangTypeForm, bindingResult)) {
 			log.info(String.format("Saved gang type: %s", gangTypeForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -218,9 +213,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("factionForm") final FactionInput factionForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(factionForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, factionForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, factionForm);
 		if(factionPersister.save(factionForm, bindingResult)) {
 			log.info(String.format("Saved faction: %s", factionForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -275,9 +268,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("raceForm") final RaceInput raceForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(raceForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, raceForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, raceForm);
 		if(racePersister.save(raceForm, bindingResult)) {
 			log.info(String.format("Saved race: %s", raceForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -333,9 +324,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("fighterTypeForm") final FighterTypeInput fighterTypeForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(fighterTypeForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, fighterTypeForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, fighterTypeForm);
 		if(fighterTypePersister.save(fighterTypeForm, bindingResult)) {
 			log.info(String.format("Saved fighter type: %s", fighterTypeForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -389,9 +378,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("territoryCategoryForm") final TerritoryCategoryInput territoryCategoryForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(territoryCategoryForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, territoryCategoryForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, territoryCategoryForm);
 		if(territoryCategoryPersister.save(territoryCategoryForm, bindingResult)) {
 			log.info(String.format("Saved territory category: %s", territoryCategoryForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -444,9 +431,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("territoryTypeForm") final TerritoryTypeInput territoryTypeForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(territoryTypeForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, territoryTypeForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, territoryTypeForm);
 		if(territoryTypePersister.save(territoryTypeForm, bindingResult)) {
 			log.info(String.format("Saved territory type: %s", territoryTypeForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -498,9 +483,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("skillCategoryForm") final SkillCategoryInput skillCategoryForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(skillCategoryForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, skillCategoryForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, skillCategoryForm);
 		if(skillCategoryPersister.save(skillCategoryForm, bindingResult)) {
 			log.info(String.format("Saved skill category: %s", skillCategoryForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -553,9 +536,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("skillForm") final SkillInput skillForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(skillForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, skillForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, skillForm);
 		if(skillPersister.save(skillForm, bindingResult)) {
 			log.info(String.format("Saved skill: %s", skillForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -607,9 +588,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("itemCategoryForm") final ItemCategoryInput itemCategoryForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(itemCategoryForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, itemCategoryForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, itemCategoryForm);
 		if(itemCategoryPersister.save(itemCategoryForm, bindingResult)) {
 			log.info(String.format("Saved item category: %s", itemCategoryForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
@@ -662,9 +641,7 @@ public class RulesController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("itemTypeForm") final ItemTypeInput itemTypeForm,
 			final BindingResult bindingResult) {
-		if(! groupId.equals(itemTypeForm.getGroupId())) {
-			throw new FormAndURLMismatchException("Group ID", groupId, itemTypeForm.getGroupId());
-		}
+		verifyURLGroupIdMatchesForm(groupId, itemTypeForm);
 		if(itemTypePersister.save(itemTypeForm, bindingResult)) {
 			log.info(String.format("Saved item type: %s", itemTypeForm));
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));

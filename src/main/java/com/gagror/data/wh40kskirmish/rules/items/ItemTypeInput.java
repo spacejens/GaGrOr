@@ -5,9 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.gagror.data.AbstractIdentifiableNamedInput;
+import com.gagror.data.group.GroupIdentifiable;
 
 @NoArgsConstructor
-public class ItemTypeInput extends AbstractIdentifiableNamedInput<ItemTypeOutput> {
+public class ItemTypeInput
+extends AbstractIdentifiableNamedInput<ItemTypeOutput>
+implements GroupIdentifiable {
 
 	@Getter
 	@Setter

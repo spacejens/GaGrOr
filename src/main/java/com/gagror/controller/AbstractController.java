@@ -9,6 +9,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.SecurityRoles;
+import com.gagror.data.group.GroupIdentifiable;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @CommonsLog
@@ -33,6 +34,12 @@ public abstract class AbstractController {
 	public AccountReferenceOutput getCurrentUser() {
 		log.trace("Getting current user model attribute");
 		return accessControl.getRequestAccount();
+	}
+
+	protected <F extends GroupIdentifiable> void verifyURLGroupIdMatchesForm(final Long urlGroupId, final F form) {
+		if(! urlGroupId.equals(form.getGroupId())) {
+			throw new FormAndURLMismatchException("Group ID", urlGroupId, form.getGroupId());
+		}
 	}
 
 	// TODO Replace whitelabel error page with custom error page
