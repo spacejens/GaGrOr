@@ -48,7 +48,7 @@ extends AbstractPersister<TerritoryCategoryInput, TerritoryCategoryEntity, Wh40k
 			final Wh40kSkirmishRulesEntity context) {
 		for(final TerritoryCategoryEntity territoryCategory : context.getTerritoryCategories()) {
 			if(territoryCategory.getName().equals(form.getName())
-					&& ! territoryCategory.getId().equals(form.getId())) {
+					&& ! territoryCategory.hasId(form.getId())) {
 				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 			}
 		}
@@ -56,13 +56,13 @@ extends AbstractPersister<TerritoryCategoryInput, TerritoryCategoryEntity, Wh40k
 
 	@Override
 	protected boolean isCreateNew(final TerritoryCategoryInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected TerritoryCategoryEntity loadExisting(final TerritoryCategoryInput form, final Wh40kSkirmishRulesEntity context) {
 		for(final TerritoryCategoryEntity territoryCategory : context.getTerritoryCategories()) {
-			if(territoryCategory.getId().equals(form.getId())) {
+			if(territoryCategory.hasId(form.getId())) {
 				return territoryCategory;
 			}
 		}

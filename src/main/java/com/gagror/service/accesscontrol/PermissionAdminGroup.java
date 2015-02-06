@@ -19,7 +19,7 @@ public class PermissionAdminGroup extends AbstractGagrorPermissionLongId<GroupEn
 	@Override
 	protected boolean hasPermission(final Long id, final AccountEntity account) {
 		for(final GroupMemberEntity membership : account.getGroupMemberships()) {
-			if(id.equals(membership.getGroup().getId()) && membership.getMemberType().isOwner()) {
+			if(membership.getGroup().hasId(id) && membership.getMemberType().isOwner()) {
 				log.debug(String.format("Account %s has permission to administrate group %s", account, membership.getGroup()));
 				return true;
 			}

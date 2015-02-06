@@ -34,7 +34,7 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 
 	@Override
 	protected void validateForm(final GangInput form, final BindingResult bindingResult) {
-		if(null == form.getId()
+		if(! form.isPersistent()
 				&& null == accountRepository.findById(form.getPlayerId())) {
 			throw new DataNotFoundException(String.format("Account %d", form.getPlayerId()));
 		}
@@ -48,7 +48,7 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 		}
 		for(final GangTypeEntity gangType : group.getWh40kSkirmishRules().getGangTypes()) {
 			for(final FactionEntity faction : gangType.getFactions()) {
-				if(faction.getId().equals(form.getFactionId())) {
+				if(faction.hasId(form.getFactionId())) {
 					return faction;
 				}
 			}
@@ -65,7 +65,7 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 			for(final FactionEntity faction : gangType.getFactions()) {
 				for(final GangEntity gang : faction.getGangs()) {
 					if(gang.getName().equals(form.getName())
-							&& ! gang.getId().equals(form.getId())) {
+							&& ! gang.hasId(form.getId())) {
 						form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 					}
 				}
@@ -75,13 +75,13 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 
 	@Override
 	protected boolean isCreateNew(final GangInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected GangEntity loadExisting(final GangInput form, final FactionEntity context) {
 		for(final GangEntity gang : context.getGangs()) {
-			if(gang.getId().equals(form.getId())) {
+			if(gang.hasId(form.getId())) {
 				return gang;
 			}
 		}

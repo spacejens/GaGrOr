@@ -73,7 +73,7 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 			final Wh40kSkirmishRulesEntity context) {
 		for(final GangTypeEntity gangType : context.getGangTypes()) {
 			if(gangType.getName().equals(form.getName())
-					&& ! gangType.getId().equals(form.getId())) {
+					&& ! gangType.hasId(form.getId())) {
 				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 			}
 		}
@@ -81,13 +81,13 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 
 	@Override
 	protected boolean isCreateNew(final GangTypeInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected GangTypeEntity loadExisting(final GangTypeInput form, final Wh40kSkirmishRulesEntity context) {
 		for(final GangTypeEntity gangType : context.getGangTypes()) {
-			if(gangType.getId().equals(form.getId())) {
+			if(gangType.hasId(form.getId())) {
 				return gangType;
 			}
 		}

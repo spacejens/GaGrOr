@@ -22,7 +22,7 @@ public class PermissionEditAccount extends AbstractGagrorPermissionLongId<Accoun
 	@Override
 	protected boolean hasPermission(final Long id, final AccountEntity account) {
 		final AccountEntity editedAccount = accountRepository.findById(id);
-		if(id.equals(account.getId())) {
+		if(account.hasId(id)) {
 			log.debug(String.format("Permitted to edit own account %d", id));
 			return true;
 		} else if(account.getAccountType().getMayEdit().contains(editedAccount.getAccountType())) {

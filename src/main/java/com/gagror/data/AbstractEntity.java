@@ -27,19 +27,10 @@ extends AbstractIdentifiable {
 
 	// TODO Forbid deletion of entities, instead using an active flag to track if they have been deleted (soft delete)
 
-	@Override
-	public String toString() {
-		return String.format("id=%d", getId());
-	}
-
 	@PrePersist
 	private void initializeCreated() {
 		if(null == created) {
 			created = new Date();
 		}
-	}
-
-	public final boolean isPersistent() {
-		return getId() != null;
 	}
 }

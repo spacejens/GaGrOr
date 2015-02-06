@@ -80,7 +80,7 @@ public class RulesService {
 	private GangTypeEntity loadGangType(final Long groupId, final Long gangTypeId) {
 		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
 		for(final GangTypeEntity gangType : rules.getGangTypes()) {
-			if(gangType.getId().equals(gangTypeId)) {
+			if(gangType.hasId(gangTypeId)) {
 				return gangType;
 			}
 		}
@@ -94,7 +94,7 @@ public class RulesService {
 	public FactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
 		final GangTypeEntity gangType = loadGangType(groupId, gangTypeId);
 		for(final FactionEntity faction : gangType.getFactions()) {
-			if(faction.getId().equals(factionId)) {
+			if(faction.hasId(factionId)) {
 				return faction;
 			}
 		}
@@ -111,7 +111,7 @@ public class RulesService {
 	private RaceEntity loadRace(final Long groupId, final Long gangTypeId, final Long raceId) {
 		final GangTypeEntity gangType = loadGangType(groupId, gangTypeId);
 		for(final RaceEntity race : gangType.getRaces()) {
-			if(race.getId().equals(raceId)) {
+			if(race.hasId(raceId)) {
 				return race;
 			}
 		}
@@ -132,7 +132,7 @@ public class RulesService {
 			final Long fighterTypeId) {
 		final RaceEntity race = loadRace(groupId, gangTypeId, raceId);
 		for(final FighterTypeEntity fighterType : race.getFighterTypes()) {
-			if(fighterType.getId().equals(fighterTypeId)){
+			if(fighterType.hasId(fighterTypeId)){
 				return fighterType;
 			}
 		}
@@ -154,7 +154,7 @@ public class RulesService {
 	private TerritoryCategoryEntity loadTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
 		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
 		for(final TerritoryCategoryEntity territoryCategory : rules.getTerritoryCategories()) {
-			if(territoryCategory.getId().equals(territoryCategoryId)) {
+			if(territoryCategory.hasId(territoryCategoryId)) {
 				return territoryCategory;
 			}
 		}
@@ -168,7 +168,7 @@ public class RulesService {
 	private TerritoryTypeEntity loadTerritoryType(final Long groupId, final Long territoryCategoryId, final Long territoryTypeId) {
 		final TerritoryCategoryEntity territoryCategory = loadTerritoryCategory(groupId, territoryCategoryId);
 		for(final TerritoryTypeEntity territoryType : territoryCategory.getTerritoryTypes()) {
-			if(territoryType.getId().equals(territoryTypeId)) {
+			if(territoryType.hasId(territoryTypeId)) {
 				return territoryType;
 			}
 		}
@@ -185,7 +185,7 @@ public class RulesService {
 	private SkillCategoryEntity loadSkillCategory(final Long groupId, final Long skillCategoryId) {
 		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
 		for(final SkillCategoryEntity skillCategory : rules.getSkillCategories()) {
-			if(skillCategory.getId().equals(skillCategoryId)) {
+			if(skillCategory.hasId(skillCategoryId)) {
 				return skillCategory;
 			}
 		}
@@ -199,7 +199,7 @@ public class RulesService {
 	private SkillEntity loadSkill(final Long groupId, final Long skillCategoryId, final Long skillId) {
 		final SkillCategoryEntity skillCategory = loadSkillCategory(groupId, skillCategoryId);
 		for(final SkillEntity skill : skillCategory.getSkills()) {
-			if(skill.getId().equals(skillId)) {
+			if(skill.hasId(skillId)) {
 				return skill;
 			}
 		}
@@ -216,7 +216,7 @@ public class RulesService {
 	private ItemCategoryEntity loadItemCategory(final Long groupId, final Long itemCategoryId) {
 		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
 		for(final ItemCategoryEntity itemCategory : rules.getItemCategories()) {
-			if(itemCategory.getId().equals(itemCategoryId)) {
+			if(itemCategory.hasId(itemCategoryId)) {
 				return itemCategory;
 			}
 		}
@@ -230,7 +230,7 @@ public class RulesService {
 	private ItemTypeEntity loadItemType(final Long groupId, final Long itemCategoryId, final Long itemTypeId) {
 		final ItemCategoryEntity itemCategory = loadItemCategory(groupId, itemCategoryId);
 		for(final ItemTypeEntity itemType : itemCategory.getItemTypes()) {
-			if(itemType.getId().equals(itemTypeId)) {
+			if(itemType.hasId(itemTypeId)) {
 				return itemType;
 			}
 		}

@@ -62,7 +62,7 @@ public class GangController extends AbstractController {
 			return redirect(String.format("/wh40kskirmish/group/%d", groupId));
 		} else {
 			log.warn(String.format("Failed to save: %s", gangForm));
-			if(null == gangForm.getId()) {
+			if(! gangForm.isPersistent()) {
 				final EditGangOutput data = gangService.prepareToCreateGang(groupId);
 				model.addAttribute("group", data.getGroup());
 				model.addAttribute("factions", data.getFactions());

@@ -39,7 +39,7 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 			throw new WrongGroupTypeException(group);
 		}
 		for(final SkillCategoryEntity skillCategory : group.getWh40kSkirmishRules().getSkillCategories()) {
-			if(skillCategory.getId().equals(form.getSkillCategoryId())) {
+			if(skillCategory.hasId(form.getSkillCategoryId())) {
 				return skillCategory;
 			}
 		}
@@ -54,7 +54,7 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 		for(final SkillCategoryEntity skillCategory : context.getRules().getSkillCategories()) {
 			for(final SkillEntity skill : skillCategory.getSkills()) {
 				if(skill.getName().equals(form.getName())
-						&& ! skill.getId().equals(form.getId())) {
+						&& ! skill.hasId(form.getId())) {
 					form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 				}
 			}
@@ -63,13 +63,13 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
 	@Override
 	protected boolean isCreateNew(final SkillInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected SkillEntity loadExisting(final SkillInput form, final SkillCategoryEntity context) {
 		for(final SkillEntity skill : context.getSkills()) {
-			if(skill.getId().equals(form.getId())) {
+			if(skill.hasId(form.getId())) {
 				return skill;
 			}
 		}

@@ -52,7 +52,7 @@ public class GangService {
 			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {
 		final FactionEntity faction = rulesService.loadFaction(groupId, gangTypeId, factionId);
 		for(final GangEntity gang : faction.getGangs()) {
-			if(gang.getId().equals(gangId)) {
+			if(gang.hasId(gangId)) {
 				return gang;
 			}
 		}

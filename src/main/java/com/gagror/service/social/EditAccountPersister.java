@@ -9,6 +9,7 @@ import org.thymeleaf.util.StringUtils;
 
 import com.gagror.data.AbstractEntity;
 import com.gagror.data.DataNotFoundException;
+import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
@@ -27,7 +28,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 
 	@Override
 	protected void validateForm(final AccountEditInput form, final BindingResult bindingResult) {
-		final boolean editingOwnAccount = isEditingOwnAccount(form.getId());
+		final boolean editingOwnAccount = isEditingOwnAccount(form);
 		if(! StringUtils.isEmptyOrWhitespace(form.getPassword())
 				|| ! StringUtils.isEmptyOrWhitespace(form.getPasswordRepeat())) {
 			// Only validate password input if there was any input
@@ -63,7 +64,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 
 	@Override
 	protected void validateFormVsExistingState(final AccountEditInput form, final BindingResult bindingResult, final AccountEntity entity) {
-		final boolean editingOwnAccount = isEditingOwnAccount(form.getId());
+		final boolean editingOwnAccount = isEditingOwnAccount(form);
 		if(editingOwnAccount
 				&& ! entity.getName().equals(form.getName())
 				&& null != accountRepository.findByName(form.getName())) {
@@ -78,7 +79,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 
 	@Override
 	protected void updateValues(final AccountEditInput form, final AccountEntity entity) {
-		final boolean editingOwnAccount = isEditingOwnAccount(entity.getId());
+		final boolean editingOwnAccount = isEditingOwnAccount(entity);
 		if(editingOwnAccount) {
 			/*
 			 * Editing username for other accounts is forbidden, since it would be very confusing.
@@ -99,12 +100,12 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 
 	@Override
 	protected void postPersistenceUpdate(final AccountEntity entity) {
-		if(isEditingOwnAccount(entity.getId())) {
+		if(isEditingOwnAccount(entity)) {
 			accessControlService.logInAs(entity);
 		}
 	}
 
-	private boolean isEditingOwnAccount(final Long id) {
-		return id.equals(accessControlService.getRequestAccountEntity().getId());
+	private boolean isEditingOwnAccount(final Identifiable<Long> editingAccount) {
+		return accessControlService.getRequestAccountEntity().hasId(editingAccount.getId());
 	}
 }

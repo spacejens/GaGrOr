@@ -18,9 +18,4 @@ implements Output {
 		id = entity.getId();
 		created = entity.getCreated();
 	}
-
-	@Override
-	public String toString() {
-		return String.format("id=%d", getId());
-	}
 }

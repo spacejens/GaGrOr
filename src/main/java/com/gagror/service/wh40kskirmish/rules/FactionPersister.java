@@ -39,7 +39,7 @@ extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 			throw new WrongGroupTypeException(group);
 		}
 		for(final GangTypeEntity gangType : group.getWh40kSkirmishRules().getGangTypes()) {
-			if(gangType.getId().equals(form.getGangTypeId())) {
+			if(gangType.hasId(form.getGangTypeId())) {
 				return gangType;
 			}
 		}
@@ -54,7 +54,7 @@ extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 		for(final GangTypeEntity gangType : context.getRules().getGangTypes()) {
 			for(final FactionEntity faction : gangType.getFactions()) {
 				if(faction.getName().equals(form.getName())
-						&& ! faction.getId().equals(form.getId())) {
+						&& ! faction.hasId(form.getId())) {
 					form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 				}
 			}
@@ -63,13 +63,13 @@ extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 
 	@Override
 	protected boolean isCreateNew(final FactionInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected FactionEntity loadExisting(final FactionInput form, final GangTypeEntity context) {
 		for(final FactionEntity faction : context.getFactions()) {
-			if(faction.getId().equals(form.getId())) {
+			if(faction.hasId(form.getId())) {
 				return faction;
 			}
 		}

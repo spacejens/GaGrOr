@@ -132,7 +132,7 @@ public class AccountService {
 
 	private ContactEntity findContact(final Set<ContactEntity> contacts, final Long contactId) {
 		for(final ContactEntity contact : contacts) {
-			if(contact.getId().equals(contactId)) {
+			if(contact.hasId(contactId)) {
 				return contact;
 			}
 		}

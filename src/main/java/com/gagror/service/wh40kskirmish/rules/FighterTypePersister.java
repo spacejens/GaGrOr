@@ -40,9 +40,9 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 			throw new WrongGroupTypeException(group);
 		}
 		for(final GangTypeEntity gangType : group.getWh40kSkirmishRules().getGangTypes()) {
-			if(gangType.getId().equals(form.getGangTypeId())) {
+			if(gangType.hasId(form.getGangTypeId())) {
 				for(final RaceEntity race : gangType.getRaces()) {
-					if(race.getId().equals(form.getRaceId())) {
+					if(race.hasId(form.getRaceId())) {
 						return race;
 					}
 				}
@@ -60,7 +60,7 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 			for(final RaceEntity race : gangType.getRaces()) {
 				for(final FighterTypeEntity fighterType : race.getFighterTypes()) {
 					if(fighterType.getName().equals(form.getName())
-							&& ! fighterType.getId().equals(form.getId())) {
+							&& ! fighterType.hasId(form.getId())) {
 						form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 					}
 				}
@@ -98,13 +98,13 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
 	@Override
 	protected boolean isCreateNew(final FighterTypeInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected FighterTypeEntity loadExisting(final FighterTypeInput form, final RaceEntity context) {
 		for(final FighterTypeEntity fighterType : context.getFighterTypes()) {
-			if(fighterType.getId().equals(form.getId())) {
+			if(fighterType.hasId(form.getId())) {
 				return fighterType;
 			}
 		}

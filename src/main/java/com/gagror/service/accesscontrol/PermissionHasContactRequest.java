@@ -18,7 +18,7 @@ public class PermissionHasContactRequest extends AbstractGagrorPermissionLongId<
 	@Override
 	protected boolean hasPermission(final Long id, final AccountEntity account) {
 		for(final ContactEntity contact : account.getIncomingContacts()) {
-			if(contact.getId().equals(id) && contact.getContactType().isRequest()) {
+			if(contact.hasId(id) && contact.getContactType().isRequest()) {
 				log.debug(String.format("Account %d has incoming contact request %d", account.getId(), id));
 				return true;
 			}

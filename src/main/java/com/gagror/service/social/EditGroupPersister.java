@@ -25,7 +25,7 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 		if(form.isViewableByAnyone()) {
 			for(final GroupEntity groupViewableByAnyone : groupRepository.findByViewableByAnyone(true)) {
 				if(groupViewableByAnyone.getName().equals(form.getName())
-						&& ! groupViewableByAnyone.getId().equals(form.getId())) {
+						&& ! groupViewableByAnyone.hasId(form.getId())) {
 					form.addErrorNameMustBeUniqueWhenViewableByAnyone(bindingResult);
 				}
 			}

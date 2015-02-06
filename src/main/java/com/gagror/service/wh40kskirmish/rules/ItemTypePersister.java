@@ -39,7 +39,7 @@ extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 			throw new WrongGroupTypeException(group);
 		}
 		for(final ItemCategoryEntity itemCategory : group.getWh40kSkirmishRules().getItemCategories()) {
-			if(itemCategory.getId().equals(form.getItemCategoryId())) {
+			if(itemCategory.hasId(form.getItemCategoryId())) {
 				return itemCategory;
 			}
 		}
@@ -54,7 +54,7 @@ extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 		for(final ItemCategoryEntity itemCategory : context.getRules().getItemCategories()) {
 			for(final ItemTypeEntity itemType : itemCategory.getItemTypes()) {
 				if(itemType.getName().equals(form.getName())
-						&& ! itemType.getId().equals(form.getId())) {
+						&& ! itemType.hasId(form.getId())) {
 					form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 				}
 			}
@@ -63,13 +63,13 @@ extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 
 	@Override
 	protected boolean isCreateNew(final ItemTypeInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected ItemTypeEntity loadExisting(final ItemTypeInput form, final ItemCategoryEntity context) {
 		for(final ItemTypeEntity itemType : context.getItemTypes()) {
-			if(itemType.getId().equals(form.getId())) {
+			if(itemType.hasId(form.getId())) {
 				return itemType;
 			}
 		}

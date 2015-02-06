@@ -10,19 +10,36 @@ implements Identifiable<Long> {
 		}
 		if(null == other
 				|| ! this.getClass().equals(other.getClass())
-				|| null == getId()) {
+				|| ! isPersistent()) {
 			return false;
 		}
 		final AbstractIdentifiable castOther = (AbstractIdentifiable)other;
-		return getId().equals(castOther.getId());
+		return hasId(castOther.getId());
 	}
 
 	@Override
 	public final int hashCode() {
-		if(null == getId()) {
+		if(! isPersistent()) {
 			return 0;
 		} else {
 			return getId().hashCode();
 		}
+	}
+
+	public final boolean hasId(final Long id) {
+		if(isPersistent()) {
+			return getId().equals(id);
+		} else {
+			return false;
+		}
+	}
+
+	public final boolean isPersistent() {
+		return getId() != null;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s, id=%d", getClass().getSimpleName(), getId());
 	}
 }

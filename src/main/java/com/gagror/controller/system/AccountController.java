@@ -122,7 +122,7 @@ public class AccountController extends AbstractController {
 			final Model model,
 			@Valid @ModelAttribute("editAccountForm") final AccountEditInput editAccountForm,
 			final BindingResult bindingResult) {
-		if(! accountId.equals(editAccountForm.getId())) {
+		if(! editAccountForm.hasId(accountId)) {
 			throw new FormAndURLMismatchException("Account ID", accountId, editAccountForm.getId());
 		}
 		if(editAccountPersister.save(editAccountForm, bindingResult)) {

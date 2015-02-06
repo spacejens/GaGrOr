@@ -48,7 +48,7 @@ extends AbstractPersister<SkillCategoryInput, SkillCategoryEntity, Wh40kSkirmish
 			final Wh40kSkirmishRulesEntity context) {
 		for(final SkillCategoryEntity skillCategory : context.getSkillCategories()) {
 			if(skillCategory.getName().equals(form.getName())
-					&& ! skillCategory.getId().equals(form.getId())) {
+					&& ! skillCategory.hasId(form.getId())) {
 				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 			}
 		}
@@ -56,13 +56,13 @@ extends AbstractPersister<SkillCategoryInput, SkillCategoryEntity, Wh40kSkirmish
 
 	@Override
 	protected boolean isCreateNew(final SkillCategoryInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected SkillCategoryEntity loadExisting(final SkillCategoryInput form, final Wh40kSkirmishRulesEntity context) {
 		for(final SkillCategoryEntity skillCategory : context.getSkillCategories()) {
-			if(skillCategory.getId().equals(form.getId())) {
+			if(skillCategory.hasId(form.getId())) {
 				return skillCategory;
 			}
 		}

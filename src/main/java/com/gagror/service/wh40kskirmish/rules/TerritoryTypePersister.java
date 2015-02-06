@@ -39,7 +39,7 @@ extends AbstractPersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCate
 			throw new WrongGroupTypeException(group);
 		}
 		for(final TerritoryCategoryEntity territoryCategory : group.getWh40kSkirmishRules().getTerritoryCategories()) {
-			if(territoryCategory.getId().equals(form.getTerritoryCategoryId())) {
+			if(territoryCategory.hasId(form.getTerritoryCategoryId())) {
 				return territoryCategory;
 			}
 		}
@@ -54,7 +54,7 @@ extends AbstractPersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCate
 		for(final TerritoryCategoryEntity territoryCategory : context.getRules().getTerritoryCategories()) {
 			for(final TerritoryTypeEntity territoryType : territoryCategory.getTerritoryTypes()) {
 				if(territoryType.getName().equals(form.getName())
-						&& ! territoryType.getId().equals(form.getId())) {
+						&& ! territoryType.hasId(form.getId())) {
 					form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 				}
 			}
@@ -63,13 +63,13 @@ extends AbstractPersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCate
 
 	@Override
 	protected boolean isCreateNew(final TerritoryTypeInput form) {
-		return null == form.getId();
+		return !form.isPersistent();
 	}
 
 	@Override
 	protected TerritoryTypeEntity loadExisting(final TerritoryTypeInput form, final TerritoryCategoryEntity context) {
 		for(final TerritoryTypeEntity territoryType : context.getTerritoryTypes()) {
-			if(territoryType.getId().equals(form.getId())) {
+			if(territoryType.hasId(form.getId())) {
 				return territoryType;
 			}
 		}

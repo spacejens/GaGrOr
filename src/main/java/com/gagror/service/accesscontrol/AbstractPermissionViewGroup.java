@@ -38,7 +38,7 @@ public abstract class AbstractPermissionViewGroup extends AbstractGagrorPermissi
 		}
 		// Check the memberships
 		for(final GroupMemberEntity membership : account.getGroupMemberships()) {
-			if(id.equals(membership.getGroup().getId())) {
+			if(membership.getGroup().hasId(id)) {
 				log.debug(String.format("Account %s has permission to view group %s", account, membership.getGroup()));
 				return true;
 			}

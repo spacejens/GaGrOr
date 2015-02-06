@@ -98,7 +98,7 @@ public class GroupService {
 
 	public GroupEditOutput editGroup(final Long groupId) {
 		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
-			if(groupId.equals(membership.getGroup().getId())) {
+			if(membership.getGroup().hasId(groupId)) {
 				return new GroupEditOutput(membership);
 			}
 		}
@@ -212,7 +212,7 @@ public class GroupService {
 
 	private GroupMemberEntity findInvitation(final Long memberId) {
 		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
-			if(memberId.equals(membership.getId()) && membership.getMemberType().isInvitation()) {
+			if(membership.hasId(memberId) && membership.getMemberType().isInvitation()) {
 				return membership;
 			}
 		}
@@ -221,7 +221,7 @@ public class GroupService {
 
 	public void leave(final Long groupId) {
 		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
-			if(groupId.equals(membership.getGroup().getId())) {
+			if(membership.getGroup().hasId(groupId)) {
 				// If the request account is the only owner, we cannot leave the group
 				if(membership.getMemberType().isOwner()) {
 					int countOwners = 0;
@@ -274,12 +274,12 @@ public class GroupService {
 
 	private GroupMemberEntity findAnotherGroupMemberFromMemberships(final Long groupId, final Long accountId) {
 		final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
-		if(accountId.equals(requestAccount.getId())) {
+		if(requestAccount.hasId(accountId)) {
 			throw new GroupMembershipChangeException("This action can only be performed on other accounts");
 		}
 		GroupEntity group = null;
 		for(final GroupMemberEntity membership : requestAccount.getGroupMemberships()) {
-			if(groupId.equals(membership.getGroup().getId())) {
+			if(membership.getGroup().hasId(groupId)) {
 				group = membership.getGroup();
 				break;
 			}
@@ -288,7 +288,7 @@ public class GroupService {
 			throw new NotGroupMemberException(String.format("Request account is not a member of group %d", groupId));
 		}
 		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
-			if(accountId.equals(membership.getAccount().getId())) {
+			if(membership.getAccount().hasId(accountId)) {
 				return membership;
 			}
 		}

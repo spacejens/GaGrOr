@@ -125,7 +125,7 @@ public class GroupsController extends AbstractController {
 			final BindingResult bindingResult,
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
-		if(! groupId.equals(groupEditForm.getId())) {
+		if(! groupEditForm.hasId(groupId)) {
 			throw new FormAndURLMismatchException("Group ID", groupId, groupEditForm.getId());
 		}
 		if(editGroupPersister.save(groupEditForm, bindingResult)) {
@@ -163,7 +163,7 @@ public class GroupsController extends AbstractController {
 			final BindingResult bindingResult,
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
 			final Model model) {
-		if(! groupId.equals(groupInviteForm.getId())) {
+		if(! groupInviteForm.hasId(groupId)) {
 			throw new FormAndURLMismatchException("Group ID", groupId, groupInviteForm.getId());
 		}
 		if(inviteGroupPersister.save(groupInviteForm, bindingResult)) {
