@@ -2,13 +2,30 @@ package com.gagror.data.group;
 
 import java.util.List;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface GroupRepository extends Repository<GroupEntity, Long> {
+import com.gagror.data.DataNotFoundException;
 
-	GroupEntity findOne(final Long groupId);
+@Repository
+public class GroupRepository {
 
-	GroupEntity save(final GroupEntity group);
+	@Autowired
+	GroupRepositoryQueries groupRepositoryQueries;
 
-	List<GroupEntity> findByViewableByAnyone(final boolean viewableByAnyone);
+	public GroupEntity load(final Long groupId) {
+		final GroupEntity group = groupRepositoryQueries.findOne(groupId);
+		if(null == group) {
+			throw new DataNotFoundException(String.format("Group %d", groupId));
+		}
+		return group;
+	}
+
+	public GroupEntity persist(final GroupEntity group) {
+		return groupRepositoryQueries.save(group);
+	}
+
+	public List<GroupEntity> listViewableByAnyone() {
+		return groupRepositoryQueries.findByViewableByAnyone(true);
+	}
 }

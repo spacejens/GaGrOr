@@ -51,7 +51,7 @@ public class CreateGroupPersister extends AbstractPersister<GroupCreateInput, Gr
 
 	@Override
 	protected GroupEntity makePersistent(final GroupEntity entity) {
-		return groupRepository.save(entity);
+		return groupRepository.persist(entity);
 	}
 
 	@Override

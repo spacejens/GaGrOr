@@ -446,7 +446,7 @@ public class FighterTypePersisterUnitTest {
 	@Before
 	public void setupContext() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
+		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getGangTypes()).thenReturn(new HashSet<GangTypeEntity>());
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);

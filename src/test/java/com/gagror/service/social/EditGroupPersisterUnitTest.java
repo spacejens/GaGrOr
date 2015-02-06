@@ -2,6 +2,7 @@ package com.gagror.service.social;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -74,7 +75,7 @@ public class EditGroupPersisterUnitTest {
 		final GroupEntity anotherGroup = mock(GroupEntity.class);
 		when(anotherGroup.getId()).thenReturn(UNKNOWN_GROUP_ID);
 		when(anotherGroup.getName()).thenReturn(FORM_NAME);
-		when(groupRepository.findByViewableByAnyone(true)).thenReturn(Collections.singletonList(anotherGroup));
+		when(groupRepository.listViewableByAnyone()).thenReturn(Collections.singletonList(anotherGroup));
 	}
 
 	@Test(expected=DataNotFoundException.class)
@@ -115,7 +116,8 @@ public class EditGroupPersisterUnitTest {
 
 	@Before
 	public void setupRepository() {
-		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
+		when(groupRepository.load(GROUP_ID)).thenReturn(group);
+		doThrow(DataNotFoundException.class).when(groupRepository).load(UNKNOWN_GROUP_ID);
 	}
 
 	@Before

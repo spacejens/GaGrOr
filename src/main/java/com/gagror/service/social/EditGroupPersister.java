@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.AbstractEntity;
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
@@ -23,7 +22,7 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 	@Override
 	protected void validateForm(final GroupEditInput form, final BindingResult bindingResult) {
 		if(form.isViewableByAnyone()) {
-			for(final GroupEntity groupViewableByAnyone : groupRepository.findByViewableByAnyone(true)) {
+			for(final GroupEntity groupViewableByAnyone : groupRepository.listViewableByAnyone()) {
 				if(groupViewableByAnyone.getName().equals(form.getName())
 						&& ! groupViewableByAnyone.hasId(form.getId())) {
 					form.addErrorNameMustBeUniqueWhenViewableByAnyone(bindingResult);
@@ -39,11 +38,7 @@ public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupE
 
 	@Override
 	protected GroupEntity loadExisting(final GroupEditInput form, final AbstractEntity context) {
-		final GroupEntity group = groupRepository.findOne(form.getId());
-		if(null == group) {
-			throw new DataNotFoundException(String.format("Group %d", form.getId()));
-		}
-		return group;
+		return groupRepository.load(form.getId());
 	}
 
 	@Override

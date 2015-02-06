@@ -34,7 +34,7 @@ extends AbstractPersister<ItemCategoryInput, ItemCategoryEntity, Wh40kSkirmishRu
 
 	@Override
 	protected Wh40kSkirmishRulesEntity loadContext(final ItemCategoryInput form) {
-		final GroupEntity group = groupRepository.findOne(form.getGroupId());
+		final GroupEntity group = groupRepository.load(form.getGroupId());
 		if(null == group.getWh40kSkirmishRules()) {
 			throw new WrongGroupTypeException(group);
 		}

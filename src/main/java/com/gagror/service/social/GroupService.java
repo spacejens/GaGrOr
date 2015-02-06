@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
@@ -78,7 +77,7 @@ public class GroupService {
 	public List<GroupListOutput> loadPublicGroupList() {
 		log.debug("Loading public group list");
 		final List<GroupListOutput> output = new ArrayList<>();
-		final List<GroupEntity> groups = groupRepository.findByViewableByAnyone(true);
+		final List<GroupEntity> groups = groupRepository.listViewableByAnyone();
 		for(final GroupEntity group : groups) {
 			output.add(new GroupListOutput(group));
 		}
@@ -126,11 +125,8 @@ public class GroupService {
 	}
 
 	public GroupEntity loadGroup(final Long groupId) {
-		final GroupEntity group = groupRepository.findOne(groupId);
-		if(null == group) {
-			throw new DataNotFoundException(String.format("Group %d", groupId));
-		}
-		return group;
+		// TODO Inline this method, calling the group repository directly where used
+		return groupRepository.load(groupId);
 	}
 
 	public List<AccountReferenceOutput> loadPossibleUsersToInvite(final Long groupId) {

@@ -59,7 +59,7 @@ public class CreateGroupPersisterUnitTest {
 		final boolean result = instance.save(groupCreateForm, bindingResult);
 		assertTrue("Saving should have been successful", result);
 		final ArgumentCaptor<GroupEntity> group = ArgumentCaptor.forClass(GroupEntity.class);
-		verify(groupRepository).save(group.capture());
+		verify(groupRepository).persist(group.capture());
 		assertEquals("Wrong name of created group", NEW_GROUP_NAME, group.getValue().getName());
 		final ArgumentCaptor<GroupMemberEntity> groupMember = ArgumentCaptor.forClass(GroupMemberEntity.class);
 		verify(groupMemberRepository).save(groupMember.capture());
@@ -84,7 +84,7 @@ public class CreateGroupPersisterUnitTest {
 
 	@Before
 	public void setupAccountRepository() {
-		when(groupRepository.save(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>() {
+		when(groupRepository.persist(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>() {
 			@Override
 			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {
 				return (GroupEntity)invocation.getArguments()[0];

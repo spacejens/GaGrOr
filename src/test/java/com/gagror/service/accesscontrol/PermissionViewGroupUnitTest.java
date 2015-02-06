@@ -2,6 +2,7 @@ package com.gagror.service.accesscontrol;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupMemberEntity;
@@ -85,7 +87,7 @@ public class PermissionViewGroupUnitTest {
 		assertTrue("Not logged in, should have permission", instance.hasPermission(THIRD_GROUP_ID, null));
 	}
 
-	@Test
+	@Test(expected=DataNotFoundException.class)
 	public void hasPermission_unknownGroup() {
 		assertFalse("Should not have permission to unknown group", instance.hasPermission(OTHER_GROUP_ID, account));
 	}
@@ -98,6 +100,7 @@ public class PermissionViewGroupUnitTest {
 		setupGroup(secondGroup, SECOND_GROUP_ID);
 		setupGroupMember(secondGroup, secondGroupInvited, SECOND_MEMBER_ID, MemberType.INVITED);
 		setupGroup(thirdGroup, THIRD_GROUP_ID);
+		doThrow(DataNotFoundException.class).when(groupRepository).load(OTHER_GROUP_ID);
 	}
 
 	private void setupAccount() {
@@ -110,7 +113,7 @@ public class PermissionViewGroupUnitTest {
 		when(group.isViewableByAnyone()).thenReturn(false);
 		final Set<GroupMemberEntity> memberships = new HashSet<>();
 		when(group.getGroupMemberships()).thenReturn(memberships);
-		when(groupRepository.findOne(id)).thenReturn(group);
+		when(groupRepository.load(id)).thenReturn(group);
 	}
 
 	private void setupGroupMember(final GroupEntity group, final GroupMemberEntity member, final Long id, final MemberType memberType) {

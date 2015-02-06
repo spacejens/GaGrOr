@@ -99,7 +99,7 @@ public class RulesPersisterUnitTest {
 	@Before
 	public void setupGroup() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
+		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getId()).thenReturn(RULES_ID);
 		when(rules.getVersion()).thenReturn(DB_RULES_VERSION);

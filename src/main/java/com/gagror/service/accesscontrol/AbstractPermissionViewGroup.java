@@ -25,10 +25,7 @@ public abstract class AbstractPermissionViewGroup extends AbstractGagrorPermissi
 	@Override
 	protected final boolean hasPermission(final Long id, final AccountEntity account) {
 		// First, load the group and check if it is viewable by anyone
-		final GroupEntity group = groupRepository.findOne(id);
-		if(null == group) {
-			return false;
-		}
+		final GroupEntity group = groupRepository.load(id);
 		if(viewableByAnyoneApplicable && group.isViewableByAnyone()) {
 			return true;
 		}

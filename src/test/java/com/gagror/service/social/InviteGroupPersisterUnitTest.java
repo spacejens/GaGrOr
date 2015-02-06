@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -40,6 +41,7 @@ import com.gagror.service.accesscontrol.AccessControlService;
 public class InviteGroupPersisterUnitTest {
 
 	private static final Long GROUP_ID = 11L;
+	private static final Long UNKNOWN_GROUP_ID = 634782L;
 	private static final Long ACCOUNT_ID_REQUEST = 123L;
 	private static final Long ACCOUNT_ID_CONTACT = 456L;
 	private static final Long CONTACT_ID = 789L;
@@ -93,7 +95,7 @@ public class InviteGroupPersisterUnitTest {
 
 	@Test(expected=DataNotFoundException.class)
 	public void sendInvitations_groupNotFound() {
-		when(groupInviteForm.getId()).thenReturn(7964336L);
+		when(groupInviteForm.getId()).thenReturn(UNKNOWN_GROUP_ID);
 		instance.save(groupInviteForm, bindingResult);
 	}
 
@@ -176,7 +178,8 @@ public class InviteGroupPersisterUnitTest {
 		when(group.getId()).thenReturn(GROUP_ID);
 		final Set<GroupMemberEntity> memberships = new HashSet<>();
 		when(group.getGroupMemberships()).thenReturn(memberships);
-		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
+		when(groupRepository.load(GROUP_ID)).thenReturn(group);
+		doThrow(DataNotFoundException.class).when(groupRepository).load(UNKNOWN_GROUP_ID);
 	}
 
 	@Before

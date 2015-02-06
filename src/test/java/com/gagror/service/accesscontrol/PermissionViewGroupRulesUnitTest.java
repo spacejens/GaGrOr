@@ -110,7 +110,7 @@ public class PermissionViewGroupRulesUnitTest {
 		when(group.isViewableByAnyone()).thenReturn(false);
 		final Set<GroupMemberEntity> memberships = new HashSet<>();
 		when(group.getGroupMemberships()).thenReturn(memberships);
-		when(groupRepository.findOne(id)).thenReturn(group);
+		when(groupRepository.load(id)).thenReturn(group);
 	}
 
 	private void setupGroupMember(final GroupEntity group, final GroupMemberEntity member, final Long id, final MemberType memberType) {

@@ -179,7 +179,7 @@ public class TerritoryCategoryPersisterUnitTest {
 	@Before
 	public void setupGroup() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.findOne(GROUP_ID)).thenReturn(group);
+		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getTerritoryCategories()).thenReturn(new HashSet<TerritoryCategoryEntity>());
 	}

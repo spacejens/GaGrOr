@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -51,6 +52,7 @@ public class GroupServiceUnitTest {
 	private static final Long THIRD_GROUP_ID = 33L;
 	private static final Long FOURTH_GROUP_ID = 44L;
 	private static final Long ANOTHER_GROUP_ID = 55L;
+	private static final Long UNKNOWN_GROUP_ID = 754328L;
 	private static final String FIRST_GROUP_NAME = "First";
 	private static final String SECOND_GROUP_NAME = "Second";
 	private static final String THIRD_GROUP_NAME = "Third";
@@ -153,7 +155,7 @@ public class GroupServiceUnitTest {
 	@Test
 	public void loadPublicGroupList_noPublicGroups() {
 		final List<GroupEntity> noGroups = new ArrayList<>();
-		when(groupRepository.findByViewableByAnyone(true)).thenReturn(noGroups);
+		when(groupRepository.listViewableByAnyone()).thenReturn(noGroups);
 		Long[] expectedGroupIds = {};
 		assertIds(instance.loadPublicGroupList(), expectedGroupIds);
 	}
@@ -186,7 +188,7 @@ public class GroupServiceUnitTest {
 
 	@Test(expected=DataNotFoundException.class)
 	public void viewGroup_notFound() {
-		instance.viewGroup(34578095L);
+		instance.viewGroup(UNKNOWN_GROUP_ID);
 	}
 
 	@Test
@@ -228,7 +230,7 @@ public class GroupServiceUnitTest {
 
 	@Test(expected=DataNotFoundException.class)
 	public void viewGroupMembers_notFound() {
-		instance.viewGroupMembers(34578095L);
+		instance.viewGroupMembers(UNKNOWN_GROUP_ID);
 	}
 
 	@Test
@@ -238,7 +240,7 @@ public class GroupServiceUnitTest {
 
 	@Test(expected=DataNotFoundException.class)
 	public void loadGroup_notFound() {
-		instance.loadGroup(789347L);
+		instance.loadGroup(UNKNOWN_GROUP_ID);
 	}
 
 	@Test
@@ -515,14 +517,15 @@ public class GroupServiceUnitTest {
 
 	@Before
 	public void setupGroupRepository() {
-		when(groupRepository.save(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>(){
+		when(groupRepository.persist(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>(){
 			@Override
 			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {
 				final GroupEntity group = (GroupEntity)invocation.getArguments()[0];
 				return group;
 			}
 		});
-		when(groupRepository.findByViewableByAnyone(true)).thenReturn(Arrays.asList(firstGroup, secondGroup, thirdGroup, fourthGroup));
+		when(groupRepository.listViewableByAnyone()).thenReturn(Arrays.asList(firstGroup, secondGroup, thirdGroup, fourthGroup));
+		doThrow(DataNotFoundException.class).when(groupRepository).load(UNKNOWN_GROUP_ID);
 	}
 
 	@Before
@@ -545,7 +548,7 @@ public class GroupServiceUnitTest {
 		when(group.getName()).thenReturn(name);
 		final Set<GroupMemberEntity> memberships = new HashSet<>();
 		when(group.getGroupMemberships()).thenReturn(memberships);
-		when(groupRepository.findOne(id)).thenReturn(group);
+		when(groupRepository.load(id)).thenReturn(group);
 	}
 
 	private void mockGroupMember(final GroupMemberEntity member, final GroupEntity group, final Long id, final MemberType memberType, final AccountEntity account) {

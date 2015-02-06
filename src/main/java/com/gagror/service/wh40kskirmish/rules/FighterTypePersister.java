@@ -35,7 +35,7 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
 	@Override
 	protected RaceEntity loadContext(final FighterTypeInput form) {
-		final GroupEntity group = groupRepository.findOne(form.getGroupId());
+		final GroupEntity group = groupRepository.load(form.getGroupId());
 		if(null == group.getWh40kSkirmishRules()) {
 			throw new WrongGroupTypeException(group);
 		}
