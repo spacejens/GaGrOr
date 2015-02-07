@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.wh40kskirmish.rules.RulesRepository;
-import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @Repository
 public class SkillCategoryRepository {
@@ -21,12 +20,9 @@ public class SkillCategoryRepository {
 	}
 
 	public SkillCategoryEntity load(final Long groupId, final Long skillCategoryId) {
-		// TODO Load skill category from ID using query, verify group after loading
-		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
-		for(final SkillCategoryEntity skillCategory : rules.getSkillCategories()) {
-			if(skillCategory.hasId(skillCategoryId)) {
-				return skillCategory;
-			}
+		final SkillCategoryEntity skillCategory = skillCategoryRepositoryQueries.findOne(skillCategoryId);
+		if(null != skillCategory && skillCategory.getGroup().hasId(groupId)) {
+			return skillCategory;
 		}
 		throw new DataNotFoundException(String.format("Skill category %d (group %d)", skillCategoryId, groupId));
 	}
