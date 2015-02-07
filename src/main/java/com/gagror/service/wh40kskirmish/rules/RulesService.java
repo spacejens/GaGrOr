@@ -26,6 +26,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
@@ -54,6 +55,9 @@ public class RulesService {
 
 	@Autowired
 	SkillRepository skillRepository;
+
+	@Autowired
+	ItemCategoryRepository itemCategoryRepository;
 
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
@@ -192,22 +196,12 @@ public class RulesService {
 				viewSkillCategory(groupId, skillCategoryId));
 	}
 
-	private ItemCategoryEntity loadItemCategory(final Long groupId, final Long itemCategoryId) {
-		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
-		for(final ItemCategoryEntity itemCategory : rules.getItemCategories()) {
-			if(itemCategory.hasId(itemCategoryId)) {
-				return itemCategory;
-			}
-		}
-		throw new DataNotFoundException(String.format("Item category %d (group %d)", itemCategoryId, groupId));
-	}
-
 	public ItemCategoryOutput viewItemCategory(final Long groupId, final Long itemCategoryId) {
-		return new ItemCategoryOutput(loadItemCategory(groupId, itemCategoryId), groupService.viewGroup(groupId));
+		return new ItemCategoryOutput(itemCategoryRepository.load(groupId, itemCategoryId), groupService.viewGroup(groupId));
 	}
 
 	private ItemTypeEntity loadItemType(final Long groupId, final Long itemCategoryId, final Long itemTypeId) {
-		final ItemCategoryEntity itemCategory = loadItemCategory(groupId, itemCategoryId);
+		final ItemCategoryEntity itemCategory = itemCategoryRepository.load(groupId, itemCategoryId);
 		for(final ItemTypeEntity itemType : itemCategory.getItemTypes()) {
 			if(itemType.hasId(itemTypeId)) {
 				return itemType;

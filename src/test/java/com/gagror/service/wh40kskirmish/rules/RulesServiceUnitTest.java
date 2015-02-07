@@ -27,6 +27,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
@@ -70,7 +71,6 @@ public class RulesServiceUnitTest {
 	private static final Long SKILL_ID = 9998L;
 	private static final String SKILL_NAME = "Skill";
 	private static final Long ITEM_CATEGORY_ID = 8986L;
-	private static final Long WRONG_ITEM_CATEGORY_ID = 1231658L;
 	private static final String ITEM_CATEGORY_NAME = "Item category";
 	private static final Long ITEM_TYPE_ID = 165L;
 	private static final Long WRONG_ITEM_TYPE_ID = 16514L;
@@ -89,6 +89,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	SkillRepository skillRepository;
+
+	@Mock
+	ItemCategoryRepository itemCategoryRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -230,11 +233,6 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong item category returned", ITEM_CATEGORY_NAME, result.getName());
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void viewItemCategory_notFound() {
-		instance.viewItemCategory(GROUP_ID, WRONG_ITEM_CATEGORY_ID);
-	}
-
 	@Test
 	public void viewItemType_ok() {
 		final ItemTypeOutput result = instance.viewItemType(GROUP_ID, ITEM_CATEGORY_ID, ITEM_TYPE_ID);
@@ -307,6 +305,7 @@ public class RulesServiceUnitTest {
 		when(itemCategoryEntity.getName()).thenReturn(ITEM_CATEGORY_NAME);
 		when(itemCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getItemCategories().add(itemCategoryEntity);
+		when(itemCategoryRepository.load(GROUP_ID, ITEM_CATEGORY_ID)).thenReturn(itemCategoryEntity);
 		// Set up the item type entity
 		when(itemCategoryEntity.getItemTypes()).thenReturn(new HashSet<ItemTypeEntity>());
 		when(itemTypeEntity.getId()).thenReturn(ITEM_TYPE_ID);
@@ -330,5 +329,6 @@ public class RulesServiceUnitTest {
 		instance.rulesRepository = rulesRepository;
 		instance.skillCategoryRepository = skillCategoryRepository;
 		instance.skillRepository = skillRepository;
+		instance.itemCategoryRepository = itemCategoryRepository;
 	}
 }
