@@ -18,13 +18,12 @@ public class SkillRepository {
 		return skillRepositoryQueries.save(skill);
 	}
 
-	public SkillEntity load(final Long groupId, final Long skillCategoryId, final Long skillId) {
-		// TODO Remove skill category argument when loading skill
+	public SkillEntity load(final Long groupId, final Long skillId) {
 		final SkillEntity skill = skillRepositoryQueries.findOne(skillId);
 		if(null != skill && skill.getGroup().hasId(groupId)) {
 			return skill;
 		}
-		throw new DataNotFoundException(String.format("Skill %d (skill category %d, group %d)",
-				skillId, skillCategoryId, groupId));
+		throw new DataNotFoundException(String.format("Skill %d (group %d)",
+				skillId, groupId));
 	}
 }

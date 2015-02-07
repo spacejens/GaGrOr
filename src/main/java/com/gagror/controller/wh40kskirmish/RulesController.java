@@ -548,25 +548,23 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP_RULES)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/skill/{" + ATTR_SKILLCATEGORY_ID + "}/{" + ATTR_SKILL_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/skill/{" + ATTR_SKILL_ID + "}")
 	public String viewSkill(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_SKILLCATEGORY_ID) final Long skillCategoryId,
 			@PathVariable(ATTR_SKILL_ID) final Long skillId,
 			final Model model) {
-		model.addAttribute("skill", rulesService.viewSkill(groupId, skillCategoryId, skillId));
+		model.addAttribute("skill", rulesService.viewSkill(groupId, skillId));
 		return "wh40kskirmish/skills_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/skill/{" + ATTR_SKILLCATEGORY_ID + "}/{" + ATTR_SKILL_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/skill/{" + ATTR_SKILL_ID + "}/edit", method=RequestMethod.GET)
 	public String editSkillForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_SKILLCATEGORY_ID) final Long skillCategoryId,
 			@PathVariable(ATTR_SKILL_ID) final Long skillId,
 			final Model model) {
-		log.info(String.format("Viewing edit skill form for skill %d of skill category %d in group %d", skillId, skillCategoryId, groupId));
-		final SkillOutput skill = rulesService.viewSkill(groupId, skillCategoryId, skillId);
+		log.info(String.format("Viewing edit skill form for skill %d in group %d", skillId, groupId));
+		final SkillOutput skill = rulesService.viewSkill(groupId, skillId);
 		model.addAttribute("skillCategory", skill.getSkillCategory());
 		model.addAttribute("skillForm", new SkillInput(skill));
 		return "wh40kskirmish/skills_edit";

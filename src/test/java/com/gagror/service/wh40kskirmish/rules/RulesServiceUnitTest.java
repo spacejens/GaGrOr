@@ -213,7 +213,7 @@ public class RulesServiceUnitTest {
 
 	@Test
 	public void viewSkill_ok() {
-		final SkillOutput result = instance.viewSkill(GROUP_ID, SKILL_CATEGORY_ID, SKILL_ID);
+		final SkillOutput result = instance.viewSkill(GROUP_ID, SKILL_ID);
 		assertEquals("Wrong skill returned", SKILL_NAME, result.getName());
 	}
 
@@ -289,7 +289,7 @@ public class RulesServiceUnitTest {
 		when(skillEntity.getName()).thenReturn(SKILL_NAME);
 		when(skillEntity.getSkillCategory()).thenReturn(skillCategoryEntity);
 		skillCategoryEntity.getSkills().add(skillEntity);
-		when(skillRepository.load(GROUP_ID, SKILL_CATEGORY_ID, SKILL_ID)).thenReturn(skillEntity);
+		when(skillRepository.load(GROUP_ID, SKILL_ID)).thenReturn(skillEntity);
 		// Set up the item category entity
 		when(rulesEntity.getItemCategories()).thenReturn(new HashSet<ItemCategoryEntity>());
 		when(itemCategoryEntity.getId()).thenReturn(ITEM_CATEGORY_ID);

@@ -14,7 +14,7 @@
 	</nav>
 	<dl  th:if="${skill.skillCategory.group.memberType != null and skill.skillCategory.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/skill/{skillCategoryId}/{skillId}/edit(groupId=${skill.skillCategory.group.id},skillCategoryId=${skill.skillCategory.id},skillId=${skill.id})}" th:text="#{menu.groups.rules.wh40kskirmish.skill.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/skill/{skillId}/edit(groupId=${skill.skillCategory.group.id},skillId=${skill.id})}" th:text="#{menu.groups.rules.wh40kskirmish.skill.edit}"></a></dd>
 	</dl>
 	<p>View skill here</p>
 	<script th:replace="/fragments/framework :: init"></script>

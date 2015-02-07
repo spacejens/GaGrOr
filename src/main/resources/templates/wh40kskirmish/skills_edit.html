@@ -11,7 +11,7 @@
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${skillCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.skill}"></a>
 		<a th:unless="${skillForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.skill.create}"></a>
-		<a th:if="${skillForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/skill/{skillCategoryId}/{skillId}(groupId=${skillCategory.group.id},skillCategoryId=${skillCategory.id},skillId=${skillForm.id})}" th:text="${skillForm.name}"></a>
+		<a th:if="${skillForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/skill/{skillId}(groupId=${skillCategory.group.id},skillId=${skillForm.id})}" th:text="${skillForm.name}"></a>
 		<a th:if="${skillForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.skill.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/skill/save(groupId=${skillCategory.group.id})}" th:object="${skillForm}" method="post">

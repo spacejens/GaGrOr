@@ -31,6 +31,7 @@ import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
+import com.gagror.data.wh40kskirmish.rules.skills.SkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryOutput;
@@ -142,10 +143,11 @@ public class RulesService {
 		return new SkillCategoryOutput(skillCategoryRepository.load(groupId, skillCategoryId), groupService.viewGroup(groupId));
 	}
 
-	public SkillOutput viewSkill(final Long groupId, final Long skillCategoryId, final Long skillId) {
+	public SkillOutput viewSkill(final Long groupId, final Long skillId) {
+		final SkillEntity skill = skillRepository.load(groupId, skillId);
 		return new SkillOutput(
-				skillRepository.load(groupId, skillCategoryId, skillId),
-				viewSkillCategory(groupId, skillCategoryId));
+				skill,
+				new SkillCategoryOutput(skill.getSkillCategory(), groupService.viewGroup(groupId)));
 	}
 
 	public ItemCategoryOutput viewItemCategory(final Long groupId, final Long itemCategoryId) {
