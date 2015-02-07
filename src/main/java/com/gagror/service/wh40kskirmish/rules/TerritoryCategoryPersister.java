@@ -92,6 +92,6 @@ extends AbstractPersister<TerritoryCategoryInput, TerritoryCategoryEntity, Wh40k
 
 	@Override
 	protected TerritoryCategoryEntity makePersistent(final TerritoryCategoryEntity entity) {
-		return territoryCategoryRepository.save(entity);
+		return territoryCategoryRepository.persist(entity);
 	}
 }

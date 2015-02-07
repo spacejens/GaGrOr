@@ -1,8 +1,15 @@
 package com.gagror.data.wh40kskirmish.rules.territory;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface TerritoryCategoryRepository extends Repository<TerritoryCategoryEntity, Long> {
+@Repository
+public class TerritoryCategoryRepository {
 
-	TerritoryCategoryEntity save(final TerritoryCategoryEntity gangType);
+	@Autowired
+	TerritoryCategoryRepositoryQueries territoryCategoryRepositoryQueries;
+
+	public TerritoryCategoryEntity persist(final TerritoryCategoryEntity territoryCategory) {
+		return territoryCategoryRepositoryQueries.save(territoryCategory);
+	}
 }
