@@ -74,7 +74,7 @@ public class TerritoryTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<TerritoryTypeEntity> savedTerritoryType = ArgumentCaptor.forClass(TerritoryTypeEntity.class);
-		verify(territoryTypeRepository).save(savedTerritoryType.capture());
+		verify(territoryTypeRepository).persist(savedTerritoryType.capture());
 		assertEquals("Wrong name", FORM_TERRITORY_TYPE_NAME, savedTerritoryType.getValue().getName());
 		assertTrue("Not added to territory category", territoryCategory.getTerritoryTypes().contains(savedTerritoryType.getValue()));
 	}
@@ -84,7 +84,7 @@ public class TerritoryTypePersisterUnitTest {
 		whenAnotherTerritoryTypeWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(territoryTypeRepository, never()).save(any(TerritoryTypeEntity.class));
+		verify(territoryTypeRepository, never()).persist(any(TerritoryTypeEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -93,7 +93,7 @@ public class TerritoryTypePersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(territoryTypeRepository, never()).save(any(TerritoryTypeEntity.class));
+		verify(territoryTypeRepository, never()).persist(any(TerritoryTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -115,7 +115,7 @@ public class TerritoryTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		verify(bindingResult).hasErrors(); // Should check for form validation errors
 		verifyNoMoreInteractions(bindingResult);
-		verify(territoryTypeRepository, never()).save(any(TerritoryTypeEntity.class));
+		verify(territoryTypeRepository, never()).persist(any(TerritoryTypeEntity.class));
 		verify(territoryType).setName(FORM_TERRITORY_TYPE_NAME);
 	}
 
@@ -136,7 +136,7 @@ public class TerritoryTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(territoryType, never()).setName(anyString());
-		verify(territoryTypeRepository, never()).save(any(TerritoryTypeEntity.class));
+		verify(territoryTypeRepository, never()).persist(any(TerritoryTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)

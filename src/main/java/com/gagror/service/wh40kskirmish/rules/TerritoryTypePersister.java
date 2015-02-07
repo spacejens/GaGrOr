@@ -99,6 +99,6 @@ extends AbstractPersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCate
 
 	@Override
 	protected TerritoryTypeEntity makePersistent(final TerritoryTypeEntity entity) {
-		return territoryTypeRepository.save(entity);
+		return territoryTypeRepository.persist(entity);
 	}
 }
