@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.wh40kskirmish.rules.RulesRepository;
-import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @Repository
 public class GangTypeRepository {
@@ -21,12 +20,9 @@ public class GangTypeRepository {
 	}
 
 	public GangTypeEntity load(final Long groupId, final Long gangTypeId) {
-		// TODO Load gang type from ID using query, verify group after loading
-		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
-		for(final GangTypeEntity gangType : rules.getGangTypes()) {
-			if(gangType.hasId(gangTypeId)) {
-				return gangType;
-			}
+		final GangTypeEntity gangType = gangTypeRepositoryQueries.findOne(gangTypeId);
+		if(null != gangType && gangType.getGroup().hasId(groupId)) {
+			return gangType;
 		}
 		throw new DataNotFoundException(String.format("Gang type %d (group %d)", gangTypeId, groupId));
 	}
