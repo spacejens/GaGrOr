@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeInput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
@@ -22,7 +20,7 @@ public class ItemTypePersister
 extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	ItemCategoryRepository itemCategoryRepository;
 
 	@Autowired
 	ItemTypeRepository itemTypeRepository;
@@ -34,17 +32,7 @@ extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 
 	@Override
 	protected ItemCategoryEntity loadContext(final ItemTypeInput form) {
-		// TODO Load context directly from appropriate repository
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		for(final ItemCategoryEntity itemCategory : group.getWh40kSkirmishRules().getItemCategories()) {
-			if(itemCategory.hasId(form.getItemCategoryId())) {
-				return itemCategory;
-			}
-		}
-		throw new DataNotFoundException(String.format("Item category %d (group %d)", form.getItemCategoryId(), form.getGroupId()));
+		return itemCategoryRepository.load(form.getGroupId(), form.getItemCategoryId());
 	}
 
 	@Override

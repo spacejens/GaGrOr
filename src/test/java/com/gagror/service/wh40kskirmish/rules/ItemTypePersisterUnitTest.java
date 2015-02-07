@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -23,10 +24,9 @@ import org.springframework.validation.BindingResult;
 import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeInput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
@@ -50,7 +50,7 @@ public class ItemTypePersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	ItemCategoryRepository itemCategoryRepository;
 
 	@Mock
 	ItemTypeRepository itemTypeRepository;
@@ -95,15 +95,9 @@ public class ItemTypePersisterUnitTest {
 		verify(itemTypeRepository, never()).persist(any(ItemTypeEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_new_itemCategoryNotFound() {
-		rules.getItemCategories().remove(itemCategory);
+		doThrow(DataNotFoundException.class).when(itemCategoryRepository).load(GROUP_ID, ITEM_CATEGORY_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -137,17 +131,10 @@ public class ItemTypePersisterUnitTest {
 		verify(itemTypeRepository, never()).persist(any(ItemTypeEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenItemTypeExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_itemCategoryNotFound() {
 		whenItemTypeExists();
-		rules.getItemCategories().remove(itemCategory);
+		doThrow(DataNotFoundException.class).when(itemCategoryRepository).load(GROUP_ID, ITEM_CATEGORY_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -202,19 +189,19 @@ public class ItemTypePersisterUnitTest {
 	@Before
 	public void setupContext() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getItemCategories()).thenReturn(new HashSet<ItemCategoryEntity>());
 		when(itemCategory.getId()).thenReturn(ITEM_CATEGORY_ID);
 		when(itemCategory.getItemTypes()).thenReturn(new HashSet<ItemTypeEntity>());
 		when(itemCategory.getRules()).thenReturn(rules);
 		rules.getItemCategories().add(itemCategory);
+		when(itemCategoryRepository.load(GROUP_ID, ITEM_CATEGORY_ID)).thenReturn(itemCategory);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new ItemTypePersister();
-		instance.groupRepository = groupRepository;
+		instance.itemCategoryRepository = itemCategoryRepository;
 		instance.itemTypeRepository = itemTypeRepository;
 	}
 }
