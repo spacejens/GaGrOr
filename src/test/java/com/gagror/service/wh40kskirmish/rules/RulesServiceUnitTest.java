@@ -201,7 +201,7 @@ public class RulesServiceUnitTest {
 
 	@Test
 	public void viewTerritoryType_ok() {
-		final TerritoryTypeOutput result = instance.viewTerritoryType(GROUP_ID, TERRITORY_CATEGORY_ID, TERRITORY_TYPE_ID);
+		final TerritoryTypeOutput result = instance.viewTerritoryType(GROUP_ID, TERRITORY_TYPE_ID);
 		assertEquals("Wrong territory type returned", TERRITORY_TYPE_NAME, result.getName());
 	}
 
@@ -275,7 +275,7 @@ public class RulesServiceUnitTest {
 		when(territoryTypeEntity.getName()).thenReturn(TERRITORY_TYPE_NAME);
 		when(territoryTypeEntity.getTerritoryCategory()).thenReturn(territoryCategoryEntity);
 		territoryCategoryEntity.getTerritoryTypes().add(territoryTypeEntity);
-		when(territoryTypeRepository.load(GROUP_ID, TERRITORY_CATEGORY_ID, TERRITORY_TYPE_ID)).thenReturn(territoryTypeEntity);
+		when(territoryTypeRepository.load(GROUP_ID, TERRITORY_TYPE_ID)).thenReturn(territoryTypeEntity);
 		// Set up the skill category entity
 		when(rulesEntity.getSkillCategories()).thenReturn(new HashSet<SkillCategoryEntity>());
 		when(skillCategoryEntity.getId()).thenReturn(SKILL_CATEGORY_ID);

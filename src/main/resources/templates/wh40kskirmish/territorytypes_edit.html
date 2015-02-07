@@ -11,7 +11,7 @@
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${territoryCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.territorytype}"></a>
 		<a th:unless="${territoryTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.create}"></a>
-		<a th:if="${territoryTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/{territoryTypeId}(groupId=${territoryCategory.group.id},territoryCategoryId=${territoryCategory.id},territoryTypeId=${territoryTypeForm.id})}" th:text="${territoryTypeForm.name}"></a>
+		<a th:if="${territoryTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryTypeId}(groupId=${territoryCategory.group.id},territoryTypeId=${territoryTypeForm.id})}" th:text="${territoryTypeForm.name}"></a>
 		<a th:if="${territoryTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/territorytype/save(groupId=${territoryCategory.group.id})}" th:object="${territoryTypeForm}" method="post">

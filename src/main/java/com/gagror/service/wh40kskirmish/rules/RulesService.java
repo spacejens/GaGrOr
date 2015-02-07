@@ -36,6 +36,7 @@ import com.gagror.data.wh40kskirmish.rules.skills.SkillOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryRepository;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeRepository;
 import com.gagror.service.social.GroupService;
@@ -133,10 +134,11 @@ public class RulesService {
 		return new TerritoryCategoryOutput(territoryCategoryRepository.load(groupId, territoryCategoryId), groupService.viewGroup(groupId));
 	}
 
-	public TerritoryTypeOutput viewTerritoryType(final Long groupId, final Long territoryCategoryId, final Long territoryTypeId) {
+	public TerritoryTypeOutput viewTerritoryType(final Long groupId, final Long territoryTypeId) {
+		final TerritoryTypeEntity territoryType = territoryTypeRepository.load(groupId, territoryTypeId);
 		return new TerritoryTypeOutput(
-				territoryTypeRepository.load(groupId, territoryCategoryId, territoryTypeId),
-				viewTerritoryCategory(groupId, territoryCategoryId));
+				territoryType,
+				new TerritoryCategoryOutput(territoryType.getTerritoryCategory(), groupService.viewGroup(groupId)));
 	}
 
 	public SkillCategoryOutput viewSkillCategory(final Long groupId, final Long skillCategoryId) {

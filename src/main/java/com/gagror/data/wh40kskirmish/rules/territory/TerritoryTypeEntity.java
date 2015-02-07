@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableNamedEntity;
+import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupOwned;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
 @Entity
 @Table(name="wh40ksk_territorytype")
-public class TerritoryTypeEntity extends AbstractEditableNamedEntity {
+public class TerritoryTypeEntity extends AbstractEditableNamedEntity implements GroupOwned {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
@@ -26,5 +28,10 @@ public class TerritoryTypeEntity extends AbstractEditableNamedEntity {
 		this.territoryCategory = territoryCategory;
 		// Add the new entity to the referencing collection
 		territoryCategory.getTerritoryTypes().add(this);
+	}
+
+	@Override
+	public GroupEntity getGroup() {
+		return getTerritoryCategory().getGroup();
 	}
 }

@@ -68,7 +68,7 @@
 			<a th:href="@{/wh40kskirmish/rules/{groupId}/territorycategory/{territoryCategoryId}(groupId=${rules.group.id},territoryCategoryId=${territoryCategory.id})}" th:text="${territoryCategory.name}"></a>
 			<ul>
 				<li th:each="territoryType : ${territoryCategory.territoryTypes}">
-					<a th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/{territoryTypeId}(groupId=${rules.group.id},territoryCategoryId=${territoryCategory.id},territoryTypeId=${territoryType.id})}" th:text="${territoryType.name}"></a>
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryTypeId}(groupId=${rules.group.id},territoryTypeId=${territoryType.id})}" th:text="${territoryType.name}"></a>
 				</li>
 				<li th:if="${#lists.isEmpty(territoryCategory.territoryTypes)}" class="fi-alert">
 					No territory types have been created yet

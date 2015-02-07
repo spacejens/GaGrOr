@@ -443,25 +443,23 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP_RULES)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYCATEGORY_ID + "}/{" + ATTR_TERRITORYTYPE_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYTYPE_ID + "}")
 	public String viewTerritoryType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_TERRITORYCATEGORY_ID) final Long territoryCategoryId,
 			@PathVariable(ATTR_TERRITORYTYPE_ID) final Long territoryTypeId,
 			final Model model) {
-		model.addAttribute("territoryType", rulesService.viewTerritoryType(groupId, territoryCategoryId, territoryTypeId));
+		model.addAttribute("territoryType", rulesService.viewTerritoryType(groupId, territoryTypeId));
 		return "wh40kskirmish/territorytypes_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYCATEGORY_ID + "}/{" + ATTR_TERRITORYTYPE_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/territorytype/{" + ATTR_TERRITORYTYPE_ID + "}/edit", method=RequestMethod.GET)
 	public String editTerritoryTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_TERRITORYCATEGORY_ID) final Long territoryCategoryId,
 			@PathVariable(ATTR_TERRITORYTYPE_ID) final Long territoryTypeId,
 			final Model model) {
-		log.info(String.format("Viewing edit territory type form for territory type %d of territory category %d in group %d", territoryTypeId, territoryCategoryId, groupId));
-		final TerritoryTypeOutput territoryType = rulesService.viewTerritoryType(groupId, territoryCategoryId, territoryTypeId);
+		log.info(String.format("Viewing edit territory type form for territory type %d in group %d", territoryTypeId, groupId));
+		final TerritoryTypeOutput territoryType = rulesService.viewTerritoryType(groupId, territoryTypeId);
 		model.addAttribute("territoryCategory", territoryType.getTerritoryCategory());
 		model.addAttribute("territoryTypeForm", new TerritoryTypeInput(territoryType));
 		return "wh40kskirmish/territorytypes_edit";

@@ -4,5 +4,7 @@ import org.springframework.data.repository.Repository;
 
 interface TerritoryTypeRepositoryQueries extends Repository<TerritoryTypeEntity, Long> {
 
+	TerritoryTypeEntity findOne(final Long territoryTypeId);
+
 	TerritoryTypeEntity save(final TerritoryTypeEntity territoryType);
 }

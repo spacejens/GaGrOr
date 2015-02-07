@@ -14,7 +14,7 @@
 	</nav>
 	<dl  th:if="${territoryType.territoryCategory.group.memberType != null and territoryType.territoryCategory.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/{territoryTypeId}/edit(groupId=${territoryType.territoryCategory.group.id},territoryCategoryId=${territoryType.territoryCategory.id},territoryTypeId=${territoryType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryTypeId}/edit(groupId=${territoryType.territoryCategory.group.id},territoryTypeId=${territoryType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.edit}"></a></dd>
 	</dl>
 	<p>View territory type here</p>
 	<script th:replace="/fragments/framework :: init"></script>
