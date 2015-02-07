@@ -1,8 +1,15 @@
 package com.gagror.data.wh40kskirmish.rules.items;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface ItemTypeRepository extends Repository<ItemTypeEntity, Long> {
+@Repository
+public class ItemTypeRepository {
 
-	ItemTypeEntity save(final ItemTypeEntity gangType);
+	@Autowired
+	ItemTypeRepositoryQueries itemTypeRepositoryQueries;
+
+	public ItemTypeEntity persist(final ItemTypeEntity itemType) {
+		return itemTypeRepositoryQueries.save(itemType);
+	}
 }

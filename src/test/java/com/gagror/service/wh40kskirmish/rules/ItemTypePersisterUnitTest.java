@@ -73,7 +73,7 @@ public class ItemTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<ItemTypeEntity> savedItemType = ArgumentCaptor.forClass(ItemTypeEntity.class);
-		verify(itemTypeRepository).save(savedItemType.capture());
+		verify(itemTypeRepository).persist(savedItemType.capture());
 		assertEquals("Wrong name", FORM_ITEM_TYPE_NAME, savedItemType.getValue().getName());
 		assertTrue("Not added to item category", itemCategory.getItemTypes().contains(savedItemType.getValue()));
 	}
@@ -83,7 +83,7 @@ public class ItemTypePersisterUnitTest {
 		whenAnotherItemTypeWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(itemTypeRepository, never()).save(any(ItemTypeEntity.class));
+		verify(itemTypeRepository, never()).persist(any(ItemTypeEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -92,7 +92,7 @@ public class ItemTypePersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(itemTypeRepository, never()).save(any(ItemTypeEntity.class));
+		verify(itemTypeRepository, never()).persist(any(ItemTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -113,7 +113,7 @@ public class ItemTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(itemTypeRepository, never()).save(any(ItemTypeEntity.class));
+		verify(itemTypeRepository, never()).persist(any(ItemTypeEntity.class));
 		verify(itemType).setName(FORM_ITEM_TYPE_NAME);
 	}
 
@@ -134,7 +134,7 @@ public class ItemTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(itemType, never()).setName(anyString());
-		verify(itemTypeRepository, never()).save(any(ItemTypeEntity.class));
+		verify(itemTypeRepository, never()).persist(any(ItemTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)

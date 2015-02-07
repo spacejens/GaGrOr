@@ -99,6 +99,6 @@ extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 
 	@Override
 	protected ItemTypeEntity makePersistent(final ItemTypeEntity entity) {
-		return itemTypeRepository.save(entity);
+		return itemTypeRepository.persist(entity);
 	}
 }
