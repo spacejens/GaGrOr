@@ -99,6 +99,6 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
 	@Override
 	protected SkillEntity makePersistent(final SkillEntity entity) {
-		return skillRepository.save(entity);
+		return skillRepository.persist(entity);
 	}
 }

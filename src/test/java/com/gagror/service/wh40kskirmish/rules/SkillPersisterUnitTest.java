@@ -73,7 +73,7 @@ public class SkillPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<SkillEntity> savedSkill = ArgumentCaptor.forClass(SkillEntity.class);
-		verify(skillRepository).save(savedSkill.capture());
+		verify(skillRepository).persist(savedSkill.capture());
 		assertEquals("Wrong name", FORM_SKILL_NAME, savedSkill.getValue().getName());
 		assertTrue("Not added to skill category", skillCategory.getSkills().contains(savedSkill.getValue()));
 	}
@@ -83,7 +83,7 @@ public class SkillPersisterUnitTest {
 		whenAnotherSkillWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(skillRepository, never()).save(any(SkillEntity.class));
+		verify(skillRepository, never()).persist(any(SkillEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -92,7 +92,7 @@ public class SkillPersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(skillRepository, never()).save(any(SkillEntity.class));
+		verify(skillRepository, never()).persist(any(SkillEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -113,7 +113,7 @@ public class SkillPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(skillRepository, never()).save(any(SkillEntity.class));
+		verify(skillRepository, never()).persist(any(SkillEntity.class));
 		verify(skill).setName(FORM_SKILL_NAME);
 	}
 
@@ -134,7 +134,7 @@ public class SkillPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(skill, never()).setName(anyString());
-		verify(skillRepository, never()).save(any(SkillEntity.class));
+		verify(skillRepository, never()).persist(any(SkillEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
