@@ -24,11 +24,10 @@ import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
-import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
-import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillOutput;
@@ -58,6 +57,9 @@ public class RulesService {
 
 	@Autowired
 	ItemCategoryRepository itemCategoryRepository;
+
+	@Autowired
+	ItemTypeRepository itemTypeRepository;
 
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
@@ -200,20 +202,9 @@ public class RulesService {
 		return new ItemCategoryOutput(itemCategoryRepository.load(groupId, itemCategoryId), groupService.viewGroup(groupId));
 	}
 
-	private ItemTypeEntity loadItemType(final Long groupId, final Long itemCategoryId, final Long itemTypeId) {
-		final ItemCategoryEntity itemCategory = itemCategoryRepository.load(groupId, itemCategoryId);
-		for(final ItemTypeEntity itemType : itemCategory.getItemTypes()) {
-			if(itemType.hasId(itemTypeId)) {
-				return itemType;
-			}
-		}
-		throw new DataNotFoundException(String.format("Item type %d (item category %d, group %d)",
-				itemTypeId, itemCategoryId, groupId));
-	}
-
 	public ItemTypeOutput viewItemType(final Long groupId, final Long itemCategoryId, final Long itemTypeId) {
 		return new ItemTypeOutput(
-				loadItemType(groupId, itemCategoryId, itemTypeId),
+				itemTypeRepository.load(groupId, itemCategoryId, itemTypeId),
 				viewItemCategory(groupId, itemCategoryId));
 	}
 }

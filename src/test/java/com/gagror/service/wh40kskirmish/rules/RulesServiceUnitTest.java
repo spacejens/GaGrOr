@@ -30,6 +30,7 @@ import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
@@ -73,7 +74,6 @@ public class RulesServiceUnitTest {
 	private static final Long ITEM_CATEGORY_ID = 8986L;
 	private static final String ITEM_CATEGORY_NAME = "Item category";
 	private static final Long ITEM_TYPE_ID = 165L;
-	private static final Long WRONG_ITEM_TYPE_ID = 16514L;
 	private static final String ITEM_TYPE_NAME = "Item type";
 
 	RulesService instance;
@@ -92,6 +92,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	ItemCategoryRepository itemCategoryRepository;
+
+	@Mock
+	ItemTypeRepository itemTypeRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -239,11 +242,6 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong item type returned", ITEM_TYPE_NAME, result.getName());
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void viewItemType_notFound() {
-		instance.viewItemType(GROUP_ID, ITEM_CATEGORY_ID, WRONG_ITEM_TYPE_ID);
-	}
-
 	@Before
 	public void setupRules() {
 		// Set up the rules entity
@@ -312,6 +310,7 @@ public class RulesServiceUnitTest {
 		when(itemTypeEntity.getName()).thenReturn(ITEM_TYPE_NAME);
 		when(itemTypeEntity.getItemCategory()).thenReturn(itemCategoryEntity);
 		itemCategoryEntity.getItemTypes().add(itemTypeEntity);
+		when(itemTypeRepository.load(GROUP_ID, ITEM_CATEGORY_ID, ITEM_TYPE_ID)).thenReturn(itemTypeEntity);
 	}
 
 	@Before
@@ -330,5 +329,6 @@ public class RulesServiceUnitTest {
 		instance.skillCategoryRepository = skillCategoryRepository;
 		instance.skillRepository = skillRepository;
 		instance.itemCategoryRepository = itemCategoryRepository;
+		instance.itemTypeRepository = itemTypeRepository;
 	}
 }
