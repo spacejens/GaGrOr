@@ -141,7 +141,7 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 
 	@Override
 	protected GangTypeEntity makePersistent(final GangTypeEntity entity) {
-		return gangTypeRepository.save(entity);
+		return gangTypeRepository.persist(entity);
 	}
 
 	@Override

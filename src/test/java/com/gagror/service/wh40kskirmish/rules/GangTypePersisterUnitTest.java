@@ -109,7 +109,7 @@ public class GangTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<GangTypeEntity> savedGangType = ArgumentCaptor.forClass(GangTypeEntity.class);
-		verify(gangTypeRepository).save(savedGangType.capture());
+		verify(gangTypeRepository).persist(savedGangType.capture());
 		assertEquals("Wrong name", FORM_GANG_TYPE_NAME, savedGangType.getValue().getName());
 		assertTrue("Not added to rules", rules.getGangTypes().contains(savedGangType.getValue()));
 		final ArgumentCaptor<ExperienceLevelEntity> savedExperienceLevel = ArgumentCaptor.forClass(ExperienceLevelEntity.class);
@@ -124,7 +124,7 @@ public class GangTypePersisterUnitTest {
 		whenAnotherGangTypeWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
+		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -134,7 +134,7 @@ public class GangTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorExperienceLevelsMustStartAtZero(bindingResult);
-		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
+		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 	}
 
 	@Test
@@ -143,7 +143,7 @@ public class GangTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(form).addErrorExperienceLevelsMustBeUnique(bindingResult);
-		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
+		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class GangTypePersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
+		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -166,7 +166,7 @@ public class GangTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
+		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 		verify(gangType).setName(FORM_GANG_TYPE_NAME);
 		verify(experienceLevelFirst).setName(FORM_XP_LEVEL_FIRST_NAME);
 		verify(experienceLevelFirst).setExperiencePoints(FORM_XP_LEVEL_FIRST_XP);
@@ -237,7 +237,7 @@ public class GangTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(gangType, never()).setName(anyString());
-		verify(gangTypeRepository, never()).save(any(GangTypeEntity.class));
+		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -326,7 +326,7 @@ public class GangTypePersisterUnitTest {
 
 	@Before
 	public void setupGangTypeRepository() {
-		when(gangTypeRepository.save(any(GangTypeEntity.class))).thenAnswer(new Answer<GangTypeEntity>() {
+		when(gangTypeRepository.persist(any(GangTypeEntity.class))).thenAnswer(new Answer<GangTypeEntity>() {
 			@Override
 			public GangTypeEntity answer(final InvocationOnMock invocation) throws Throwable {
 				return (GangTypeEntity)invocation.getArguments()[0];
