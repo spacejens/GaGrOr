@@ -62,7 +62,7 @@ public class CreateGroupPersisterUnitTest {
 		verify(groupRepository).persist(group.capture());
 		assertEquals("Wrong name of created group", NEW_GROUP_NAME, group.getValue().getName());
 		final ArgumentCaptor<GroupMemberEntity> groupMember = ArgumentCaptor.forClass(GroupMemberEntity.class);
-		verify(groupMemberRepository).save(groupMember.capture());
+		verify(groupMemberRepository).persist(groupMember.capture());
 		assertSame("Group member should be for saved group", group.getValue(), groupMember.getValue().getGroup());
 		assertSame("Group member should be for request account", requestAccount, groupMember.getValue().getAccount());
 		assertEquals("Group member should be owner", MemberType.OWNER, groupMember.getValue().getMemberType());

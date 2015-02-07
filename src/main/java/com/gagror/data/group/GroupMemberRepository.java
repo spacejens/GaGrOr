@@ -1,10 +1,19 @@
 package com.gagror.data.group;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface GroupMemberRepository extends Repository<GroupMemberEntity, Long> {
+@Repository
+public class GroupMemberRepository {
 
-	GroupMemberEntity save(final GroupMemberEntity groupMember);
+	@Autowired
+	GroupMemberRepositoryQueries groupMemberRepositoryQueries;
 
-	void delete(final GroupMemberEntity groupMember);
+	public GroupMemberEntity persist(final GroupMemberEntity groupMember) {
+		return groupMemberRepositoryQueries.save(groupMember);
+	}
+
+	public void delete(final GroupMemberEntity groupMember) {
+		groupMemberRepositoryQueries.delete(groupMember);
+	}
 }

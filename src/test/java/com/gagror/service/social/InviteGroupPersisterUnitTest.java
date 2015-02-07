@@ -85,7 +85,7 @@ public class InviteGroupPersisterUnitTest {
 		assertTrue("Saving should have succeeded", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<GroupMemberEntity> member = ArgumentCaptor.forClass(GroupMemberEntity.class);
-		verify(groupMemberRepository).save(member.capture());
+		verify(groupMemberRepository).persist(member.capture());
 		assertSame("Wrong group", group, member.getValue().getGroup());
 		assertSame("Wrong account", contactAccount, member.getValue().getAccount());
 		assertEquals("Wrong member type", MemberType.INVITED, member.getValue().getMemberType());
@@ -110,7 +110,7 @@ public class InviteGroupPersisterUnitTest {
 		groupInviteForm.getSelected().add(anotherAccountID);
 		final boolean result = instance.save(groupInviteForm, bindingResult);
 		assertTrue("Saving should have succeeded", result);
-		verify(groupMemberRepository, times(2)).save(any(GroupMemberEntity.class));
+		verify(groupMemberRepository, times(2)).persist(any(GroupMemberEntity.class));
 	}
 
 	@Test(expected=GroupMembershipChangeException.class)
@@ -127,7 +127,7 @@ public class InviteGroupPersisterUnitTest {
 		groupInviteForm.getSelected().add(ACCOUNT_ID_CONTACT);
 		final boolean result = instance.save(groupInviteForm, bindingResult);
 		assertTrue("Saving should have succeeded", result);
-		verify(groupMemberRepository, never()).save(any(GroupMemberEntity.class));
+		verify(groupMemberRepository, never()).persist(any(GroupMemberEntity.class));
 	}
 
 	@Test(expected=GroupMembershipChangeException.class)

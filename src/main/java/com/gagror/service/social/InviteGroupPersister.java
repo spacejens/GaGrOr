@@ -70,7 +70,7 @@ public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, Gr
 		for(final Long invited : form.getSelected()) {
 			final AccountEntity account = accountRepository.load(invited);
 			if(! existingMembers.contains(account)) {
-				groupMemberRepository.save(new GroupMemberEntity(
+				groupMemberRepository.persist(new GroupMemberEntity(
 						entity,
 						account,
 						MemberType.INVITED));
