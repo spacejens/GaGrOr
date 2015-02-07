@@ -17,9 +17,8 @@ import org.springframework.validation.BindingResult;
 
 import com.gagror.AddError;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.RulesInput;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,7 +39,7 @@ public class RulesPersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Mock
 	GroupEntity group;
@@ -71,12 +70,6 @@ public class RulesPersisterUnitTest {
 		verify(rules, never()).setCurrencyName(anyString());
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test
 	public void save_existing_simultaneousEdit() {
 		when(form.getVersion()).thenReturn(DB_RULES_VERSION - 1);
@@ -99,15 +92,16 @@ public class RulesPersisterUnitTest {
 	@Before
 	public void setupGroup() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getId()).thenReturn(RULES_ID);
 		when(rules.getVersion()).thenReturn(DB_RULES_VERSION);
+		when(rules.getGroup()).thenReturn(group);
+		when(rulesRepository.load(GROUP_ID)).thenReturn(rules);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new RulesPersister();
-		instance.groupRepository = groupRepository;
+		instance.rulesRepository = rulesRepository;
 	}
 }

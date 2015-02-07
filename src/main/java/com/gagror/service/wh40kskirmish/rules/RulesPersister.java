@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.RulesInput;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.service.AbstractPersister;
 
@@ -19,7 +18,7 @@ public class RulesPersister
 extends AbstractPersister<RulesInput, Wh40kSkirmishRulesEntity, GroupEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Override
 	protected void validateForm(final RulesInput form, final BindingResult bindingResult) {
@@ -28,12 +27,8 @@ extends AbstractPersister<RulesInput, Wh40kSkirmishRulesEntity, GroupEntity> {
 
 	@Override
 	protected GroupEntity loadContext(final RulesInput form) {
-		// TODO Load context directly from appropriate repository
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		return group;
+		// Load through rules repository to get group type check
+		return rulesRepository.load(form.getGroupId()).getGroup();
 	}
 
 	@Override
