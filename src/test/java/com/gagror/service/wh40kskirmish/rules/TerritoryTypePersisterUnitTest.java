@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -24,10 +25,9 @@ import org.springframework.validation.BindingResult;
 import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeInput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeRepository;
@@ -51,7 +51,7 @@ public class TerritoryTypePersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	TerritoryCategoryRepository territoryCategoryRepository;
 
 	@Mock
 	TerritoryTypeRepository territoryTypeRepository;
@@ -96,15 +96,9 @@ public class TerritoryTypePersisterUnitTest {
 		verify(territoryTypeRepository, never()).persist(any(TerritoryTypeEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_new_territoryCategoryNotFound() {
-		rules.getTerritoryCategories().remove(territoryCategory);
+		doThrow(DataNotFoundException.class).when(territoryCategoryRepository).load(GROUP_ID, TERRITORY_CATEGORY_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -139,17 +133,10 @@ public class TerritoryTypePersisterUnitTest {
 		verify(territoryTypeRepository, never()).persist(any(TerritoryTypeEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenTerritoryTypeExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_territoryCategoryNotFound() {
 		whenTerritoryTypeExists();
-		rules.getTerritoryCategories().remove(territoryCategory);
+		doThrow(DataNotFoundException.class).when(territoryCategoryRepository).load(GROUP_ID, TERRITORY_CATEGORY_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -204,19 +191,19 @@ public class TerritoryTypePersisterUnitTest {
 	@Before
 	public void setupContext() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getTerritoryCategories()).thenReturn(new HashSet<TerritoryCategoryEntity>());
 		when(territoryCategory.getId()).thenReturn(TERRITORY_CATEGORY_ID);
 		when(territoryCategory.getTerritoryTypes()).thenReturn(new HashSet<TerritoryTypeEntity>());
 		when(territoryCategory.getRules()).thenReturn(rules);
 		rules.getTerritoryCategories().add(territoryCategory);
+		when(territoryCategoryRepository.load(GROUP_ID, TERRITORY_CATEGORY_ID)).thenReturn(territoryCategory);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new TerritoryTypePersister();
-		instance.groupRepository = groupRepository;
+		instance.territoryCategoryRepository = territoryCategoryRepository;
 		instance.territoryTypeRepository = territoryTypeRepository;
 	}
 }

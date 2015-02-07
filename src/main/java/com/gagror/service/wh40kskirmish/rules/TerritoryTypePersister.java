@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeInput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeRepository;
@@ -22,7 +20,7 @@ public class TerritoryTypePersister
 extends AbstractPersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCategoryEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	TerritoryCategoryRepository territoryCategoryRepository;
 
 	@Autowired
 	TerritoryTypeRepository territoryTypeRepository;
@@ -34,17 +32,7 @@ extends AbstractPersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCate
 
 	@Override
 	protected TerritoryCategoryEntity loadContext(final TerritoryTypeInput form) {
-		// TODO Load context directly from appropriate repository
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		for(final TerritoryCategoryEntity territoryCategory : group.getWh40kSkirmishRules().getTerritoryCategories()) {
-			if(territoryCategory.hasId(form.getTerritoryCategoryId())) {
-				return territoryCategory;
-			}
-		}
-		throw new DataNotFoundException(String.format("Territory category %d (group %d)", form.getTerritoryCategoryId(), form.getGroupId()));
+		return territoryCategoryRepository.load(form.getGroupId(), form.getTerritoryCategoryId());
 	}
 
 	@Override
