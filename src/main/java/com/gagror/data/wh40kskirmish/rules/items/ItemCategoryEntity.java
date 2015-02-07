@@ -14,13 +14,15 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableNamedEntity;
+import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupOwned;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
 @Entity
 @Table(name="wh40ksk_itemcategory")
-public class ItemCategoryEntity extends AbstractEditableNamedEntity {
+public class ItemCategoryEntity extends AbstractEditableNamedEntity implements GroupOwned {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
@@ -37,5 +39,10 @@ public class ItemCategoryEntity extends AbstractEditableNamedEntity {
 		this.rules = rules;
 		// Add the new entity to the referencing collection
 		rules.getItemCategories().add(this);
+	}
+
+	@Override
+	public GroupEntity getGroup() {
+		return getRules().getGroup();
 	}
 }
