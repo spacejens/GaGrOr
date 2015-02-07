@@ -35,6 +35,7 @@ extends AbstractPersister<RaceInput, RaceEntity, GangTypeEntity> {
 
 	@Override
 	protected GangTypeEntity loadContext(final RaceInput form) {
+		// TODO Load context directly from appropriate repository
 		final GroupEntity group = groupRepository.load(form.getGroupId());
 		if(null == group.getWh40kSkirmishRules()) {
 			throw new WrongGroupTypeException(group);

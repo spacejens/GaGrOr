@@ -59,6 +59,7 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 
 	@Override
 	protected Wh40kSkirmishRulesEntity loadContext(final GangTypeInput form) {
+		// TODO Load context directly from appropriate repository
 		final GroupEntity group = groupRepository.load(form.getGroupId());
 		if(null == group.getWh40kSkirmishRules()) {
 			throw new WrongGroupTypeException(group);

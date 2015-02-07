@@ -34,6 +34,7 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
 	@Override
 	protected SkillCategoryEntity loadContext(final SkillInput form) {
+		// TODO Load context directly from appropriate repository
 		final GroupEntity group = groupRepository.load(form.getGroupId());
 		if(null == group.getWh40kSkirmishRules()) {
 			throw new WrongGroupTypeException(group);
