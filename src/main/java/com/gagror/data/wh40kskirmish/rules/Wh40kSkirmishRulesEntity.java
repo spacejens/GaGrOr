@@ -16,6 +16,7 @@ import lombok.ToString;
 
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupOwned;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
@@ -25,7 +26,7 @@ import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
 @ToString(of={}, callSuper=true)
 @Entity
 @Table(name="wh40ksk_rules")
-public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity {
+public class Wh40kSkirmishRulesEntity extends AbstractEditableEntity implements GroupOwned {
 
 	@OneToOne(optional=false)
 	@Getter

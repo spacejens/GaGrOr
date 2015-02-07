@@ -18,7 +18,7 @@ import com.gagror.data.account.AccountEntity;
 @ToString(of={"group", "account", "memberType"}, callSuper=true)
 @Entity
 @Table(name="gagror_groupmember")
-public class GroupMemberEntity extends AbstractEditableEntity {
+public class GroupMemberEntity extends AbstractEditableEntity implements GroupOwned {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
