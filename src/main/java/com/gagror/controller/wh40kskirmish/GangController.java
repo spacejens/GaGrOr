@@ -66,8 +66,6 @@ public class GangController extends AbstractController {
 			} else {
 				final EditGangOutput data = gangService.prepareToEditGang(
 						groupId,
-						gangForm.getGangTypeId(),
-						gangForm.getFactionId(),
 						gangForm.getId());
 				model.addAttribute("group", data.getGroup());
 			}
@@ -76,29 +74,25 @@ public class GangController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}/{" + ATTR_GANG_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/{" + ATTR_GANG_ID + "}")
 	public String viewGang(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
-			@PathVariable(ATTR_FACTION_ID) final Long factionId,
 			@PathVariable(ATTR_GANG_ID) final Long gangId,
 			final Model model) {
-		log.info(String.format("Viewing gang %d of faction %d of gang type %d in group %d", gangId, factionId, gangTypeId, groupId));
-		model.addAttribute("gang", gangService.viewGang(groupId, gangTypeId, factionId, gangId));
+		log.info(String.format("Viewing gang %d in group %d", gangId, groupId));
+		model.addAttribute("gang", gangService.viewGang(groupId, gangId));
 		// TODO Show fighters on view gang page
 		return "wh40kskirmish/gang_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}/{" + ATTR_GANG_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/{" + ATTR_GANG_ID + "}/edit", method=RequestMethod.GET)
 	public String editGangForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
-			@PathVariable(ATTR_FACTION_ID) final Long factionId,
 			@PathVariable(ATTR_GANG_ID) final Long gangId,
 			final Model model) {
-		log.info(String.format("Viewing edit gang form for gang %d in group %d", gangTypeId, groupId));
-		final EditGangOutput data = gangService.prepareToEditGang(groupId, gangTypeId, factionId, gangId);
+		log.info(String.format("Viewing edit gang form for gang %d in group %d", gangId, groupId));
+		final EditGangOutput data = gangService.prepareToEditGang(groupId, gangId);
 		model.addAttribute("group", data.getGroup());
 		model.addAttribute("gangForm", new GangInput(data.getCurrentState()));
 		return "wh40kskirmish/gang_edit";

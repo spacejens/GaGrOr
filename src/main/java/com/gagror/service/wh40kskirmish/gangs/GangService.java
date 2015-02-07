@@ -35,17 +35,15 @@ public class GangService {
 		return EditGangOutput.createGang(group, rules, factions);
 	}
 
-	public EditGangOutput prepareToEditGang(
-			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {
+	public EditGangOutput prepareToEditGang(final Long groupId, final Long gangId) {
 		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
-		final GangOutput gang = viewGang(groupId, gangTypeId, factionId, gangId);
+		final GangOutput gang = viewGang(groupId, gangId);
 		return EditGangOutput.editGang(group, gang);
 	}
 
-	public GangOutput viewGang(
-			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {
+	public GangOutput viewGang(final Long groupId, final Long gangId) {
 		return new GangOutput(
-				gangRepository.load(groupId, gangTypeId, factionId, gangId),
+				gangRepository.load(groupId, gangId),
 				rulesService.viewRules(groupId));
 	}
 }

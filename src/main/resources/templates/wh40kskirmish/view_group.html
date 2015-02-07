@@ -27,7 +27,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="gang : ${group.gangs}">
-				<td><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangTypeId}/{factionId}/{gangId}(groupId=${group.id},gangTypeId=${gang.gangType.id},factionId=${gang.faction.id},gangId=${gang.id})}" th:text="${gang.name}"></a></td>
+				<td><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}(groupId=${group.id},gangId=${gang.id})}" th:text="${gang.name}"></a></td>
 				<td th:text="${gang.faction.name}"></td>
 				<td><span th:replace="/fragments/formatting :: username (account=${gang.player})"></span></td>
 			</tr>

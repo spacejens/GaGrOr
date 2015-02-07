@@ -23,10 +23,6 @@ implements GroupIdentifiable {
 
 	@Getter
 	@Setter
-	private Long gangTypeId;
-
-	@Getter
-	@Setter
 	@NotNull
 	private Long factionId;
 
@@ -48,7 +44,6 @@ implements GroupIdentifiable {
 	public GangInput(final GangOutput currentState) {
 		super(currentState);
 		setGroupId(currentState.getRules().getGroup().getId());
-		setGangTypeId(currentState.getGangType().getId());
 		setFactionId(currentState.getFaction().getId());
 		setPlayerId(currentState.getPlayer().getId());
 		setMoney(currentState.getMoney());

@@ -13,7 +13,7 @@
 	</nav>
 	<dl th:if="${gang.rules.group.memberType != null and gang.rules.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangTypeId}/{factionId}/{gangId}/edit(groupId=${gang.rules.group.id},gangTypeId=${gang.gangType.id},factionId=${gang.faction.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/edit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
 	</dl>
 	<table>
 		<thead>

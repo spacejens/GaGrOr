@@ -78,7 +78,7 @@ public class GangServiceUnitTest {
 
 	@Test
 	public void prepareToEditGang_ok() {
-		final EditGangOutput result = instance.prepareToEditGang(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID);
+		final EditGangOutput result = instance.prepareToEditGang(GROUP_ID, GANG_ID);
 		assertSame("Wrong group", groupMembers, result.getGroup());
 		assertSame("Wrong rules", rules, result.getRules());
 		assertNull("Doesn't need to get factions", result.getFactions());
@@ -87,7 +87,7 @@ public class GangServiceUnitTest {
 
 	@Test
 	public void viewGang_ok() {
-		final GangOutput result = instance.viewGang(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID);
+		final GangOutput result = instance.viewGang(GROUP_ID, GANG_ID);
 		assertEquals("Wrong gang returned", GANG_NAME, result.getName());
 	}
 
@@ -100,7 +100,7 @@ public class GangServiceUnitTest {
 		when(gang.getName()).thenReturn(GANG_NAME);
 		when(gang.getPlayer()).thenReturn(player);
 		when(gang.getFaction()).thenReturn(faction);
-		when(gangRepository.load(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID)).thenReturn(gang);
+		when(gangRepository.load(GROUP_ID, GANG_ID)).thenReturn(gang);
 		when(faction.getId()).thenReturn(FACTION_ID);
 		when(faction.getGangs()).thenReturn(new HashSet<GangEntity>());
 		faction.getGangs().add(gang);

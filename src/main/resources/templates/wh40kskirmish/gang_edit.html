@@ -10,7 +10,7 @@
 		<a th:href="@{${group.groupType.groupUrl}+'/{groupId}'(groupId=${group.id})}" th:text="${group.name}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
 		<a th:unless="${gangForm.id}" class="current" th:text="#{menu.groups.wh40kskirmish.gang.create}"></a>
-		<a th:if="${gangForm.id}" th:href="@{/wh40kskirmish/gang/{groupId}/{gangTypeId}/{factionId}/{gangId}(groupId=${group.id},gangTypeId=${gangForm.gangTypeId},factionId=${gangForm.factionId},gangId=${gangForm.id})}" th:text="${gangForm.name}"></a>
+		<a th:if="${gangForm.id}" th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}(groupId=${group.id},gangId=${gangForm.id})}" th:text="${gangForm.name}"></a>
 		<a th:if="${gangForm.id}" class="current" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/gang/{groupId}/save(groupId=${group.id})}" th:object="${gangForm}" method="post">
@@ -28,7 +28,6 @@
 				<option th:each="member : ${group.members}" th:value="${member.id}" th:text="${member.name}" th:class="#{${member.cssClass}}"></option>
 			</select>
 		</label>
-		<input th:if="${gangForm.id}" type="hidden" th:field="*{gangTypeId}" />
 		<input th:if="${gangForm.id}" type="hidden" th:field="*{factionId}" />
 		<label th:unless="${gangForm.id}">
 			Faction <span class="error" th:if="${#fields.hasErrors('factionId')}" th:errors="*{factionId}">Faction error</span>
