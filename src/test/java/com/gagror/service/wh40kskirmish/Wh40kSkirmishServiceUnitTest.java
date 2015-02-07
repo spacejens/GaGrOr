@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupMemberEntity;
+import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
 import com.gagror.data.wh40kskirmish.GroupOutput;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
@@ -28,6 +29,9 @@ public class Wh40kSkirmishServiceUnitTest {
 
 	@Mock
 	GroupService groupService;
+
+	@Mock
+	GroupRepository groupRepository;
 
 	@Mock
 	GroupEntity group;
@@ -68,7 +72,7 @@ public class Wh40kSkirmishServiceUnitTest {
 
 	@Before
 	public void setupGroupService() {
-		when(groupService.loadGroup(GROUP_ID)).thenReturn(group);
+		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(groupService.findGroupMemberForRequestAccount(group)).thenReturn(groupMember);
 	}
 
@@ -76,5 +80,6 @@ public class Wh40kSkirmishServiceUnitTest {
 	public void setupInstance() {
 		instance = new Wh40kSkirmishService();
 		instance.groupService = groupService;
+		instance.groupRepository = groupRepository;
 	}
 }

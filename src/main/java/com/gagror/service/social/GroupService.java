@@ -86,7 +86,7 @@ public class GroupService {
 	}
 
 	public GroupReferenceOutput viewGroup(final Long groupId) {
-		final GroupEntity group = loadGroup(groupId);
+		final GroupEntity group = groupRepository.load(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
 		final GroupMemberEntity membership = findGroupMemberForRequestAccount(group);
 		if(null != membership) {
@@ -105,7 +105,7 @@ public class GroupService {
 	}
 
 	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {
-		final GroupEntity group = loadGroup(groupId);
+		final GroupEntity group = groupRepository.load(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
 		final GroupMemberEntity membership = findGroupMemberForRequestAccount(group);
 		if(null != membership) {
@@ -124,13 +124,8 @@ public class GroupService {
 		return null;
 	}
 
-	public GroupEntity loadGroup(final Long groupId) {
-		// TODO Inline this method, calling the group repository directly where used
-		return groupRepository.load(groupId);
-	}
-
 	public List<AccountReferenceOutput> loadPossibleUsersToInvite(final Long groupId) {
-		final GroupEntity group = loadGroup(groupId);
+		final GroupEntity group = groupRepository.load(groupId);
 		// Find the group of users who are already invited or members
 		final Set<AccountEntity> groupMemberAccounts = findGroupMemberAccounts(group, false);
 		// Find the possible users

@@ -14,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
@@ -80,6 +81,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	GroupService groupService;
+
+	@Mock
+	GroupRepository groupRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -338,12 +342,13 @@ public class RulesServiceUnitTest {
 
 	private void mockGroup(final GroupEntity group, final Long id) {
 		when(group.getId()).thenReturn(id);
-		when(groupService.loadGroup(id)).thenReturn(group);
+		when(groupRepository.load(id)).thenReturn(group);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new RulesService();
 		instance.groupService = groupService;
+		instance.groupRepository = groupRepository;
 	}
 }

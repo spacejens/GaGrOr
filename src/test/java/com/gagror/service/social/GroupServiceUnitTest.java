@@ -3,7 +3,6 @@ package com.gagror.service.social;
 import static com.gagror.GagrorAssert.assertIds;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -231,16 +230,6 @@ public class GroupServiceUnitTest {
 	@Test(expected=DataNotFoundException.class)
 	public void viewGroupMembers_notFound() {
 		instance.viewGroupMembers(UNKNOWN_GROUP_ID);
-	}
-
-	@Test
-	public void loadGroup_ok() {
-		assertSame("Wrong group loaded", firstGroup, instance.loadGroup(FIRST_GROUP_ID));
-	}
-
-	@Test(expected=DataNotFoundException.class)
-	public void loadGroup_notFound() {
-		instance.loadGroup(UNKNOWN_GROUP_ID);
 	}
 
 	@Test

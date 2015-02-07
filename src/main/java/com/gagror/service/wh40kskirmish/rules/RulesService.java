@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.RulesListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
@@ -47,6 +48,9 @@ public class RulesService {
 	@Autowired
 	GroupService groupService;
 
+	@Autowired
+	GroupRepository groupRepository;
+
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
 		return new RulesListChildrenOutput(loadRules(groupId), groupService.viewGroup(groupId));
@@ -58,7 +62,7 @@ public class RulesService {
 	}
 
 	private Wh40kSkirmishRulesEntity loadRules(final Long groupId) {
-		final GroupEntity group = groupService.loadGroup(groupId);
+		final GroupEntity group = groupRepository.load(groupId);
 		if(null == group.getWh40kSkirmishRules()) {
 			throw new WrongGroupTypeException(group);
 		}
