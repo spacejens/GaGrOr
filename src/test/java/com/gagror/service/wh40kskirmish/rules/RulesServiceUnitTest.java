@@ -26,6 +26,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
@@ -58,7 +59,6 @@ public class RulesServiceUnitTest {
 	private static final Long WRONG_FACTION_ID = 75783L;
 	private static final String FACTION_NAME = "Faction";
 	private static final Long RACE_ID = 113L;
-	private static final Long WRONG_RACE_ID = 1543L;
 	private static final String RACE_NAME = "Race";
 	private static final Long FIGHTER_TYPE_ID = 457L;
 	private static final Long WRONG_FIGHTER_TYPE_ID = 46378L;
@@ -104,6 +104,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	GangTypeRepository gangTypeRepository;
+
+	@Mock
+	RaceRepository raceRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -184,11 +187,6 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong race returned", RACE_NAME, result.getName());
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void viewRace_notFound() {
-		instance.viewRace(GROUP_ID, GANG_TYPE_ID, WRONG_RACE_ID);
-	}
-
 	@Test
 	public void viewFighterType_ok() {
 		final FighterTypeOutput result = instance.viewFighterType(GROUP_ID, GANG_TYPE_ID, RACE_ID, FIGHTER_TYPE_ID);
@@ -260,6 +258,7 @@ public class RulesServiceUnitTest {
 		when(raceEntity.getName()).thenReturn(RACE_NAME);
 		when(raceEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getRaces().add(raceEntity);
+		when(raceRepository.load(GROUP_ID, GANG_TYPE_ID, RACE_ID)).thenReturn(raceEntity);
 		// Set up the fighter type entity
 		when(raceEntity.getFighterTypes()).thenReturn(new HashSet<FighterTypeEntity>());
 		when(fighterTypeEntity.getId()).thenReturn(FIGHTER_TYPE_ID);
@@ -330,5 +329,6 @@ public class RulesServiceUnitTest {
 		instance.territoryCategoryRepository = territoryCategoryRepository;
 		instance.territoryTypeRepository = territoryTypeRepository;
 		instance.gangTypeRepository = gangTypeRepository;
+		instance.raceRepository = raceRepository;
 	}
 }
