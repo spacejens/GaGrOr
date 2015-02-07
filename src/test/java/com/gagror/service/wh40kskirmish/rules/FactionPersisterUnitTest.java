@@ -73,7 +73,7 @@ public class FactionPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<FactionEntity> savedFaction = ArgumentCaptor.forClass(FactionEntity.class);
-		verify(factionRepository).save(savedFaction.capture());
+		verify(factionRepository).persist(savedFaction.capture());
 		assertEquals("Wrong name", FORM_FACTION_NAME, savedFaction.getValue().getName());
 		assertTrue("Not added to gang type", gangType.getFactions().contains(savedFaction.getValue()));
 	}
@@ -83,7 +83,7 @@ public class FactionPersisterUnitTest {
 		whenAnotherFactionWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(factionRepository, never()).save(any(FactionEntity.class));
+		verify(factionRepository, never()).persist(any(FactionEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -92,7 +92,7 @@ public class FactionPersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(factionRepository, never()).save(any(FactionEntity.class));
+		verify(factionRepository, never()).persist(any(FactionEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -113,7 +113,7 @@ public class FactionPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(factionRepository, never()).save(any(FactionEntity.class));
+		verify(factionRepository, never()).persist(any(FactionEntity.class));
 		verify(faction).setName(FORM_FACTION_NAME);
 	}
 
@@ -134,7 +134,7 @@ public class FactionPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(faction, never()).setName(anyString());
-		verify(factionRepository, never()).save(any(FactionEntity.class));
+		verify(factionRepository, never()).persist(any(FactionEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)

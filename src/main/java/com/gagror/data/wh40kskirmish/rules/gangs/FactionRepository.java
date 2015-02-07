@@ -1,8 +1,15 @@
 package com.gagror.data.wh40kskirmish.rules.gangs;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface FactionRepository extends Repository<FactionEntity, Long> {
+@Repository
+public class FactionRepository {
 
-	FactionEntity save(final FactionEntity faction);
+	@Autowired
+	FactionRepositoryQueries factionRepositoryQueries;
+
+	public FactionEntity persist(final FactionEntity faction) {
+		return factionRepositoryQueries.save(faction);
+	}
 }

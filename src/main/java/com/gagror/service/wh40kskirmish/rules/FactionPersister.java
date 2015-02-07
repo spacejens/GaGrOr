@@ -99,6 +99,6 @@ extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 
 	@Override
 	protected FactionEntity makePersistent(final FactionEntity entity) {
-		return factionRepository.save(entity);
+		return factionRepository.persist(entity);
 	}
 }
