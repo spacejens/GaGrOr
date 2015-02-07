@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillInput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
@@ -22,7 +20,7 @@ public class SkillPersister
 extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	SkillCategoryRepository skillCategoryRepository;
 
 	@Autowired
 	SkillRepository skillRepository;
@@ -34,17 +32,7 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
 	@Override
 	protected SkillCategoryEntity loadContext(final SkillInput form) {
-		// TODO Load context directly from appropriate repository
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		for(final SkillCategoryEntity skillCategory : group.getWh40kSkirmishRules().getSkillCategories()) {
-			if(skillCategory.hasId(form.getSkillCategoryId())) {
-				return skillCategory;
-			}
-		}
-		throw new DataNotFoundException(String.format("Skill category %d (group %d)", form.getSkillCategoryId(), form.getGroupId()));
+		return skillCategoryRepository.load(form.getGroupId(), form.getSkillCategoryId());
 	}
 
 	@Override

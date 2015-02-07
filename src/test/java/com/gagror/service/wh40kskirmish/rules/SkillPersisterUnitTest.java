@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -23,10 +24,9 @@ import org.springframework.validation.BindingResult;
 import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
+import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillInput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
@@ -50,7 +50,7 @@ public class SkillPersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	SkillCategoryRepository skillCategoryRepository;
 
 	@Mock
 	SkillRepository skillRepository;
@@ -95,15 +95,9 @@ public class SkillPersisterUnitTest {
 		verify(skillRepository, never()).persist(any(SkillEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_new_skillCategoryNotFound() {
-		rules.getSkillCategories().remove(skillCategory);
+		doThrow(DataNotFoundException.class).when(skillCategoryRepository).load(GROUP_ID, SKILL_CATEGORY_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -137,17 +131,10 @@ public class SkillPersisterUnitTest {
 		verify(skillRepository, never()).persist(any(SkillEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenSkillExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_skillCategoryNotFound() {
 		whenSkillExists();
-		rules.getSkillCategories().remove(skillCategory);
+		doThrow(DataNotFoundException.class).when(skillCategoryRepository).load(GROUP_ID, SKILL_CATEGORY_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -202,19 +189,19 @@ public class SkillPersisterUnitTest {
 	@Before
 	public void setupContext() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getSkillCategories()).thenReturn(new HashSet<SkillCategoryEntity>());
 		when(skillCategory.getId()).thenReturn(SKILL_CATEGORY_ID);
 		when(skillCategory.getSkills()).thenReturn(new HashSet<SkillEntity>());
 		when(skillCategory.getRules()).thenReturn(rules);
 		rules.getSkillCategories().add(skillCategory);
+		when(skillCategoryRepository.load(GROUP_ID, SKILL_CATEGORY_ID)).thenReturn(skillCategory);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new SkillPersister();
-		instance.groupRepository = groupRepository;
+		instance.skillCategoryRepository = skillCategoryRepository;
 		instance.skillRepository = skillRepository;
 	}
 }
