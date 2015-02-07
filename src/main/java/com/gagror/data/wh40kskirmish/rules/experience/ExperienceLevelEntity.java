@@ -12,6 +12,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableNamedEntity;
+import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupOwned;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 
 @NoArgsConstructor
@@ -20,7 +22,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 @Table(name="wh40ksk_experiencelevel")
 public class ExperienceLevelEntity
 extends AbstractEditableNamedEntity
-implements ExperiencePoints {
+implements ExperiencePoints, GroupOwned {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
@@ -36,5 +38,10 @@ implements ExperiencePoints {
 		this.gangType = gangType;
 		// Add the new entity to the referencing collection
 		gangType.getExperienceLevels().add(this);
+	}
+
+	@Override
+	public GroupEntity getGroup() {
+		return getGangType().getGroup();
 	}
 }
