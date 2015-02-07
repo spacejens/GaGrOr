@@ -16,12 +16,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import com.gagror.data.AbstractEditableNamedEntity;
+import com.gagror.data.group.GroupEntity;
+import com.gagror.data.group.GroupOwned;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
 @Entity
 @Table(name="wh40ksk_race")
-public class RaceEntity extends AbstractEditableNamedEntity {
+public class RaceEntity extends AbstractEditableNamedEntity implements GroupOwned {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
@@ -83,5 +85,10 @@ public class RaceEntity extends AbstractEditableNamedEntity {
 		this.gangType = gangType;
 		// Add the new entity to the referencing collection
 		gangType.getRaces().add(this);
+	}
+
+	@Override
+	public GroupEntity getGroup() {
+		return getGangType().getGroup();
 	}
 }

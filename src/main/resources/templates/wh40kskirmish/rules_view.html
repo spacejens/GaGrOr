@@ -113,7 +113,7 @@
 				<td>
 					<ul>
 						<li th:each="race : ${gangType.races}">
-							<a th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/{raceId}(groupId=${rules.group.id},gangTypeId=${gangType.id},raceId=${race.id})}"
+							<a th:href="@{/wh40kskirmish/rules/{groupId}/race/{raceId}(groupId=${rules.group.id},raceId=${race.id})}"
 								th:text="${race.name}"></a>
 							<ul>
 								<li th:each="fighterType : ${race.fighterTypes}">

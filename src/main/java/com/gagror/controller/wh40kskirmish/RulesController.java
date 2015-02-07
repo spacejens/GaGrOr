@@ -280,25 +280,23 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP_RULES)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/race/{" +  ATTR_RACE_ID + "}")
 	public String viewRace(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			final Model model) {
-		model.addAttribute("race", rulesService.viewRace(groupId, gangTypeId, raceId));
+		model.addAttribute("race", rulesService.viewRace(groupId, raceId));
 		return "wh40kskirmish/races_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/race/{" + ATTR_RACE_ID + "}/edit", method=RequestMethod.GET)
 	public String editRaceForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			final Model model) {
-		log.info(String.format("Viewing edit race form for race %d of gang type %d in group %d", raceId, gangTypeId, groupId));
-		final RaceOutput race = rulesService.viewRace(groupId, gangTypeId, raceId);
+		log.info(String.format("Viewing edit race form for race %d in group %d", raceId, groupId));
+		final RaceOutput race = rulesService.viewRace(groupId, raceId);
 		model.addAttribute("gangType", race.getGangType());
 		model.addAttribute("raceForm", new RaceInput(race));
 		return "wh40kskirmish/races_edit";
@@ -311,8 +309,8 @@ public class RulesController extends AbstractController {
 			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			final Model model) {
-		log.info(String.format("Viewing create fighter type form for race %d of gang type %d of group %d", raceId, gangTypeId, groupId));
-		model.addAttribute("race", rulesService.viewRace(groupId, gangTypeId, raceId));
+		log.info(String.format("Viewing create fighter type form for race %d in group %d", raceId, groupId));
+		model.addAttribute("race", rulesService.viewRace(groupId, raceId));
 		model.addAttribute("fighterTypeForm", new FighterTypeInput(groupId, gangTypeId, raceId));
 		return "wh40kskirmish/fightertypes_edit";
 	}
@@ -330,7 +328,7 @@ public class RulesController extends AbstractController {
 			return redirect(String.format("/wh40kskirmish/rules/%d", groupId));
 		} else {
 			log.warn(String.format("Failed to save: %s", fighterTypeForm));
-			model.addAttribute("race", rulesService.viewRace(groupId, fighterTypeForm.getGangTypeId(), fighterTypeForm.getRaceId()));
+			model.addAttribute("race", rulesService.viewRace(groupId, fighterTypeForm.getRaceId()));
 			return "wh40kskirmish/fightertypes_edit";
 		}
 	}

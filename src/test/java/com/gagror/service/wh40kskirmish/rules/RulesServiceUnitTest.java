@@ -183,7 +183,7 @@ public class RulesServiceUnitTest {
 
 	@Test
 	public void viewRace_ok() {
-		final RaceOutput result = instance.viewRace(GROUP_ID, GANG_TYPE_ID, RACE_ID);
+		final RaceOutput result = instance.viewRace(GROUP_ID, RACE_ID);
 		assertEquals("Wrong race returned", RACE_NAME, result.getName());
 	}
 
@@ -254,7 +254,7 @@ public class RulesServiceUnitTest {
 		when(raceEntity.getName()).thenReturn(RACE_NAME);
 		when(raceEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getRaces().add(raceEntity);
-		when(raceRepository.load(GROUP_ID, GANG_TYPE_ID, RACE_ID)).thenReturn(raceEntity);
+		when(raceRepository.load(GROUP_ID, RACE_ID)).thenReturn(raceEntity);
 		// Set up the fighter type entity
 		when(raceEntity.getFighterTypes()).thenReturn(new HashSet<FighterTypeEntity>());
 		when(fighterTypeEntity.getId()).thenReturn(FIGHTER_TYPE_ID);

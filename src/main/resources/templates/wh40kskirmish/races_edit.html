@@ -11,7 +11,7 @@
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${gangType.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.race}"></a>
 		<a th:unless="${raceForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.race.create}"></a>
-		<a th:if="${raceForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/{raceId}(groupId=${gangType.group.id},gangTypeId=${gangType.id},raceId=${raceForm.id})}" th:text="${raceForm.name}"></a>
+		<a th:if="${raceForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/race/{raceId}(groupId=${gangType.group.id},raceId=${raceForm.id})}" th:text="${raceForm.name}"></a>
 		<a th:if="${raceForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.race.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/race/save(groupId=${gangType.group.id})}" th:object="${raceForm}" method="post">

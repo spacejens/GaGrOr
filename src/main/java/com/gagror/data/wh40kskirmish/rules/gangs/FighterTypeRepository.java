@@ -24,7 +24,7 @@ public class FighterTypeRepository {
 			final Long raceId,
 			final Long fighterTypeId) {
 		// TODO Load fighter type from ID using query, verify group after loading. Gang type and race IDs no longer needed
-		final RaceEntity race = raceRepository.load(groupId, gangTypeId, raceId);
+		final RaceEntity race = raceRepository.load(groupId, raceId);
 		for(final FighterTypeEntity fighterType : race.getFighterTypes()) {
 			if(fighterType.hasId(fighterTypeId)){
 				return fighterType;

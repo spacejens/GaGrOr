@@ -23,6 +23,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
@@ -115,10 +116,11 @@ public class RulesService {
 				viewGangType(groupId, gangTypeId));
 	}
 
-	public RaceOutput viewRace(final Long groupId, final Long gangTypeId, final Long raceId) {
+	public RaceOutput viewRace(final Long groupId, final Long raceId) {
+		final RaceEntity race = raceRepository.load(groupId, raceId);
 		return new RaceOutput(
-				raceRepository.load(groupId, gangTypeId, raceId),
-				viewGangType(groupId, gangTypeId));
+				race,
+				new GangTypeOutput(race.getGangType(), groupService.viewGroup(groupId)));
 	}
 
 	public FighterTypeOutput viewFighterType(
@@ -128,7 +130,7 @@ public class RulesService {
 			final Long fighterTypeId) {
 		return new FighterTypeOutput(
 				fighterTypeRepository.load(groupId, gangTypeId, raceId, fighterTypeId),
-				viewRace(groupId, gangTypeId, raceId));
+				viewRace(groupId, raceId));
 	}
 
 	public TerritoryCategoryOutput viewTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
