@@ -27,8 +27,7 @@ import org.springframework.validation.BindingResult;
 import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelInput;
@@ -78,7 +77,7 @@ public class GangTypePersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Mock
 	GangTypeRepository gangTypeRepository;
@@ -152,12 +151,6 @@ public class GangTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
-	}
-
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
 	}
 
 	@Test
@@ -240,13 +233,6 @@ public class GangTypePersisterUnitTest {
 		verify(gangTypeRepository, never()).persist(any(GangTypeEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenGangTypeExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_notFoundInGroup() {
 		whenGangTypeExists();
@@ -319,9 +305,9 @@ public class GangTypePersisterUnitTest {
 	@Before
 	public void setupGroup() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getGangTypes()).thenReturn(new HashSet<GangTypeEntity>());
+		when(rulesRepository.load(GROUP_ID)).thenReturn(rules);
 	}
 
 	@Before
@@ -337,7 +323,7 @@ public class GangTypePersisterUnitTest {
 	@Before
 	public void setupInstance() {
 		instance = new GangTypePersister();
-		instance.groupRepository = groupRepository;
+		instance.rulesRepository = rulesRepository;
 		instance.gangTypeRepository = gangTypeRepository;
 		instance.experienceLevelRepository = experienceLevelRepository;
 	}

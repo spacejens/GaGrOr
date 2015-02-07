@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelInput;
@@ -32,7 +30,7 @@ public class GangTypePersister
 extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Autowired
 	GangTypeRepository gangTypeRepository;
@@ -59,12 +57,7 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 
 	@Override
 	protected Wh40kSkirmishRulesEntity loadContext(final GangTypeInput form) {
-		// TODO Load context directly from appropriate repository
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		return group.getWh40kSkirmishRules();
+		return rulesRepository.load(form.getGroupId());
 	}
 
 	@Override
