@@ -19,12 +19,10 @@ public class SkillRepository {
 	}
 
 	public SkillEntity load(final Long groupId, final Long skillCategoryId, final Long skillId) {
-		// TODO Load skill from ID using query, verify group after loading. Category ID no longer needed
-		final SkillCategoryEntity skillCategory = skillCategoryRepository.load(groupId, skillCategoryId);
-		for(final SkillEntity skill : skillCategory.getSkills()) {
-			if(skill.hasId(skillId)) {
-				return skill;
-			}
+		// TODO Remove skill category argument when loading skill
+		final SkillEntity skill = skillRepositoryQueries.findOne(skillId);
+		if(null != skill && skill.getGroup().hasId(groupId)) {
+			return skill;
 		}
 		throw new DataNotFoundException(String.format("Skill %d (skill category %d, group %d)",
 				skillId, skillCategoryId, groupId));
