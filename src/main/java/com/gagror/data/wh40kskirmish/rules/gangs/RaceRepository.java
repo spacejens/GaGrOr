@@ -1,8 +1,15 @@
 package com.gagror.data.wh40kskirmish.rules.gangs;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface RaceRepository extends Repository<RaceEntity, Long> {
+@Repository
+public class RaceRepository {
 
-	RaceEntity save(final RaceEntity race);
+	@Autowired
+	RaceRepositoryQueries raceRepositoryQueries;
+
+	public RaceEntity persist(final RaceEntity race) {
+		return raceRepositoryQueries.save(race);
+	}
 }

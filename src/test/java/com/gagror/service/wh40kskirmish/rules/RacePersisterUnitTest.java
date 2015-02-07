@@ -88,7 +88,7 @@ public class RacePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<RaceEntity> savedRace = ArgumentCaptor.forClass(RaceEntity.class);
-		verify(raceRepository).save(savedRace.capture());
+		verify(raceRepository).persist(savedRace.capture());
 		assertEquals("Wrong name", FORM_RACE_NAME, savedRace.getValue().getName());
 		assertEquals("Wrong movement", FORM_RACE_MOVEMENT, savedRace.getValue().getMaxMovement());
 		assertEquals("Wrong weapon skill", FORM_RACE_WEAPON_SKILL, savedRace.getValue().getMaxWeaponSkill());
@@ -107,7 +107,7 @@ public class RacePersisterUnitTest {
 		whenAnotherRaceWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(raceRepository, never()).save(any(RaceEntity.class));
+		verify(raceRepository, never()).persist(any(RaceEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -116,7 +116,7 @@ public class RacePersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(raceRepository, never()).save(any(RaceEntity.class));
+		verify(raceRepository, never()).persist(any(RaceEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -137,7 +137,7 @@ public class RacePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(raceRepository, never()).save(any(RaceEntity.class));
+		verify(raceRepository, never()).persist(any(RaceEntity.class));
 		verify(race).setName(FORM_RACE_NAME);
 		verify(race).setMaxMovement(FORM_RACE_MOVEMENT);
 		verify(race).setMaxWeaponSkill(FORM_RACE_WEAPON_SKILL);
@@ -257,7 +257,7 @@ public class RacePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(race, never()).setName(anyString());
-		verify(raceRepository, never()).save(any(RaceEntity.class));
+		verify(raceRepository, never()).persist(any(RaceEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)

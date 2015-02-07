@@ -157,6 +157,6 @@ extends AbstractPersister<RaceInput, RaceEntity, GangTypeEntity> {
 
 	@Override
 	protected RaceEntity makePersistent(final RaceEntity entity) {
-		return raceRepository.save(entity);
+		return raceRepository.persist(entity);
 	}
 }
