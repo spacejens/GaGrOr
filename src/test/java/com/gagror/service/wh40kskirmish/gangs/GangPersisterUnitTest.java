@@ -27,13 +27,12 @@ import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangInput;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -58,7 +57,7 @@ public class GangPersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	FactionRepository factionRepository;
 
 	@Mock
 	AccountRepository accountRepository;
@@ -119,21 +118,9 @@ public class GangPersisterUnitTest {
 		instance.save(form, bindingResult);
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
-	@Test(expected=DataNotFoundException.class)
-	public void save_new_gangTypeNotFound() {
-		rules.getGangTypes().remove(gangType);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_new_factionNotFound() {
-		gangType.getFactions().remove(faction);
+		doThrow(DataNotFoundException.class).when(factionRepository).load(GROUP_ID, FACTION_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -169,24 +156,10 @@ public class GangPersisterUnitTest {
 		verify(gangRepository, never()).persist(any(GangEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenGangExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
-	@Test(expected=DataNotFoundException.class)
-	public void save_existing_gangTypeNotFound() {
-		whenGangExists();
-		rules.getGangTypes().remove(gangType);
-		instance.save(form, bindingResult);
-	}
-
 	@Test(expected=DataNotFoundException.class)
 	public void save_existing_factionNotFound() {
 		whenGangExists();
-		gangType.getFactions().remove(faction);
+		doThrow(DataNotFoundException.class).when(factionRepository).load(GROUP_ID, FACTION_ID);
 		instance.save(form, bindingResult);
 	}
 
@@ -250,7 +223,6 @@ public class GangPersisterUnitTest {
 	@Before
 	public void setupContext() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getGroup()).thenReturn(group);
 		when(rules.getGangTypes()).thenReturn(new HashSet<GangTypeEntity>());
@@ -262,6 +234,7 @@ public class GangPersisterUnitTest {
 		when(faction.getGangs()).thenReturn(new HashSet<GangEntity>());
 		when(faction.getGangType()).thenReturn(gangType);
 		gangType.getFactions().add(faction);
+		when(factionRepository.load(GROUP_ID, FACTION_ID)).thenReturn(faction);
 		when(player.getId()).thenReturn(PLAYER_ID);
 		when(accountRepository.load(PLAYER_ID)).thenReturn(player);
 	}
@@ -269,7 +242,7 @@ public class GangPersisterUnitTest {
 	@Before
 	public void setupInstance() {
 		instance = new GangPersister();
-		instance.groupRepository = groupRepository;
+		instance.factionRepository = factionRepository;
 		instance.accountRepository = accountRepository;
 		instance.gangRepository = gangRepository;
 	}
