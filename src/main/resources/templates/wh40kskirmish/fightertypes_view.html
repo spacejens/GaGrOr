@@ -14,7 +14,7 @@
 	</nav>
 	<dl  th:if="${fighterType.race.gangType.group.memberType != null and fighterType.race.gangType.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{gangTypeId}/{raceId}/{fighterTypeId}/edit(groupId=${fighterType.race.gangType.group.id},gangTypeId=${fighterType.race.gangType.id},raceId=${fighterType.race.id},fighterTypeId=${fighterType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{fighterTypeId}/edit(groupId=${fighterType.race.gangType.group.id},fighterTypeId=${fighterType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.edit}"></a></dd>
 	</dl>
 	<table>
 		<thead>

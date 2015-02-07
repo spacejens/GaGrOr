@@ -304,7 +304,7 @@ public class RulesController extends AbstractController {
 	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/create", method=RequestMethod.GET)
 	public String createFighterTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
+			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId, // TODO This argument should not be needed
 			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			final Model model) {
 		log.info(String.format("Viewing create fighter type form for race %d in group %d", raceId, groupId));
@@ -332,27 +332,23 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP_RULES)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/{" + ATTR_FIGHTERTYPE_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_FIGHTERTYPE_ID + "}")
 	public String viewFighterType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
-			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			@PathVariable(ATTR_FIGHTERTYPE_ID) final Long fighterTypeId,
 			final Model model) {
-		model.addAttribute("fighterType", rulesService.viewFighterType(groupId, gangTypeId, raceId, fighterTypeId));
+		model.addAttribute("fighterType", rulesService.viewFighterType(groupId, fighterTypeId));
 		return "wh40kskirmish/fightertypes_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/{" + ATTR_FIGHTERTYPE_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_FIGHTERTYPE_ID + "}/edit", method=RequestMethod.GET)
 	public String editFighterTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
-			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			@PathVariable(ATTR_FIGHTERTYPE_ID) final Long fighterTypeId,
 			final Model model) {
-		log.info(String.format("Viewing edit fighter type form for fighter type %d of race %d of gang type %d in group %d", fighterTypeId, raceId, gangTypeId, groupId));
-		final FighterTypeOutput fighterType = rulesService.viewFighterType(groupId, gangTypeId, raceId, fighterTypeId);
+		log.info(String.format("Viewing edit fighter type form for fighter type %d in group %d", fighterTypeId, groupId));
+		final FighterTypeOutput fighterType = rulesService.viewFighterType(groupId, fighterTypeId);
 		model.addAttribute("race", fighterType.getRace());
 		model.addAttribute("fighterTypeForm", new FighterTypeInput(fighterType));
 		return "wh40kskirmish/fightertypes_edit";

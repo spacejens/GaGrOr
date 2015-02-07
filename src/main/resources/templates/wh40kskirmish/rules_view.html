@@ -117,7 +117,7 @@
 								th:text="${race.name}"></a>
 							<ul>
 								<li th:each="fighterType : ${race.fighterTypes}">
-									<a th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{gangTypeId}/{raceId}/{fighterTypeId}(groupId=${rules.group.id},gangTypeId=${gangType.id},raceId=${race.id},fighterTypeId=${fighterType.id})}"
+									<a th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{fighterTypeId}(groupId=${rules.group.id},fighterTypeId=${fighterType.id})}"
 										th:text="${fighterType.name}"></a>
 								</li>
 								<li th:if="${#lists.isEmpty(race.fighterTypes)}" class="fi-alert">

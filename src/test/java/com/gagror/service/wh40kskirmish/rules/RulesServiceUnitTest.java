@@ -189,7 +189,7 @@ public class RulesServiceUnitTest {
 
 	@Test
 	public void viewFighterType_ok() {
-		final FighterTypeOutput result = instance.viewFighterType(GROUP_ID, GANG_TYPE_ID, RACE_ID, FIGHTER_TYPE_ID);
+		final FighterTypeOutput result = instance.viewFighterType(GROUP_ID, FIGHTER_TYPE_ID);
 		assertEquals("Wrong fighter type returned", FIGHTER_TYPE_NAME, result.getName());
 	}
 
@@ -261,7 +261,7 @@ public class RulesServiceUnitTest {
 		when(fighterTypeEntity.getName()).thenReturn(FIGHTER_TYPE_NAME);
 		when(fighterTypeEntity.getRace()).thenReturn(raceEntity);
 		raceEntity.getFighterTypes().add(fighterTypeEntity);
-		when(fighterTypeRepository.load(GROUP_ID, GANG_TYPE_ID, RACE_ID, FIGHTER_TYPE_ID)).thenReturn(fighterTypeEntity);
+		when(fighterTypeRepository.load(GROUP_ID, FIGHTER_TYPE_ID)).thenReturn(fighterTypeEntity);
 		// Set up the territory category entity
 		when(rulesEntity.getTerritoryCategories()).thenReturn(new HashSet<TerritoryCategoryEntity>());
 		when(territoryCategoryEntity.getId()).thenReturn(TERRITORY_CATEGORY_ID);
