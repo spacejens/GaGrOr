@@ -8,7 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.thymeleaf.util.StringUtils;
 
 import com.gagror.data.AbstractEntity;
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
@@ -55,11 +54,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 
 	@Override
 	protected AccountEntity loadExisting(final AccountEditInput form, final AbstractEntity context) {
-		final AccountEntity account = accountRepository.findById(form.getId());
-		if(null == account) {
-			throw new DataNotFoundException(String.format("Account %d", form.getId()));
-		}
-		return account;
+		return accountRepository.load(form.getId());
 	}
 
 	@Override
@@ -67,7 +62,7 @@ public class EditAccountPersister extends AbstractPersister<AccountEditInput, Ac
 		final boolean editingOwnAccount = isEditingOwnAccount(form);
 		if(editingOwnAccount
 				&& ! entity.getName().equals(form.getName())
-				&& null != accountRepository.findByName(form.getName())) {
+				&& accountRepository.exists(form.getName())) {
 			log.warn(String.format("Attempt to edit account %d failed, username was busy", form.getId()));
 			form.addErrorUsernameBusy(bindingResult);
 		}

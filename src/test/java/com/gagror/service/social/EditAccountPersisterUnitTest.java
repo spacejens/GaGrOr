@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -118,7 +118,7 @@ public class EditAccountPersisterUnitTest {
 
 	@Test
 	public void saveAccount_usernameBusy() {
-		when(accountRepository.findByName(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
+		when(accountRepository.exists(FORM_USERNAME)).thenReturn(true);
 		final boolean result = instance.save(editAccountForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(editAccountForm).addErrorUsernameBusy(bindingResult);
@@ -167,7 +167,7 @@ public class EditAccountPersisterUnitTest {
 
 	@Test
 	public void saveAccount_manyErrors() {
-		when(accountRepository.findByName(FORM_USERNAME)).thenReturn(mock(AccountEntity.class));
+		when(accountRepository.exists(FORM_USERNAME)).thenReturn(true);
 		when(editAccountForm.getPasswordRepeat()).thenReturn("Doesn't match");
 		when(accessControlService.isPasswordTooWeak(FORM_PASSWORD)).thenReturn(true);
 		when(account.getVersion()).thenReturn(VERSION+1);
@@ -187,7 +187,7 @@ public class EditAccountPersisterUnitTest {
 
 	@Test(expected=DataNotFoundException.class)
 	public void saveAccount_accountNotFound() {
-		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(null);
+		doThrow(DataNotFoundException.class).when(accountRepository).load(ACCOUNT_ID);
 		instance.save(editAccountForm, bindingResult);
 	}
 
@@ -197,7 +197,7 @@ public class EditAccountPersisterUnitTest {
 		when(account.getVersion()).thenReturn(VERSION);
 		when(account.getName()).thenReturn(ENTITY_USERNAME);
 		when(account.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
-		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
+		when(accountRepository.load(ACCOUNT_ID)).thenReturn(account);
 		when(anotherAccount.getId()).thenReturn(ANOTHER_ACCOUNT_ID);
 		when(anotherAccount.getAccountType()).thenReturn(ENTITY_ACCOUNT_TYPE);
 	}

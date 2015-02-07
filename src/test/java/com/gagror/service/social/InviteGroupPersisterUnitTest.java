@@ -141,7 +141,7 @@ public class InviteGroupPersisterUnitTest {
 
 	private void mockAccount(final AccountEntity account, final Long id) {
 		when(account.getId()).thenReturn(id);
-		when(accountRepository.findById(id)).thenReturn(account);
+		when(accountRepository.load(id)).thenReturn(account);
 		final Set<ContactEntity> contacts = new HashSet<>();
 		when(account.getContacts()).thenReturn(contacts);
 		final Set<GroupMemberEntity> memberships = new HashSet<>();

@@ -17,7 +17,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.gagror.controller.AbstractController;
 import com.gagror.controller.FormAndURLMismatchException;
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.service.social.AccountService;
@@ -109,7 +108,7 @@ public class AccountController extends AbstractController {
 	@RequestMapping(value="/edit/{" + ATTR_ACCOUNT_ID + "}", method=RequestMethod.GET)
 	public String editUserForm(@PathVariable(ATTR_ACCOUNT_ID) final Long accountId, final Model model) {
 		log.info(String.format("Viewing edit account form for account ID %d", accountId));
-		final AccountEditOutput currentState = loadCurrentState(accountId);
+		final AccountEditOutput currentState = accountService.loadAccountForEditing(accountId);
 		model.addAttribute("currentState", currentState);
 		model.addAttribute("editAccountForm", new AccountEditInput(currentState));
 		return "edit_account";
@@ -130,17 +129,9 @@ public class AccountController extends AbstractController {
 			return redirect("/");
 		} else {
 			log.warn(String.format("Failed to edit account ID %d", accountId));
-			final AccountEditOutput currentState = loadCurrentState(accountId);
+			final AccountEditOutput currentState = accountService.loadAccountForEditing(accountId);
 			model.addAttribute("currentState", currentState);
 			return "edit_account";
 		}
-	}
-
-	protected AccountEditOutput loadCurrentState(final Long accountId) {
-		final AccountEditOutput currentState = accountService.loadAccountForEditing(accountId);
-		if(null == currentState) {
-			throw new DataNotFoundException(String.format("Account %d", accountId));
-		}
-		return currentState;
 	}
 }

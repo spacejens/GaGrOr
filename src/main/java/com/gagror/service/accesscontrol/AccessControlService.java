@@ -34,7 +34,7 @@ public class AccessControlService {
 				&& authentication.isAuthenticated()
 				&& ! (authentication instanceof AnonymousAuthenticationToken)) {
 			log.trace(String.format("Loading request account '%s'", authentication.getName()));
-			return accountRepository.findByName(authentication.getName());
+			return accountRepository.loadOrNull(authentication.getName());
 		} else {
 			return null;
 		}

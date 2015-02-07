@@ -34,9 +34,9 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 
 	@Override
 	protected void validateForm(final GangInput form, final BindingResult bindingResult) {
-		if(! form.isPersistent()
-				&& null == accountRepository.findById(form.getPlayerId())) {
-			throw new DataNotFoundException(String.format("Account %d", form.getPlayerId()));
+		if(! form.isPersistent()) {
+			// Validate that loading can be performed without causing an exception
+			accountRepository.load(form.getPlayerId());
 		}
 	}
 
@@ -106,7 +106,7 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 
 	@Override
 	protected GangEntity createNew(final GangInput form, final FactionEntity context) {
-		return new GangEntity(context, accountRepository.findById(form.getPlayerId()));
+		return new GangEntity(context, accountRepository.load(form.getPlayerId()));
 	}
 
 	@Override

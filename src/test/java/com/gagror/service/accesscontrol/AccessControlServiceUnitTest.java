@@ -102,7 +102,7 @@ public class AccessControlServiceUnitTest {
 	@Test
 	public void getRequestAccountEntity_accountNotFound() {
 		whenLoggedIn();
-		when(accountRepository.findByName(USERNAME)).thenReturn(null);
+		when(accountRepository.loadOrNull(USERNAME)).thenReturn(null);
 		final AccountEntity result = instance.getRequestAccountEntity();
 		assertNull("Should not have loaded request account", result);
 		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
@@ -132,7 +132,7 @@ public class AccessControlServiceUnitTest {
 	@Test
 	public void getRequestAccount_accountNotFound() {
 		whenLoggedIn();
-		when(accountRepository.findByName(USERNAME)).thenReturn(null);
+		when(accountRepository.loadOrNull(USERNAME)).thenReturn(null);
 		final AccountReferenceOutput result = instance.getRequestAccount();
 		assertNull("Should not have loaded request account", result);
 		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
@@ -193,12 +193,12 @@ public class AccessControlServiceUnitTest {
 	@SuppressWarnings("rawtypes")
 	@Before
 	public void setupAccountRepository() {
-		when(accountRepository.findByName(USERNAME)).thenReturn(account);
-		when(accountRepository.save(any(AccountEntity.class))).thenAnswer(new Answer(){
+		when(accountRepository.loadOrNull(USERNAME)).thenReturn(account);
+		when(accountRepository.persist(any(AccountEntity.class))).thenAnswer(new Answer(){
 			@Override
 			public Object answer(final InvocationOnMock invocation) throws Throwable {
 				final AccountEntity input = (AccountEntity)invocation.getArguments()[0];
-				when(accountRepository.findByName(input.getName())).thenReturn(input);
+				when(accountRepository.loadOrNull(input.getName())).thenReturn(input);
 				return input;
 			}
 		});

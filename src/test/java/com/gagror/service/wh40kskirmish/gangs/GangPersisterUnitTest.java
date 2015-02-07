@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -114,10 +115,8 @@ public class GangPersisterUnitTest {
 
 	@Test(expected=DataNotFoundException.class)
 	public void save_new_playerNotFound() {
-		when(accountRepository.findById(PLAYER_ID)).thenReturn(null);
-		final boolean result = instance.save(form, bindingResult);
-		assertFalse("Should have failed to save", result);
-		verify(gangRepository, never()).save(any(GangEntity.class));
+		doThrow(DataNotFoundException.class).when(accountRepository).load(PLAYER_ID);
+		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -264,7 +263,7 @@ public class GangPersisterUnitTest {
 		when(faction.getGangType()).thenReturn(gangType);
 		gangType.getFactions().add(faction);
 		when(player.getId()).thenReturn(PLAYER_ID);
-		when(accountRepository.findById(PLAYER_ID)).thenReturn(player);
+		when(accountRepository.load(PLAYER_ID)).thenReturn(player);
 	}
 
 	@Before

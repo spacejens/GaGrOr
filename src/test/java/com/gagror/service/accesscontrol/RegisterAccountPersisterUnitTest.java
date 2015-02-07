@@ -55,7 +55,7 @@ public class RegisterAccountPersisterUnitTest {
 		assertTrue("Saving should have been successful", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<AccountEntity> savedAccount = ArgumentCaptor.forClass(AccountEntity.class);
-		verify(accountRepository).save(savedAccount.capture());
+		verify(accountRepository).persist(savedAccount.capture());
 		assertEquals("Wrong username", USERNAME, savedAccount.getValue().getName());
 		assertEquals("Wrong password", PASSWORD_ENCODED, savedAccount.getValue().getPassword());
 		assertSame("Wrong account type", AccountType.STANDARD, savedAccount.getValue().getAccountType());
@@ -66,11 +66,11 @@ public class RegisterAccountPersisterUnitTest {
 
 	@Test
 	public void register_usernameBusy() {
-		when(accountRepository.findByName(USERNAME)).thenReturn(anAccount);
+		when(accountRepository.exists(USERNAME)).thenReturn(true);
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorUsernameBusy(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
+		verify(accountRepository, never()).persist(any(AccountEntity.class));
 	}
 
 	@Test
@@ -79,7 +79,7 @@ public class RegisterAccountPersisterUnitTest {
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorPasswordMismatch(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
+		verify(accountRepository, never()).persist(any(AccountEntity.class));
 	}
 
 	@Test
@@ -88,12 +88,12 @@ public class RegisterAccountPersisterUnitTest {
 		final boolean result = instance.save(registerForm, bindingResult);
 		assertFalse("Saving should have failed", result);
 		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
+		verify(accountRepository, never()).persist(any(AccountEntity.class));
 	}
 
 	@Test
 	public void register_manyErrors() {
-		when(accountRepository.findByName(USERNAME)).thenReturn(anAccount);
+		when(accountRepository.exists(USERNAME)).thenReturn(true);
 		when(registerForm.getPasswordRepeat()).thenReturn("doesn't match");
 		when(accessControlService.isPasswordTooWeak(PASSWORD)).thenReturn(true);
 		final boolean result = instance.save(registerForm, bindingResult);
@@ -101,7 +101,7 @@ public class RegisterAccountPersisterUnitTest {
 		verify(registerForm).addErrorUsernameBusy(bindingResult);
 		verify(registerForm).addErrorPasswordMismatch(bindingResult);
 		verify(registerForm).addErrorPasswordTooWeak(bindingResult);
-		verify(accountRepository, never()).save(any(AccountEntity.class));
+		verify(accountRepository, never()).persist(any(AccountEntity.class));
 	}
 
 	@Before
@@ -111,7 +111,7 @@ public class RegisterAccountPersisterUnitTest {
 
 	@Before
 	public void setupAccountRepository() {
-		when(accountRepository.save(any(AccountEntity.class))).thenAnswer(new Answer<AccountEntity>() {
+		when(accountRepository.persist(any(AccountEntity.class))).thenAnswer(new Answer<AccountEntity>() {
 			@Override
 			public AccountEntity answer(final InvocationOnMock invocation) throws Throwable {
 				return (AccountEntity)invocation.getArguments()[0];

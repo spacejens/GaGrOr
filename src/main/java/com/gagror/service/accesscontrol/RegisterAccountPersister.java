@@ -24,7 +24,7 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 
 	@Override
 	protected void validateForm(final RegisterInput form, final BindingResult bindingResult) {
-		if(null != accountRepository.findByName(form.getName())) {
+		if(accountRepository.exists(form.getName())) {
 			log.warn(String.format("Attempt to create user '%s' failed, username busy", form.getName()));
 			form.addErrorUsernameBusy(bindingResult);
 		}
@@ -57,7 +57,7 @@ public class RegisterAccountPersister extends AbstractPersister<RegisterInput, A
 
 	@Override
 	protected AccountEntity makePersistent(final AccountEntity entity) {
-		return accountRepository.save(entity);
+		return accountRepository.persist(entity);
 	}
 
 	@Override

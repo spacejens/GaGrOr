@@ -8,7 +8,6 @@ import java.util.Set;
 import lombok.extern.apachecommons.CommonsLog;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,24 +36,15 @@ public class AccountService {
 	AccessControlService accessControlService;
 
 	public void loginAsUser(final Long accountId) {
-		final AccountEntity entity = accountRepository.findById(accountId);
-		if(null != entity) {
-			log.debug(String.format("Loaded account ID %d (%s) for logging in", accountId, entity.getName()));
-			accessControlService.logInAs(entity);
-		} else {
-			log.error(String.format("Failed to load account ID %d for editing", accountId));
-		}
+		final AccountEntity entity = accountRepository.load(accountId);
+		log.debug(String.format("Loaded account ID %d (%s) for logging in", accountId, entity.getName()));
+		accessControlService.logInAs(entity);
 	}
 
 	public AccountEditOutput loadAccountForEditing(final Long accountId) {
-		final AccountEntity entity = accountRepository.findById(accountId);
-		if(null != entity) {
-			log.debug(String.format("Loaded account ID %d (%s) for editing", accountId, entity.getName()));
-			return new AccountEditOutput(entity);
-		} else {
-			log.warn(String.format("Failed to load account ID %d for editing", accountId));
-			return null;
-		}
+		final AccountEntity entity = accountRepository.load(accountId);
+		log.debug(String.format("Loaded account ID %d (%s) for editing", accountId, entity.getName()));
+		return new AccountEditOutput(entity);
 	}
 
 	public List<ContactReferenceOutput> loadContacts() {
@@ -96,7 +86,7 @@ public class AccountService {
 	public List<ContactReferenceOutput> loadAccountsNotContacts() {
 		log.debug("Loading non-contact accounts as contacts");
 		final List<ContactReferenceOutput> output = new ArrayList<>();
-		for(final AccountEntity account : accountRepository.findAll(new Sort("name"))) {
+		for(final AccountEntity account : accountRepository.list()) {
 			if(isNonContactAccount(account)) {
 				output.add(new ContactReferenceOutput(account));
 			}
@@ -150,7 +140,7 @@ public class AccountService {
 	}
 
 	public void createContactRequest(final Long accountId) {
-		final AccountEntity account = accountRepository.findById(accountId);
+		final AccountEntity account = accountRepository.load(accountId);
 		if(isNonContactAccount(account)) {
 			final AccountEntity requestAccount = accessControlService.getRequestAccountEntity();
 			createContact(requestAccount, ContactType.REQUESTED, account);

@@ -67,7 +67,7 @@ public class PermissionEditAccountUnitTest {
 
 	@Before
 	public void setupAccountRepository() {
-		when(accountRepository.findById(ID_OTHER)).thenReturn(editedAccount);
+		when(accountRepository.load(ID_OTHER)).thenReturn(editedAccount);
 	}
 
 	@Before

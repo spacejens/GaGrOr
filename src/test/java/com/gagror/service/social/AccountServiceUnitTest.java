@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -15,7 +16,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -27,9 +27,8 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 
+import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
@@ -92,11 +91,10 @@ public class AccountServiceUnitTest {
 		verify(accessControlService).logInAs(account);
 	}
 
-	@Test
+	@Test(expected=DataNotFoundException.class)
 	public void loginAsUser_notFound() {
-		when(accountRepository.findById(ANOTHER_ACCOUNT_ID)).thenReturn(null);
+		doThrow(DataNotFoundException.class).when(accountRepository).load(ANOTHER_ACCOUNT_ID);
 		instance.loginAsUser(ANOTHER_ACCOUNT_ID);
-		verify(accessControlService, never()).logInAs(any(AccountEntity.class));
 	}
 
 	@Test
@@ -106,11 +104,10 @@ public class AccountServiceUnitTest {
 		assertEquals("Unexpected account loaded", ACCOUNT_ID, result.getId());
 	}
 
-	@Test
+	@Test(expected=DataNotFoundException.class)
 	public void loadAccountForEditing_notFound() {
-		when(accountRepository.findById(ANOTHER_ACCOUNT_ID)).thenReturn(null);
-		final AccountEditOutput result = instance.loadAccountForEditing(ANOTHER_ACCOUNT_ID);
-		assertNull("Should not have found any account", result);
+		doThrow(DataNotFoundException.class).when(accountRepository).load(ANOTHER_ACCOUNT_ID);
+		instance.loadAccountForEditing(ANOTHER_ACCOUNT_ID);
 	}
 
 	@Test
@@ -198,13 +195,6 @@ public class AccountServiceUnitTest {
 		final List<ContactReferenceOutput> contacts = instance.loadAccountsNotContacts();
 		Long[] accountIDs = { firstId, secondId };
 		assertIds(contacts, accountIDs);
-		// Verify that sorting occurred on the database level (since that is what test data setup is based on)
-		final ArgumentCaptor<Sort> sort = ArgumentCaptor.forClass(Sort.class);
-		verify(accountRepository).findAll(sort.capture());
-		final Iterator<Order> orderIterator = sort.getValue().iterator();
-		assertTrue("Missing sort order", orderIterator.hasNext());
-		assertEquals("Unexpected sort order", "name", orderIterator.next().getProperty());
-		assertFalse("Should only sort on name", orderIterator.hasNext());
 	}
 
 	@Test
@@ -456,14 +446,14 @@ public class AccountServiceUnitTest {
 
 	@Before
 	public void setupAccountRepository() {
-		when(accountRepository.findById(ACCOUNT_ID)).thenReturn(account);
-		when(accountRepository.findById(ANOTHER_ACCOUNT_ID)).thenReturn(anotherAccount);
-		when(accountRepository.findById(CONTACT_ACCOUNT_ID)).thenReturn(contactAccount);
+		when(accountRepository.load(ACCOUNT_ID)).thenReturn(account);
+		when(accountRepository.load(ANOTHER_ACCOUNT_ID)).thenReturn(anotherAccount);
+		when(accountRepository.load(CONTACT_ACCOUNT_ID)).thenReturn(contactAccount);
 		allAccounts = new ArrayList<>();
 		allAccounts.add(account);
 		allAccounts.add(anotherAccount);
 		allAccounts.add(contactAccount);
-		when(accountRepository.findAll(any(Sort.class))).thenReturn(allAccounts);
+		when(accountRepository.list()).thenReturn(allAccounts);
 	}
 
 	@Before
