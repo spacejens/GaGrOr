@@ -113,7 +113,7 @@ public class GangTypePersisterUnitTest {
 		assertEquals("Wrong name", FORM_GANG_TYPE_NAME, savedGangType.getValue().getName());
 		assertTrue("Not added to rules", rules.getGangTypes().contains(savedGangType.getValue()));
 		final ArgumentCaptor<ExperienceLevelEntity> savedExperienceLevel = ArgumentCaptor.forClass(ExperienceLevelEntity.class);
-		verify(experienceLevelRepository).save(savedExperienceLevel.capture());
+		verify(experienceLevelRepository).persist(savedExperienceLevel.capture());
 		assertEquals("Wrong experience level name", FORM_XP_LEVEL_FIRST_NAME, savedExperienceLevel.getValue().getName());
 		assertEquals("Wrong experience level points", FORM_XP_LEVEL_FIRST_XP, savedExperienceLevel.getValue().getExperiencePoints());
 		assertTrue("Experience level not added to gang type", savedGangType.getValue().getExperienceLevels().contains(savedExperienceLevel.getValue()));
@@ -192,7 +192,7 @@ public class GangTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<ExperienceLevelEntity> savedExperienceLevel = ArgumentCaptor.forClass(ExperienceLevelEntity.class);
-		verify(experienceLevelRepository).save(savedExperienceLevel.capture());
+		verify(experienceLevelRepository).persist(savedExperienceLevel.capture());
 		assertEquals("Wrong experience level name", FORM_XP_LEVEL_NEW_NAME, savedExperienceLevel.getValue().getName());
 		assertEquals("Wrong experience level points", FORM_XP_LEVEL_NEW_XP, savedExperienceLevel.getValue().getExperiencePoints());
 		assertTrue("Experience level not added to gang type", gangType.getExperienceLevels().contains(savedExperienceLevel.getValue()));

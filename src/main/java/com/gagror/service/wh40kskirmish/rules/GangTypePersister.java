@@ -148,7 +148,7 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 	protected void postPersistenceUpdate(final GangTypeEntity entity) {
 		for(final ExperienceLevelEntity experienceLevel : entity.getExperienceLevels()) {
 			if(! experienceLevel.isPersistent()) {
-				experienceLevelRepository.save(experienceLevel);
+				experienceLevelRepository.persist(experienceLevel);
 			}
 		}
 	}

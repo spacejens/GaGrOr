@@ -1,10 +1,19 @@
 package com.gagror.data.wh40kskirmish.rules.experience;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface ExperienceLevelRepository extends Repository<ExperienceLevelEntity, Long> {
+@Repository
+public class ExperienceLevelRepository {
 
-	ExperienceLevelEntity save(final ExperienceLevelEntity experienceLevel);
+	@Autowired
+	ExperienceLevelRepositoryQueries experienceLevelRepositoryQueries;
 
-	void delete(final ExperienceLevelEntity experienceLevel);
+	public ExperienceLevelEntity persist(final ExperienceLevelEntity experienceLevel) {
+		return experienceLevelRepositoryQueries.save(experienceLevel);
+	}
+
+	public void delete(final ExperienceLevelEntity experienceLevel) {
+		experienceLevelRepositoryQueries.delete(experienceLevel);
+	}
 }
