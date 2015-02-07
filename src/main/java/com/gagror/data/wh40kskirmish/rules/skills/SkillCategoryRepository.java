@@ -1,8 +1,15 @@
 package com.gagror.data.wh40kskirmish.rules.skills;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface SkillCategoryRepository extends Repository<SkillCategoryEntity, Long> {
+@Repository
+public class SkillCategoryRepository {
 
-	SkillCategoryEntity save(final SkillCategoryEntity gangType);
+	@Autowired
+	SkillCategoryRepositoryQueries skillCategoryRepositoryQueries;
+
+	public SkillCategoryEntity persist(final SkillCategoryEntity skillCategory) {
+		return skillCategoryRepositoryQueries.save(skillCategory);
+	}
 }

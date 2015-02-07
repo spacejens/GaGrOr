@@ -68,7 +68,7 @@ public class SkillCategoryPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<SkillCategoryEntity> savedSkillCategory = ArgumentCaptor.forClass(SkillCategoryEntity.class);
-		verify(skillCategoryRepository).save(savedSkillCategory.capture());
+		verify(skillCategoryRepository).persist(savedSkillCategory.capture());
 		assertEquals("Wrong name", FORM_SKILL_CATEGORY_NAME, savedSkillCategory.getValue().getName());
 		assertTrue("Not added to rules", rules.getSkillCategories().contains(savedSkillCategory.getValue()));
 	}
@@ -78,7 +78,7 @@ public class SkillCategoryPersisterUnitTest {
 		whenAnotherCategoryWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(skillCategoryRepository, never()).save(any(SkillCategoryEntity.class));
+		verify(skillCategoryRepository, never()).persist(any(SkillCategoryEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -87,7 +87,7 @@ public class SkillCategoryPersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(skillCategoryRepository, never()).save(any(SkillCategoryEntity.class));
+		verify(skillCategoryRepository, never()).persist(any(SkillCategoryEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -102,7 +102,7 @@ public class SkillCategoryPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(skillCategoryRepository, never()).save(any(SkillCategoryEntity.class));
+		verify(skillCategoryRepository, never()).persist(any(SkillCategoryEntity.class));
 		verify(skillCategory).setName(FORM_SKILL_CATEGORY_NAME);
 	}
 
@@ -123,7 +123,7 @@ public class SkillCategoryPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(skillCategory, never()).setName(anyString());
-		verify(skillCategoryRepository, never()).save(any(SkillCategoryEntity.class));
+		verify(skillCategoryRepository, never()).persist(any(SkillCategoryEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)

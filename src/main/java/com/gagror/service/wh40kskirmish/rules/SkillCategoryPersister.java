@@ -92,6 +92,6 @@ extends AbstractPersister<SkillCategoryInput, SkillCategoryEntity, Wh40kSkirmish
 
 	@Override
 	protected SkillCategoryEntity makePersistent(final SkillCategoryEntity entity) {
-		return skillCategoryRepository.save(entity);
+		return skillCategoryRepository.persist(entity);
 	}
 }
