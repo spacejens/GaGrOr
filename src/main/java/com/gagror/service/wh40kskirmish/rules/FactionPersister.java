@@ -7,13 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
 import com.gagror.service.AbstractPersister;
 
 @Service
@@ -22,7 +20,7 @@ public class FactionPersister
 extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	GangTypeRepository gangTypeRepository;
 
 	@Autowired
 	FactionRepository factionRepository;
@@ -34,16 +32,7 @@ extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 
 	@Override
 	protected GangTypeEntity loadContext(final FactionInput form) {
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		for(final GangTypeEntity gangType : group.getWh40kSkirmishRules().getGangTypes()) {
-			if(gangType.hasId(form.getGangTypeId())) {
-				return gangType;
-			}
-		}
-		throw new DataNotFoundException(String.format("Gang type %d (group %d)", form.getGangTypeId(), group.getId()));
+		return gangTypeRepository.load(form.getGroupId(), form.getGangTypeId());
 	}
 
 	@Override
