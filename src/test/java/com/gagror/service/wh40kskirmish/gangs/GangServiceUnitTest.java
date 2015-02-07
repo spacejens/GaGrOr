@@ -14,16 +14,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
+import com.gagror.data.wh40kskirmish.gangs.GangRepository;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
-import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.rules.RulesService;
@@ -46,7 +45,7 @@ public class GangServiceUnitTest {
 	RulesService rulesService;
 
 	@Mock
-	FactionRepository factionRepository;
+	GangRepository gangRepository;
 
 	@Mock
 	AccountEntity player;
@@ -92,22 +91,16 @@ public class GangServiceUnitTest {
 		assertEquals("Wrong gang returned", GANG_NAME, result.getName());
 	}
 
-	@Test(expected = DataNotFoundException.class)
-	public void viewGang_notFound() {
-		faction.getGangs().remove(gang);
-		instance.viewGang(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID);
-	}
-
 	@Before
 	public void setup() {
 		when(groupService.viewGroupMembers(GROUP_ID)).thenReturn(groupMembers);
 		when(rulesService.viewRules(GROUP_ID)).thenReturn(rules);
 		when(rulesService.listAllFactions(GROUP_ID)).thenReturn(factions);
-		when(factionRepository.load(GROUP_ID, GANG_TYPE_ID, FACTION_ID)).thenReturn(faction);
 		when(gang.getId()).thenReturn(GANG_ID);
 		when(gang.getName()).thenReturn(GANG_NAME);
 		when(gang.getPlayer()).thenReturn(player);
 		when(gang.getFaction()).thenReturn(faction);
+		when(gangRepository.load(GROUP_ID, GANG_TYPE_ID, FACTION_ID, GANG_ID)).thenReturn(gang);
 		when(faction.getId()).thenReturn(FACTION_ID);
 		when(faction.getGangs()).thenReturn(new HashSet<GangEntity>());
 		faction.getGangs().add(gang);
@@ -120,6 +113,6 @@ public class GangServiceUnitTest {
 		instance = new GangService();
 		instance.groupService = groupService;
 		instance.rulesService = rulesService;
-		instance.factionRepository = factionRepository;
+		instance.gangRepository = gangRepository;
 	}
 }
