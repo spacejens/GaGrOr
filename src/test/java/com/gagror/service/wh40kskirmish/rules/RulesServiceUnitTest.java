@@ -225,7 +225,7 @@ public class RulesServiceUnitTest {
 
 	@Test
 	public void viewItemType_ok() {
-		final ItemTypeOutput result = instance.viewItemType(GROUP_ID, ITEM_CATEGORY_ID, ITEM_TYPE_ID);
+		final ItemTypeOutput result = instance.viewItemType(GROUP_ID, ITEM_TYPE_ID);
 		assertEquals("Wrong item type returned", ITEM_TYPE_NAME, result.getName());
 	}
 
@@ -303,7 +303,7 @@ public class RulesServiceUnitTest {
 		when(itemTypeEntity.getName()).thenReturn(ITEM_TYPE_NAME);
 		when(itemTypeEntity.getItemCategory()).thenReturn(itemCategoryEntity);
 		itemCategoryEntity.getItemTypes().add(itemTypeEntity);
-		when(itemTypeRepository.load(GROUP_ID, ITEM_CATEGORY_ID, ITEM_TYPE_ID)).thenReturn(itemTypeEntity);
+		when(itemTypeRepository.load(GROUP_ID, ITEM_TYPE_ID)).thenReturn(itemTypeEntity);
 	}
 
 	@Before

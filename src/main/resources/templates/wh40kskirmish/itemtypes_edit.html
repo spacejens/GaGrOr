@@ -11,7 +11,7 @@
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${itemCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.itemtype}"></a>
 		<a th:unless="${itemTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.create}"></a>
-		<a th:if="${itemTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemCategoryId}/{itemTypeId}(groupId=${itemCategory.group.id},itemCategoryId=${itemCategory.id},itemTypeId=${itemTypeForm.id})}" th:text="${itemTypeForm.name}"></a>
+		<a th:if="${itemTypeForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemTypeId}(groupId=${itemCategory.group.id},itemTypeId=${itemTypeForm.id})}" th:text="${itemTypeForm.name}"></a>
 		<a th:if="${itemTypeForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/itemtype/save(groupId=${itemCategory.group.id})}" th:object="${itemTypeForm}" method="post">

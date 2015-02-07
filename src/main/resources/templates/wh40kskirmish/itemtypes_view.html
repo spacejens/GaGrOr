@@ -14,7 +14,7 @@
 	</nav>
 	<dl  th:if="${itemType.itemCategory.group.memberType != null and itemType.itemCategory.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemCategoryId}/{itemTypeId}/edit(groupId=${itemType.itemCategory.group.id},itemCategoryId=${itemType.itemCategory.id},itemTypeId=${itemType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemTypeId}/edit(groupId=${itemType.itemCategory.group.id},itemTypeId=${itemType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.edit}"></a></dd>
 	</dl>
 	<p>View item type here</p>
 	<script th:replace="/fragments/framework :: init"></script>

@@ -45,7 +45,7 @@
 			<a th:href="@{/wh40kskirmish/rules/{groupId}/itemcategory/{itemCategoryId}(groupId=${rules.group.id},itemCategoryId=${itemCategory.id})}" th:text="${itemCategory.name}"></a>
 			<ul>
 				<li th:each="itemType : ${itemCategory.itemTypes}">
-					<a th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemCategoryId}/{itemTypeId}(groupId=${rules.group.id},itemCategoryId=${itemCategory.id},itemTypeId=${itemType.id})}" th:text="${itemType.name}"></a>
+					<a th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemTypeId}(groupId=${rules.group.id},itemTypeId=${itemType.id})}" th:text="${itemType.name}"></a>
 				</li>
 				<li th:if="${#lists.isEmpty(itemCategory.itemTypes)}" class="fi-alert">
 					No item types have been created yet

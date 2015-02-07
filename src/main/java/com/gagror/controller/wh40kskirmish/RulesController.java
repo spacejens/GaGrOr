@@ -649,25 +649,23 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP_RULES)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/itemtype/{" + ATTR_ITEMCATEGORY_ID + "}/{" + ATTR_ITEMTYPE_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/itemtype/{" + ATTR_ITEMTYPE_ID + "}")
 	public String viewItemType(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_ITEMCATEGORY_ID) final Long itemCategoryId,
 			@PathVariable(ATTR_ITEMTYPE_ID) final Long itemTypeId,
 			final Model model) {
-		model.addAttribute("itemType", rulesService.viewItemType(groupId, itemCategoryId, itemTypeId));
+		model.addAttribute("itemType", rulesService.viewItemType(groupId, itemTypeId));
 		return "wh40kskirmish/itemtypes_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/itemtype/{" + ATTR_ITEMCATEGORY_ID + "}/{" + ATTR_ITEMTYPE_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/itemtype/{" + ATTR_ITEMTYPE_ID + "}/edit", method=RequestMethod.GET)
 	public String editItemTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_ITEMCATEGORY_ID) final Long itemCategoryId,
 			@PathVariable(ATTR_ITEMTYPE_ID) final Long itemTypeId,
 			final Model model) {
-		log.info(String.format("Viewing edit item type form for item type %d of item category %d in group %d", itemTypeId, itemCategoryId, groupId));
-		final ItemTypeOutput itemType = rulesService.viewItemType(groupId, itemCategoryId, itemTypeId);
+		log.info(String.format("Viewing edit item type form for item type %d in group %d", itemTypeId, groupId));
+		final ItemTypeOutput itemType = rulesService.viewItemType(groupId, itemTypeId);
 		model.addAttribute("itemCategory", itemType.getItemCategory());
 		model.addAttribute("itemTypeForm", new ItemTypeInput(itemType));
 		return "wh40kskirmish/itemtypes_edit";

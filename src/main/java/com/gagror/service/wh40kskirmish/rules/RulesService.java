@@ -27,6 +27,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
+import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
@@ -156,9 +157,10 @@ public class RulesService {
 		return new ItemCategoryOutput(itemCategoryRepository.load(groupId, itemCategoryId), groupService.viewGroup(groupId));
 	}
 
-	public ItemTypeOutput viewItemType(final Long groupId, final Long itemCategoryId, final Long itemTypeId) {
+	public ItemTypeOutput viewItemType(final Long groupId, final Long itemTypeId) {
+		final ItemTypeEntity itemType = itemTypeRepository.load(groupId, itemTypeId);
 		return new ItemTypeOutput(
-				itemTypeRepository.load(groupId, itemCategoryId, itemTypeId),
-				viewItemCategory(groupId, itemCategoryId));
+				itemType,
+				new ItemCategoryOutput(itemType.getItemCategory(), groupService.viewGroup(groupId)));
 	}
 }
