@@ -144,6 +144,6 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
 	@Override
 	protected FighterTypeEntity makePersistent(final FighterTypeEntity entity) {
-		return fighterTypeRepository.save(entity);
+		return fighterTypeRepository.persist(entity);
 	}
 }

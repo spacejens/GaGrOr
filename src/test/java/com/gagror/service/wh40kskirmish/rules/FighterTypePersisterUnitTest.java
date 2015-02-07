@@ -89,7 +89,7 @@ public class FighterTypePersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<FighterTypeEntity> savedFighterType = ArgumentCaptor.forClass(FighterTypeEntity.class);
-		verify(fighterTypeRepository).save(savedFighterType.capture());
+		verify(fighterTypeRepository).persist(savedFighterType.capture());
 		assertEquals("Wrong name", FORM_FIGHTERTYPE_NAME, savedFighterType.getValue().getName());
 		assertEquals("Wrong movement", FORM_FIGHTERTYPE_MOVEMENT, savedFighterType.getValue().getStartingMovement());
 		assertEquals("Wrong weapon skill", FORM_FIGHTERTYPE_WEAPON_SKILL, savedFighterType.getValue().getStartingWeaponSkill());
@@ -109,7 +109,7 @@ public class FighterTypePersisterUnitTest {
 		whenAnotherFighterTypeWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -118,7 +118,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingMovement()).thenReturn(FORM_FIGHTERTYPE_MOVEMENT + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxMovement(bindingResult, FORM_FIGHTERTYPE_MOVEMENT);
 	}
 
@@ -127,7 +127,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingWeaponSkill()).thenReturn(FORM_FIGHTERTYPE_WEAPON_SKILL + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxWeaponSkill(bindingResult, FORM_FIGHTERTYPE_WEAPON_SKILL);
 	}
 
@@ -136,7 +136,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingBallisticSkill()).thenReturn(FORM_FIGHTERTYPE_BALLISTIC_SKILL + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxBallisticSkill(bindingResult, FORM_FIGHTERTYPE_BALLISTIC_SKILL);
 	}
 
@@ -145,7 +145,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingStrength()).thenReturn(FORM_FIGHTERTYPE_STRENGTH + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxStrength(bindingResult, FORM_FIGHTERTYPE_STRENGTH);
 	}
 
@@ -154,7 +154,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingToughness()).thenReturn(FORM_FIGHTERTYPE_TOUGHNESS + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxToughness(bindingResult, FORM_FIGHTERTYPE_TOUGHNESS);
 	}
 
@@ -163,7 +163,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingWounds()).thenReturn(FORM_FIGHTERTYPE_WOUNDS + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxWounds(bindingResult, FORM_FIGHTERTYPE_WOUNDS);
 	}
 
@@ -172,7 +172,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingInitiative()).thenReturn(FORM_FIGHTERTYPE_INITIATIVE + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxInitiative(bindingResult, FORM_FIGHTERTYPE_INITIATIVE);
 	}
 
@@ -181,7 +181,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingAttacks()).thenReturn(FORM_FIGHTERTYPE_ATTACKS + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxAttacks(bindingResult, FORM_FIGHTERTYPE_ATTACKS);
 	}
 
@@ -190,7 +190,7 @@ public class FighterTypePersisterUnitTest {
 		when(form.getStartingLeadership()).thenReturn(FORM_FIGHTERTYPE_LEADERSHIP + 1);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(form).addErrorStartingAboveMaxLeadership(bindingResult, FORM_FIGHTERTYPE_LEADERSHIP);
 	}
 
@@ -199,7 +199,7 @@ public class FighterTypePersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
@@ -226,7 +226,7 @@ public class FighterTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 		verify(fighterType).setName(FORM_FIGHTERTYPE_NAME);
 		verify(fighterType).setStartingMovement(FORM_FIGHTERTYPE_MOVEMENT);
 		verify(fighterType).setStartingWeaponSkill(FORM_FIGHTERTYPE_WEAPON_SKILL);
@@ -347,7 +347,7 @@ public class FighterTypePersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
 		verify(race, never()).setName(anyString());
-		verify(fighterTypeRepository, never()).save(any(FighterTypeEntity.class));
+		verify(fighterTypeRepository, never()).persist(any(FighterTypeEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)
