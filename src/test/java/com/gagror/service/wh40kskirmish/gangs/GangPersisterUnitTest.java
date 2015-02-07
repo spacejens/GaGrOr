@@ -90,7 +90,7 @@ public class GangPersisterUnitTest {
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
 		final ArgumentCaptor<GangEntity> savedGang = ArgumentCaptor.forClass(GangEntity.class);
-		verify(gangRepository).save(savedGang.capture());
+		verify(gangRepository).persist(savedGang.capture());
 		assertEquals("Wrong name", FORM_GANG_NAME, savedGang.getValue().getName());
 		assertEquals("Wrong money", FORM_MONEY, savedGang.getValue().getMoney());
 		assertTrue("Not added to faction", faction.getGangs().contains(savedGang.getValue()));
@@ -101,7 +101,7 @@ public class GangPersisterUnitTest {
 		whenAnotherGangWithSameNameExists();
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(gangRepository, never()).save(any(GangEntity.class));
+		verify(gangRepository, never()).persist(any(GangEntity.class));
 		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 	}
 
@@ -110,7 +110,7 @@ public class GangPersisterUnitTest {
 		when(bindingResult.hasErrors()).thenReturn(true);
 		final boolean result = instance.save(form, bindingResult);
 		assertFalse("Should have failed to save", result);
-		verify(gangRepository, never()).save(any(GangEntity.class));
+		verify(gangRepository, never()).persist(any(GangEntity.class));
 	}
 
 	@Test(expected=DataNotFoundException.class)
@@ -143,7 +143,7 @@ public class GangPersisterUnitTest {
 		final boolean result = instance.save(form, bindingResult);
 		assertTrue("Should have saved successfully", result);
 		assertFalse("Should not have reported errors", bindingResult.hasErrors());
-		verify(gangRepository, never()).save(any(GangEntity.class));
+		verify(gangRepository, never()).persist(any(GangEntity.class));
 		verify(gang).setName(FORM_GANG_NAME);
 		verify(gang).setMoney(FORM_MONEY);
 	}
@@ -166,7 +166,7 @@ public class GangPersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(gang, never()).setName(anyString());
 		verify(gang, never()).setMoney(anyInt());
-		verify(gangRepository, never()).save(any(GangEntity.class));
+		verify(gangRepository, never()).persist(any(GangEntity.class));
 	}
 
 	@Test(expected=WrongGroupTypeException.class)

@@ -1,8 +1,15 @@
 package com.gagror.data.wh40kskirmish.gangs;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface GangRepository extends Repository<GangEntity, Long> {
+@Repository
+public class GangRepository {
 
-	GangEntity save(final GangEntity gang);
+	@Autowired
+	GangRepositoryQueries gangRepositoryQueries;
+
+	public GangEntity persist(final GangEntity gang) {
+		return gangRepositoryQueries.save(gang);
+	}
 }

@@ -117,6 +117,6 @@ extends AbstractPersister<GangInput, GangEntity, FactionEntity> {
 
 	@Override
 	protected GangEntity makePersistent(final GangEntity entity) {
-		return gangRepository.save(entity);
+		return gangRepository.persist(entity);
 	}
 }
