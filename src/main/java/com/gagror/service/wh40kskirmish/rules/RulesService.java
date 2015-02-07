@@ -28,11 +28,10 @@ import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
-import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
-import com.gagror.data.wh40kskirmish.rules.skills.SkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillOutput;
+import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeEntity;
@@ -52,6 +51,9 @@ public class RulesService {
 
 	@Autowired
 	SkillCategoryRepository skillCategoryRepository;
+
+	@Autowired
+	SkillRepository skillRepository;
 
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
@@ -184,20 +186,9 @@ public class RulesService {
 		return new SkillCategoryOutput(skillCategoryRepository.load(groupId, skillCategoryId), groupService.viewGroup(groupId));
 	}
 
-	private SkillEntity loadSkill(final Long groupId, final Long skillCategoryId, final Long skillId) {
-		final SkillCategoryEntity skillCategory = skillCategoryRepository.load(groupId, skillCategoryId);
-		for(final SkillEntity skill : skillCategory.getSkills()) {
-			if(skill.hasId(skillId)) {
-				return skill;
-			}
-		}
-		throw new DataNotFoundException(String.format("Skill %d (skill category %d, group %d)",
-				skillId, skillCategoryId, groupId));
-	}
-
 	public SkillOutput viewSkill(final Long groupId, final Long skillCategoryId, final Long skillId) {
 		return new SkillOutput(
-				loadSkill(groupId, skillCategoryId, skillId),
+				skillRepository.load(groupId, skillCategoryId, skillId),
 				viewSkillCategory(groupId, skillCategoryId));
 	}
 
