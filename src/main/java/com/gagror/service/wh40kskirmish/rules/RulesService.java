@@ -18,12 +18,11 @@ import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
-import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
-import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
@@ -75,6 +74,9 @@ public class RulesService {
 	@Autowired
 	RaceRepository raceRepository;
 
+	@Autowired
+	FighterTypeRepository fighterTypeRepository;
+
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
 		return new RulesListChildrenOutput(rulesRepository.load(groupId), groupService.viewGroup(groupId));
@@ -124,29 +126,13 @@ public class RulesService {
 				viewGangType(groupId, gangTypeId));
 	}
 
-	private FighterTypeEntity loadFighterType(
-			final Long groupId,
-			final Long gangTypeId,
-			final Long raceId,
-			final Long fighterTypeId) {
-		final RaceEntity race = raceRepository.load(groupId, gangTypeId, raceId);
-		for(final FighterTypeEntity fighterType : race.getFighterTypes()) {
-			if(fighterType.hasId(fighterTypeId)){
-				return fighterType;
-			}
-		}
-		throw new DataNotFoundException(String.format(
-				"Fighter type %d (race %d, gang type %d, group %d)",
-				fighterTypeId, raceId, gangTypeId, groupId));
-	}
-
 	public FighterTypeOutput viewFighterType(
 			final Long groupId,
 			final Long gangTypeId,
 			final Long raceId,
 			final Long fighterTypeId) {
 		return new FighterTypeOutput(
-				loadFighterType(groupId, gangTypeId, raceId, fighterTypeId),
+				fighterTypeRepository.load(groupId, gangTypeId, raceId, fighterTypeId),
 				viewRace(groupId, gangTypeId, raceId));
 	}
 

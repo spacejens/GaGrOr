@@ -21,6 +21,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
@@ -61,7 +62,6 @@ public class RulesServiceUnitTest {
 	private static final Long RACE_ID = 113L;
 	private static final String RACE_NAME = "Race";
 	private static final Long FIGHTER_TYPE_ID = 457L;
-	private static final Long WRONG_FIGHTER_TYPE_ID = 46378L;
 	private static final String FIGHTER_TYPE_NAME = "Fighter type";
 	private static final Long TERRITORY_CATEGORY_ID = 67L;
 	private static final String TERRITORY_CATEGORY_NAME = "Territory category";
@@ -107,6 +107,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	RaceRepository raceRepository;
+
+	@Mock
+	FighterTypeRepository fighterTypeRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -193,11 +196,6 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong fighter type returned", FIGHTER_TYPE_NAME, result.getName());
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void viewFighterType_notFound() {
-		instance.viewFighterType(GROUP_ID, GANG_TYPE_ID, RACE_ID, WRONG_FIGHTER_TYPE_ID);
-	}
-
 	@Test
 	public void viewTerritoryCategory_ok() {
 		final TerritoryCategoryOutput result = instance.viewTerritoryCategory(GROUP_ID, TERRITORY_CATEGORY_ID);
@@ -265,6 +263,7 @@ public class RulesServiceUnitTest {
 		when(fighterTypeEntity.getName()).thenReturn(FIGHTER_TYPE_NAME);
 		when(fighterTypeEntity.getRace()).thenReturn(raceEntity);
 		raceEntity.getFighterTypes().add(fighterTypeEntity);
+		when(fighterTypeRepository.load(GROUP_ID, GANG_TYPE_ID, RACE_ID, FIGHTER_TYPE_ID)).thenReturn(fighterTypeEntity);
 		// Set up the territory category entity
 		when(rulesEntity.getTerritoryCategories()).thenReturn(new HashSet<TerritoryCategoryEntity>());
 		when(territoryCategoryEntity.getId()).thenReturn(TERRITORY_CATEGORY_ID);
@@ -330,5 +329,6 @@ public class RulesServiceUnitTest {
 		instance.territoryTypeRepository = territoryTypeRepository;
 		instance.gangTypeRepository = gangTypeRepository;
 		instance.raceRepository = raceRepository;
+		instance.fighterTypeRepository = fighterTypeRepository;
 	}
 }
