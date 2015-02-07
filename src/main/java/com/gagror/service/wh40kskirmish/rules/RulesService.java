@@ -34,6 +34,7 @@ import com.gagror.data.wh40kskirmish.rules.skills.SkillOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeOutput;
 import com.gagror.service.social.GroupService;
@@ -60,6 +61,9 @@ public class RulesService {
 
 	@Autowired
 	ItemTypeRepository itemTypeRepository;
+
+	@Autowired
+	TerritoryCategoryRepository territoryCategoryRepository;
 
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
@@ -157,22 +161,12 @@ public class RulesService {
 				viewRace(groupId, gangTypeId, raceId));
 	}
 
-	private TerritoryCategoryEntity loadTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
-		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
-		for(final TerritoryCategoryEntity territoryCategory : rules.getTerritoryCategories()) {
-			if(territoryCategory.hasId(territoryCategoryId)) {
-				return territoryCategory;
-			}
-		}
-		throw new DataNotFoundException(String.format("Territory category %d (group %d)", territoryCategoryId, groupId));
-	}
-
 	public TerritoryCategoryOutput viewTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
-		return new TerritoryCategoryOutput(loadTerritoryCategory(groupId, territoryCategoryId), groupService.viewGroup(groupId));
+		return new TerritoryCategoryOutput(territoryCategoryRepository.load(groupId, territoryCategoryId), groupService.viewGroup(groupId));
 	}
 
 	private TerritoryTypeEntity loadTerritoryType(final Long groupId, final Long territoryCategoryId, final Long territoryTypeId) {
-		final TerritoryCategoryEntity territoryCategory = loadTerritoryCategory(groupId, territoryCategoryId);
+		final TerritoryCategoryEntity territoryCategory = territoryCategoryRepository.load(groupId, territoryCategoryId);
 		for(final TerritoryTypeEntity territoryType : territoryCategory.getTerritoryTypes()) {
 			if(territoryType.hasId(territoryTypeId)) {
 				return territoryType;
