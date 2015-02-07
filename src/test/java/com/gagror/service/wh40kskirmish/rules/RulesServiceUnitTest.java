@@ -14,8 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
@@ -83,7 +82,7 @@ public class RulesServiceUnitTest {
 	GroupService groupService;
 
 	@Mock
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -129,19 +128,9 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong rules returned", RULES_ID, instance.viewRulesListChildren(GROUP_ID).getId());
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void viewRulesListChildren_wrongType() {
-		instance.viewRulesListChildren(WRONG_TYPE_GROUP_ID);
-	}
-
 	@Test
 	public void viewRules_ok() {
 		assertEquals("Wrong rules returned", RULES_ID, instance.viewRules(GROUP_ID).getId());
-	}
-
-	@Test(expected=WrongGroupTypeException.class)
-	public void viewRules_wrongType() {
-		instance.viewRules(WRONG_TYPE_GROUP_ID);
 	}
 
 	@Test
@@ -149,11 +138,6 @@ public class RulesServiceUnitTest {
 		final List<FactionReferenceOutput> result = instance.listAllFactions(GROUP_ID);
 		assertEquals("Wrong number of factions", 1, result.size());
 		assertEquals("Wrong faction", FACTION_NAME, result.get(0).getName());
-	}
-
-	@Test(expected=WrongGroupTypeException.class)
-	public void listAllFactions_wrongType() {
-		instance.listAllFactions(WRONG_TYPE_GROUP_ID);
 	}
 
 	@Test
@@ -335,20 +319,16 @@ public class RulesServiceUnitTest {
 
 	@Before
 	public void setupGroups() {
-		mockGroup(groupEntity, GROUP_ID);
+		when(groupEntity.getId()).thenReturn(GROUP_ID);
 		when(groupEntity.getWh40kSkirmishRules()).thenReturn(rulesEntity);
-		mockGroup(wrongTypeGroupEntity, WRONG_TYPE_GROUP_ID);
-	}
-
-	private void mockGroup(final GroupEntity group, final Long id) {
-		when(group.getId()).thenReturn(id);
-		when(groupRepository.load(id)).thenReturn(group);
+		when(rulesRepository.load(GROUP_ID)).thenReturn(rulesEntity);
+		when(wrongTypeGroupEntity.getId()).thenReturn(WRONG_TYPE_GROUP_ID);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new RulesService();
 		instance.groupService = groupService;
-		instance.groupRepository = groupRepository;
+		instance.rulesRepository = rulesRepository;
 	}
 }

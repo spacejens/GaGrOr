@@ -11,11 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.RulesListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
@@ -49,29 +47,21 @@ public class RulesService {
 	GroupService groupService;
 
 	@Autowired
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
-		return new RulesListChildrenOutput(loadRules(groupId), groupService.viewGroup(groupId));
+		return new RulesListChildrenOutput(rulesRepository.load(groupId), groupService.viewGroup(groupId));
 	}
 
 	public RulesOutput viewRules(final Long groupId) {
 		log.debug(String.format("Viewing rules for group %d", groupId));
-		return new RulesOutput(loadRules(groupId), groupService.viewGroup(groupId));
-	}
-
-	private Wh40kSkirmishRulesEntity loadRules(final Long groupId) {
-		final GroupEntity group = groupRepository.load(groupId);
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		return group.getWh40kSkirmishRules();
+		return new RulesOutput(rulesRepository.load(groupId), groupService.viewGroup(groupId));
 	}
 
 	public List<FactionReferenceOutput> listAllFactions(final Long groupId) {
 		final List<FactionReferenceOutput> factions = new ArrayList<>();
-		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
 		for(final GangTypeEntity gangType : rules.getGangTypes()) {
 			for(final FactionEntity faction : gangType.getFactions()) {
 				factions.add(new FactionReferenceOutput(faction));
@@ -82,7 +72,7 @@ public class RulesService {
 	}
 
 	private GangTypeEntity loadGangType(final Long groupId, final Long gangTypeId) {
-		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
 		for(final GangTypeEntity gangType : rules.getGangTypes()) {
 			if(gangType.hasId(gangTypeId)) {
 				return gangType;
@@ -156,7 +146,7 @@ public class RulesService {
 	}
 
 	private TerritoryCategoryEntity loadTerritoryCategory(final Long groupId, final Long territoryCategoryId) {
-		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
 		for(final TerritoryCategoryEntity territoryCategory : rules.getTerritoryCategories()) {
 			if(territoryCategory.hasId(territoryCategoryId)) {
 				return territoryCategory;
@@ -187,7 +177,7 @@ public class RulesService {
 	}
 
 	private SkillCategoryEntity loadSkillCategory(final Long groupId, final Long skillCategoryId) {
-		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
 		for(final SkillCategoryEntity skillCategory : rules.getSkillCategories()) {
 			if(skillCategory.hasId(skillCategoryId)) {
 				return skillCategory;
@@ -218,7 +208,7 @@ public class RulesService {
 	}
 
 	private ItemCategoryEntity loadItemCategory(final Long groupId, final Long itemCategoryId) {
-		final Wh40kSkirmishRulesEntity rules = loadRules(groupId);
+		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
 		for(final ItemCategoryEntity itemCategory : rules.getItemCategories()) {
 			if(itemCategory.hasId(itemCategoryId)) {
 				return itemCategory;
