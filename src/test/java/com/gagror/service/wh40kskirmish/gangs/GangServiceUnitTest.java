@@ -23,6 +23,7 @@ import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.rules.RulesService;
@@ -43,6 +44,9 @@ public class GangServiceUnitTest {
 
 	@Mock
 	RulesService rulesService;
+
+	@Mock
+	FactionRepository factionRepository;
 
 	@Mock
 	AccountEntity player;
@@ -99,7 +103,7 @@ public class GangServiceUnitTest {
 		when(groupService.viewGroupMembers(GROUP_ID)).thenReturn(groupMembers);
 		when(rulesService.viewRules(GROUP_ID)).thenReturn(rules);
 		when(rulesService.listAllFactions(GROUP_ID)).thenReturn(factions);
-		when(rulesService.loadFaction(GROUP_ID, GANG_TYPE_ID, FACTION_ID)).thenReturn(faction);
+		when(factionRepository.load(GROUP_ID, GANG_TYPE_ID, FACTION_ID)).thenReturn(faction);
 		when(gang.getId()).thenReturn(GANG_ID);
 		when(gang.getName()).thenReturn(GANG_NAME);
 		when(gang.getPlayer()).thenReturn(player);
@@ -116,5 +120,6 @@ public class GangServiceUnitTest {
 		instance = new GangService();
 		instance.groupService = groupService;
 		instance.rulesService = rulesService;
+		instance.factionRepository = factionRepository;
 	}
 }

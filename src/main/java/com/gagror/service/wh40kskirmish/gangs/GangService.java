@@ -14,6 +14,7 @@ import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.service.social.GroupService;
 import com.gagror.service.wh40kskirmish.rules.RulesService;
 
@@ -26,6 +27,9 @@ public class GangService {
 
 	@Autowired
 	RulesService rulesService;
+
+	@Autowired
+	FactionRepository factionRepository;
 
 	public EditGangOutput prepareToCreateGang(final Long groupId) {
 		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
@@ -50,7 +54,7 @@ public class GangService {
 
 	private GangEntity loadGang(
 			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {
-		final FactionEntity faction = rulesService.loadFaction(groupId, gangTypeId, factionId);
+		final FactionEntity faction = factionRepository.load(groupId, gangTypeId, factionId);
 		for(final GangEntity gang : faction.getGangs()) {
 			if(gang.hasId(gangId)) {
 				return gang;

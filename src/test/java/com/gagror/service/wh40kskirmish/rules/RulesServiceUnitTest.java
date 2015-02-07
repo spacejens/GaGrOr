@@ -12,13 +12,13 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
@@ -57,7 +57,6 @@ public class RulesServiceUnitTest {
 	private static final Long GANG_TYPE_ID = 7L;
 	private static final String GANG_TYPE_NAME = "Gang type";
 	private static final Long FACTION_ID = 9L;
-	private static final Long WRONG_FACTION_ID = 75783L;
 	private static final String FACTION_NAME = "Faction";
 	private static final Long RACE_ID = 113L;
 	private static final String RACE_NAME = "Race";
@@ -104,6 +103,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	GangTypeRepository gangTypeRepository;
+
+	@Mock
+	FactionRepository factionRepository;
 
 	@Mock
 	RaceRepository raceRepository;
@@ -179,11 +181,6 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong faction returned", FACTION_NAME, result.getName());
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void viewFaction_notFound() {
-		instance.viewFaction(GROUP_ID, GANG_TYPE_ID, WRONG_FACTION_ID);
-	}
-
 	@Test
 	public void viewRace_ok() {
 		final RaceOutput result = instance.viewRace(GROUP_ID, GANG_TYPE_ID, RACE_ID);
@@ -250,6 +247,7 @@ public class RulesServiceUnitTest {
 		when(factionEntity.getName()).thenReturn(FACTION_NAME);
 		when(factionEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getFactions().add(factionEntity);
+		when(factionRepository.load(GROUP_ID, GANG_TYPE_ID, FACTION_ID)).thenReturn(factionEntity);
 		// Set up the race entity
 		when(gangTypeEntity.getRaces()).thenReturn(new HashSet<RaceEntity>());
 		when(raceEntity.getId()).thenReturn(RACE_ID);
@@ -328,6 +326,7 @@ public class RulesServiceUnitTest {
 		instance.territoryCategoryRepository = territoryCategoryRepository;
 		instance.territoryTypeRepository = territoryTypeRepository;
 		instance.gangTypeRepository = gangTypeRepository;
+		instance.factionRepository = factionRepository;
 		instance.raceRepository = raceRepository;
 		instance.fighterTypeRepository = fighterTypeRepository;
 	}

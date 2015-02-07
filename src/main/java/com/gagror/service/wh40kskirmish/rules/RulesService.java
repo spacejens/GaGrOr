@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gagror.data.DataNotFoundException;
 import com.gagror.data.wh40kskirmish.rules.RulesListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesRepository;
@@ -18,6 +17,7 @@ import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
@@ -72,6 +72,9 @@ public class RulesService {
 	GangTypeRepository gangTypeRepository;
 
 	@Autowired
+	FactionRepository factionRepository;
+
+	@Autowired
 	RaceRepository raceRepository;
 
 	@Autowired
@@ -103,20 +106,9 @@ public class RulesService {
 		return new GangTypeOutput(gangTypeRepository.load(groupId, gangTypeId), groupService.viewGroup(groupId));
 	}
 
-	public FactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
-		final GangTypeEntity gangType = gangTypeRepository.load(groupId, gangTypeId);
-		for(final FactionEntity faction : gangType.getFactions()) {
-			if(faction.hasId(factionId)) {
-				return faction;
-			}
-		}
-		throw new DataNotFoundException(String.format("Faction %d (gang type %d, group %d)",
-				factionId, gangTypeId, groupId));
-	}
-
 	public FactionOutput viewFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
 		return new FactionOutput(
-				loadFaction(groupId, gangTypeId, factionId),
+				factionRepository.load(groupId, gangTypeId, factionId),
 				viewGangType(groupId, gangTypeId));
 	}
 
