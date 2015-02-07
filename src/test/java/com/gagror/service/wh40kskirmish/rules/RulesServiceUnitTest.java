@@ -31,6 +31,7 @@ import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryOutput;
+import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillOutput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
@@ -64,7 +65,6 @@ public class RulesServiceUnitTest {
 	private static final Long WRONG_TERRITORY_TYPE_ID = 21711L;
 	private static final String TERRITORY_TYPE_NAME = "Territory type";
 	private static final Long SKILL_CATEGORY_ID = 74154L;
-	private static final Long WRONG_SKILL_CATEGORY_ID = 4664L;
 	private static final String SKILL_CATEGORY_NAME = "Skill category";
 	private static final Long SKILL_ID = 9998L;
 	private static final Long WRONG_SKILL_ID = 13213L;
@@ -83,6 +83,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	RulesRepository rulesRepository;
+
+	@Mock
+	SkillCategoryRepository skillCategoryRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -212,11 +215,6 @@ public class RulesServiceUnitTest {
 		assertEquals("Wrong skill category returned", SKILL_CATEGORY_NAME, result.getName());
 	}
 
-	@Test(expected=DataNotFoundException.class)
-	public void viewSkillCategory_notFound() {
-		instance.viewSkillCategory(GROUP_ID, WRONG_SKILL_CATEGORY_ID);
-	}
-
 	@Test
 	public void viewSkill_ok() {
 		final SkillOutput result = instance.viewSkill(GROUP_ID, SKILL_CATEGORY_ID, SKILL_ID);
@@ -297,6 +295,7 @@ public class RulesServiceUnitTest {
 		when(skillCategoryEntity.getName()).thenReturn(SKILL_CATEGORY_NAME);
 		when(skillCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getSkillCategories().add(skillCategoryEntity);
+		when(skillCategoryRepository.load(GROUP_ID, SKILL_CATEGORY_ID)).thenReturn(skillCategoryEntity);
 		// Set up the skill entity
 		when(skillCategoryEntity.getSkills()).thenReturn(new HashSet<SkillEntity>());
 		when(skillEntity.getId()).thenReturn(SKILL_ID);
@@ -330,5 +329,6 @@ public class RulesServiceUnitTest {
 		instance = new RulesService();
 		instance.groupService = groupService;
 		instance.rulesRepository = rulesRepository;
+		instance.skillCategoryRepository = skillCategoryRepository;
 	}
 }
