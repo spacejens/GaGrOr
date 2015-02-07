@@ -9,13 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.gagror.controller.AbstractController;
 import com.gagror.service.wh40kskirmish.Wh40kSkirmishService;
 
 @Controller
 @RequestMapping("/wh40kskirmish/group")
 @CommonsLog
-public class Wh40kSkirmishController extends AbstractController {
+public class Wh40kSkirmishController extends AbstractWh40kSkirmishController {
 
 	@Autowired
 	Wh40kSkirmishService wh40kSkirmishService;

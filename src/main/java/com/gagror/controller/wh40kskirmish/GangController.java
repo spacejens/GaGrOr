@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.gagror.controller.AbstractController;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangInput;
 import com.gagror.service.wh40kskirmish.gangs.GangPersister;
@@ -23,11 +22,7 @@ import com.gagror.service.wh40kskirmish.gangs.GangService;
 @Controller
 @RequestMapping("/wh40kskirmish/gang")
 @CommonsLog
-public class GangController extends AbstractController {
-
-	protected static final String ATTR_GANGTYPE_ID = "gangTypeId";
-	protected static final String ATTR_FACTION_ID = "factionId";
-	protected static final String ATTR_GANG_ID = "gangId";
+public class GangController extends AbstractWh40kSkirmishController {
 
 	@Autowired
 	GangService gangService;

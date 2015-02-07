@@ -14,6 +14,7 @@ import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 
 import com.gagror.CodingErrorException;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishPermissionGangPlayer;
 
 @RequiredArgsConstructor
 @CommonsLog
@@ -43,6 +44,9 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 	@Autowired
 	PermissionAdminGroup adminGroup;
 
+	@Autowired
+	Wh40kSkirmishPermissionGangPlayer wh40kskGangPlayer;
+
 	public GagrorPermissionEvaluator() {
 		this(new HashMap<String, GagrorPermission>());
 	}
@@ -54,6 +58,7 @@ public class GagrorPermissionEvaluator implements PermissionEvaluator {
 		addPermission(viewGroup);
 		addPermission(viewGroupRules);
 		addPermission(adminGroup);
+		addPermission(wh40kskGangPlayer);
 	}
 
 	@Override

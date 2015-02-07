@@ -15,6 +15,14 @@ public class GangRepository {
 		return gangRepositoryQueries.save(gang);
 	}
 
+	public GangEntity load(final Long gangId) {
+		final GangEntity gang = gangRepositoryQueries.findOne(gangId);
+		if(null != gang) {
+			return gang;
+		}
+		throw new DataNotFoundException(String.format("Gang %d", gangId));
+	}
+
 	public GangEntity load(final Long groupId, final Long gangId) {
 		final GangEntity gang = gangRepositoryQueries.findOne(gangId);
 		if(null != gang && gang.getGroup().hasId(groupId)) {

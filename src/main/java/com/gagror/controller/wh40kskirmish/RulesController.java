@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.gagror.controller.AbstractController;
 import com.gagror.data.wh40kskirmish.rules.RulesInput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionInput;
@@ -54,10 +53,8 @@ import com.gagror.service.wh40kskirmish.rules.TerritoryTypePersister;
 @Controller
 @RequestMapping("/wh40kskirmish/rules")
 @CommonsLog
-public class RulesController extends AbstractController {
+public class RulesController extends AbstractWh40kSkirmishController {
 
-	protected static final String ATTR_GANGTYPE_ID = "gangTypeId";
-	protected static final String ATTR_FACTION_ID = "factionId";
 	protected static final String ATTR_RACE_ID = "raceId";
 	protected static final String ATTR_FIGHTERTYPE_ID = "fighterTypeId";
 	protected static final String ATTR_TERRITORYCATEGORY_ID = "territoryCategoryId";

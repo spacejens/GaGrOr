@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 
 import com.gagror.CodingErrorException;
 import com.gagror.data.account.AccountEntity;
+import com.gagror.service.wh40kskirmish.Wh40kSkirmishPermissionGangPlayer;
 
 @RunWith(MockitoJUnitRunner.class)
 @CommonsLog
@@ -149,5 +150,6 @@ public class GagrorPermissionEvaluatorUnitTest {
 		instanceDefault.viewGroup = new PermissionViewGroup();
 		instanceDefault.viewGroupRules = new PermissionViewGroupRules();
 		instanceDefault.adminGroup = new PermissionAdminGroup();
+		instanceDefault.wh40kskGangPlayer = new Wh40kSkirmishPermissionGangPlayer();
 	}
 }
