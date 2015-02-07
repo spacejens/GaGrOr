@@ -23,8 +23,7 @@ import org.springframework.validation.BindingResult;
 import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryInput;
@@ -48,7 +47,7 @@ public class SkillCategoryPersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Mock
 	SkillCategoryRepository skillCategoryRepository;
@@ -90,12 +89,6 @@ public class SkillCategoryPersisterUnitTest {
 		verify(skillCategoryRepository, never()).persist(any(SkillCategoryEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test
 	public void save_existing_ok() {
 		whenSkillCategoryExists();
@@ -124,13 +117,6 @@ public class SkillCategoryPersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(skillCategory, never()).setName(anyString());
 		verify(skillCategoryRepository, never()).persist(any(SkillCategoryEntity.class));
-	}
-
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenSkillCategoryExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
@@ -179,15 +165,15 @@ public class SkillCategoryPersisterUnitTest {
 	@Before
 	public void setupGroup() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getSkillCategories()).thenReturn(new HashSet<SkillCategoryEntity>());
+		when(rulesRepository.load(GROUP_ID)).thenReturn(rules);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new SkillCategoryPersister();
-		instance.groupRepository = groupRepository;
+		instance.rulesRepository = rulesRepository;
 		instance.skillCategoryRepository = skillCategoryRepository;
 	}
 }
