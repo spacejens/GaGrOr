@@ -11,9 +11,6 @@ public class SkillRepository {
 	@Autowired
 	SkillRepositoryQueries skillRepositoryQueries;
 
-	@Autowired
-	SkillCategoryRepository skillCategoryRepository;
-
 	public SkillEntity persist(final SkillEntity skill) {
 		return skillRepositoryQueries.save(skill);
 	}
