@@ -7,14 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.data.DataNotFoundException;
-import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.service.AbstractPersister;
 
 @Service
@@ -23,7 +21,7 @@ public class FighterTypePersister
 extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
 	@Autowired
-	GroupRepository groupRepository;
+	RaceRepository raceRepository;
 
 	@Autowired
 	FighterTypeRepository fighterTypeRepository;
@@ -35,20 +33,7 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
 	@Override
 	protected RaceEntity loadContext(final FighterTypeInput form) {
-		final GroupEntity group = groupRepository.load(form.getGroupId());
-		if(null == group.getWh40kSkirmishRules()) {
-			throw new WrongGroupTypeException(group);
-		}
-		for(final GangTypeEntity gangType : group.getWh40kSkirmishRules().getGangTypes()) {
-			if(gangType.hasId(form.getGangTypeId())) {
-				for(final RaceEntity race : gangType.getRaces()) {
-					if(race.hasId(form.getRaceId())) {
-						return race;
-					}
-				}
-			}
-		}
-		throw new DataNotFoundException(String.format("Race %d (gang type %d, group %d)", form.getRaceId(), form.getGangTypeId(), form.getGroupId()));
+		return raceRepository.load(form.getGroupId(), form.getRaceId());
 	}
 
 	@Override
@@ -108,7 +93,7 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 				return fighterType;
 			}
 		}
-		throw new DataNotFoundException(String.format("Fighter type (race %d, gang type %d, group %d)", form.getId(), form.getRaceId(), form.getGangTypeId(), form.getGroupId()));
+		throw new DataNotFoundException(String.format("Fighter type (race %d, group %d)", form.getId(), form.getRaceId(), form.getGroupId()));
 	}
 
 	@Override

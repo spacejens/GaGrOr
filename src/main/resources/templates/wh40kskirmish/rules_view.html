@@ -124,7 +124,7 @@
 									No fighter types have been created yet
 								</li>
 								<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
-									<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{gangTypeId}/{raceId}/create(groupId=${rules.group.id},gangTypeId=${gangType.id},raceId=${race.id})}" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.create}"></a>
+									<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{raceId}/create(groupId=${rules.group.id},raceId=${race.id})}" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.create}"></a>
 								</li>
 							</ul>
 						</li>

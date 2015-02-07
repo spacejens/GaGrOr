@@ -24,10 +24,6 @@ implements GroupIdentifiable {
 
 	@Getter
 	@Setter
-	private Long gangTypeId;
-
-	@Getter
-	@Setter
 	private Long raceId;
 
 	@Getter
@@ -92,7 +88,6 @@ implements GroupIdentifiable {
 	public FighterTypeInput(final FighterTypeOutput currentState) {
 		super(currentState);
 		setGroupId(currentState.getRace().getGangType().getGroup().getId());
-		setGangTypeId(currentState.getRace().getGangType().getId());
 		setRaceId(currentState.getRace().getId());
 		setStartingMovement(currentState.getStartingMovement());
 		setStartingWeaponSkill(currentState.getStartingWeaponSkill());
@@ -106,9 +101,8 @@ implements GroupIdentifiable {
 		setCost(currentState.getCost());
 	}
 
-	public FighterTypeInput(final Long groupId, final Long gangTypeId, final Long raceId) {
+	public FighterTypeInput(final Long groupId, final Long raceId) {
 		this.groupId = groupId;
-		this.gangTypeId = gangTypeId;
 		this.raceId = raceId;
 		// Default values for mandatory fields
 		setStartingMovement(4);

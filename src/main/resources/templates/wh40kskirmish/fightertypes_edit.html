@@ -18,7 +18,6 @@
 		<input type="hidden" th:field="*{id}" />
 		<input type="hidden" th:field="*{version}" />
 		<input type="hidden" th:field="*{groupId}" />
-		<input type="hidden" th:field="*{gangTypeId}" />
 		<input type="hidden" th:field="*{raceId}" />
 		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
 		<input type="text" th:field="*{name}" />

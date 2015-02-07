@@ -301,15 +301,14 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_RACE_ID + "}/create", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fightertype/{" + ATTR_RACE_ID + "}/create", method=RequestMethod.GET)
 	public String createFighterTypeForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId, // TODO This argument should not be needed
 			@PathVariable(ATTR_RACE_ID) final Long raceId,
 			final Model model) {
 		log.info(String.format("Viewing create fighter type form for race %d in group %d", raceId, groupId));
 		model.addAttribute("race", rulesService.viewRace(groupId, raceId));
-		model.addAttribute("fighterTypeForm", new FighterTypeInput(groupId, gangTypeId, raceId));
+		model.addAttribute("fighterTypeForm", new FighterTypeInput(groupId, raceId));
 		return "wh40kskirmish/fightertypes_edit";
 	}
 
