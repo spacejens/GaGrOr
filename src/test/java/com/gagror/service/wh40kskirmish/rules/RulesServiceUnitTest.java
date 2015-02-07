@@ -23,6 +23,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
@@ -52,7 +53,6 @@ public class RulesServiceUnitTest {
 	private static final Long RULES_ID = 1L;
 	private static final Long WRONG_TYPE_GROUP_ID = 456L;
 	private static final Long GANG_TYPE_ID = 7L;
-	private static final Long WRONG_GANG_TYPE_ID = 765L;
 	private static final String GANG_TYPE_NAME = "Gang type";
 	private static final Long FACTION_ID = 9L;
 	private static final Long WRONG_FACTION_ID = 75783L;
@@ -101,6 +101,9 @@ public class RulesServiceUnitTest {
 
 	@Mock
 	TerritoryTypeRepository territoryTypeRepository;
+
+	@Mock
+	GangTypeRepository gangTypeRepository;
 
 	@Mock
 	GroupEntity groupEntity;
@@ -162,11 +165,6 @@ public class RulesServiceUnitTest {
 	public void viewGangType_ok() {
 		final GangTypeOutput result = instance.viewGangType(GROUP_ID, GANG_TYPE_ID);
 		assertEquals("Wrong gang type returned", GANG_TYPE_NAME, result.getName());
-	}
-
-	@Test(expected=DataNotFoundException.class)
-	public void viewGangType_notFound() {
-		instance.viewGangType(GROUP_ID, WRONG_GANG_TYPE_ID);
 	}
 
 	@Test
@@ -249,6 +247,7 @@ public class RulesServiceUnitTest {
 		when(gangTypeEntity.getName()).thenReturn(GANG_TYPE_NAME);
 		when(gangTypeEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getGangTypes().add(gangTypeEntity);
+		when(gangTypeRepository.load(GROUP_ID, GANG_TYPE_ID)).thenReturn(gangTypeEntity);
 		// Set up the faction entity
 		when(gangTypeEntity.getFactions()).thenReturn(new HashSet<FactionEntity>());
 		when(factionEntity.getId()).thenReturn(FACTION_ID);
@@ -330,5 +329,6 @@ public class RulesServiceUnitTest {
 		instance.itemTypeRepository = itemTypeRepository;
 		instance.territoryCategoryRepository = territoryCategoryRepository;
 		instance.territoryTypeRepository = territoryTypeRepository;
+		instance.gangTypeRepository = gangTypeRepository;
 	}
 }

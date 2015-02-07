@@ -22,6 +22,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryOutput;
@@ -67,6 +68,9 @@ public class RulesService {
 	@Autowired
 	TerritoryTypeRepository territoryTypeRepository;
 
+	@Autowired
+	GangTypeRepository gangTypeRepository;
+
 	public RulesListChildrenOutput viewRulesListChildren(final Long groupId) {
 		log.debug(String.format("Viewing rules (including children data) for group %d", groupId));
 		return new RulesListChildrenOutput(rulesRepository.load(groupId), groupService.viewGroup(groupId));
@@ -89,22 +93,12 @@ public class RulesService {
 		return factions;
 	}
 
-	private GangTypeEntity loadGangType(final Long groupId, final Long gangTypeId) {
-		final Wh40kSkirmishRulesEntity rules = rulesRepository.load(groupId);
-		for(final GangTypeEntity gangType : rules.getGangTypes()) {
-			if(gangType.hasId(gangTypeId)) {
-				return gangType;
-			}
-		}
-		throw new DataNotFoundException(String.format("Gang type %d (group %d)", gangTypeId, groupId));
-	}
-
 	public GangTypeOutput viewGangType(final Long groupId, final Long gangTypeId) {
-		return new GangTypeOutput(loadGangType(groupId, gangTypeId), groupService.viewGroup(groupId));
+		return new GangTypeOutput(gangTypeRepository.load(groupId, gangTypeId), groupService.viewGroup(groupId));
 	}
 
 	public FactionEntity loadFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
-		final GangTypeEntity gangType = loadGangType(groupId, gangTypeId);
+		final GangTypeEntity gangType = gangTypeRepository.load(groupId, gangTypeId);
 		for(final FactionEntity faction : gangType.getFactions()) {
 			if(faction.hasId(factionId)) {
 				return faction;
@@ -121,7 +115,7 @@ public class RulesService {
 	}
 
 	private RaceEntity loadRace(final Long groupId, final Long gangTypeId, final Long raceId) {
-		final GangTypeEntity gangType = loadGangType(groupId, gangTypeId);
+		final GangTypeEntity gangType = gangTypeRepository.load(groupId, gangTypeId);
 		for(final RaceEntity race : gangType.getRaces()) {
 			if(race.hasId(raceId)) {
 				return race;
