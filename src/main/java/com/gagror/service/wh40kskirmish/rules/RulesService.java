@@ -110,10 +110,11 @@ public class RulesService {
 		return new GangTypeOutput(gangTypeRepository.load(groupId, gangTypeId), groupService.viewGroup(groupId));
 	}
 
-	public FactionOutput viewFaction(final Long groupId, final Long gangTypeId, final Long factionId) {
+	public FactionOutput viewFaction(final Long groupId, final Long factionId) {
+		final FactionEntity faction = factionRepository.load(groupId, factionId);
 		return new FactionOutput(
-				factionRepository.load(groupId, gangTypeId, factionId),
-				viewGangType(groupId, gangTypeId));
+				faction,
+				new GangTypeOutput(faction.getGangType(), groupService.viewGroup(groupId)));
 	}
 
 	public RaceOutput viewRace(final Long groupId, final Long raceId) {

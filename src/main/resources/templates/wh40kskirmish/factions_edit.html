@@ -11,7 +11,7 @@
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${gangType.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.faction}"></a>
 		<a th:unless="${factionForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.faction.create}"></a>
-		<a th:if="${factionForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/faction/{gangTypeId}/{factionId}(groupId=${gangType.group.id},gangTypeId=${gangType.id},factionId=${factionForm.id})}" th:text="${factionForm.name}"></a>
+		<a th:if="${factionForm.id}" th:href="@{/wh40kskirmish/rules/{groupId}/faction/{factionId}(groupId=${gangType.group.id},factionId=${factionForm.id})}" th:text="${factionForm.name}"></a>
 		<a th:if="${factionForm.id}" class="current" th:text="#{menu.groups.rules.wh40kskirmish.faction.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/wh40kskirmish/rules/{groupId}/faction/save(groupId=${gangType.group.id})}" th:object="${factionForm}" method="post">

@@ -225,25 +225,23 @@ public class RulesController extends AbstractController {
 	}
 
 	@PreAuthorize(MAY_VIEW_GROUP_RULES)
-	@RequestMapping("/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}")
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_FACTION_ID + "}")
 	public String viewFaction(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			@PathVariable(ATTR_FACTION_ID) final Long factionId,
 			final Model model) {
-		model.addAttribute("faction", rulesService.viewFaction(groupId, gangTypeId, factionId));
+		model.addAttribute("faction", rulesService.viewFaction(groupId, factionId));
 		return "wh40kskirmish/factions_view";
 	}
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
-	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_GANGTYPE_ID + "}/{" + ATTR_FACTION_ID + "}/edit", method=RequestMethod.GET)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/faction/{" + ATTR_FACTION_ID + "}/edit", method=RequestMethod.GET)
 	public String editFactionForm(
 			@PathVariable(ATTR_GROUP_ID) final Long groupId,
-			@PathVariable(ATTR_GANGTYPE_ID) final Long gangTypeId,
 			@PathVariable(ATTR_FACTION_ID) final Long factionId,
 			final Model model) {
-		log.info(String.format("Viewing edit faction form for faction %d of gang type %d in group %d", factionId, gangTypeId, groupId));
-		final FactionOutput faction = rulesService.viewFaction(groupId, gangTypeId, factionId);
+		log.info(String.format("Viewing edit faction form for faction %d in group %d", factionId, groupId));
+		final FactionOutput faction = rulesService.viewFaction(groupId, factionId);
 		model.addAttribute("gangType", faction.getGangType());
 		model.addAttribute("factionForm", new FactionInput(faction));
 		return "wh40kskirmish/factions_edit";

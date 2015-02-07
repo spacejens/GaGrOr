@@ -14,7 +14,7 @@
 	</nav>
 	<dl  th:if="${faction.gangType.group.memberType != null and faction.gangType.group.memberType.owner}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/faction/{gangTypeId}/{factionId}/edit(groupId=${faction.gangType.group.id},gangTypeId=${faction.gangType.id},factionId=${faction.id})}" th:text="#{menu.groups.rules.wh40kskirmish.faction.edit}"></a></dd>
+		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/faction/{factionId}/edit(groupId=${faction.gangType.group.id},factionId=${faction.id})}" th:text="#{menu.groups.rules.wh40kskirmish.faction.edit}"></a></dd>
 	</dl>
 	<p>View faction here</p>
 	<script th:replace="/fragments/framework :: init"></script>

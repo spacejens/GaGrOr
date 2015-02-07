@@ -23,7 +23,7 @@ public class GangRepository {
 	public GangEntity load(
 			final Long groupId, final Long gangTypeId, final Long factionId, final Long gangId) {
 		// TODO Load gang from ID using query, verify group after loading. Gang type and faction IDs no longer needed
-		final FactionEntity faction = factionRepository.load(groupId, gangTypeId, factionId);
+		final FactionEntity faction = factionRepository.load(groupId, factionId);
 		for(final GangEntity gang : faction.getGangs()) {
 			if(gang.hasId(gangId)) {
 				return gang;

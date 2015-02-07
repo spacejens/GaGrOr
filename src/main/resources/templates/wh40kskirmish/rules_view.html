@@ -99,7 +99,7 @@
 					<a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}(groupId=${rules.group.id},gangTypeId=${gangType.id})}" th:text="${gangType.name}"></a>
 					<ul>
 						<li th:each="faction : ${gangType.factions}">
-							<a th:href="@{/wh40kskirmish/rules/{groupId}/faction/{gangTypeId}/{factionId}(groupId=${rules.group.id},gangTypeId=${gangType.id},factionId=${faction.id})}"
+							<a th:href="@{/wh40kskirmish/rules/{groupId}/faction/{factionId}(groupId=${rules.group.id},factionId=${faction.id})}"
 								th:text="${faction.name}"></a>
 						</li>
 						<li th:if="${#lists.isEmpty(gangType.factions)}" class="fi-alert">
