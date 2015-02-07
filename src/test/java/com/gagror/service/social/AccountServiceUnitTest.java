@@ -220,7 +220,7 @@ public class AccountServiceUnitTest {
 		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
 		instance.createContactRequest(CONTACT_ACCOUNT_ID);
 		final ArgumentCaptor<ContactEntity> saved = ArgumentCaptor.forClass(ContactEntity.class);
-		verify(contactRepository).save(saved.capture());
+		verify(contactRepository).persist(saved.capture());
 		assertSame("Unexpected owner of created contact", account, saved.getValue().getOwner());
 		assertSame("Unexpected contact of created contact", contactAccount, saved.getValue().getContact());
 		assertSame("Unexpected contact type of created contact", ContactType.REQUESTED, saved.getValue().getContactType());
@@ -235,7 +235,7 @@ public class AccountServiceUnitTest {
 		final int sizeBefore = account.getContacts().size();
 		final int incomingSizeBefore = contactAccount.getIncomingContacts().size();
 		instance.createContactRequest(CONTACT_ACCOUNT_ID);
-		verify(contactRepository, never()).save(any(ContactEntity.class));
+		verify(contactRepository, never()).persist(any(ContactEntity.class));
 		final int sizeAfter = account.getContacts().size();
 		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
 		final int incomingSizeAfter = contactAccount.getIncomingContacts().size();
@@ -252,7 +252,7 @@ public class AccountServiceUnitTest {
 		final int sizeBefore = contactAccount.getContacts().size();
 		final int incomingSizeBefore = account.getIncomingContacts().size();
 		instance.createContactRequest(CONTACT_ACCOUNT_ID);
-		verify(contactRepository, never()).save(any(ContactEntity.class));
+		verify(contactRepository, never()).persist(any(ContactEntity.class));
 		final int sizeAfter = contactAccount.getContacts().size();
 		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
 		final int incomingSizeAfter = account.getIncomingContacts().size();
@@ -264,7 +264,7 @@ public class AccountServiceUnitTest {
 		final int sizeBefore = account.getContacts().size();
 		final int incomingSizeBefore = account.getIncomingContacts().size();
 		instance.createContactRequest(ACCOUNT_ID);
-		verify(contactRepository, never()).save(any(ContactEntity.class));
+		verify(contactRepository, never()).persist(any(ContactEntity.class));
 		final int sizeAfter = account.getContacts().size();
 		assertEquals("Should not have added any contact", sizeBefore, sizeAfter);
 		final int incomingSizeAfter = account.getIncomingContacts().size();
@@ -302,7 +302,7 @@ public class AccountServiceUnitTest {
 		instance.acceptContactRequest(CONTACT_ID);
 		verify(contact).setContactType(ContactType.APPROVED);
 		final ArgumentCaptor<ContactEntity> mirroredContact = ArgumentCaptor.forClass(ContactEntity.class);
-		verify(contactRepository).save(mirroredContact.capture());
+		verify(contactRepository).persist(mirroredContact.capture());
 		assertTrue("Mirrored contact should be added to acting account", contactAccount.getContacts().contains(mirroredContact.getValue()));
 		assertTrue("Mirrored contact should be added as incoming for requesting account", account.getIncomingContacts().contains(mirroredContact.getValue()));
 	}
@@ -315,7 +315,7 @@ public class AccountServiceUnitTest {
 		final int incomingSizeBefore = account.getIncomingContacts().size();
 		instance.acceptContactRequest(CONTACT_ID);
 		verify(contact, never()).setContactType(any(ContactType.class));
-		verify(contactRepository, never()).save(any(ContactEntity.class));
+		verify(contactRepository, never()).persist(any(ContactEntity.class));
 		final int sizeAfter = contactAccount.getContacts().size();
 		assertEquals("Should not have added contact", sizeBefore, sizeAfter);
 		final int incomingSizeAfter = account.getIncomingContacts().size();
@@ -329,7 +329,7 @@ public class AccountServiceUnitTest {
 		final int incomingSizeBefore = account.getIncomingContacts().size();
 		instance.acceptContactRequest(99999L);
 		verify(contact, never()).setContactType(any(ContactType.class));
-		verify(contactRepository, never()).save(any(ContactEntity.class));
+		verify(contactRepository, never()).persist(any(ContactEntity.class));
 		final int sizeAfter = contactAccount.getContacts().size();
 		assertEquals("Should not have added contact", sizeBefore, sizeAfter);
 		final int incomingSizeAfter = account.getIncomingContacts().size();
@@ -382,7 +382,7 @@ public class AccountServiceUnitTest {
 	@Test
 	public void createContact_ok() {
 		final ContactEntity result = instance.createContact(account, ContactType.AUTOMATIC, anotherAccount);
-		verify(contactRepository).save(result);
+		verify(contactRepository).persist(result);
 		assertSame("Wrong contact owner", account, result.getOwner());
 		assertEquals("Wrong contact type", ContactType.AUTOMATIC, result.getContactType());
 		assertSame("Wrong contact account", anotherAccount, result.getContact());
@@ -391,7 +391,7 @@ public class AccountServiceUnitTest {
 	@Test
 	public void mirrorContact_ok() {
 		final ContactEntity result = instance.mirrorContact(contact);
-		verify(contactRepository).save(result);
+		verify(contactRepository).persist(result);
 		assertSame("Wrong contact owner", contact.getContact(), result.getOwner());
 		assertEquals("Wrong contact type", contact.getContactType(), result.getContactType());
 		assertSame("Wrong contact account", contact.getOwner(), result.getContact());
@@ -458,7 +458,7 @@ public class AccountServiceUnitTest {
 
 	@Before
 	public void setupContactRepository() {
-		when(contactRepository.save(any(ContactEntity.class))).thenAnswer(new Answer<ContactEntity>(){
+		when(contactRepository.persist(any(ContactEntity.class))).thenAnswer(new Answer<ContactEntity>(){
 			@Override
 			public ContactEntity answer(final InvocationOnMock invocation) throws Throwable {
 				return (ContactEntity)invocation.getArguments()[0];

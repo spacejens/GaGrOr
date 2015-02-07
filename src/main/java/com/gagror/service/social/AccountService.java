@@ -188,7 +188,7 @@ public class AccountService {
 
 	public ContactEntity createContact(final AccountEntity owner, final ContactType contactType, final AccountEntity account) {
 		final ContactEntity contact = new ContactEntity(owner, contactType, account);
-		return contactRepository.save(contact);
+		return contactRepository.persist(contact);
 	}
 
 	public ContactEntity mirrorContact(final ContactEntity original) {

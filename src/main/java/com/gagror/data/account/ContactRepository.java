@@ -1,10 +1,19 @@
 package com.gagror.data.account;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface ContactRepository extends Repository<ContactEntity, Long> {
+@Repository
+public class ContactRepository {
 
-	ContactEntity save(final ContactEntity contact);
+	@Autowired
+	ContactRepositoryQueries contactRepositoryQueries;
 
-	void delete(final ContactEntity contact);
+	public ContactEntity persist(final ContactEntity contact) {
+		return contactRepositoryQueries.save(contact);
+	}
+
+	public void delete(final ContactEntity contact) {
+		contactRepositoryQueries.delete(contact);
+	}
 }
