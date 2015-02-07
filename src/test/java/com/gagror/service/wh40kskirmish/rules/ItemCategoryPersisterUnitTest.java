@@ -23,8 +23,7 @@ import org.springframework.validation.BindingResult;
 import com.gagror.AddError;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupRepository;
-import com.gagror.data.group.WrongGroupTypeException;
+import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryInput;
@@ -48,7 +47,7 @@ public class ItemCategoryPersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
-	GroupRepository groupRepository;
+	RulesRepository rulesRepository;
 
 	@Mock
 	ItemCategoryRepository itemCategoryRepository;
@@ -90,12 +89,6 @@ public class ItemCategoryPersisterUnitTest {
 		verify(itemCategoryRepository, never()).persist(any(ItemCategoryEntity.class));
 	}
 
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_new_wrongGroupType() {
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
-	}
-
 	@Test
 	public void save_existing_ok() {
 		whenItemCategoryExists();
@@ -124,13 +117,6 @@ public class ItemCategoryPersisterUnitTest {
 		assertFalse("Should have failed to save", result);
 		verify(itemCategory, never()).setName(anyString());
 		verify(itemCategoryRepository, never()).persist(any(ItemCategoryEntity.class));
-	}
-
-	@Test(expected=WrongGroupTypeException.class)
-	public void save_existing_wrongGroupType() {
-		whenItemCategoryExists();
-		when(group.getWh40kSkirmishRules()).thenReturn(null);
-		instance.save(form, bindingResult);
 	}
 
 	@Test(expected=DataNotFoundException.class)
@@ -179,15 +165,15 @@ public class ItemCategoryPersisterUnitTest {
 	@Before
 	public void setupGroup() {
 		when(group.getId()).thenReturn(GROUP_ID);
-		when(groupRepository.load(GROUP_ID)).thenReturn(group);
 		when(group.getWh40kSkirmishRules()).thenReturn(rules);
 		when(rules.getItemCategories()).thenReturn(new HashSet<ItemCategoryEntity>());
+		when(rulesRepository.load(GROUP_ID)).thenReturn(rules);
 	}
 
 	@Before
 	public void setupInstance() {
 		instance = new ItemCategoryPersister();
-		instance.groupRepository = groupRepository;
+		instance.rulesRepository = rulesRepository;
 		instance.itemCategoryRepository = itemCategoryRepository;
 	}
 }
