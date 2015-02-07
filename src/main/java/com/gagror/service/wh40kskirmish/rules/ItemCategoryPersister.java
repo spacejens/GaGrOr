@@ -92,6 +92,6 @@ extends AbstractPersister<ItemCategoryInput, ItemCategoryEntity, Wh40kSkirmishRu
 
 	@Override
 	protected ItemCategoryEntity makePersistent(final ItemCategoryEntity entity) {
-		return itemCategoryRepository.save(entity);
+		return itemCategoryRepository.persist(entity);
 	}
 }
