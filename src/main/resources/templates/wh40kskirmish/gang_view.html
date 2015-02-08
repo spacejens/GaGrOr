@@ -22,6 +22,7 @@
 		<thead>
 			<tr>
 				<td>Fighter</td>
+				<td>Fighter type</td>
 				<td>M</td>
 				<td>WS</td>
 				<td>BS</td>
@@ -37,6 +38,7 @@
 		<tbody>
 			<tr th:each="fighter : ${gang.fighters}">
 				<td th:text="${fighter.name}"></td>
+				<td th:text="${fighter.fighterType.name}"></td>
 				<td th:text="${fighter.movement}"></td>
 				<td th:text="${fighter.weaponSkill}"></td>
 				<td th:text="${fighter.ballisticSkill}"></td>

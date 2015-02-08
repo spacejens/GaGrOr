@@ -12,7 +12,6 @@ public class FighterViewService {
 
 	public FighterViewOutput view(final FighterEntity entity) {
 		final FighterViewOutput.Builder builder = new FighterViewOutput.Builder(entity);
-		// TODO Add fighter type to the fighter view output
 		// TODO Add experience level title to the fighter view output
 		calculateCharacteristics(entity, builder);
 		calculateCost(entity, builder);

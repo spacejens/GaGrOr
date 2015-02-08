@@ -4,7 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeReferenceOutput;
+
 public class FighterViewOutput extends FighterReferenceOutput {
+
+	@Getter
+	private final FighterTypeReferenceOutput fighterType;
 
 	@Getter
 	private final int movement;
@@ -49,6 +54,7 @@ public class FighterViewOutput extends FighterReferenceOutput {
 			final int leadership,
 			final int cost) {
 		super(entity);
+		fighterType = new FighterTypeReferenceOutput(entity.getFighterType());
 		this.movement = movement;
 		this.weaponSkill = weaponSkill;
 		this.ballisticSkill = ballisticSkill;
