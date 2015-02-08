@@ -23,6 +23,7 @@ extends AbstractGagrorPermissionLongId<E> {
 			log.debug(String.format("Account %s is player of %s", account, target));
 			return true;
 		}
+		// TODO Account should only count as player if currently a member of the group
 		// TODO Group owners should be granted player permission for all targets within the group
 		// Disallow for everyone else
 		return false;
