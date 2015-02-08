@@ -15,6 +15,7 @@ public class FighterViewService {
 		// TODO Add fighter type to the fighter view output
 		// TODO Add experience level title to the fighter view output
 		calculateCharacteristics(entity, builder);
+		calculateCost(entity, builder);
 		return builder.build();
 	}
 
@@ -30,5 +31,11 @@ public class FighterViewService {
 		builder.setAttacks(entity.getFighterType().getStartingAttacks());
 		builder.setLeadership(entity.getFighterType().getStartingLeadership());
 		// TODO Modify fighter characteristics by experience advances
+	}
+
+	protected void calculateCost(final FighterEntity entity, final FighterViewOutput.Builder builder) {
+		// Initialize cost from the fighter type
+		builder.setCost(entity.getFighterType().getCost());
+		// TODO Modify fighter cost by the carried items
 	}
 }

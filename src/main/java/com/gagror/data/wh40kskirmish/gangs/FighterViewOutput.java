@@ -33,6 +33,9 @@ public class FighterViewOutput extends FighterReferenceOutput {
 	@Getter
 	private final int leadership;
 
+	@Getter
+	private final int cost;
+
 	protected FighterViewOutput(
 			final FighterEntity entity,
 			final int movement,
@@ -43,7 +46,8 @@ public class FighterViewOutput extends FighterReferenceOutput {
 			final int wounds,
 			final int initiative,
 			final int attacks,
-			final int leadership) {
+			final int leadership,
+			final int cost) {
 		super(entity);
 		this.movement = movement;
 		this.weaponSkill = weaponSkill;
@@ -54,6 +58,7 @@ public class FighterViewOutput extends FighterReferenceOutput {
 		this.initiative = initiative;
 		this.attacks = attacks;
 		this.leadership = leadership;
+		this.cost = cost;
 	}
 
 	@RequiredArgsConstructor
@@ -96,18 +101,23 @@ public class FighterViewOutput extends FighterReferenceOutput {
 		@Setter
 		private int leadership;
 
+		@Getter
+		@Setter
+		private int cost;
+
 		public FighterViewOutput build() {
 			return new FighterViewOutput(
 					entity,
-					movement,
-					weaponSkill,
-					ballisticSkill,
-					strength,
-					toughness,
-					wounds,
-					initiative,
-					attacks,
-					leadership);
+					getMovement(),
+					getWeaponSkill(),
+					getBallisticSkill(),
+					getStrength(),
+					getToughness(),
+					getWounds(),
+					getInitiative(),
+					getAttacks(),
+					getLeadership(),
+					getCost());
 		}
 	}
 }
