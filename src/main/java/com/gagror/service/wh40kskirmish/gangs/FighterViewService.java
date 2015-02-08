@@ -14,7 +14,21 @@ public class FighterViewService {
 		final FighterViewOutput.Builder builder = new FighterViewOutput.Builder(entity);
 		// TODO Add fighter type to the fighter view output
 		// TODO Add experience level title to the fighter view output
-		// TODO Add characteristics to the fighter view output
+		calculateCharacteristics(entity, builder);
 		return builder.build();
+	}
+
+	protected void calculateCharacteristics(final FighterEntity entity, final FighterViewOutput.Builder builder) {
+		// Initialize the characteristics from the fighter type
+		builder.setMovement(entity.getFighterType().getStartingMovement());
+		builder.setWeaponSkill(entity.getFighterType().getStartingWeaponSkill());
+		builder.setBallisticSkill(entity.getFighterType().getStartingBallisticSkill());
+		builder.setStrength(entity.getFighterType().getStartingStrength());
+		builder.setToughness(entity.getFighterType().getStartingToughness());
+		builder.setWounds(entity.getFighterType().getStartingWounds());
+		builder.setInitiative(entity.getFighterType().getStartingInitiative());
+		builder.setAttacks(entity.getFighterType().getStartingAttacks());
+		builder.setLeadership(entity.getFighterType().getStartingLeadership());
+		// TODO Modify fighter characteristics by experience advances
 	}
 }
