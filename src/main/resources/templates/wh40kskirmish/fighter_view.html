@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${fighter.gang.rules.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${fighter.gang.rules.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${fighter.gang.rules.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{${fighter.gang.rules.group.groupType.groupUrl}+'/{groupId}'(groupId=${fighter.gang.rules.group.id})}" th:text="${fighter.gang.rules.group.name}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
+		<a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}(groupId=${fighter.gang.rules.group.id},gangId=${fighter.gang.id})}" th:text="${fighter.gang.name}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.fighter}"></a>
+		<a class="current" th:text="${fighter.name}"></a>
+	</nav>
+	<table>
+		<thead>
+			<tr>
+				<td></td>
+				<td>Fighter type</td>
+				<td>M</td>
+				<td>WS</td>
+				<td>BS</td>
+				<td>S</td>
+				<td>T</td>
+				<td>W</td>
+				<td>I</td>
+				<td>A</td>
+				<td>Ld</td>
+				<td>Cost</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:text="${fighter.name}"></td>
+				<td th:text="${fighter.fighterType.name}"></td>
+				<td th:text="${fighter.movement}"></td>
+				<td th:text="${fighter.weaponSkill}"></td>
+				<td th:text="${fighter.ballisticSkill}"></td>
+				<td th:text="${fighter.strength}"></td>
+				<td th:text="${fighter.toughness}"></td>
+				<td th:text="${fighter.wounds}"></td>
+				<td th:text="${fighter.initiative}"></td>
+				<td th:text="${fighter.attacks}"></td>
+				<td th:text="${fighter.leadership}"></td>
+				<td th:text="${fighter.cost}"></td>
+			</tr>
+		</tbody>
+	</table>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

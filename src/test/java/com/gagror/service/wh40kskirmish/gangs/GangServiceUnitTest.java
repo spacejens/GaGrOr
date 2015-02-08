@@ -3,6 +3,8 @@ package com.gagror.service.wh40kskirmish.gangs;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -12,11 +14,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
+import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
+import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
@@ -34,7 +41,9 @@ public class GangServiceUnitTest {
 	private static final Long GANG_TYPE_ID = 2L;
 	private static final Long FACTION_ID = 3L;
 	private static final Long GANG_ID = 4L;
+	private static final Long FIGHTER_ID = 5L;
 	private static final String GANG_NAME = "Gang";
+	private static final String FIGHTER_NAME = "Fighter";
 
 	GangService instance;
 
@@ -48,6 +57,12 @@ public class GangServiceUnitTest {
 	GangRepository gangRepository;
 
 	@Mock
+	FighterRepository fighterRepository;
+
+	@Mock
+	FighterViewService fighterViewService;
+
+	@Mock
 	AccountEntity player;
 
 	@Mock
@@ -58,6 +73,12 @@ public class GangServiceUnitTest {
 
 	@Mock
 	GangEntity gang;
+
+	@Mock
+	FighterEntity fighter;
+
+	@Mock
+	FighterViewOutput fighterViewOutput;
 
 	@Mock
 	RulesOutput rules;
@@ -91,6 +112,14 @@ public class GangServiceUnitTest {
 		assertEquals("Wrong gang returned", GANG_NAME, result.getName());
 	}
 
+	@Test
+	public void viewFighter_ok() {
+		final FighterViewOutput result = instance.viewFighter(GROUP_ID, FIGHTER_ID);
+		assertEquals("Wrong fighter returned", FIGHTER_NAME, result.getName());
+		assertEquals("Wrong gang returned", GANG_NAME, result.getGang().getName());
+		assertSame("Wrong rules returned", rules, result.getGang().getRules());
+	}
+
 	@Before
 	public void setup() {
 		when(groupService.viewGroupMembers(GROUP_ID)).thenReturn(groupMembers);
@@ -106,6 +135,24 @@ public class GangServiceUnitTest {
 		faction.getGangs().add(gang);
 		when(faction.getGangType()).thenReturn(gangType);
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
+		when(fighter.getId()).thenReturn(FIGHTER_ID);
+		when(fighter.getName()).thenReturn(FIGHTER_NAME);
+		when(fighter.getGang()).thenReturn(gang);
+		when(fighterRepository.load(GROUP_ID, FIGHTER_ID)).thenReturn(fighter);
+		when(fighterViewService.view(any(FighterEntity.class), any(GangOutput.class))).thenAnswer(new Answer<FighterViewOutput>(){
+			@Override
+			public FighterViewOutput answer(final InvocationOnMock invocation) throws Throwable {
+				final FighterEntity fighter = (FighterEntity)invocation.getArguments()[0];
+				final Long fighterId = fighter.getId();
+				final String fighterName = fighter.getName();
+				final GangOutput gang = (GangOutput)invocation.getArguments()[1];
+				final FighterViewOutput output = mock(FighterViewOutput.class);
+				when(output.getId()).thenReturn(fighterId);
+				when(output.getName()).thenReturn(fighterName);
+				when(output.getGang()).thenReturn(gang);
+				return output;
+			}
+		});
 	}
 
 	@Before
@@ -114,5 +161,7 @@ public class GangServiceUnitTest {
 		instance.groupService = groupService;
 		instance.rulesService = rulesService;
 		instance.gangRepository = gangRepository;
+		instance.fighterRepository = fighterRepository;
+		instance.fighterViewService = fighterViewService;
 	}
 }

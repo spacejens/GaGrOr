@@ -12,6 +12,9 @@ public class FighterViewOutput extends FighterReferenceOutput {
 	private final FighterTypeReferenceOutput fighterType;
 
 	@Getter
+	private final GangOutput gang;
+
+	@Getter
 	private final int movement;
 
 	@Getter
@@ -43,6 +46,7 @@ public class FighterViewOutput extends FighterReferenceOutput {
 
 	protected FighterViewOutput(
 			final FighterEntity entity,
+			final GangOutput gang,
 			final int movement,
 			final int weaponSkill,
 			final int ballisticSkill,
@@ -55,6 +59,7 @@ public class FighterViewOutput extends FighterReferenceOutput {
 			final int cost) {
 		super(entity);
 		fighterType = new FighterTypeReferenceOutput(entity.getFighterType());
+		this.gang = gang;
 		this.movement = movement;
 		this.weaponSkill = weaponSkill;
 		this.ballisticSkill = ballisticSkill;
@@ -70,6 +75,8 @@ public class FighterViewOutput extends FighterReferenceOutput {
 	@RequiredArgsConstructor
 	public static class Builder {
 		final FighterEntity entity;
+
+		final GangOutput gang;
 
 		@Getter
 		@Setter
@@ -114,6 +121,7 @@ public class FighterViewOutput extends FighterReferenceOutput {
 		public FighterViewOutput build() {
 			return new FighterViewOutput(
 					entity,
+					gang,
 					getMovement(),
 					getWeaponSkill(),
 					getBallisticSkill(),

@@ -5,13 +5,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
 import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
+import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 
 @Service
 @Transactional
 public class FighterViewService {
 
 	public FighterViewOutput view(final FighterEntity entity) {
-		final FighterViewOutput.Builder builder = new FighterViewOutput.Builder(entity);
+		return view(entity, null);
+	}
+
+	public FighterViewOutput view(final FighterEntity entity, final GangOutput gang) {
+		final FighterViewOutput.Builder builder = new FighterViewOutput.Builder(entity, gang);
 		// TODO Add experience level title to the fighter view output
 		calculateCharacteristics(entity, builder);
 		calculateCost(entity, builder);

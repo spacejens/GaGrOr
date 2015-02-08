@@ -94,5 +94,14 @@ public class GangController extends AbstractWh40kSkirmishController {
 
 	// TODO Add page to create (buy) or edit fighter (group owner unlocks additional capabilities?)
 
-	// TODO Add page to view fighter
+	@PreAuthorize(MAY_VIEW_GROUP)
+	@RequestMapping("/{" + ATTR_GROUP_ID + "}/fighter/{" + ATTR_FIGHTER_ID + "}")
+	public String viewFighter(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_FIGHTER_ID) final Long fighterId,
+			final Model model) {
+		log.info(String.format("Viewing fighter %d in group %d", fighterId, groupId));
+		model.addAttribute("fighter", gangService.viewFighter(groupId, fighterId));
+		return "wh40kskirmish/fighter_view";
+	}
 }

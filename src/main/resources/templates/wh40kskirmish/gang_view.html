@@ -37,7 +37,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="fighter : ${gang.fighters}">
-				<td th:text="${fighter.name}"></td>
+				<td><a th:href="@{/wh40kskirmish/gang/{groupId}/fighter/{fighterId}(groupId=${gang.rules.group.id},fighterId=${fighter.id})}" th:text="${fighter.name}"></a></td>
 				<td th:text="${fighter.fighterType.name}"></td>
 				<td th:text="${fighter.movement}"></td>
 				<td th:text="${fighter.weaponSkill}"></td>
