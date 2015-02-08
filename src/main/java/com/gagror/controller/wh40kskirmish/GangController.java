@@ -76,7 +76,6 @@ public class GangController extends AbstractWh40kSkirmishController {
 			final Model model) {
 		log.info(String.format("Viewing gang %d in group %d", gangId, groupId));
 		model.addAttribute("gang", gangService.viewGang(groupId, gangId));
-		// TODO Show fighters on view gang page
 		return "wh40kskirmish/gang_view";
 	}
 
