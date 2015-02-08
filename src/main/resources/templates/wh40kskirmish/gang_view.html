@@ -15,6 +15,21 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/edit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
 	</dl>
+	<p th:if="${#lists.isEmpty(gang.fighters)}" class="fi-alert">
+		No fighters have been recruited yet
+	</p>
+	<table th:unless="${#lists.isEmpty(gang.fighters)}">
+		<thead>
+			<tr>
+				<td>Fighter</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="fighter : ${gang.fighters}">
+				<td th:text="${fighter.name}"></td>
+			</tr>
+		</tbody>
+	</table>
 	<table>
 		<thead>
 			<tr>

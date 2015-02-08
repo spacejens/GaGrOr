@@ -1,5 +1,7 @@
 package com.gagror.service.wh40kskirmish.gangs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
+import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
+import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
+import com.gagror.data.wh40kskirmish.gangs.GangViewOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionReferenceOutput;
 import com.gagror.service.social.GroupService;
@@ -28,6 +34,9 @@ public class GangService {
 	@Autowired
 	GangRepository gangRepository;
 
+	@Autowired
+	FighterViewService fighterViewService;
+
 	public EditGangOutput prepareToCreateGang(final Long groupId) {
 		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
 		final RulesOutput rules = rulesService.viewRules(groupId);
@@ -37,13 +46,21 @@ public class GangService {
 
 	public EditGangOutput prepareToEditGang(final Long groupId, final Long gangId) {
 		final GroupViewMembersOutput group = groupService.viewGroupMembers(groupId);
-		final GangOutput gang = viewGang(groupId, gangId);
-		return EditGangOutput.editGang(group, gang);
+		return EditGangOutput.editGang(
+				group,
+				new GangOutput(gangRepository.load(groupId, gangId), rulesService.viewRules(groupId)));
 	}
 
 	public GangOutput viewGang(final Long groupId, final Long gangId) {
-		return new GangOutput(
-				gangRepository.load(groupId, gangId),
-				rulesService.viewRules(groupId));
+		final GangEntity gang = gangRepository.load(groupId, gangId);
+		final List<FighterViewOutput> fighters = new ArrayList<>();
+		for(final FighterEntity fighter : gang.getFighters()) {
+			fighters.add(fighterViewService.view(fighter));
+		}
+		Collections.sort(fighters); // TODO Sort fighters in a more appropriate order when viewing gang (fixed positions?)
+		return new GangViewOutput(
+				gang,
+				rulesService.viewRules(groupId),
+				fighters);
 	}
 }
