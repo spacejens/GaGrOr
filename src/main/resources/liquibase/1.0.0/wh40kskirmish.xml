@@ -483,7 +483,7 @@
 
 	<changeSet id="gang-foreign-keys" author="spacejens">
 		<addForeignKeyConstraint
-			constraintName="gangtype_gang_faction_fk"
+			constraintName="faction_gang_faction_fk"
 			referencedTableName="wh40ksk_faction"
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_gang"
@@ -494,5 +494,46 @@
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_gang"
 			baseColumnNames="player_id"/>
+	</changeSet>
+
+	<changeSet id="fighter-table" author="spacejens">
+		<createTable tableName="wh40ksk_fighter">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="version" type="bigint" defaultValueNumeric="0">
+				<constraints nullable="false" />
+			</column>
+			<column name="created" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="modified" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="gang_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="name" type="varchar(64)">
+				<constraints nullable="false" />
+			</column>
+			<column name="fighter_type_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet id="fighter-foreign-keys" author="spacejens">
+		<addForeignKeyConstraint
+			constraintName="gang_fighter_gang_fk"
+			referencedTableName="wh40ksk_gang"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_fighter"
+			baseColumnNames="gang_id"/>
+		<addForeignKeyConstraint
+			constraintName="fightertype_fighter_fighter_type_fk"
+			referencedTableName="wh40ksk_fightertype"
+			referencedColumnNames="id"
+			baseTableName="wh40ksk_fighter"
+			baseColumnNames="fighter_type_id"/>
 	</changeSet>
 </databaseChangeLog>
