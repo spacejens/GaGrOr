@@ -11,9 +11,10 @@
 		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
 		<a class="current" th:text="${gang.name}"></a>
 	</nav>
-	<dl th:if="${gang.rules.group.memberType != null and gang.rules.group.memberType.owner}" class="sub-nav" id="pageactions">
+	<dl th:if="${(gang.rules.group.memberType != null and gang.rules.group.memberType.owner) or (currentUser != null and gang.player.id == currentUser.id)}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/edit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
+		<dd th:if="${gang.rules.group.memberType != null and gang.rules.group.memberType.owner}"><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/edit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
+		<dd th:if="${(gang.rules.group.memberType != null and gang.rules.group.memberType.owner) or (currentUser != null and gang.player.id == currentUser.id)}"><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/recruit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.fighter.create}"></a></dd>
 	</dl>
 	<p th:if="${#lists.isEmpty(gang.fighters)}" class="fi-alert">
 		No fighters have been recruited yet

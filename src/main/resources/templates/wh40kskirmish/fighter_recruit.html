@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:unless="${gang.rules.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${gang.rules.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${gang.rules.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{${gang.rules.group.groupType.groupUrl}+'/{groupId}'(groupId=${gang.rules.group.id})}" th:text="${gang.rules.group.name}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
+		<a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="${gang.name}"></a>
+		<a class="current" th:text="#{menu.groups.wh40kskirmish.fighter.create}"></a>
+	</nav>
+	<form action="#" th:action="@{/wh40kskirmish/gang/{groupId}/{gangId}/recruit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:object="${fighterRecruitForm}" method="post">
+		<input type="hidden" th:field="*{groupId}" />
+		<input type="hidden" th:field="*{gangId}" />
+		<label>
+			Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Username error</span>
+			<input type="text" th:field="*{name}" />
+		</label>
+		<label>
+			Fighter type <span class="error" th:if="${#fields.hasErrors('fighterTypeId')}" th:errors="*{fighterTypeId}">Fighter type error</span>
+			<select th:field="*{fighterTypeId}">
+				<option th:each="fighterType : ${gang.fighterTypes}" th:value="${fighterType.id}" th:text="${fighterType.name}"></option>
+			</select>
+		</label>
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

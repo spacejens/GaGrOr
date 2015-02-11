@@ -15,6 +15,7 @@ import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
 import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
+import com.gagror.data.wh40kskirmish.gangs.GangRecruitOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
 import com.gagror.data.wh40kskirmish.gangs.GangViewOutput;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
@@ -66,6 +67,12 @@ public class GangService {
 				gang,
 				rulesService.viewRules(groupId),
 				fighters);
+	}
+
+	public GangRecruitOutput prepareToRecruitFighter(final Long groupId, final Long gangId) {
+		return new GangRecruitOutput(
+				gangRepository.load(groupId, gangId),
+				rulesService.viewRules(groupId));
 	}
 
 	public FighterViewOutput viewFighter(final Long groupId, final Long fighterId) {

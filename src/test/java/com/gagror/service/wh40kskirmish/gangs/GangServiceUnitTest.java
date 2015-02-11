@@ -26,6 +26,7 @@ import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
 import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangOutput;
+import com.gagror.data.wh40kskirmish.gangs.GangRecruitOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
 import com.gagror.data.wh40kskirmish.rules.RulesOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
@@ -110,6 +111,13 @@ public class GangServiceUnitTest {
 	public void viewGang_ok() {
 		final GangOutput result = instance.viewGang(GROUP_ID, GANG_ID);
 		assertEquals("Wrong gang returned", GANG_NAME, result.getName());
+	}
+
+	@Test
+	public void prepareToRecruitFighter_ok() {
+		final GangRecruitOutput result = instance.prepareToRecruitFighter(GROUP_ID, GANG_ID);
+		assertEquals("Wrong gang returned", GANG_NAME, result.getName());
+		assertSame("Wrong rules returned", rules, result.getRules());
 	}
 
 	@Test
