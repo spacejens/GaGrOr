@@ -2,10 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/framework :: head" />
 <body>
-	<h1>Data formatting and output</h1>
+	<h1>Types of formatting</h1>
+	<h2>Data formatting and output</h2>
 	<span th:fragment="datetime (date)" th:text="${#calendars.format(date,'yyyy-MM-dd HH:mm')}">1970-01-01 00:01</span>
 	<span th:fragment="username (account)" class="fi-torso" th:class="#{${account.cssClass}}" th:text="${account.name}">Name</span>
 	<span th:fragment="usernames (accounts)" th:each="account : ${accounts}" class="fi-torso" th:class="#{${account.cssClass}}" th:text="${account.name}">One of several names</span>
+	<h2>Account, group, and contact links</h2>
+	<th:block th:fragment="contact (contact)">
+		<a th:if="${contact.contactType} ? ${contact.contactType.contact}" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}" th:text="${contact.name}" th:class="#{${contact.cssClass}}"></a>
+		<span th:unless="${contact.contactType} ? ${contact.contactType.contact}" th:class="#{${contact.cssClass}}" th:text="${contact.name}"></span>
+	</th:block>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
 </html>

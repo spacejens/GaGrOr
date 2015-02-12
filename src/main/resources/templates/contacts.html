@@ -21,10 +21,7 @@
 		<tbody>
 			<tr th:each="contact : ${contacts}">
 				<td>
-					<span th:replace="/fragments/formatting :: username (account=${contact})"></span>
-				</td>
-				<td th:if="${contact.contactType} ? ${contact.contactType.contact}">
-					<a href="view_contact.html" th:href="@{/account/viewcontact/{contactId}(contactId=${contact.contactId})}" th:text="#{menu.contacts.view}"></a>
+					<a th:replace="/fragments/formatting :: contact (contact=${contact})"></a>
 				</td>
 				<td th:unless="${contact.contactType}">
 					<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}" th:text="#{menu.contacts.request}"></a>
