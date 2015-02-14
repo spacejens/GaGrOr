@@ -21,7 +21,7 @@
 		<label th:unless="${currentUser.is(currentState)}">
 			Account type <span class="error" th:if="${#fields.hasErrors('accountType')}" th:errors="*{accountType}">Account type error</span>
 			<select th:field="*{accountType}">
-				<option th:each="type : ${currentUser.account.accountType.mayEdit}" th:value="${type}" th:text="#{${type.displayNameProperty}}">Standard user</option>
+				<option th:each="type : ${currentUser.mayEdit}" th:value="${type}" th:text="#{${type.displayNameProperty}}">Standard user</option>
 			</select>
 		</label>
 		<input th:if="${currentUser.is(currentState)}" type="hidden" th:field="*{active}" />

@@ -1,5 +1,8 @@
 package com.gagror.data.account;
 
+import java.util.Collections;
+import java.util.List;
+
 import lombok.Getter;
 
 import com.gagror.data.Output;
@@ -28,8 +31,21 @@ public class CurrentUserOutput implements Output {
 		return !is(otherAccount);
 	}
 
+	public List<AccountType> getMayEdit() {
+		if(isLoggedIn()) {
+			return getAccount().getAccountType().getMayEdit();
+		}
+		return Collections.emptyList();
+	}
+
+	public boolean mayEdit(final AccountReferenceOutput otherAccount) {
+		if(is(otherAccount)) {
+			return true;
+		}
+		return getMayEdit().contains(otherAccount.getAccountType());
+	}
+
 	// TODO Add capability to check group membership statuses (invited / full member / owner), simplify HTML
-	// TODO Add capability to check if current user can edit other accounts, simplify HTML
 
 	public boolean isLoggedIn() {
 		return null != account;
