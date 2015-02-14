@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.CodingErrorException;
 import com.gagror.data.account.AccountEntity;
-import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
+import com.gagror.data.account.CurrentUserOutput;
 
 @Service
 @Transactional
@@ -49,14 +49,14 @@ public class AccessControlService {
 		return requestAccount.getAccount();
 	}
 
-	public AccountReferenceOutput getRequestAccount() {
+	public CurrentUserOutput getCurrentUser() {
 		final AccountEntity account = getRequestAccountEntity();
 		if(null != account) {
 			log.trace(String.format("Loaded request account '%s' for output", account.getName()));
-			return new AccountReferenceOutput(account);
+			return new CurrentUserOutput(account);
 		} else {
 			log.trace("Cannot load request account for output, user not logged in");
-			return null;
+			return new CurrentUserOutput();
 		}
 	}
 

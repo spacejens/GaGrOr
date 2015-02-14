@@ -12,25 +12,25 @@
 		<p class="error" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Global errors</p>
 		<input type="hidden" th:field="*{id}" />
 		<input type="hidden" th:field="*{version}" />
-		<input th:unless="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{name}" />
-		<label th:if="${currentUser.id} == ${currentState.id}">
+		<input th:unless="${currentUser.account.id} == ${currentState.id}" type="hidden" th:field="*{name}" />
+		<label th:if="${currentUser.account.id} == ${currentState.id}">
 			Username <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Username error</span>
 			<input type="text" th:field="*{name}" />
 		</label>
-		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{accountType}" />
-		<label th:unless="${currentUser.id} == ${currentState.id}">
+		<input th:if="${currentUser.account.id} == ${currentState.id}" type="hidden" th:field="*{accountType}" />
+		<label th:unless="${currentUser.account.id} == ${currentState.id}">
 			Account type <span class="error" th:if="${#fields.hasErrors('accountType')}" th:errors="*{accountType}">Account type error</span>
 			<select th:field="*{accountType}">
-				<option th:each="type : ${currentUser.accountType.mayEdit}" th:value="${type}" th:text="#{${type.displayNameProperty}}">Standard user</option>
+				<option th:each="type : ${currentUser.account.accountType.mayEdit}" th:value="${type}" th:text="#{${type.displayNameProperty}}">Standard user</option>
 			</select>
 		</label>
-		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{active}" />
-		<label th:unless="${currentUser.id} == ${currentState.id}">
+		<input th:if="${currentUser.account.id} == ${currentState.id}" type="hidden" th:field="*{active}" />
+		<label th:unless="${currentUser.account.id} == ${currentState.id}">
 			Active
 			<input type="checkbox" th:field="*{active}" />
 		</label>
-		<input th:if="${currentUser.id} == ${currentState.id}" type="hidden" th:field="*{locked}" />
-		<label th:unless="${currentUser.id} == ${currentState.id}">
+		<input th:if="${currentUser.account.id} == ${currentState.id}" type="hidden" th:field="*{locked}" />
+		<label th:unless="${currentUser.account.id} == ${currentState.id}">
 			Locked
 			<input type="checkbox" th:field="*{locked}" />
 		</label>

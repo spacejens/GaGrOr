@@ -30,9 +30,9 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.gagror.data.account.AccountEntity;
-import com.gagror.data.account.AccountReferenceOutput;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
+import com.gagror.data.account.CurrentUserOutput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccessControlServiceUnitTest {
@@ -110,31 +110,34 @@ public class AccessControlServiceUnitTest {
 	}
 
 	@Test
-	public void getRequestAccount_ok() {
+	public void getCurrentUser_ok() {
 		whenLoggedIn();
-		final AccountReferenceOutput result = instance.getRequestAccount();
-		assertEquals("Wrong ID", account.getId(), result.getId());
-		assertEquals("Wrong username", account.getName(), result.getName());
-		assertEquals("Wrong account type", account.getAccountType(), result.getAccountType());
+		final CurrentUserOutput result = instance.getCurrentUser();
+		assertTrue("Should be logged in", result.isLoggedIn());
+		assertEquals("Wrong ID", account.getId(), result.getAccount().getId());
+		assertEquals("Wrong username", account.getName(), result.getAccount().getName());
+		assertEquals("Wrong account type", account.getAccountType(), result.getAccount().getAccountType());
 		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
 		assertSame("Should have cached request account", account, requestAccount.getAccount());
 	}
 
 	@Test
-	public void getRequestAccount_notLoggedIn() {
+	public void getCurrentUser_notLoggedIn() {
 		whenNotLoggedIn();
-		final AccountReferenceOutput result = instance.getRequestAccount();
-		assertNull("Should not have loaded request account", result);
+		final CurrentUserOutput result = instance.getCurrentUser();
+		assertFalse("Should not be logged in", result.isLoggedIn());
+		assertNull("Should not have loaded request account", result.getAccount());
 		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
 		assertNull("Should have cached request account null", requestAccount.getAccount());
 	}
 
 	@Test
-	public void getRequestAccount_accountNotFound() {
+	public void getCurrentUser_accountNotFound() {
 		whenLoggedIn();
 		when(accountRepository.loadOrNull(USERNAME)).thenReturn(null);
-		final AccountReferenceOutput result = instance.getRequestAccount();
-		assertNull("Should not have loaded request account", result);
+		final CurrentUserOutput result = instance.getCurrentUser();
+		assertFalse("Should not be logged in", result.isLoggedIn());
+		assertNull("Should not have loaded request account", result.getAccount());
 		assertTrue("Should have marked request account as loaded", requestAccount.isLoaded());
 		assertNull("Should have cached request account null", requestAccount.getAccount());
 	}

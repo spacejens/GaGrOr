@@ -4,7 +4,7 @@
 <body>
 	<div th:fragment="mainmenu" id="mainmenu">
 		<form id="logout-form" th:action="@{/access/logout}" method="post" style="display: none;"></form>
-		<nav th:if="${currentUser}" class="icon-bar five-up">
+		<nav th:if="${currentUser.loggedIn}" class="icon-bar five-up">
 			<a class="item" href="../about.html" th:href="@{/}">
 				<i class="fi-info"></i>
 				<label th:text="#{menu.public}"></label>
@@ -17,16 +17,16 @@
 				<i class="fi-address-book"></i>
 				<label th:text="#{menu.contacts}"></label>
 			</a>
-			<a class="item" href="../edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${currentUser.id})}">
-				<i class="fi-torso" th:class="#{${currentUser.cssClass}}"></i>
-				<label th:text="${currentUser.name}"></label>
+			<a class="item" href="../edit_account.html" th:href="@{/account/edit/{accountId}(accountId=${currentUser.account.id})}">
+				<i class="fi-torso" th:class="#{${currentUser.account.cssClass}}"></i>
+				<label th:text="${currentUser.account.name}"></label>
 			</a>
 			<a class="item" href="#" onclick="javascript: document.getElementById('logout-form').submit();return false;">
 				<i class="fi-lock"></i>
 				<label th:text="#{menu.logout}"></label>
 			</a>
 		</nav>
-		<nav th:unless="${currentUser}" class="icon-bar three-up">
+		<nav th:unless="${currentUser.loggedIn}" class="icon-bar three-up">
 			<a class="item" href="../about.html" th:href="@{/}">
 				<i class="fi-info"></i>
 				<label th:text="#{menu.public}"></label>

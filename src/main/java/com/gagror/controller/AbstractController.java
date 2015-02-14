@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.gagror.data.account.AccountReferenceOutput;
+import com.gagror.data.account.CurrentUserOutput;
 import com.gagror.data.account.SecurityRoles;
 import com.gagror.data.group.GroupIdentifiable;
 import com.gagror.service.accesscontrol.AccessControlService;
@@ -31,9 +31,9 @@ public abstract class AbstractController {
 
 	@PreAuthorize(IS_PUBLIC)
 	@ModelAttribute("currentUser") // This annotation is OK here because every page needs this data to render the menu
-	public AccountReferenceOutput getCurrentUser() {
+	public CurrentUserOutput getCurrentUser() {
 		log.trace("Getting current user model attribute");
-		return accessControl.getRequestAccount();
+		return accessControl.getCurrentUser();
 	}
 
 	protected <F extends GroupIdentifiable> void verifyURLGroupIdMatchesForm(final Long urlGroupId, final F form) {
