@@ -26,13 +26,13 @@
 				<td th:unless="${contact.contactType}">
 					<a href="contacts.html" th:href="@{/account/request/{accountId}(accountId=${contact.id})}" th:text="#{menu.contacts.request}"></a>
 				</td>
-				<td th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
+				<td th:if="${contact.incomingRequest}">
 					<a href="contacts.html" th:href="@{/account/accept/{contactId}(contactId=${contact.contactId})}" th:text="#{menu.contacts.accept}"></a>
 				</td>
-				<td th:if="${contact.contactType != null and contact.contactType.request and contact.incoming}">
+				<td th:if="${contact.incomingRequest}">
 					<a href="contacts.html" th:href="@{/account/decline/{contactId}(contactId=${contact.contactId})}" th:text="#{menu.contacts.decline}"></a>
 				</td>
-				<td th:if="${contact.contactType != null and not contact.incoming}">
+				<td th:if="${contact.outgoing}">
 					<a href="contacts.html" th:href="@{/account/delete/{contactId}(contactId=${contact.contactId})}" onclick="return window.confirm('Are you sure?');" th:text="#{menu.contacts.delete}"></a>
 				</td>
 				<td th:if="${currentUser.mayEdit(contact)}">

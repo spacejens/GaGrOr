@@ -26,4 +26,18 @@ public class ContactReferenceOutput extends AccountReferenceOutput {
 		contactId = null;
 		incoming = false;
 	}
+
+	public boolean isOutgoing() {
+		if(null == contactType) {
+			return false;
+		}
+		return !isIncoming();
+	}
+
+	public boolean isIncomingRequest() {
+		if(null == contactType) {
+			return false;
+		}
+		return contactType.isRequest() && isIncoming();
+	}
 }
