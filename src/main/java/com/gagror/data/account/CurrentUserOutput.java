@@ -17,7 +17,17 @@ public class CurrentUserOutput implements Output {
 		account = null;
 	}
 
-	// TODO Add capability to check if current user is same as another user, simplify HTML
+	public boolean is(final AccountReferenceOutput otherAccount) {
+		if(null == getAccount()) {
+			return false;
+		}
+		return otherAccount.getId().equals(getAccount().getId());
+	}
+
+	public boolean isNot(final AccountReferenceOutput otherAccount) {
+		return !is(otherAccount);
+	}
+
 	// TODO Add capability to check group membership statuses (invited / full member / owner), simplify HTML
 	// TODO Add capability to check if current user can edit other accounts, simplify HTML
 
