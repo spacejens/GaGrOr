@@ -45,6 +45,7 @@ public class CurrentUserOutput implements Output {
 		return getMayEdit().contains(otherAccount.getAccountType());
 	}
 
+	// TODO Add capability to check if owner of player owned data, simplify HTML
 	// TODO Add capability to check group membership statuses (invited / full member / owner), simplify HTML
 
 	public boolean isLoggedIn() {
