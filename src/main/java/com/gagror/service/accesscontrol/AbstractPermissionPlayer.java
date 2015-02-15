@@ -5,11 +5,10 @@ import lombok.extern.apachecommons.CommonsLog;
 import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupMemberEntity;
-import com.gagror.data.group.GroupOwned;
 import com.gagror.data.group.PlayerOwned;
 
 @CommonsLog
-public abstract class AbstractPermissionPlayer<E extends Identifiable<Long> & PlayerOwned & GroupOwned>
+public abstract class AbstractPermissionPlayer<E extends Identifiable<Long> & PlayerOwned>
 extends AbstractGagrorPermissionLongId<E> {
 
 	protected AbstractPermissionPlayer(final String name, final Class<E> targetClass) {

@@ -19,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.gagror.data.account.AccountEntity;
+import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
 import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
@@ -62,6 +63,9 @@ public class GangServiceUnitTest {
 
 	@Mock
 	FighterViewService fighterViewService;
+
+	@Mock
+	GroupEntity group;
 
 	@Mock
 	AccountEntity player;
@@ -130,11 +134,13 @@ public class GangServiceUnitTest {
 
 	@Before
 	public void setup() {
+		when(group.getId()).thenReturn(GROUP_ID);
 		when(groupService.viewGroupMembers(GROUP_ID)).thenReturn(groupMembers);
 		when(rulesService.viewRules(GROUP_ID)).thenReturn(rules);
 		when(rulesService.listAllFactions(GROUP_ID)).thenReturn(factions);
 		when(gang.getId()).thenReturn(GANG_ID);
 		when(gang.getName()).thenReturn(GANG_NAME);
+		when(gang.getGroup()).thenReturn(group);
 		when(gang.getPlayer()).thenReturn(player);
 		when(gang.getFaction()).thenReturn(faction);
 		when(gangRepository.load(GROUP_ID, GANG_ID)).thenReturn(gang);

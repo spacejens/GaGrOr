@@ -4,17 +4,17 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${gang.rules.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${gang.rules.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${gang.rules.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{${gang.rules.group.groupType.groupUrl}+'/{groupId}'(groupId=${gang.rules.group.id})}" th:text="${gang.rules.group.name}"></a>
+		<a th:unless="${currentUser.isInvitedOrMember(gang.group)}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${currentUser.isInvitedOrMember(gang.group)}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${currentUser.isInvitedOrMember(gang.group)}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{${gang.group.groupType.groupUrl}+'/{groupId}'(groupId=${gang.group.id})}" th:text="${gang.group.name}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
 		<a class="current" th:text="${gang.name}"></a>
 	</nav>
-	<dl th:if="${(gang.rules.group.memberType != null and gang.rules.group.memberType.owner) or currentUser.is(gang.player)}" class="sub-nav" id="pageactions">
+	<dl th:if="${currentUser.canActAsPlayer(gang)}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd th:if="${gang.rules.group.memberType != null and gang.rules.group.memberType.owner}"><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/edit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
-		<dd th:if="${(gang.rules.group.memberType != null and gang.rules.group.memberType.owner) or currentUser.is(gang.player)}"><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/recruit(groupId=${gang.rules.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.fighter.create}"></a></dd>
+		<dd th:if="${currentUser.isOwner(gang.group)}"><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/edit(groupId=${gang.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.gang.edit}"></a></dd>
+		<dd th:if="${currentUser.canActAsPlayer(gang)}"><a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}/recruit(groupId=${gang.group.id},gangId=${gang.id})}" th:text="#{menu.groups.wh40kskirmish.fighter.create}"></a></dd>
 	</dl>
 	<p th:if="${#lists.isEmpty(gang.fighters)}" class="fi-alert">
 		No fighters have been recruited yet
@@ -38,7 +38,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="fighter : ${gang.fighters}">
-				<td><a th:href="@{/wh40kskirmish/gang/{groupId}/fighter/{fighterId}(groupId=${gang.rules.group.id},fighterId=${fighter.id})}" th:text="${fighter.name}"></a></td>
+				<td><a th:href="@{/wh40kskirmish/gang/{groupId}/fighter/{fighterId}(groupId=${gang.group.id},fighterId=${fighter.id})}" th:text="${fighter.name}"></a></td>
 				<td th:text="${fighter.fighterType.name}"></td>
 				<td th:text="${fighter.movement}"></td>
 				<td th:text="${fighter.weaponSkill}"></td>

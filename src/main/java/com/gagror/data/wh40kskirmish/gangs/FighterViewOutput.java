@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import com.gagror.data.account.AccountReferenceOutput;
+import com.gagror.data.group.GroupReferenceOutput;
+import com.gagror.data.group.PlayerOwnedOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeReferenceOutput;
 
-public class FighterViewOutput extends FighterReferenceOutput {
+public class FighterViewOutput extends FighterReferenceOutput implements PlayerOwnedOutput {
 
 	@Getter
 	private final FighterTypeReferenceOutput fighterType;
@@ -57,6 +60,7 @@ public class FighterViewOutput extends FighterReferenceOutput {
 			final int attacks,
 			final int leadership,
 			final int cost) {
+		// TODO Send builder as argument to constructor, to reduce risk of arguments being mixed up
 		super(entity);
 		fighterType = new FighterTypeReferenceOutput(entity.getFighterType());
 		this.gang = gang;
@@ -133,5 +137,15 @@ public class FighterViewOutput extends FighterReferenceOutput {
 					getLeadership(),
 					getCost());
 		}
+	}
+
+	@Override
+	public GroupReferenceOutput getGroup() {
+		return getGang().getRules().getGroup();
+	}
+
+	@Override
+	public AccountReferenceOutput getPlayer() {
+		return getGang().getPlayer();
 	}
 }
