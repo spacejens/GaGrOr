@@ -5,7 +5,7 @@
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
 		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{${group.groupType.groupUrl}+'/{groupId}'(groupId=${group.id})}" th:text="${group.name}"></a>
+		<a th:href="@{${group.url}}" th:text="${group.name}"></a>
 		<a class="current" th:text="#{menu.groups.edit}"></a>
 	</nav>
 	<form action="#" th:action="@{/groups/edit/{groupId}(groupId=${group.id})}" th:object="${groupEditForm}" method="post">

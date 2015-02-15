@@ -3,9 +3,11 @@ package com.gagror.data.group;
 import lombok.Getter;
 
 import com.gagror.data.AbstractEditableNamedEntityOutput;
+import com.gagror.data.URLOutput;
 
 public class GroupReferenceOutput
-extends AbstractEditableNamedEntityOutput {
+extends AbstractEditableNamedEntityOutput
+implements URLOutput {
 
 	@Getter
 	private final GroupType groupType;
@@ -29,5 +31,10 @@ extends AbstractEditableNamedEntityOutput {
 		groupType = group.getGroupType();
 		memberType = membership.getMemberType();
 		viewableByAnyone = group.isViewableByAnyone();
+	}
+
+	@Override
+	public String getUrl() {
+		return String.format("%s/%d", getGroupType().getGroupUrl(), getId());
 	}
 }

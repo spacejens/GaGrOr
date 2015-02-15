@@ -27,7 +27,7 @@
 				<td th:text="#{${group.groupType.displayNameProperty}}"></td>
 				<td th:unless="${public == 'true'}" th:text="#{${group.memberType.displayNameProperty}}"></td>
 				<td th:text="${group.memberCount} + (${group.invitationCount}? ' (+' + ${group.invitationCount} + ')' : '')"></td>
-				<td><a th:href="@{${group.groupType.groupUrl}+'/{groupId}'(groupId=${group.id})}" th:text="#{menu.groups.view}"></a></td>
+				<td><a th:href="@{${group.url}}" th:text="#{menu.groups.view}"></a></td>
 				<td th:if="${public != 'true' and group.memberType.invitation}"><a th:href="@{/groups/accept/{memberId}(memberId=${group.memberId})}" th:text="#{menu.groups.accept}"></a></td>
 				<td th:if="${public != 'true' and group.memberType.invitation}"><a th:href="@{/groups/decline/{memberId}(memberId=${group.memberId})}" th:text="#{menu.groups.decline}"></a></td>
 			</tr>

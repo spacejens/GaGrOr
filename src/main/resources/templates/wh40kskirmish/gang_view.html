@@ -7,7 +7,7 @@
 		<a th:unless="${currentUser.isInvitedOrMember(gang.group)}" th:href="@{/}" th:text="#{menu.public}"></a>
 		<a th:unless="${currentUser.isInvitedOrMember(gang.group)}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
 		<a th:if="${currentUser.isInvitedOrMember(gang.group)}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{${gang.group.groupType.groupUrl}+'/{groupId}'(groupId=${gang.group.id})}" th:text="${gang.group.name}"></a>
+		<a th:href="@{${gang.group.url}}" th:text="${gang.group.name}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
 		<a class="current" th:text="${gang.name}"></a>
 	</nav>
