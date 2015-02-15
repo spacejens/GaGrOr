@@ -7,7 +7,7 @@
 		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
 		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
 		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{${group.url}}" th:text="${group.name}"></a>
+		<a th:replace="/fragments/formatting :: link (to=${group})"></a>
 		<a class="current" th:text="#{menu.groups.members}"></a>
 	</nav>
 	<dl class="sub-nav" id="pageactions" th:if="${group.memberType != null and group.memberType.owner}">

@@ -7,7 +7,7 @@
 		<a th:unless="${skill.skillCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
 		<a th:unless="${skill.skillCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
 		<a th:if="${skill.skillCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{${skill.skillCategory.group.url}}" th:text="${skill.skillCategory.group.name}"></a>
+		<a th:replace="/fragments/formatting :: link (to=${skill.skillCategory.group})"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${skill.skillCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.skill}"></a>
 		<a class="current" th:text="${skill.name}"></a>

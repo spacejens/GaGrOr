@@ -7,7 +7,7 @@
 		<a th:unless="${itemCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
 		<a th:unless="${itemCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
 		<a th:if="${itemCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
-		<a th:href="@{${itemCategory.group.url}}" th:text="${itemCategory.group.name}"></a>
+		<a th:replace="/fragments/formatting :: link (to=${itemCategory.group})"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${itemCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.itemcategory}"></a>
 		<a class="current" th:text="${itemCategory.name}"></a>
