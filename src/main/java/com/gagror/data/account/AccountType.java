@@ -37,7 +37,7 @@ public enum AccountType implements Identifiable<Integer>, PropertyNameDisplayabl
 	private final String cssClass;
 
 	@Getter
-	private final List<AccountType> mayEdit; // TODO Change AccountType.mayEdit to EnumSet
+	private final List<AccountType> mayEdit; // Cannot be EnumSet of own type, class would not be able to instantiate
 
 	/**
 	 * Sorted as needed by {@link UserDetails#getAuthorities()}.
