@@ -12,7 +12,6 @@ import lombok.ToString;
 import com.gagror.data.AbstractEditableNamedEntity;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupOwned;
 import com.gagror.data.group.PlayerOwned;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 
@@ -20,7 +19,7 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 @ToString(of={}, callSuper=true)
 @Entity
 @Table(name="wh40ksk_fighter")
-public class FighterEntity extends AbstractEditableNamedEntity implements GroupOwned, PlayerOwned {
+public class FighterEntity extends AbstractEditableNamedEntity implements PlayerOwned {
 
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
