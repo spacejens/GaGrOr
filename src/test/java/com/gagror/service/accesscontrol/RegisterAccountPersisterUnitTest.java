@@ -14,12 +14,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.AddError;
+import com.gagror.EchoAnswer;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
 import com.gagror.data.account.AccountType;
@@ -111,12 +110,7 @@ public class RegisterAccountPersisterUnitTest {
 
 	@Before
 	public void setupAccountRepository() {
-		when(accountRepository.persist(any(AccountEntity.class))).thenAnswer(new Answer<AccountEntity>() {
-			@Override
-			public AccountEntity answer(final InvocationOnMock invocation) throws Throwable {
-				return (AccountEntity)invocation.getArguments()[0];
-			}
-		});
+		when(accountRepository.persist(any(AccountEntity.class))).thenAnswer(new EchoAnswer<>());
 	}
 
 	@Before

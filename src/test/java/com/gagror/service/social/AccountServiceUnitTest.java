@@ -24,10 +24,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
+import com.gagror.EchoAnswer;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEditOutput;
 import com.gagror.data.account.AccountEntity;
@@ -458,12 +457,7 @@ public class AccountServiceUnitTest {
 
 	@Before
 	public void setupContactRepository() {
-		when(contactRepository.persist(any(ContactEntity.class))).thenAnswer(new Answer<ContactEntity>(){
-			@Override
-			public ContactEntity answer(final InvocationOnMock invocation) throws Throwable {
-				return (ContactEntity)invocation.getArguments()[0];
-			}
-		});
+		when(contactRepository.persist(any(ContactEntity.class))).thenAnswer(new EchoAnswer<>());
 	}
 
 	@Before

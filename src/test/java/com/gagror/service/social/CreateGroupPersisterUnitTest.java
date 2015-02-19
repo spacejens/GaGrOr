@@ -14,11 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.EchoAnswer;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupCreateInput;
 import com.gagror.data.group.GroupEntity;
@@ -84,12 +83,7 @@ public class CreateGroupPersisterUnitTest {
 
 	@Before
 	public void setupAccountRepository() {
-		when(groupRepository.persist(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>() {
-			@Override
-			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {
-				return (GroupEntity)invocation.getArguments()[0];
-			}
-		});
+		when(groupRepository.persist(any(GroupEntity.class))).thenAnswer(new EchoAnswer<>());
 	}
 
 	@Before

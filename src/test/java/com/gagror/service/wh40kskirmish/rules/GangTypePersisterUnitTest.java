@@ -19,12 +19,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.springframework.validation.BindingResult;
 
 import com.gagror.AddError;
+import com.gagror.EchoAnswer;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.rules.RulesRepository;
@@ -312,12 +311,7 @@ public class GangTypePersisterUnitTest {
 
 	@Before
 	public void setupGangTypeRepository() {
-		when(gangTypeRepository.persist(any(GangTypeEntity.class))).thenAnswer(new Answer<GangTypeEntity>() {
-			@Override
-			public GangTypeEntity answer(final InvocationOnMock invocation) throws Throwable {
-				return (GangTypeEntity)invocation.getArguments()[0];
-			}
-		});
+		when(gangTypeRepository.persist(any(GangTypeEntity.class))).thenAnswer(new EchoAnswer<>());
 	}
 
 	@Before

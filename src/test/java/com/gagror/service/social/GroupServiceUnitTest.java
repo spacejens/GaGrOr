@@ -22,10 +22,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
+import com.gagror.EchoAnswer;
 import com.gagror.data.DataNotFoundException;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountReferenceOutput;
@@ -506,13 +505,7 @@ public class GroupServiceUnitTest {
 
 	@Before
 	public void setupGroupRepository() {
-		when(groupRepository.persist(any(GroupEntity.class))).thenAnswer(new Answer<GroupEntity>(){
-			@Override
-			public GroupEntity answer(final InvocationOnMock invocation) throws Throwable {
-				final GroupEntity group = (GroupEntity)invocation.getArguments()[0];
-				return group;
-			}
-		});
+		when(groupRepository.persist(any(GroupEntity.class))).thenAnswer(new EchoAnswer<>());
 		when(groupRepository.listViewableByAnyone()).thenReturn(Arrays.asList(firstGroup, secondGroup, thirdGroup, fourthGroup));
 		doThrow(DataNotFoundException.class).when(groupRepository).load(UNKNOWN_GROUP_ID);
 	}
