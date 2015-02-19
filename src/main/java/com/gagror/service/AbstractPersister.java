@@ -57,7 +57,6 @@ public abstract class AbstractPersister<I extends Input, E extends AbstractEntit
 		// OVerride this method to add form validations depending on the context
 	}
 
-	// TODO Add default implementation of isCreateNew for identifiable forms
 	protected abstract boolean isCreateNew(final I form);
 
 	protected E loadExisting(final I form, final C context) {

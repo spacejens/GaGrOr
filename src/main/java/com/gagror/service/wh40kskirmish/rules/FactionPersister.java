@@ -12,12 +12,12 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FactionInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class FactionPersister
-extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
+extends AbstractIdentifiablePersister<FactionInput, FactionEntity, GangTypeEntity> {
 
 	@Autowired
 	GangTypeRepository gangTypeRepository;
@@ -48,11 +48,6 @@ extends AbstractPersister<FactionInput, FactionEntity, GangTypeEntity> {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected boolean isCreateNew(final FactionInput form) {
-		return !form.isPersistent();
 	}
 
 	@Override

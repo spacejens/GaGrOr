@@ -12,12 +12,12 @@ import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryInput;
 import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class TerritoryCategoryPersister
-extends AbstractPersister<TerritoryCategoryInput, TerritoryCategoryEntity, Wh40kSkirmishRulesEntity> {
+extends AbstractIdentifiablePersister<TerritoryCategoryInput, TerritoryCategoryEntity, Wh40kSkirmishRulesEntity> {
 
 	@Autowired
 	RulesRepository rulesRepository;
@@ -46,11 +46,6 @@ extends AbstractPersister<TerritoryCategoryInput, TerritoryCategoryEntity, Wh40k
 				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 			}
 		}
-	}
-
-	@Override
-	protected boolean isCreateNew(final TerritoryCategoryInput form) {
-		return !form.isPersistent();
 	}
 
 	@Override

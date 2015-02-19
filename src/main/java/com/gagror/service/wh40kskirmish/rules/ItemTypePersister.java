@@ -12,12 +12,12 @@ import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeInput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemTypeRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class ItemTypePersister
-extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
+extends AbstractIdentifiablePersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 
 	@Autowired
 	ItemCategoryRepository itemCategoryRepository;
@@ -48,11 +48,6 @@ extends AbstractPersister<ItemTypeInput, ItemTypeEntity, ItemCategoryEntity> {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected boolean isCreateNew(final ItemTypeInput form) {
-		return !form.isPersistent();
 	}
 
 	@Override

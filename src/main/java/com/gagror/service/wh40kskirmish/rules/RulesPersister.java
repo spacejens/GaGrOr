@@ -10,12 +10,12 @@ import com.gagror.data.group.GroupEntity;
 import com.gagror.data.wh40kskirmish.rules.RulesInput;
 import com.gagror.data.wh40kskirmish.rules.RulesRepository;
 import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class RulesPersister
-extends AbstractPersister<RulesInput, Wh40kSkirmishRulesEntity, GroupEntity> {
+extends AbstractIdentifiablePersister<RulesInput, Wh40kSkirmishRulesEntity, GroupEntity> {
 
 	@Autowired
 	RulesRepository rulesRepository;

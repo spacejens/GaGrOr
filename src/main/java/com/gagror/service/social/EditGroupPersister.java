@@ -10,11 +10,11 @@ import com.gagror.data.AbstractEntity;
 import com.gagror.data.group.GroupEditInput;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
-public class EditGroupPersister extends AbstractPersister<GroupEditInput, GroupEntity, AbstractEntity> {
+public class EditGroupPersister extends AbstractIdentifiablePersister<GroupEditInput, GroupEntity, AbstractEntity> {
 
 	@Autowired
 	GroupRepository groupRepository;

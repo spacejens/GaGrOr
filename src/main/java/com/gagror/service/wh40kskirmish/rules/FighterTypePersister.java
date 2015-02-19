@@ -13,12 +13,12 @@ import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class FighterTypePersister
-extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
+extends AbstractIdentifiablePersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
 	@Autowired
 	RaceRepository raceRepository;
@@ -79,11 +79,6 @@ extends AbstractPersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 		if(form.getStartingLeadership() > context.getMaxLeadership()) {
 			form.addErrorStartingAboveMaxLeadership(bindingResult, context.getMaxLeadership());
 		}
-	}
-
-	@Override
-	protected boolean isCreateNew(final FighterTypeInput form) {
-		return !form.isPersistent();
 	}
 
 	@Override

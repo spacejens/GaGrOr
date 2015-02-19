@@ -22,12 +22,12 @@ import com.gagror.data.wh40kskirmish.rules.experience.ExperiencePointsComparator
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeInput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class GangTypePersister
-extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntity> {
+extends AbstractIdentifiablePersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntity> {
 
 	@Autowired
 	RulesRepository rulesRepository;
@@ -71,11 +71,6 @@ extends AbstractPersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntit
 				form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
 			}
 		}
-	}
-
-	@Override
-	protected boolean isCreateNew(final GangTypeInput form) {
-		return !form.isPersistent();
 	}
 
 	@Override

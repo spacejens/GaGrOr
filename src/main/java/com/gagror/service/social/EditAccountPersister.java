@@ -12,12 +12,12 @@ import com.gagror.data.Identifiable;
 import com.gagror.data.account.AccountEditInput;
 import com.gagror.data.account.AccountEntity;
 import com.gagror.data.account.AccountRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
 @CommonsLog
-public class EditAccountPersister extends AbstractPersister<AccountEditInput, AccountEntity, AbstractEntity> {
+public class EditAccountPersister extends AbstractIdentifiablePersister<AccountEditInput, AccountEntity, AbstractEntity> {
 
 	@Autowired
 	AccountRepository accountRepository;

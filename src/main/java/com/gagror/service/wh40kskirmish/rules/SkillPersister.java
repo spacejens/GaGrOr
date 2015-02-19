@@ -12,12 +12,12 @@ import com.gagror.data.wh40kskirmish.rules.skills.SkillCategoryRepository;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillEntity;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillInput;
 import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
 @CommonsLog
 public class SkillPersister
-extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
+extends AbstractIdentifiablePersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
 	@Autowired
 	SkillCategoryRepository skillCategoryRepository;
@@ -48,11 +48,6 @@ extends AbstractPersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 				}
 			}
 		}
-	}
-
-	@Override
-	protected boolean isCreateNew(final SkillInput form) {
-		return !form.isPersistent();
 	}
 
 	@Override

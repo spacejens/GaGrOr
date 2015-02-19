@@ -18,11 +18,11 @@ import com.gagror.data.group.GroupMemberRepository;
 import com.gagror.data.group.GroupMembershipChangeException;
 import com.gagror.data.group.GroupRepository;
 import com.gagror.data.group.MemberType;
-import com.gagror.service.AbstractPersister;
+import com.gagror.service.AbstractIdentifiablePersister;
 import com.gagror.service.accesscontrol.AccessControlService;
 
 @Service
-public class InviteGroupPersister extends AbstractPersister<GroupInviteInput, GroupEntity, AbstractEntity> {
+public class InviteGroupPersister extends AbstractIdentifiablePersister<GroupInviteInput, GroupEntity, AbstractEntity> {
 
 	@Autowired
 	AccessControlService accessControlService;
