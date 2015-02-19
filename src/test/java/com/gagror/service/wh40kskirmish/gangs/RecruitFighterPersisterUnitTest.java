@@ -8,6 +8,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +27,8 @@ import com.gagror.data.wh40kskirmish.gangs.FighterRecruitInput;
 import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
+import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
@@ -32,8 +38,9 @@ public class RecruitFighterPersisterUnitTest {
 
 	private static final Long GROUP_ID = 1L;
 	private static final Long GANG_ID = 2L;
-	private static final Long FIGHTER_TYPE_ID = 3L;
-	private static final Long GANG_TYPE_ID = 4L;
+	private static final Long ANOTHER_GANG_ID = 3L;
+	private static final Long FIGHTER_TYPE_ID = 4L;
+	private static final Long GANG_TYPE_ID = 5L;
 	private static final String FIGHTER_NAME = "New fighter";
 	private static final int GANG_MONEY = 1000;
 	private static final int FIGHTER_TYPE_COST = 50;
@@ -56,6 +63,12 @@ public class RecruitFighterPersisterUnitTest {
 	BindingResult bindingResult;
 
 	@Mock
+	Wh40kSkirmishRulesEntity rules;
+
+	@Mock
+	FactionEntity faction;
+
+	@Mock
 	GangEntity gang;
 
 	@Mock
@@ -63,6 +76,12 @@ public class RecruitFighterPersisterUnitTest {
 
 	@Mock
 	FighterTypeEntity fighterType;
+
+	@Mock
+	GangEntity anotherGang;
+
+	@Mock
+	FighterEntity anotherGangsFighter;
 
 	@Test
 	public void save_ok() {
@@ -106,6 +125,14 @@ public class RecruitFighterPersisterUnitTest {
 		verify(form).addErrorFighterTypeNotAvailable(bindingResult);
 	}
 
+	@Test
+	public void save_nameNotUnique() {
+		when(anotherGangsFighter.getName()).thenReturn(FIGHTER_NAME);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
+	}
+
 	@Before
 	public void setup() {
 		// Set up repositories
@@ -119,12 +146,23 @@ public class RecruitFighterPersisterUnitTest {
 		when(form.getName()).thenReturn(FIGHTER_NAME);
 		AddError.to(bindingResult).when(form).addErrorNotEnoughMoney(bindingResult, FIGHTER_TYPE_COST);
 		AddError.to(bindingResult).when(form).addErrorFighterTypeNotAvailable(bindingResult);
+		AddError.to(bindingResult).when(form).addErrorNameMustBeUniqueWithinGroup(bindingResult);
 		// Set up context
+		when(gang.getId()).thenReturn(GANG_ID);
+		when(anotherGang.getId()).thenReturn(ANOTHER_GANG_ID);
 		when(gang.getMoney()).thenReturn(GANG_MONEY);
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
 		when(gang.getGangType()).thenReturn(gangType);
+		when(gang.getRules()).thenReturn(rules);
 		when(fighterType.getCost()).thenReturn(FIGHTER_TYPE_COST);
 		when(fighterType.availableFor(gangType)).thenReturn(true);
+		when(rules.getGangTypes()).thenReturn(Collections.singleton(gangType));
+		when(gangType.getFactions()).thenReturn(Collections.singleton(faction));
+		final Set<GangEntity> bothGangs = new HashSet<>();
+		bothGangs.add(gang);
+		bothGangs.add(anotherGang);
+		when(faction.getGangs()).thenReturn(bothGangs);
+		when(anotherGang.getFighters()).thenReturn(Collections.singleton(anotherGangsFighter));
 	}
 
 	@Before

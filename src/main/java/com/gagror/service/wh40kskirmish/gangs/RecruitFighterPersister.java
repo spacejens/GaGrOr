@@ -9,8 +9,10 @@ import com.gagror.data.wh40kskirmish.gangs.FighterRecruitInput;
 import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.service.AbstractPersister;
 
 @Service
@@ -46,8 +48,19 @@ public class RecruitFighterPersister extends AbstractPersister<FighterRecruitInp
 		if(context.getMoney() < fighterType.getCost()) {
 			form.addErrorNotEnoughMoney(bindingResult, fighterType.getCost());
 		}
+		// Validate that the fighter name is unique in the group
+		for(final GangTypeEntity gangType : context.getRules().getGangTypes()) {
+			for(final FactionEntity faction : gangType.getFactions()) {
+				for(final GangEntity gang : faction.getGangs()) {
+					for(final FighterEntity fighter : gang.getFighters()) {
+						if(form.getName().equals(fighter.getName())) {
+							form.addErrorNameMustBeUniqueWithinGroup(bindingResult);
+						}
+					}
+				}
+			}
+		}
 		// TODO Validate that one more of the selected fighter type can be recruited by the gang
-		// TODO Validate that the fighter name is unique (in the gang? in the group?)
 	}
 
 	@Override

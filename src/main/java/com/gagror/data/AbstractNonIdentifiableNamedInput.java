@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
 @NoArgsConstructor
 public abstract class AbstractNonIdentifiableNamedInput<C extends Named>
 implements Named, Input {
@@ -22,5 +25,9 @@ implements Named, Input {
 	@Override
 	public String toString() {
 		return String.format("%s, name='%s'", super.toString(), name);
+	}
+
+	public void addErrorNameMustBeUniqueWithinGroup(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(bindingResult.getObjectName(), "name", "must be unique in group"));
 	}
 }
