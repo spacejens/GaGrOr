@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.rules;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -15,7 +13,6 @@ import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class TerritoryTypePersister
 extends AbstractIdentifiablePersister<TerritoryTypeInput, TerritoryTypeEntity, TerritoryCategoryEntity> {
 
@@ -58,17 +55,6 @@ extends AbstractIdentifiablePersister<TerritoryTypeInput, TerritoryTypeEntity, T
 			}
 		}
 		throw new DataNotFoundException(String.format("Territory type %d (territory category %d, group %d)", form.getId(), form.getTerritoryCategoryId(), form.getGroupId()));
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final TerritoryTypeInput form,
-			final BindingResult bindingResult,
-			final TerritoryTypeEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit territory type %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

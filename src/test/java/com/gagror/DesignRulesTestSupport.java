@@ -48,8 +48,8 @@ public abstract class DesignRulesTestSupport {
 		for(final Class<?> clazz : reflections.getSubTypesOf(parent)) {
 			// Ignore abstract classes if specified
 			if(! concrete || ! Modifier.isAbstract(clazz.getModifiers())) {
-				// Ignore inner classes for the purposes of design rule tests
-				if(! clazz.isMemberClass()) {
+				// Ignore inner classes and interfaces for the purposes of design rule tests
+				if(! clazz.isMemberClass() && ! Modifier.isInterface(clazz.getModifiers())) {
 					parameters.add(new Object[]{clazz.getCanonicalName(), clazz});
 				}
 			}

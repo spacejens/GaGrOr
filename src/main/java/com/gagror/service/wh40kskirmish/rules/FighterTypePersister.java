@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.rules;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -16,7 +14,6 @@ import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class FighterTypePersister
 extends AbstractIdentifiablePersister<FighterTypeInput, FighterTypeEntity, RaceEntity> {
 
@@ -89,17 +86,6 @@ extends AbstractIdentifiablePersister<FighterTypeInput, FighterTypeEntity, RaceE
 			}
 		}
 		throw new DataNotFoundException(String.format("Fighter type (race %d, group %d)", form.getId(), form.getRaceId(), form.getGroupId()));
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final FighterTypeInput form,
-			final BindingResult bindingResult,
-			final FighterTypeEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit fighter type %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

@@ -25,6 +25,7 @@ public abstract class AbstractPersister<I extends Input, E extends AbstractEntit
 			if(null == entity) {
 				throw new CodingErrorException(String.format("Failed to load existing entity when saving: %s", form));
 			}
+			validateSimultaneousEdit(form, bindingResult, entity);
 			validateFormVsExistingState(form, bindingResult, entity);
 		}
 		if(bindingResult.hasErrors()) {
@@ -63,7 +64,10 @@ public abstract class AbstractPersister<I extends Input, E extends AbstractEntit
 		throw new UnsupportedOperationException("This persister cannot load existing entities");
 	}
 
-	// TODO Add default implementation of simultaneous edit check
+	protected void validateSimultaneousEdit(final I form, final BindingResult bindingResult, final E entity) {
+		// Override this method when doing a simultaneous edit check
+	}
+
 	protected void validateFormVsExistingState(final I form, final BindingResult bindingResult, final E entity) {
 		// Override this method to add form verifications depending on the existing entity state
 	}

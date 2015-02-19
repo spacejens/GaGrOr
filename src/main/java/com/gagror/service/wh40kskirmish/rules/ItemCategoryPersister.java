@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.rules;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -15,7 +13,6 @@ import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class ItemCategoryPersister
 extends AbstractIdentifiablePersister<ItemCategoryInput, ItemCategoryEntity, Wh40kSkirmishRulesEntity> {
 
@@ -56,17 +53,6 @@ extends AbstractIdentifiablePersister<ItemCategoryInput, ItemCategoryEntity, Wh4
 			}
 		}
 		throw new DataNotFoundException(String.format("Item category %d (group %d)", form.getId(), form.getGroupId()));
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final ItemCategoryInput form,
-			final BindingResult bindingResult,
-			final ItemCategoryEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit item category %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

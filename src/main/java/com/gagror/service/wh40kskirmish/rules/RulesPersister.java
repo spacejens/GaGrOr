@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.rules;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -13,7 +11,6 @@ import com.gagror.data.wh40kskirmish.rules.Wh40kSkirmishRulesEntity;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class RulesPersister
 extends AbstractIdentifiablePersister<RulesInput, Wh40kSkirmishRulesEntity, GroupEntity> {
 
@@ -39,17 +36,6 @@ extends AbstractIdentifiablePersister<RulesInput, Wh40kSkirmishRulesEntity, Grou
 	@Override
 	protected Wh40kSkirmishRulesEntity loadExisting(final RulesInput form, final GroupEntity context) {
 		return context.getWh40kSkirmishRules();
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final RulesInput form,
-			final BindingResult bindingResult,
-			final Wh40kSkirmishRulesEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit rules %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

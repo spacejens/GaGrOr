@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -25,7 +23,6 @@ import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class GangTypePersister
 extends AbstractIdentifiablePersister<GangTypeInput, GangTypeEntity, Wh40kSkirmishRulesEntity> {
 
@@ -81,17 +78,6 @@ extends AbstractIdentifiablePersister<GangTypeInput, GangTypeEntity, Wh40kSkirmi
 			}
 		}
 		throw new DataNotFoundException(String.format("Gang type %d (group %d)", form.getId(), form.getGroupId()));
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final GangTypeInput form,
-			final BindingResult bindingResult,
-			final GangTypeEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit gang type %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

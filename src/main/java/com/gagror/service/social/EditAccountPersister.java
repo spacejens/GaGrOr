@@ -66,10 +66,6 @@ public class EditAccountPersister extends AbstractIdentifiablePersister<AccountE
 			log.warn(String.format("Attempt to edit account %d failed, username was busy", form.getId()));
 			form.addErrorUsernameBusy(bindingResult);
 		}
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit account %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.rules;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -16,7 +14,6 @@ import com.gagror.data.wh40kskirmish.rules.gangs.RaceRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class RacePersister
 extends AbstractIdentifiablePersister<RaceInput, RaceEntity, GangTypeEntity> {
 
@@ -66,10 +63,6 @@ extends AbstractIdentifiablePersister<RaceInput, RaceEntity, GangTypeEntity> {
 			final RaceInput form,
 			final BindingResult bindingResult,
 			final RaceEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit race %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 		// Validate that maximum characteristics are not below fighter type maximums
 		int minMovement = 0;
 		int minWeaponSkill = 0;

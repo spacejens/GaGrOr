@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.rules;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -15,7 +13,6 @@ import com.gagror.data.wh40kskirmish.rules.skills.SkillRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class SkillPersister
 extends AbstractIdentifiablePersister<SkillInput, SkillEntity, SkillCategoryEntity> {
 
@@ -58,17 +55,6 @@ extends AbstractIdentifiablePersister<SkillInput, SkillEntity, SkillCategoryEnti
 			}
 		}
 		throw new DataNotFoundException(String.format("Skill %d (skill category %d, group %d)", form.getId(), form.getSkillCategoryId(), form.getGroupId()));
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final SkillInput form,
-			final BindingResult bindingResult,
-			final SkillEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit skill %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

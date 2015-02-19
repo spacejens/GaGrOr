@@ -1,7 +1,5 @@
 package com.gagror.service.wh40kskirmish.gangs;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -17,7 +15,6 @@ import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class GangPersister
 extends AbstractIdentifiablePersister<GangInput, GangEntity, FactionEntity> {
 
@@ -73,17 +70,6 @@ extends AbstractIdentifiablePersister<GangInput, GangEntity, FactionEntity> {
 				context.getId(),
 				context.getGangType().getId(),
 				context.getGangType().getRules().getGroup().getId()));
-	}
-
-	@Override
-	protected void validateFormVsExistingState(
-			final GangInput form,
-			final BindingResult bindingResult,
-			final GangEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit gang %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

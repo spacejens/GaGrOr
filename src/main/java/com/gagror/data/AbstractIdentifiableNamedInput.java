@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 @NoArgsConstructor
-public abstract class AbstractIdentifiableNamedInput<C extends Identifiable<Long> & Versioned & Named>
+public abstract class AbstractIdentifiableNamedInput<C extends IdentifiablePersistent & Versioned & Named>
 extends AbstractIdentifiableInput<C>
 implements Named {
 

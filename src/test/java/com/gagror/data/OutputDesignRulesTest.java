@@ -38,7 +38,7 @@ public class OutputDesignRulesTest extends DesignRulesTestSupport {
 	}
 
 	@Parameters(name="{0}")
-	public static Iterable<Object[]> findEntities() {
+	public static Iterable<Object[]> findOutputs() {
 		return parameterizeForAllSubclasses(Output.class);
 	}
 }

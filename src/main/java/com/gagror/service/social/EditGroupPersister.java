@@ -1,7 +1,5 @@
 package com.gagror.service.social;
 
-import lombok.extern.apachecommons.CommonsLog;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -13,7 +11,6 @@ import com.gagror.data.group.GroupRepository;
 import com.gagror.service.AbstractIdentifiablePersister;
 
 @Service
-@CommonsLog
 public class EditGroupPersister extends AbstractIdentifiablePersister<GroupEditInput, GroupEntity, AbstractEntity> {
 
 	@Autowired
@@ -39,14 +36,6 @@ public class EditGroupPersister extends AbstractIdentifiablePersister<GroupEditI
 	@Override
 	protected GroupEntity loadExisting(final GroupEditInput form, final AbstractEntity context) {
 		return groupRepository.load(form.getId());
-	}
-
-	@Override
-	protected void validateFormVsExistingState(final GroupEditInput form, final BindingResult bindingResult, final GroupEntity entity) {
-		if(! form.getVersion().equals(entity.getVersion())) {
-			log.warn(String.format("Attempt to edit group %d failed, simultaneous edit detected", form.getId()));
-			form.addErrorSimultaneuosEdit(bindingResult);
-		}
 	}
 
 	@Override

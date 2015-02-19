@@ -8,9 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
 @NoArgsConstructor
-public abstract class AbstractIdentifiableInput<C extends Identifiable<Long> & Versioned>
+public abstract class AbstractIdentifiableInput<C extends IdentifiablePersistent & Versioned>
 extends AbstractIdentifiable
-implements Versioned, Input {
+implements VersionedInput {
 
 	@Getter
 	@Setter
@@ -25,6 +25,7 @@ implements Versioned, Input {
 		setVersion(currentState.getVersion());
 	}
 
+	@Override
 	public void addErrorSimultaneuosEdit(final BindingResult bindingResult) {
 		bindingResult.addError(new ObjectError(bindingResult.getObjectName(), "Simultaneous edit detected, cannot proceed"));
 	}
