@@ -1,5 +1,6 @@
 package com.gagror.data.wh40kskirmish.gangs;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -47,39 +48,29 @@ public class FighterViewOutput extends FighterReferenceOutput implements PlayerO
 	@Getter
 	private final int cost;
 
-	protected FighterViewOutput(
-			final FighterEntity entity,
-			final GangOutput gang,
-			final int movement,
-			final int weaponSkill,
-			final int ballisticSkill,
-			final int strength,
-			final int toughness,
-			final int wounds,
-			final int initiative,
-			final int attacks,
-			final int leadership,
-			final int cost) {
-		// TODO Send builder as argument to constructor, to reduce risk of arguments being mixed up
-		super(entity);
-		fighterType = new FighterTypeReferenceOutput(entity.getFighterType());
-		this.gang = gang;
-		this.movement = movement;
-		this.weaponSkill = weaponSkill;
-		this.ballisticSkill = ballisticSkill;
-		this.strength = strength;
-		this.toughness = toughness;
-		this.wounds = wounds;
-		this.initiative = initiative;
-		this.attacks = attacks;
-		this.leadership = leadership;
-		this.cost = cost;
+	protected FighterViewOutput(final Builder builder) {
+		super(builder.getEntity());
+		fighterType = new FighterTypeReferenceOutput(builder.getEntity().getFighterType());
+		this.gang = builder.getGang();
+		this.movement = builder.getMovement();
+		this.weaponSkill = builder.getWeaponSkill();
+		this.ballisticSkill = builder.getBallisticSkill();
+		this.strength = builder.getStrength();
+		this.toughness = builder.getToughness();
+		this.wounds = builder.getWounds();
+		this.initiative = builder.getInitiative();
+		this.attacks = builder.getAttacks();
+		this.leadership = builder.getLeadership();
+		this.cost = builder.getCost();
 	}
 
 	@RequiredArgsConstructor
 	public static class Builder {
+
+		@Getter(AccessLevel.PRIVATE)
 		final FighterEntity entity;
 
+		@Getter(AccessLevel.PRIVATE)
 		final GangOutput gang;
 
 		@Getter
@@ -123,19 +114,7 @@ public class FighterViewOutput extends FighterReferenceOutput implements PlayerO
 		private int cost;
 
 		public FighterViewOutput build() {
-			return new FighterViewOutput(
-					entity,
-					gang,
-					getMovement(),
-					getWeaponSkill(),
-					getBallisticSkill(),
-					getStrength(),
-					getToughness(),
-					getWounds(),
-					getInitiative(),
-					getAttacks(),
-					getLeadership(),
-					getCost());
+			return new FighterViewOutput(this);
 		}
 	}
 
