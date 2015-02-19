@@ -43,4 +43,11 @@ implements GroupIdentifiable, GangIdentifiable {
 				"fighterTypeId",
 				String.format("Not enough money, costs %d", cost)));
 	}
+
+	public void addErrorFighterTypeNotAvailable(final BindingResult bindingResult) {
+		bindingResult.addError(new FieldError(
+				bindingResult.getObjectName(),
+				"fighterTypeId",
+				"Fighter type not available"));
+	}
 }

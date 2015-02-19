@@ -33,6 +33,7 @@ public class RecruitFighterPersisterUnitTest {
 	private static final Long GROUP_ID = 1L;
 	private static final Long GANG_ID = 2L;
 	private static final Long FIGHTER_TYPE_ID = 3L;
+	private static final Long GANG_TYPE_ID = 4L;
 	private static final String FIGHTER_NAME = "New fighter";
 	private static final int GANG_MONEY = 1000;
 	private static final int FIGHTER_TYPE_COST = 50;
@@ -58,13 +59,10 @@ public class RecruitFighterPersisterUnitTest {
 	GangEntity gang;
 
 	@Mock
-	GangTypeEntity gangGangType;
+	GangTypeEntity gangType;
 
 	@Mock
 	FighterTypeEntity fighterType;
-
-	@Mock
-	GangTypeEntity fighterTypeGangType;
 
 	@Test
 	public void save_ok() {
@@ -100,6 +98,14 @@ public class RecruitFighterPersisterUnitTest {
 		verify(form).addErrorNotEnoughMoney(bindingResult, FIGHTER_TYPE_COST);
 	}
 
+	@Test
+	public void save_fighterTypeNotAvailable() {
+		when(fighterType.availableFor(gangType)).thenReturn(false);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorFighterTypeNotAvailable(bindingResult);
+	}
+
 	@Before
 	public void setup() {
 		// Set up repositories
@@ -112,11 +118,13 @@ public class RecruitFighterPersisterUnitTest {
 		when(form.getFighterTypeId()).thenReturn(FIGHTER_TYPE_ID);
 		when(form.getName()).thenReturn(FIGHTER_NAME);
 		AddError.to(bindingResult).when(form).addErrorNotEnoughMoney(bindingResult, FIGHTER_TYPE_COST);
+		AddError.to(bindingResult).when(form).addErrorFighterTypeNotAvailable(bindingResult);
 		// Set up context
 		when(gang.getMoney()).thenReturn(GANG_MONEY);
-		when(gang.getGangType()).thenReturn(gangGangType);
+		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
+		when(gang.getGangType()).thenReturn(gangType);
 		when(fighterType.getCost()).thenReturn(FIGHTER_TYPE_COST);
-		when(fighterType.getGangType()).thenReturn(fighterTypeGangType);
+		when(fighterType.availableFor(gangType)).thenReturn(true);
 	}
 
 	@Before

@@ -39,8 +39,8 @@ public class RecruitFighterPersister extends AbstractPersister<FighterRecruitInp
 	protected void validateFormVsContext(final FighterRecruitInput form, final BindingResult bindingResult, final GangEntity context) {
 		final FighterTypeEntity fighterType = loadFighterType(form);
 		// Validate that the selected fighter type is available for the gang
-		if(! context.getGangType().equals(fighterType.getGangType())) {
-			// TODO Validate that the selected fighter type is available for the gang
+		if(! fighterType.availableFor(context.getGangType())) {
+			form.addErrorFighterTypeNotAvailable(bindingResult);
 		}
 		// Validate that the gang can afford to recruit the fighter
 		if(context.getMoney() < fighterType.getCost()) {

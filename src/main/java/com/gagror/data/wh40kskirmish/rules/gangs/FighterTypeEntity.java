@@ -93,6 +93,10 @@ public class FighterTypeEntity extends AbstractEditableNamedEntity implements Gr
 		return getRace().getGroup();
 	}
 
+	public boolean availableFor(final GangTypeEntity gangType) {
+		return getGangType().equals(gangType);
+	}
+
 	public GangTypeEntity getGangType() {
 		return getRace().getGangType();
 	}
