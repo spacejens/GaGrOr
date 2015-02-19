@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 
+import com.gagror.AddError;
 import com.gagror.EchoAnswer;
 import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
 import com.gagror.data.wh40kskirmish.gangs.FighterRecruitInput;
@@ -24,6 +25,7 @@ import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangRepository;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeRepository;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecruitFighterPersisterUnitTest {
@@ -56,7 +58,13 @@ public class RecruitFighterPersisterUnitTest {
 	GangEntity gang;
 
 	@Mock
+	GangTypeEntity gangGangType;
+
+	@Mock
 	FighterTypeEntity fighterType;
+
+	@Mock
+	GangTypeEntity fighterTypeGangType;
 
 	@Test
 	public void save_ok() {
@@ -76,6 +84,22 @@ public class RecruitFighterPersisterUnitTest {
 		verify(fighterRepository, never()).persist(any(FighterEntity.class));
 	}
 
+	@Test
+	public void save_justEnoughMoney() {
+		when(gang.getMoney()).thenReturn(FIGHTER_TYPE_COST);
+		final boolean result = instance.save(form, bindingResult);
+		assertTrue("Should have saved successfully", result);
+		verify(form, never()).addErrorNotEnoughMoney(bindingResult, FIGHTER_TYPE_COST);
+	}
+
+	@Test
+	public void save_notEnoughMoney() {
+		when(gang.getMoney()).thenReturn(FIGHTER_TYPE_COST-1);
+		final boolean result = instance.save(form, bindingResult);
+		assertFalse("Should have failed to save", result);
+		verify(form).addErrorNotEnoughMoney(bindingResult, FIGHTER_TYPE_COST);
+	}
+
 	@Before
 	public void setup() {
 		// Set up repositories
@@ -87,9 +111,12 @@ public class RecruitFighterPersisterUnitTest {
 		when(form.getGangId()).thenReturn(GANG_ID);
 		when(form.getFighterTypeId()).thenReturn(FIGHTER_TYPE_ID);
 		when(form.getName()).thenReturn(FIGHTER_NAME);
+		AddError.to(bindingResult).when(form).addErrorNotEnoughMoney(bindingResult, FIGHTER_TYPE_COST);
 		// Set up context
 		when(gang.getMoney()).thenReturn(GANG_MONEY);
+		when(gang.getGangType()).thenReturn(gangGangType);
 		when(fighterType.getCost()).thenReturn(FIGHTER_TYPE_COST);
+		when(fighterType.getGangType()).thenReturn(fighterTypeGangType);
 	}
 
 	@Before

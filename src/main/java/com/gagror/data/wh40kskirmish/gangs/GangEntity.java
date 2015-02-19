@@ -20,6 +20,7 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.PlayerOwned;
 import com.gagror.data.wh40kskirmish.rules.gangs.FactionEntity;
+import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
@@ -56,5 +57,9 @@ public class GangEntity extends AbstractEditableNamedEntity implements PlayerOwn
 	@Override
 	public GroupEntity getGroup() {
 		return getFaction().getGroup();
+	}
+
+	public GangTypeEntity getGangType() {
+		return getFaction().getGangType();
 	}
 }

@@ -92,4 +92,8 @@ public class FighterTypeEntity extends AbstractEditableNamedEntity implements Gr
 	public GroupEntity getGroup() {
 		return getRace().getGroup();
 	}
+
+	public GangTypeEntity getGangType() {
+		return getRace().getGangType();
+	}
 }
