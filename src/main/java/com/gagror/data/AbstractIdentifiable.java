@@ -1,7 +1,7 @@
 package com.gagror.data;
 
 public abstract class AbstractIdentifiable
-implements Identifiable<Long> {
+implements IdentifiablePersistent {
 
 	@Override
 	public final boolean equals(final Object other) {
@@ -26,6 +26,7 @@ implements Identifiable<Long> {
 		}
 	}
 
+	@Override
 	public final boolean hasId(final Long id) {
 		if(isPersistent()) {
 			return getId().equals(id);
@@ -34,6 +35,7 @@ implements Identifiable<Long> {
 		}
 	}
 
+	@Override
 	public final boolean isPersistent() {
 		return getId() != null;
 	}

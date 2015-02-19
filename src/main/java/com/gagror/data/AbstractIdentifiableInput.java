@@ -10,7 +10,7 @@ import org.springframework.validation.ObjectError;
 @NoArgsConstructor
 public abstract class AbstractIdentifiableInput<C extends Identifiable<Long> & Versioned>
 extends AbstractIdentifiable
-implements Identifiable<Long>, Versioned, Input {
+implements Versioned, Input {
 
 	@Getter
 	@Setter
