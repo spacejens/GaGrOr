@@ -82,6 +82,20 @@ public class AccessControlServiceUnitTest {
 	}
 
 	@Test
+	public void isLoggedIn_ok() {
+		whenLoggedIn();
+		final boolean result = instance.isLoggedIn();
+		assertTrue("Should be logged in", result);
+	}
+
+	@Test
+	public void isLoggedIn_notLoggedIn() {
+		whenNotLoggedIn();
+		final boolean result = instance.isLoggedIn();
+		assertFalse("Should not be logged in", result);
+	}
+
+	@Test
 	public void getRequestAccountEntity_ok() {
 		whenLoggedIn();
 		final AccountEntity result = instance.getRequestAccountEntity();

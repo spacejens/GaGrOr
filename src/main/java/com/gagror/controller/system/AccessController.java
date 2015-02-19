@@ -26,7 +26,11 @@ public class AccessController extends AbstractController {
 
 	@PreAuthorize(IS_PUBLIC)
 	@RequestMapping(value="/login", method = RequestMethod.GET)
-	public String loginForm() {
+	public Object loginForm() {
+		if(accessControl.isLoggedIn()) {
+			log.info("Already logged in, redirecting away from login form");
+			return redirect("/groups/list");
+		}
 		log.info("Viewing login form");
 		return "login";
 	}

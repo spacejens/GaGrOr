@@ -29,7 +29,6 @@ public class GagrorSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		final SavedRequestAwareAuthenticationSuccessHandler successHandler =
 				new SavedRequestAwareAuthenticationSuccessHandler();
 		successHandler.setUseReferer(true);
-		// TODO When logging out and then in again, go to the groups list page
 		// Configuration for login process pages
 		http
 			.formLogin()

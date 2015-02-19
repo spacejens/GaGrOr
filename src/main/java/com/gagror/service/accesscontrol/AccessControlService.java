@@ -40,6 +40,10 @@ public class AccessControlService {
 		}
 	}
 
+	public boolean isLoggedIn() {
+		return null != getRequestAccountEntity();
+	}
+
 	public AccountEntity getRequestAccountEntity() {
 		if(! requestAccount.isLoaded()) {
 			final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
