@@ -93,7 +93,6 @@ public class CurrentUserOutput implements Output {
 		return getGroupsOwner().contains(group.getId());
 	}
 
-	// TODO Simplify HTML when checking if account can act as player
 	public boolean canActAsPlayer(final PlayerOwnedOutput data) {
 		return isOwner(data.getGroup()) || (is(data.getPlayer()) && isMember(data.getGroup()));
 	}
