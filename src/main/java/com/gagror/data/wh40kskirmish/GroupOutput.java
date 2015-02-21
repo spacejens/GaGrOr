@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.Getter;
 
 import com.gagror.data.group.GroupEntity;
-import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.wh40kskirmish.gangs.GangEntity;
 import com.gagror.data.wh40kskirmish.gangs.GangListOutput;
@@ -22,11 +21,6 @@ public class GroupOutput extends GroupReferenceOutput {
 	public GroupOutput(final GroupEntity group) {
 		super(group);
 		gangs = listGangs(group);
-	}
-
-	public GroupOutput(final GroupMemberEntity membership) {
-		super(membership);
-		gangs = listGangs(membership.getGroup());
 	}
 
 	private static List<GangListOutput> listGangs(final GroupEntity group) {

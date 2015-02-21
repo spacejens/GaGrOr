@@ -126,8 +126,7 @@ public class GroupsController extends AbstractController {
 			final Model model) {
 		verifyURLGroupIdMatchesForm(groupId, groupEditForm);
 		if(editGroupPersister.save(groupEditForm, bindingResult)) {
-			final GroupType groupType = groupService.viewGroup(groupId).getGroupType();
-			return redirect(String.format("%s/%d", groupType.getGroupUrl(), groupId));
+			return redirect(groupService.viewGroup(groupId).getUrl());
 		} else {
 			final GroupEditOutput currentState = groupService.editGroup(groupId);
 			model.addAttribute("group", currentState);

@@ -181,7 +181,6 @@ public class GroupServiceUnitTest {
 	private void viewGroup_ok(final Long id, final String expectedName, final MemberType expectedMemberType) {
 		final GroupReferenceOutput result = instance.viewGroup(id);
 		assertEquals("Wrong group found", expectedName, result.getName());
-		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
 	}
 
 	@Test(expected=DataNotFoundException.class)
@@ -193,11 +192,6 @@ public class GroupServiceUnitTest {
 	public void editGroup_ok() {
 		final GroupEditOutput result = instance.editGroup(FIRST_GROUP_ID);
 		assertEquals("Wrong group found", FIRST_GROUP_NAME, result.getName());
-	}
-
-	@Test(expected=NotGroupMemberException.class)
-	public void editGroup_notMember() {
-		instance.editGroup(37598345L);
 	}
 
 	@Test
@@ -218,7 +212,6 @@ public class GroupServiceUnitTest {
 	private void viewGroupMembers_ok(final Long id, final String expectedName, final MemberType expectedMemberType) {
 		final GroupReferenceOutput result = instance.viewGroupMembers(id);
 		assertEquals("Wrong group found", expectedName, result.getName());
-		assertEquals("Wrong membership type", expectedMemberType, result.getMemberType());
 	}
 
 	@Test

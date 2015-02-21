@@ -70,13 +70,13 @@ public class GroupViewMembersOutputUnitTest {
 
 	@Test
 	public void getCreated_ok() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
 		assertEquals("Created date should be from group", DATE_GROUP, instance.getCreated());
 	}
 
 	@Test
 	public void getMembers() {
-		final GroupViewMembersOutput instance = new GroupViewMembersOutput(memberFirstOwner);
+		final GroupViewMembersOutput instance = new GroupViewMembersOutput(group);
 		assertNames(instance.getMembers(), USERNAME_FIRST_INVITED, USERNAME_FIRST_MEMBER, USERNAME_FIRST_OWNER, USERNAME_SECOND_INVITED, USERNAME_SECOND_MEMBER, USERNAME_SECOND_OWNER);
 	}
 

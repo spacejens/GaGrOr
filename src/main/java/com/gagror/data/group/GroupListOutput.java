@@ -14,7 +14,7 @@ public class GroupListOutput extends GroupReferenceOutput {
 	private final Long memberId;
 
 	public GroupListOutput(final GroupMemberEntity membership) {
-		super(membership);
+		super(membership.getGroup());
 		memberId = membership.getId();
 		memberCount = countMembers(membership.getGroup(), false);
 		invitationCount = countMembers(membership.getGroup(), true);

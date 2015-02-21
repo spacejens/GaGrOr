@@ -85,43 +85,20 @@ public class GroupService {
 		return output;
 	}
 
-	public GroupReferenceOutput viewGroup(final Long groupId) {
+	public GroupReferenceOutput viewGroup(final Long groupId) { // TODO Can this be inlined where used? It no longer contains any membership checking logic
 		final GroupEntity group = groupRepository.load(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
-		final GroupMemberEntity membership = findGroupMemberForRequestAccount(group);
-		if(null != membership) {
-			return new GroupReferenceOutput(membership);
-		}
 		return new GroupReferenceOutput(group);
 	}
 
 	public GroupEditOutput editGroup(final Long groupId) {
-		for(final GroupMemberEntity membership : accessControlService.getRequestAccountEntity().getGroupMemberships()) {
-			if(membership.getGroup().hasId(groupId)) {
-				return new GroupEditOutput(membership);
-			}
-		}
-		throw new NotGroupMemberException(String.format("User is not a member of group %d", groupId));
+		return new GroupEditOutput(groupRepository.load(groupId));
 	}
 
 	public GroupViewMembersOutput viewGroupMembers(final Long groupId) {
 		final GroupEntity group = groupRepository.load(groupId);
 		log.debug(String.format("Loaded group %s for viewing", group));
-		final GroupMemberEntity membership = findGroupMemberForRequestAccount(group);
-		if(null != membership) {
-			return new GroupViewMembersOutput(membership);
-		}
 		return new GroupViewMembersOutput(group);
-	}
-
-	public GroupMemberEntity findGroupMemberForRequestAccount(final GroupEntity group) {
-		final AccountEntity currentUser = accessControlService.getRequestAccountEntity();
-		for(final GroupMemberEntity membership : group.getGroupMemberships()) {
-			if(membership.getAccount().equals(currentUser)) {
-				return membership;
-			}
-		}
-		return null;
 	}
 
 	public List<AccountReferenceOutput> loadPossibleUsersToInvite(final Long groupId) {
