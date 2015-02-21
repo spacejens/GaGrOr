@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.gagror.controller.FormAndURLMismatchException;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.FighterEditOutput;
+import com.gagror.data.wh40kskirmish.gangs.FighterInput;
 import com.gagror.data.wh40kskirmish.gangs.FighterRecruitInput;
 import com.gagror.data.wh40kskirmish.gangs.GangInput;
+import com.gagror.service.wh40kskirmish.gangs.FighterPersister;
 import com.gagror.service.wh40kskirmish.gangs.GangPersister;
 import com.gagror.service.wh40kskirmish.gangs.GangService;
 import com.gagror.service.wh40kskirmish.gangs.RecruitFighterPersister;
@@ -34,6 +38,9 @@ public class GangController extends AbstractWh40kSkirmishController {
 
 	@Autowired
 	RecruitFighterPersister recruitFighterPersister;
+
+	@Autowired
+	FighterPersister fighterPersister;
 
 	@PreAuthorize(MAY_ADMIN_GROUP)
 	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/create", method=RequestMethod.GET)
@@ -140,5 +147,39 @@ public class GangController extends AbstractWh40kSkirmishController {
 		return "wh40kskirmish/fighter_view";
 	}
 
-	// TODO Add page to edit a fighter, accessible for group owners
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fighter/{" + ATTR_FIGHTER_ID + "}/edit", method=RequestMethod.GET)
+	public String editFighterForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_FIGHTER_ID) final Long fighterId,
+			final Model model) {
+		log.info(String.format("Editing fighter %d in group %d", fighterId, groupId));
+		final FighterEditOutput fighter = gangService.editFighter(groupId, fighterId);
+		model.addAttribute("gang", fighter.getGang());
+		model.addAttribute("fighterForm", new FighterInput(fighter));
+		return "wh40kskirmish/fighter_edit";
+	}
+
+	@PreAuthorize(MAY_ADMIN_GROUP)
+	@RequestMapping(value="/{" + ATTR_GROUP_ID + "}/fighter/{" + ATTR_FIGHTER_ID + "}/edit", method=RequestMethod.POST)
+	public Object saveEditFighterForm(
+			@PathVariable(ATTR_GROUP_ID) final Long groupId,
+			@PathVariable(ATTR_FIGHTER_ID) final Long fighterId,
+			final Model model,
+			@Valid @ModelAttribute("fighterForm") final FighterInput fighterForm,
+			final BindingResult bindingResult) {
+		verifyURLGroupIdMatchesForm(groupId, fighterForm);
+		if(! fighterId.equals(fighterForm.getId())) {
+			throw new FormAndURLMismatchException("Fighter ID", fighterId, fighterForm.getId());
+		}
+		if(fighterPersister.save(fighterForm, bindingResult)) {
+			log.info(String.format("Edited fighter: %s", fighterForm));
+			return redirect(String.format("/wh40kskirmish/gang/%d/fighter/%d", groupId, fighterId));
+		} else {
+			log.warn(String.format("Failed to save: %s", fighterForm));
+			final FighterEditOutput fighter = gangService.editFighter(groupId, fighterId);
+			model.addAttribute("gang", fighter.getGang());
+			return "wh40kskirmish/fighter_edit";
+		}
+	}
 }

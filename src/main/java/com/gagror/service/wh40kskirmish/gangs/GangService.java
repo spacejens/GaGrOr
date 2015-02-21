@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.FighterEditOutput;
 import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
 import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
 import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
@@ -79,5 +80,10 @@ public class GangService {
 		final FighterEntity fighter = fighterRepository.load(groupId, fighterId);
 		final GangOutput gang = new GangOutput(fighter.getGang(), rulesService.viewRules(groupId));
 		return fighterViewService.view(fighter, gang);
+	}
+
+	public FighterEditOutput editFighter(final Long groupId, final Long fighterId) {
+		final FighterEntity fighter = fighterRepository.load(groupId, fighterId);
+		return new FighterEditOutput(fighter);
 	}
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/framework :: head" />
+<body>
+	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
+	<nav class="breadcrumbs" id="submenu">
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:replace="/fragments/formatting :: link (to=${gang.group})"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.gang}"></a>
+		<a th:href="@{/wh40kskirmish/gang/{groupId}/{gangId}(groupId=${gang.group.id},gangId=${gang.id})}" th:text="${gang.name}"></a>
+		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.fighter}"></a>
+		<a th:href="@{/wh40kskirmish/gang/{groupId}/fighter/{fighterId}(groupId=${gang.group.id},fighterId=${fighterForm.id})}" th:text="${fighterForm.name}"></a>
+		<a class="current" th:text="#{menu.groups.wh40kskirmish.fighter.edit}"></a>
+	</nav>
+	<form action="#" th:action="@{/wh40kskirmish/gang/{groupId}/fighter/{fighterId}/edit(groupId=${gang.group.id},fighterId=${fighterForm.id})}" th:object="${fighterForm}" method="post">
+		<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{version}" />
+		<input type="hidden" th:field="*{groupId}" />
+		<input type="hidden" th:field="*{gangId}" />
+		Name <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</span>
+		<input type="text" th:field="*{name}" />
+		<button type="submit">Save</button>
+	</form>
+	<script th:replace="/fragments/framework :: init"></script>
+</body>
+</html>

@@ -22,6 +22,7 @@ import com.gagror.data.account.AccountEntity;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupViewMembersOutput;
 import com.gagror.data.wh40kskirmish.gangs.EditGangOutput;
+import com.gagror.data.wh40kskirmish.gangs.FighterEditOutput;
 import com.gagror.data.wh40kskirmish.gangs.FighterEntity;
 import com.gagror.data.wh40kskirmish.gangs.FighterRepository;
 import com.gagror.data.wh40kskirmish.gangs.FighterViewOutput;
@@ -132,6 +133,12 @@ public class GangServiceUnitTest {
 		assertSame("Wrong rules returned", rules, result.getGang().getRules());
 	}
 
+	@Test
+	public void editFighter_ok() {
+		final FighterEditOutput result = instance.editFighter(GROUP_ID, FIGHTER_ID);
+		assertEquals("Wrong fighter returned", FIGHTER_NAME, result.getName());
+	}
+
 	@Before
 	public void setup() {
 		when(group.getId()).thenReturn(GROUP_ID);
@@ -152,6 +159,7 @@ public class GangServiceUnitTest {
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
 		when(gangType.getGroup()).thenReturn(group);
 		when(fighter.getId()).thenReturn(FIGHTER_ID);
+		when(fighter.getGroup()).thenReturn(group);
 		when(fighter.getName()).thenReturn(FIGHTER_NAME);
 		when(fighter.getGang()).thenReturn(gang);
 		when(fighterRepository.load(GROUP_ID, FIGHTER_ID)).thenReturn(fighter);

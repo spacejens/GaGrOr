@@ -13,6 +13,10 @@
 		<a class="unavailable" href="#" th:text="#{menu.groups.wh40kskirmish.fighter}"></a>
 		<a class="current" th:text="${fighter.name}"></a>
 	</nav>
+	<dl  th:if="${currentUser.isOwner(fighter.group)}" class="sub-nav" id="pageactions">
+		<dt th:text="#{menu.subpages}"></dt>
+		<dd><a th:href="@{/wh40kskirmish/gang/{groupId}/fighter/{fighterId}/edit(groupId=${fighter.group.id},fighterId=${fighter.id})}" th:text="#{menu.groups.wh40kskirmish.fighter.edit}"></a></dd>
+	</dl>
 	<table>
 		<thead>
 			<tr>
