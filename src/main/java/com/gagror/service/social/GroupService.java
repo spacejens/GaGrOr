@@ -85,10 +85,8 @@ public class GroupService {
 		return output;
 	}
 
-	public GroupReferenceOutput viewGroup(final Long groupId) { // TODO Can this be inlined where used? It no longer contains any membership checking logic
-		final GroupEntity group = groupRepository.load(groupId);
-		log.debug(String.format("Loaded group %s for viewing", group));
-		return new GroupReferenceOutput(group);
+	public GroupReferenceOutput viewGroup(final Long groupId) {
+		return new GroupReferenceOutput(groupRepository.load(groupId));
 	}
 
 	public GroupEditOutput editGroup(final Long groupId) {
