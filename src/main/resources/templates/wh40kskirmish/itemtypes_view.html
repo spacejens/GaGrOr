@@ -4,15 +4,13 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${itemType.itemCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${itemType.itemCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${itemType.itemCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:replace="/fragments/formatting :: link (to=${itemType.itemCategory.group})"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${itemType.itemCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.itemtype}"></a>
 		<a class="current" th:text="${itemType.name}"></a>
 	</nav>
-	<dl  th:if="${itemType.itemCategory.group.memberType != null and itemType.itemCategory.group.memberType.owner}" class="sub-nav" id="pageactions">
+	<dl  th:if="${currentUser.isOwner(itemType.itemCategory.group)}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemTypeId}/edit(groupId=${itemType.itemCategory.group.id},itemTypeId=${itemType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.edit}"></a></dd>
 	</dl>

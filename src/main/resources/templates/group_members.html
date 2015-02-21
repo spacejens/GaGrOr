@@ -4,13 +4,13 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:unless="${currentUser.isInvitedOrMember(group)}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${currentUser.isInvitedOrMember(group)}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${currentUser.isInvitedOrMember(group)}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:replace="/fragments/formatting :: link (to=${group})"></a>
 		<a class="current" th:text="#{menu.groups.members}"></a>
 	</nav>
-	<dl class="sub-nav" id="pageactions" th:if="${group.memberType != null and group.memberType.owner}">
+	<dl class="sub-nav" id="pageactions" th:if="${currentUser.isOwner(group)}">
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/groups/invite/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members.invite}"></a></dd>
 	</dl>
@@ -19,23 +19,23 @@
 			<tr>
 				<td>User</td>
 				<td>Member type</td>
-				<td th:if="${group.memberType != null}" colspan="4">Action</td>
+				<td th:if="${currentUser.isInvitedOrMember(group)}" colspan="4">Action</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="member : ${group.members}">
 				<td><span th:replace="/fragments/formatting :: username (account=${member})"></span></td>
 				<td th:text="#{${member.memberType.displayNameProperty}}"></td>
-				<td th:if="${group.memberType != null and currentUser.is(member) and ! member.onlyOwner}">
+				<td th:if="${currentUser.isInvitedOrMember(group) and currentUser.is(member) and ! member.onlyOwner}">
 					<a th:href="@{/groups/leave/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members.leave}" onclick="return window.confirm('Are you sure?');"></a>
 				</td>
-				<td th:if="${group.memberType != null and currentUser.isNot(member) and group.memberType != null and group.memberType.owner and member.memberType.member and ! member.memberType.owner}">
+				<td th:if="${currentUser.isOwner(group) and currentUser.isNot(member) and member.memberType.member and ! member.memberType.owner}">
 					<a th:href="@{/groups/{groupId}/promote/{accountId}(groupId=${group.id},accountId=${member.id})}" th:text="#{menu.groups.members.promote}"></a>
 				</td>
-				<td th:if="${group.memberType != null and currentUser.isNot(member) and group.memberType != null and group.memberType.owner and member.memberType.owner}">
+				<td th:if="${currentUser.isOwner(group) and currentUser.isNot(member) and member.memberType.owner}">
 					<a th:href="@{/groups/{groupId}/demote/{accountId}(groupId=${group.id},accountId=${member.id})}" th:text="#{menu.groups.members.demote}"></a>
 				</td>
-				<td th:if="${group.memberType != null and currentUser.isNot(member) and group.memberType != null and group.memberType.owner}">
+				<td th:if="${currentUser.isOwner(group) and currentUser.isNot(member)}">
 					<a th:href="@{/groups/{groupId}/remove/{accountId}(groupId=${group.id},accountId=${member.id})}" th:text="#{menu.groups.members.remove}" onclick="return window.confirm('Are you sure?');"></a>
 				</td>
 			</tr>

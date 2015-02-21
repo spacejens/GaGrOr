@@ -2,6 +2,7 @@ package com.gagror.data.account;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -136,6 +137,36 @@ public class CurrentUserOutputUnitTest {
 			when(otherAccount.getAccountType()).thenReturn(accountType);
 			assertFalse(String.format("Should not be able to edit %s", accountType), instance.mayEdit(otherAccount));
 		}
+	}
+
+	@Test
+	public void getMemberType_loggedIn_owner() {
+		whenLoggedIn();
+		assertEquals(MemberType.OWNER, instance.getMemberType(groupOwner));
+	}
+
+	@Test
+	public void getMemberType_loggedIn_member() {
+		whenLoggedIn();
+		assertEquals(MemberType.MEMBER, instance.getMemberType(groupMember));
+	}
+
+	@Test
+	public void getMemberType_loggedIn_invited() {
+		whenLoggedIn();
+		assertEquals(MemberType.INVITED, instance.getMemberType(groupInvited));
+	}
+
+	@Test
+	public void getMemberType_loggedIn_notMember() {
+		whenLoggedIn();
+		assertNull(instance.getMemberType(groupNotMember));
+	}
+
+	@Test
+	public void getMemberType_notLoggedIn_notMember() {
+		whenNotLoggedIn();
+		assertNull(instance.getMemberType(groupNotMember));
 	}
 
 	@Test

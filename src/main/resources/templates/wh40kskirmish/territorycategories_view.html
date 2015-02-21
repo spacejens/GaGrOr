@@ -4,15 +4,13 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${territoryCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${territoryCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${territoryCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:replace="/fragments/formatting :: link (to=${territoryCategory.group})"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${territoryCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.territorycategory}"></a>
 		<a class="current" th:text="${territoryCategory.name}"></a>
 	</nav>
-	<dl  th:if="${territoryCategory.group.memberType != null and territoryCategory.group.memberType.owner}" class="sub-nav" id="pageactions">
+	<dl  th:if="${currentUser.isOwner(territoryCategory.group)}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/territorycategory/{territoryCategoryId}/edit(groupId=${territoryCategory.group.id},territoryCategoryId=${territoryCategory.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorycategory.edit}"></a></dd>
 	</dl>

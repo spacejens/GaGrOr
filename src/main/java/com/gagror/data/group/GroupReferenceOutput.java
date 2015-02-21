@@ -13,7 +13,7 @@ implements URLOutput {
 	private final GroupType groupType;
 
 	@Getter
-	private final MemberType memberType;
+	private final MemberType memberType; // TODO Remove memberType from all group output if possible, simplify constructors
 
 	@Getter
 	private final boolean viewableByAnyone;

@@ -1,15 +1,16 @@
 package com.gagror.data.account;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import lombok.Getter;
 
 import com.gagror.data.Output;
 import com.gagror.data.group.GroupMemberEntity;
 import com.gagror.data.group.GroupReferenceOutput;
+import com.gagror.data.group.MemberType;
 import com.gagror.data.group.PlayerOwnedOutput;
 
 public class CurrentUserOutput implements Output {
@@ -18,40 +19,20 @@ public class CurrentUserOutput implements Output {
 	private final AccountReferenceOutput account;
 
 	@Getter
-	private final Set<Long> groupsInvited;
-
-	@Getter
-	private final Set<Long> groupsMember;
-
-	@Getter
-	private final Set<Long> groupsOwner;
+	private final Map<Long, MemberType> groupMemberships;
 
 	public CurrentUserOutput(final AccountEntity requestAccount) {
 		account = new AccountReferenceOutput(requestAccount);
-		final Set<Long> tempGroupsInvited = new HashSet<>();
-		final Set<Long> tempGroupsMember = new HashSet<>();
-		final Set<Long> tempGroupsOwner = new HashSet<>();
+		final Map<Long, MemberType> tempGroupMemberships = new HashMap<>();
 		for(final GroupMemberEntity membership : requestAccount.getGroupMemberships()) {
-			if(membership.getMemberType().isInvitation()) {
-				tempGroupsInvited.add(membership.getGroup().getId());
-			}
-			if(membership.getMemberType().isMember()) {
-				tempGroupsMember.add(membership.getGroup().getId());
-			}
-			if(membership.getMemberType().isOwner()) {
-				tempGroupsOwner.add(membership.getGroup().getId());
-			}
+			tempGroupMemberships.put(membership.getGroup().getId(), membership.getMemberType());
 		}
-		groupsInvited = Collections.unmodifiableSet(tempGroupsInvited);
-		groupsMember = Collections.unmodifiableSet(tempGroupsMember);
-		groupsOwner = Collections.unmodifiableSet(tempGroupsOwner);
+		groupMemberships = Collections.unmodifiableMap(tempGroupMemberships);
 	}
 
 	public CurrentUserOutput() {
 		account = null;
-		groupsInvited = Collections.emptySet();
-		groupsMember = Collections.emptySet();
-		groupsOwner = Collections.emptySet();
+		groupMemberships = Collections.emptyMap();
 	}
 
 	public boolean is(final AccountReferenceOutput otherAccount) {
@@ -79,18 +60,23 @@ public class CurrentUserOutput implements Output {
 		return getMayEdit().contains(otherAccount.getAccountType());
 	}
 
-	// TODO Simplify HTML when checking group membership status
+	public MemberType getMemberType(final GroupReferenceOutput group) {
+		return getGroupMemberships().get(group.getId());
+	}
 	public boolean isInvitedOrMember(final GroupReferenceOutput group) {
 		return isInvited(group) || isMember(group);
 	}
 	public boolean isInvited(final GroupReferenceOutput group) {
-		return getGroupsInvited().contains(group.getId());
+		return getGroupMemberships().containsKey(group.getId())
+				&& getGroupMemberships().get(group.getId()).isInvitation();
 	}
 	public boolean isMember(final GroupReferenceOutput group) {
-		return getGroupsMember().contains(group.getId());
+		return getGroupMemberships().containsKey(group.getId())
+				&& getGroupMemberships().get(group.getId()).isMember();
 	}
 	public boolean isOwner(final GroupReferenceOutput group) {
-		return getGroupsOwner().contains(group.getId());
+		return getGroupMemberships().containsKey(group.getId())
+				&& getGroupMemberships().get(group.getId()).isOwner();
 	}
 
 	public boolean canActAsPlayer(final PlayerOwnedOutput data) {

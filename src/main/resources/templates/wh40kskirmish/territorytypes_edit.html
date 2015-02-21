@@ -4,9 +4,7 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${territoryCategory.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${territoryCategory.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${territoryCategory.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:replace="/fragments/formatting :: link (to=${territoryCategory.group})"></a>
 		<a th:href="@{/wh40kskirmish/rules/{groupId}(groupId=${territoryCategory.group.id})}" th:text="#{menu.groups.rules}"></a>
 		<a class="unavailable" href="#" th:text="#{menu.groups.rules.wh40kskirmish.territorytype}"></a>

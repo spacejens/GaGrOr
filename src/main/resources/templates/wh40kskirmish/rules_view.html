@@ -4,13 +4,11 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${rules.group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${rules.group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${rules.group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a th:replace="/fragments/formatting :: link (to=${rules.group})"></a>
 		<a class="current" th:text="#{menu.groups.rules}"></a>
 	</nav>
-	<dl  th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="sub-nav" id="pageactions">
+	<dl  th:if="${currentUser.isOwner(rules.group)}" class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/edit(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.edit}"></a></dd>
 	</dl>
@@ -27,7 +25,7 @@
 				<li th:if="${#lists.isEmpty(skillCategory.skills)}" class="fi-alert">
 					No skills have been created yet
 				</li>
-				<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+				<li th:if="${currentUser.isOwner(rules.group)}">
 					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/skill/{skillCategoryId}/create(groupId=${rules.group.id},skillCategoryId=${skillCategory.id})}" th:text="#{menu.groups.rules.wh40kskirmish.skill.create}"></a>
 				</li>
 			</ul>
@@ -35,7 +33,7 @@
 		<li th:if="${#lists.isEmpty(rules.skillCategories)}" class="fi-alert panel">
 			No skill categories have been created yet
 		</li>
-		<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="panel">
+		<li th:if="${currentUser.isOwner(rules.group)}" class="panel">
 			<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/skillcategory/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.skillcategory.create}"></a>
 		</li>
 	</ul>
@@ -50,7 +48,7 @@
 				<li th:if="${#lists.isEmpty(itemCategory.itemTypes)}" class="fi-alert">
 					No item types have been created yet
 				</li>
-				<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+				<li th:if="${currentUser.isOwner(rules.group)}">
 					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/itemtype/{itemCategoryId}/create(groupId=${rules.group.id},itemCategoryId=${itemCategory.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemtype.create}"></a>
 				</li>
 			</ul>
@@ -58,7 +56,7 @@
 		<li th:if="${#lists.isEmpty(rules.itemCategories)}" class="fi-alert panel">
 			No item categories have been created yet
 		</li>
-		<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="panel">
+		<li th:if="${currentUser.isOwner(rules.group)}" class="panel">
 			<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/itemcategory/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.itemcategory.create}"></a>
 		</li>
 	</ul>
@@ -73,7 +71,7 @@
 				<li th:if="${#lists.isEmpty(territoryCategory.territoryTypes)}" class="fi-alert">
 					No territory types have been created yet
 				</li>
-				<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+				<li th:if="${currentUser.isOwner(rules.group)}">
 					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/territorytype/{territoryCategoryId}/create(groupId=${rules.group.id},territoryCategoryId=${territoryCategory.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorytype.create}"></a>
 				</li>
 			</ul>
@@ -81,7 +79,7 @@
 		<li th:if="${#lists.isEmpty(rules.territoryCategories)}" class="fi-alert panel">
 			No territory categories have been created yet
 		</li>
-		<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}" class="panel">
+		<li th:if="${currentUser.isOwner(rules.group)}" class="panel">
 			<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/territorycategory/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.territorycategory.create}"></a>
 		</li>
 	</ul>
@@ -105,7 +103,7 @@
 						<li th:if="${#lists.isEmpty(gangType.factions)}" class="fi-alert">
 							No factions have been created yet
 						</li>
-						<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+						<li th:if="${currentUser.isOwner(rules.group)}">
 							<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/faction/{gangTypeId}/create(groupId=${rules.group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.faction.create}"></a>
 						</li>
 					</ul>
@@ -123,7 +121,7 @@
 								<li th:if="${#lists.isEmpty(race.fighterTypes)}" class="fi-alert">
 									No fighter types have been created yet
 								</li>
-								<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+								<li th:if="${currentUser.isOwner(rules.group)}">
 									<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/fightertype/{raceId}/create(groupId=${rules.group.id},raceId=${race.id})}" th:text="#{menu.groups.rules.wh40kskirmish.fightertype.create}"></a>
 								</li>
 							</ul>
@@ -131,7 +129,7 @@
 						<li th:if="${#lists.isEmpty(gangType.races)}" class="fi-alert">
 							No races have been created yet
 						</li>
-						<li th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+						<li th:if="${currentUser.isOwner(rules.group)}">
 							<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/race/{gangTypeId}/create(groupId=${rules.group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.race.create}"></a>
 						</li>
 					</ul>
@@ -143,7 +141,7 @@
 				</td>
 				<td></td>
 			</tr>
-			<tr th:if="${rules.group.memberType != null and rules.group.memberType.owner}">
+			<tr th:if="${currentUser.isOwner(rules.group)}">
 				<td>
 					<a class="fi-plus" th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/create(groupId=${rules.group.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.create}"></a>
 				</td>

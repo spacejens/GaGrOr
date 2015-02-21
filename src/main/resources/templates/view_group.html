@@ -4,14 +4,14 @@
 <body>
 	<div th:replace="/fragments/mainmenu :: mainmenu"></div>
 	<nav class="breadcrumbs" id="submenu">
-		<a th:unless="${group.memberType}" th:href="@{/}" th:text="#{menu.public}"></a>
-		<a th:unless="${group.memberType}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
-		<a th:if="${group.memberType}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
+		<a th:unless="${currentUser.isInvitedOrMember(group)}" th:href="@{/}" th:text="#{menu.public}"></a>
+		<a th:unless="${currentUser.isInvitedOrMember(group)}" th:href="@{/groups/public}" th:text="#{menu.public.groups}"></a>
+		<a th:if="${currentUser.isInvitedOrMember(group)}" th:href="@{/groups/list}" th:text="#{menu.groups}"></a>
 		<a class="current" th:text="${group.name}"></a>
 	</nav>
 	<dl class="sub-nav" id="pageactions">
 		<dt th:text="#{menu.subpages}"></dt>
-		<dd th:if="${group.memberType != null and group.memberType.owner}"><a th:href="@{/groups/edit/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.edit}"></a></dd>
+		<dd th:if="${currentUser.isOwner(group)}"><a th:href="@{/groups/edit/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.edit}"></a></dd>
 		<dd><a th:href="@{/groups/members/{groupId}(groupId=${group.id})}" th:text="#{menu.groups.members}"></a></dd>
 	</dl>
 	<div th:fragment="groupheader">
@@ -19,7 +19,7 @@
 		<p th:if="${group.viewableByAnyone}">Public group, viewable by anyone</p>
 		<p th:unless="${group.viewableByAnyone}">Private group, viewable by members only</p>
 		<p>Created: <span th:replace="/fragments/formatting :: datetime (date=${group.created})"></span></p>
-		<p th:if="${group.memberType}">My status: <span th:text="#{${group.memberType.displayNameProperty}}">Member</span></p>
+		<p th:if="${currentUser.isInvitedOrMember(group)}">My status: <span th:text="#{${currentUser.getMemberType(group).displayNameProperty}}">Member</span></p>
 	</div>
 	<script th:replace="/fragments/framework :: init"></script>
 </body>
