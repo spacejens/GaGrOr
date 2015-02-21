@@ -1,9 +1,9 @@
 package com.gagror.data.wh40kskirmish.rules.territory;
 
-import com.gagror.data.AbstractEditableNamedEntityOutput;
+import com.gagror.data.group.AbstractEditableNamedGroupOwnedEntityOutput;
 
 public class TerritoryCategoryReferenceOutput
-extends AbstractEditableNamedEntityOutput {
+extends AbstractEditableNamedGroupOwnedEntityOutput {
 
 	public TerritoryCategoryReferenceOutput(final TerritoryCategoryEntity entity) {
 		super(entity);

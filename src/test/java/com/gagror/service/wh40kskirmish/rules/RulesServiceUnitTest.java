@@ -239,11 +239,13 @@ public class RulesServiceUnitTest {
 		when(gangTypeEntity.getId()).thenReturn(GANG_TYPE_ID);
 		when(gangTypeEntity.getName()).thenReturn(GANG_TYPE_NAME);
 		when(gangTypeEntity.getRules()).thenReturn(rulesEntity);
+		when(gangTypeEntity.getGroup()).thenReturn(groupEntity);
 		rulesEntity.getGangTypes().add(gangTypeEntity);
 		when(gangTypeRepository.load(GROUP_ID, GANG_TYPE_ID)).thenReturn(gangTypeEntity);
 		// Set up the faction entity
 		when(gangTypeEntity.getFactions()).thenReturn(new HashSet<FactionEntity>());
 		when(factionEntity.getId()).thenReturn(FACTION_ID);
+		when(factionEntity.getGroup()).thenReturn(groupEntity);
 		when(factionEntity.getName()).thenReturn(FACTION_NAME);
 		when(factionEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getFactions().add(factionEntity);
@@ -251,6 +253,7 @@ public class RulesServiceUnitTest {
 		// Set up the race entity
 		when(gangTypeEntity.getRaces()).thenReturn(new HashSet<RaceEntity>());
 		when(raceEntity.getId()).thenReturn(RACE_ID);
+		when(raceEntity.getGroup()).thenReturn(groupEntity);
 		when(raceEntity.getName()).thenReturn(RACE_NAME);
 		when(raceEntity.getGangType()).thenReturn(gangTypeEntity);
 		gangTypeEntity.getRaces().add(raceEntity);
@@ -258,6 +261,7 @@ public class RulesServiceUnitTest {
 		// Set up the fighter type entity
 		when(raceEntity.getFighterTypes()).thenReturn(new HashSet<FighterTypeEntity>());
 		when(fighterTypeEntity.getId()).thenReturn(FIGHTER_TYPE_ID);
+		when(fighterTypeEntity.getGroup()).thenReturn(groupEntity);
 		when(fighterTypeEntity.getName()).thenReturn(FIGHTER_TYPE_NAME);
 		when(fighterTypeEntity.getRace()).thenReturn(raceEntity);
 		raceEntity.getFighterTypes().add(fighterTypeEntity);
@@ -265,6 +269,7 @@ public class RulesServiceUnitTest {
 		// Set up the territory category entity
 		when(rulesEntity.getTerritoryCategories()).thenReturn(new HashSet<TerritoryCategoryEntity>());
 		when(territoryCategoryEntity.getId()).thenReturn(TERRITORY_CATEGORY_ID);
+		when(territoryCategoryEntity.getGroup()).thenReturn(groupEntity);
 		when(territoryCategoryEntity.getName()).thenReturn(TERRITORY_CATEGORY_NAME);
 		when(territoryCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getTerritoryCategories().add(territoryCategoryEntity);
@@ -272,6 +277,7 @@ public class RulesServiceUnitTest {
 		// Set up the territory type entity
 		when(territoryCategoryEntity.getTerritoryTypes()).thenReturn(new HashSet<TerritoryTypeEntity>());
 		when(territoryTypeEntity.getId()).thenReturn(TERRITORY_TYPE_ID);
+		when(territoryTypeEntity.getGroup()).thenReturn(groupEntity);
 		when(territoryTypeEntity.getName()).thenReturn(TERRITORY_TYPE_NAME);
 		when(territoryTypeEntity.getTerritoryCategory()).thenReturn(territoryCategoryEntity);
 		territoryCategoryEntity.getTerritoryTypes().add(territoryTypeEntity);
@@ -279,6 +285,7 @@ public class RulesServiceUnitTest {
 		// Set up the skill category entity
 		when(rulesEntity.getSkillCategories()).thenReturn(new HashSet<SkillCategoryEntity>());
 		when(skillCategoryEntity.getId()).thenReturn(SKILL_CATEGORY_ID);
+		when(skillCategoryEntity.getGroup()).thenReturn(groupEntity);
 		when(skillCategoryEntity.getName()).thenReturn(SKILL_CATEGORY_NAME);
 		when(skillCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getSkillCategories().add(skillCategoryEntity);
@@ -286,6 +293,7 @@ public class RulesServiceUnitTest {
 		// Set up the skill entity
 		when(skillCategoryEntity.getSkills()).thenReturn(new HashSet<SkillEntity>());
 		when(skillEntity.getId()).thenReturn(SKILL_ID);
+		when(skillEntity.getGroup()).thenReturn(groupEntity);
 		when(skillEntity.getName()).thenReturn(SKILL_NAME);
 		when(skillEntity.getSkillCategory()).thenReturn(skillCategoryEntity);
 		skillCategoryEntity.getSkills().add(skillEntity);
@@ -293,6 +301,7 @@ public class RulesServiceUnitTest {
 		// Set up the item category entity
 		when(rulesEntity.getItemCategories()).thenReturn(new HashSet<ItemCategoryEntity>());
 		when(itemCategoryEntity.getId()).thenReturn(ITEM_CATEGORY_ID);
+		when(itemCategoryEntity.getGroup()).thenReturn(groupEntity);
 		when(itemCategoryEntity.getName()).thenReturn(ITEM_CATEGORY_NAME);
 		when(itemCategoryEntity.getRules()).thenReturn(rulesEntity);
 		rulesEntity.getItemCategories().add(itemCategoryEntity);
@@ -300,6 +309,7 @@ public class RulesServiceUnitTest {
 		// Set up the item type entity
 		when(itemCategoryEntity.getItemTypes()).thenReturn(new HashSet<ItemTypeEntity>());
 		when(itemTypeEntity.getId()).thenReturn(ITEM_TYPE_ID);
+		when(itemTypeEntity.getGroup()).thenReturn(groupEntity);
 		when(itemTypeEntity.getName()).thenReturn(ITEM_TYPE_NAME);
 		when(itemTypeEntity.getItemCategory()).thenReturn(itemCategoryEntity);
 		itemCategoryEntity.getItemTypes().add(itemTypeEntity);

@@ -2,11 +2,11 @@ package com.gagror.data.wh40kskirmish.rules.experience;
 
 import lombok.Getter;
 
-import com.gagror.data.AbstractEditableNamedEntityOutput;
+import com.gagror.data.group.AbstractEditableNamedGroupOwnedEntityOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeOutput;
 
 public class ExperienceLevelOutput
-extends AbstractEditableNamedEntityOutput
+extends AbstractEditableNamedGroupOwnedEntityOutput
 implements ExperiencePoints {
 
 	@Getter

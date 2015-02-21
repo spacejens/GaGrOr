@@ -145,10 +145,12 @@ public class GangServiceUnitTest {
 		when(gang.getFaction()).thenReturn(faction);
 		when(gangRepository.load(GROUP_ID, GANG_ID)).thenReturn(gang);
 		when(faction.getId()).thenReturn(FACTION_ID);
+		when(faction.getGroup()).thenReturn(group);
 		when(faction.getGangs()).thenReturn(new HashSet<GangEntity>());
 		faction.getGangs().add(gang);
 		when(faction.getGangType()).thenReturn(gangType);
 		when(gangType.getId()).thenReturn(GANG_TYPE_ID);
+		when(gangType.getGroup()).thenReturn(group);
 		when(fighter.getId()).thenReturn(FIGHTER_ID);
 		when(fighter.getName()).thenReturn(FIGHTER_NAME);
 		when(fighter.getGang()).thenReturn(gang);

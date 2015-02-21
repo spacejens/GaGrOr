@@ -61,17 +61,17 @@ public class GangTypeListChildrenOutputUnitTest {
 		when(rules.getGroup()).thenReturn(group);
 		when(group.getId()).thenReturn(GROUP_ID);
 		when(gangType.getFactions()).thenReturn(new HashSet<FactionEntity>());
-		when(faction1.getId()).thenReturn(FACTION_ID_1);
-		when(faction1.getName()).thenReturn(FACTION_NAME_1);
-		gangType.getFactions().add(faction1);
-		when(faction2.getId()).thenReturn(FACTION_ID_2);
-		when(faction2.getName()).thenReturn(FACTION_NAME_2);
-		gangType.getFactions().add(faction2);
-		when(faction3.getId()).thenReturn(FACTION_ID_3);
-		when(faction3.getName()).thenReturn(FACTION_NAME_3);
-		gangType.getFactions().add(faction3);
-		when(faction4.getId()).thenReturn(FACTION_ID_4);
-		when(faction4.getName()).thenReturn(FACTION_NAME_4);
-		gangType.getFactions().add(faction4);
+		when(gangType.getGroup()).thenReturn(group);
+		mockFaction(faction1, FACTION_ID_1, FACTION_NAME_1);
+		mockFaction(faction2, FACTION_ID_2, FACTION_NAME_2);
+		mockFaction(faction3, FACTION_ID_3, FACTION_NAME_3);
+		mockFaction(faction4, FACTION_ID_4, FACTION_NAME_4);
+	}
+
+	private void mockFaction(final FactionEntity faction, final Long id, final String name) {
+		when(faction.getId()).thenReturn(id);
+		when(faction.getGroup()).thenReturn(group);
+		when(faction.getName()).thenReturn(name);
+		gangType.getFactions().add(faction);
 	}
 }

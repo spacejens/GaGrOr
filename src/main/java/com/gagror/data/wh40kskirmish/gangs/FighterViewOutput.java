@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.gagror.data.account.AccountReferenceOutput;
-import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.group.PlayerOwnedOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.FighterTypeReferenceOutput;
 
@@ -116,11 +115,6 @@ public class FighterViewOutput extends FighterReferenceOutput implements PlayerO
 		public FighterViewOutput build() {
 			return new FighterViewOutput(this);
 		}
-	}
-
-	@Override
-	public GroupReferenceOutput getGroup() {
-		return getGang().getRules().getGroup();
 	}
 
 	@Override

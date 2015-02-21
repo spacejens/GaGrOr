@@ -6,7 +6,6 @@ import java.util.List;
 
 import lombok.Getter;
 
-import com.gagror.data.group.GroupReferenceOutput;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeEntity;
 import com.gagror.data.wh40kskirmish.rules.gangs.GangTypeListChildrenOutput;
 import com.gagror.data.wh40kskirmish.rules.items.ItemCategoryEntity;
@@ -31,8 +30,8 @@ extends RulesOutput {
 	@Getter
 	private final List<ItemCategoryListChildrenOutput> itemCategories;
 
-	public RulesListChildrenOutput(final Wh40kSkirmishRulesEntity entity, final GroupReferenceOutput group) {
-		super(entity, group);
+	public RulesListChildrenOutput(final Wh40kSkirmishRulesEntity entity) {
+		super(entity);
 		// Sorted list of gang types and their factions, races, and fighter types
 		final List<GangTypeListChildrenOutput> tempGangTypes = new ArrayList<>();
 		for(final GangTypeEntity gangType : entity.getGangTypes()) {
