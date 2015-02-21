@@ -62,6 +62,11 @@ public class InviteGroupPersister extends AbstractIdentifiablePersister<GroupInv
 	}
 
 	@Override
+	protected void validateSimultaneousEdit(final GroupInviteInput form, final BindingResult bindingResult, final GroupEntity entity) {
+		// Simultaneous edit check not performed when inviting users
+	}
+
+	@Override
 	protected void updateValues(final GroupInviteInput form, final GroupEntity entity) {
 		final Set<AccountEntity> existingMembers = new HashSet<>();
 		for(final GroupMemberEntity member : entity.getGroupMemberships()) {
