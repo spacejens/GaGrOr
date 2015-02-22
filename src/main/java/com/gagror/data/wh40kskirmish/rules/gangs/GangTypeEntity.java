@@ -43,6 +43,9 @@ public class GangTypeEntity extends AbstractEditableNamedEntity implements Group
 	@Getter
 	private Set<ExperienceLevelEntity> experienceLevels;
 
+	@OneToMany(mappedBy="gangType", fetch=FetchType.LAZY)
+	@Getter
+	private Set<StartingTerritoryEntity> startingTerritories;
 	// TODO Make initial territory allocation configurable (set of territory categories with duplicates, one random from each)
 
 	public GangTypeEntity(final Wh40kSkirmishRulesEntity rules) {
@@ -53,6 +56,7 @@ public class GangTypeEntity extends AbstractEditableNamedEntity implements Group
 		factions = new HashSet<>();
 		races = new HashSet<>();
 		experienceLevels = new HashSet<>();
+		startingTerritories = new HashSet<>();
 	}
 
 	@Override
