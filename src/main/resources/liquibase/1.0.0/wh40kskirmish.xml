@@ -469,7 +469,7 @@
 			<column name="gang_type_id" type="bigint">
 				<constraints nullable="false" />
 			</column>
-			<column name="territory_type_id" type="bigint">
+			<column name="territory_category_id" type="bigint">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -483,11 +483,11 @@
 			baseTableName="wh40ksk_startingterritory"
 			baseColumnNames="gang_type_id"/>
 		<addForeignKeyConstraint
-			constraintName="territorytype_startingterritory_territory_type_fk"
-			referencedTableName="wh40ksk_territorytype"
+			constraintName="territorycategory_startingterritory_territory_category_fk"
+			referencedTableName="wh40ksk_territorycategory"
 			referencedColumnNames="id"
 			baseTableName="wh40ksk_startingterritory"
-			baseColumnNames="territory_type_id"/>
+			baseColumnNames="territory_category_id"/>
 	</changeSet>
 
 	<changeSet id="gang-table" author="spacejens">

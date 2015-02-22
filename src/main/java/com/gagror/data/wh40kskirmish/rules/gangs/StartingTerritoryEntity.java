@@ -12,7 +12,7 @@ import lombok.ToString;
 import com.gagror.data.AbstractEditableEntity;
 import com.gagror.data.group.GroupEntity;
 import com.gagror.data.group.GroupOwned;
-import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeEntity;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryCategoryEntity;
 
 @NoArgsConstructor
 @ToString(of={}, callSuper=true)
@@ -28,11 +28,11 @@ public class StartingTerritoryEntity extends AbstractEditableEntity implements G
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
 	@Getter
-	private TerritoryTypeEntity territoryType; // TODO Should start with territory category instead
+	private TerritoryCategoryEntity territoryCategory;
 
-	public StartingTerritoryEntity(final GangTypeEntity gangType, final TerritoryTypeEntity territoryType) {
+	public StartingTerritoryEntity(final GangTypeEntity gangType, final TerritoryCategoryEntity territoryCategory) {
 		this.gangType = gangType;
-		this.territoryType = territoryType;
+		this.territoryCategory = territoryCategory;
 		// Add the new entity to the referencing collection
 		gangType.getStartingTerritories().add(this);
 	}
