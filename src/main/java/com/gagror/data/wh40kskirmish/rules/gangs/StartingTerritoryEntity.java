@@ -28,7 +28,7 @@ public class StartingTerritoryEntity extends AbstractEditableEntity implements G
 	@ManyToOne(optional=false)
 	@JoinColumn(nullable=false, insertable=true, updatable=false)
 	@Getter
-	private TerritoryTypeEntity territoryType;
+	private TerritoryTypeEntity territoryType; // TODO Should start with territory category instead
 
 	public StartingTerritoryEntity(final GangTypeEntity gangType, final TerritoryTypeEntity territoryType) {
 		this.gangType = gangType;

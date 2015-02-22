@@ -14,6 +14,11 @@
 		<dt th:text="#{menu.subpages}"></dt>
 		<dd><a th:href="@{/wh40kskirmish/rules/{groupId}/gangtype/{gangTypeId}/edit(groupId=${gangType.group.id},gangTypeId=${gangType.id})}" th:text="#{menu.groups.rules.wh40kskirmish.gangtype.edit}"></a></dd>
 	</dl>
+	<p th:if="${#lists.isEmpty(gangType.startingTerritories)}">Each gang starts with no territories</p>
+	<p th:unless="${#lists.isEmpty(gangType.startingTerritories)}">Each new gang starts with one random territory from each of the following categories:</p>
+	<ul th:unless="${#lists.isEmpty(gangType.startingTerritories)}">
+		<li th:each="startingTerritory : ${gangType.startingTerritories}" th:text="${startingTerritory.name}"></li>
+	</ul>
 	<table>
 		<thead>
 			<tr>

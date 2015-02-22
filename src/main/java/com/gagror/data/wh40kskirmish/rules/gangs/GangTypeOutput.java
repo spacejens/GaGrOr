@@ -9,11 +9,15 @@ import lombok.Getter;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelEntity;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperienceLevelOutput;
 import com.gagror.data.wh40kskirmish.rules.experience.ExperiencePointsComparator;
+import com.gagror.data.wh40kskirmish.rules.territory.TerritoryTypeReferenceOutput;
 
 public class GangTypeOutput extends GangTypeReferenceOutput {
 
 	@Getter
 	private final List<ExperienceLevelOutput> experienceLevels;
+
+	@Getter
+	private final List<TerritoryTypeReferenceOutput> startingTerritories;
 
 	public GangTypeOutput(final GangTypeEntity entity) {
 		super(entity);
@@ -24,5 +28,12 @@ public class GangTypeOutput extends GangTypeReferenceOutput {
 		}
 		Collections.sort(tempExperienceLevels, ExperiencePointsComparator.getInstance());
 		experienceLevels = Collections.unmodifiableList(tempExperienceLevels);
+		// Sorted list of starting territories
+		final List<TerritoryTypeReferenceOutput> tempStartingTerritories = new ArrayList<>();
+		for(final StartingTerritoryEntity startingTerritory : entity.getStartingTerritories()) {
+			tempStartingTerritories.add(new TerritoryTypeReferenceOutput(startingTerritory.getTerritoryType()));
+		}
+		Collections.sort(tempStartingTerritories);
+		startingTerritories = Collections.unmodifiableList(tempStartingTerritories);
 	}
 }
